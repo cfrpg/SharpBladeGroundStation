@@ -1,0 +1,9 @@
+D:\Projects\GetDependencyProperty\GetDependencyProperty\bin\Debug\GetDependencyProperty.exe.config
+D:\Projects\GetDependencyProperty\GetDependencyProperty\bin\Debug\GetDependencyProperty.exe
+D:\Projects\GetDependencyProperty\GetDependencyProperty\bin\Debug\GetDependencyProperty.pdb
+D:\Projects\GetDependencyProperty\GetDependencyProperty\obj\Debug\GetDependencyProperty.csprojResolveAssemblyReference.cache
+D:\Projects\GetDependencyProperty\GetDependencyProperty\obj\Debug\GetDependencyProperty.Form1.resources
+D:\Projects\GetDependencyProperty\GetDependencyProperty\obj\Debug\GetDependencyProperty.Properties.Resources.resources
+D:\Projects\GetDependencyProperty\GetDependencyProperty\obj\Debug\GetDependencyProperty.csproj.GenerateResource.Cache
+D:\Projects\GetDependencyProperty\GetDependencyProperty\obj\Debug\GetDependencyProperty.exe
+D:\Projects\GetDependencyProperty\GetDependencyProperty\obj\Debug\GetDependencyProperty.pdb
