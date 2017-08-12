@@ -11,6 +11,7 @@
         <local:HalfConverter x:Key="half"/>
         <local:TwiceConverter x:Key="twice"/>
     </UserControl.Resources>
+   
     <Grid x:Name="pfdgrid">
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -30,29 +31,34 @@
             <RowDefinition Height="0.7*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="4*"/>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
-        <Viewbox Grid.Column="1"  Grid.Row="3">
-            <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="m/s"  FontSize="8" VerticalAlignment="Top" Margin="0,0,0,5"/>
-        </Viewbox>
-        <Viewbox Grid.Column="3" Grid.Row="3">
-            <TextBlock x:Name="textBlock2" TextWrapping="Wrap" Text="m"  FontSize="8"/>
-        </Viewbox>
-        <Rectangle Grid.Column="1" Fill="#33000000" Grid.Row="2" Stroke="White" />
+        <Viewbox Grid.Column="1"  Grid.Row="3"/>
+
 
         <Rectangle x:Name="r1" Grid.Column="4" Height="52" Grid.Row="4" Width="37"/>
         <Viewbox Grid.Column="2"  Margin="0" Grid.Row="4" >
             <Canvas Width="200" Height="100" ClipToBounds="True">
                 <local:CompassControl x:Name="compass" Width="200" Height="200"
-                                      Heading="{Binding ElementName=pfdControl,Path=FlightState.Heading}"/>                  
-                
-            </Canvas>
-            
-        </Viewbox>
+                                      Heading="{Binding ElementName=pfdControl,Path=FlightState.Heading}"/>
 
+            </Canvas>
+
+        </Viewbox>
+        <Border BorderBrush="White" BorderThickness="1" Grid.Column="1"  Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" >
+            <local:SliderControl x:Name="speed" Margin="0" Value="{Binding ElementName=pfdControl,Path=FlightState.AirSpeed}" TickNumber="7"/>
+        </Border>
+        <Border BorderBrush="White" BorderThickness="1" Grid.Column="3"  Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Right">
+            <local:SliderControl x:Name="altitude" Margin="0" ReverseTick="-1" Value="{Binding ElementName=pfdControl,Path=FlightState.Altitude}" TickNumber="7"/>
+        </Border>
+        <Canvas Grid.Column="2" Grid.Row="3"/>
+        <local:HorizonControl x:Name="horizon" Grid.Column="2" Grid.Row="2" Pitch="{Binding ElementName=pfdControl,Path=FlightState.Pitch}" Roll="{Binding ElementName=pfdControl,Path=FlightState.Roll}">
+            
+        </local:HorizonControl>
+        
     </Grid>
 </UserControl>

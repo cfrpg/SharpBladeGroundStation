@@ -43,9 +43,7 @@ namespace FlightDisplay
         public PFDControl()
         {
             InitializeComponent();
-            Binding b1 = new Binding();
-            b1.Source = pfdgrid.RowDefinitions[4];
-            b1.Path = new PropertyPath("ActualHeight");
+           
 
         }
     }

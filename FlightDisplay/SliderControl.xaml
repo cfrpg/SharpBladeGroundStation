@@ -8,16 +8,36 @@
              xmlns:local="clr-namespace:FlightDisplay"
              mc:Ignorable="d" 
              Name="slider"
-             d:DesignHeight="300" d:DesignWidth="50">
+             d:DesignHeight="300" d:DesignWidth="60">
 
     <Viewbox>
-        <Canvas Height="300" Width="50" ClipToBounds="False">
-            <Path x:Name="path" Data="M25,-150 25,450" Stroke="Black" StrokeThickness="1" />
+        <Canvas Height="300" Width="60" ClipToBounds="True" Background="#33000000">
+            <Path x:Name="path" Data="M60,-150 60,450"  StrokeThickness="0" RenderTransformOrigin="0.5,0.5" >
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="1" ScaleX="{Binding ElementName=slider,Path=ReverseTick}"/>
+                        <SkewTransform AngleY="0" AngleX="0"/>
+                        <RotateTransform Angle="0"/>
+                        <TranslateTransform Y="{Binding ElementName=slider,Path=PathTranslate}"/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+            <Path x:Name="textpath" Data="M30,-150 30,450"  StrokeThickness="0" RenderTransformOrigin="0.5,0.5" >
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform Y="{Binding ElementName=slider,Path=PathTranslate}"/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+            
             <ec:PathListBox x:Name="LongTick" IsHitTestVisible="False" ItemsSource="{Binding ElementName=slider,Path=LongTicks}">
                 <ec:PathListBox.ItemTemplate>
                     <DataTemplate>
-                        <Line X1="0" Y1="10" X2="0" Y2="20" Stroke="Black" StrokeThickness="2" RenderTransformOrigin="0.5,0.5">
-                           
+                        <Line X1="0" Y1="0" X2="0" Y2="20" Stroke="White" StrokeThickness="2" RenderTransformOrigin="0.5,0.5">
+
                         </Line>
                     </DataTemplate>
                 </ec:PathListBox.ItemTemplate>
@@ -29,16 +49,50 @@
             <ec:PathListBox x:Name="ShortTick" IsHitTestVisible="False" ItemsSource="{Binding ElementName=slider,Path=ShortTicks}">
                 <ec:PathListBox.ItemTemplate>
                     <DataTemplate>
-                        <Line X1="0" Y1="5" X2="0" Y2="10" Stroke="Black" StrokeThickness="2"/>
+                        <Line X1="0" Y1="0" X2="0" Y2="10" Stroke="White" StrokeThickness="2"/>
                     </DataTemplate>
                 </ec:PathListBox.ItemTemplate>
                 <ec:PathListBox.LayoutPaths>
                     <ec:LayoutPath Distribution="Even" Orientation="OrientToPath"
                        SourceElement="{Binding ElementName=path}" />
                 </ec:PathListBox.LayoutPaths>
+            </ec:PathListBox>            
+            <ec:PathListBox x:Name="TextTick" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5">
+                <ec:PathListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontSize="14" Foreground="White" RenderTransformOrigin="0.5,0.5" >
+                            <TextBlock.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="-90"/>
+                                    <TranslateTransform X="0" Y="0"/>
+                                </TransformGroup>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+                    </DataTemplate>
+                </ec:PathListBox.ItemTemplate>
+                <ec:PathListBox.LayoutPaths>
+                    <ec:LayoutPath Distribution="Even" Orientation="OrientToPath"
+                       SourceElement="{Binding ElementName=textpath}" />
+                </ec:PathListBox.LayoutPaths>
             </ec:PathListBox>
-           
+            <Polygon Points="0,130 50,130 50,140 55,150 50,160 50,170 0,170 " Stroke="#FFDADADA" Fill="Black" StrokeThickness="2" RenderTransformOrigin="0.545454,0.5">
+                <Polygon.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="1" ScaleX="{Binding ElementName=slider,Path=ReverseTick}"/>
+                        <SkewTransform AngleY="0" AngleX="0"/>
+                        <RotateTransform Angle="0"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Polygon.RenderTransform>
+            </Polygon>
+
+            
+            <Grid Height="40" Canvas.Top="131" Width="60">
+                <TextBlock x:Name="textBlock" Text="{Binding ElementName=slider,Path=Value,StringFormat={}{0:0.0}}" Width="40" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" Margin="0"/>
+            </Grid>
         </Canvas>
     </Viewbox>
-    
+
 </UserControl>

@@ -45,7 +45,7 @@ namespace FlightDisplay
         public IList<Object> TextTicks
         {
             get { return (IList<Object>)GetValue(TextTicksProperty); }
-            private set { SetValue(TextTicksProperty, value); }
+            set { SetValue(TextTicksProperty, value); }
         }
         public static readonly DependencyProperty LongTickLengthProperty =
             DependencyProperty.Register("LongTickLength", typeof(double), typeof(CompassControl));

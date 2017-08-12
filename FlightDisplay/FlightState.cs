@@ -16,6 +16,7 @@ namespace FlightDisplay
         public float GroundSpeed { get; set; }
         public float AirSpeed { get; set; }
         public float ClimbRate { get; set; }
+        public float Altitude { get; set; }
 
         public static FlightState Zero
         {
