@@ -62,6 +62,17 @@ namespace FlightDisplay
         }
 
     }
-    
+
+    public class PitchTransConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (float)value * 2.7f;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (float)value / 2.7f;
+        }
+    }
 }
 

@@ -11,66 +11,83 @@
              d:DesignHeight="100" d:DesignWidth="100">
     <UserControl.Resources>
         <local:HalfConverter x:Key="half"/>
-        <local:FontSizeConverter x:Key="fsize"/>
     </UserControl.Resources>
 
-    <Grid RenderTransformOrigin="0.5,0.5" Name="gird">
-        <Grid.RenderTransform>
-            <TransformGroup>
-                <ScaleTransform/>
-                <SkewTransform/>
-                <RotateTransform Angle="{Binding ElementName=compass,Path=Rotation}"/>
-                <TranslateTransform/>
-            </TransformGroup>
-        </Grid.RenderTransform>
-        <Ellipse  Margin="0" StrokeThickness="0" Fill="#19000000"/>
-        <!--  刻度盘完整圆弧  -->
-        <ed:Arc x:Name="LongTickPath" Margin="0" ArcThickness="0" ArcThicknessUnit="Pixel"
-        EndAngle="180" StartAngle="-180" Stretch="None" Stroke="White"
-        StrokeThickness="1"/>
-        <!--  长刻度  -->
-        <ec:PathListBox x:Name="LongTick" IsHitTestVisible="False" ItemsSource="{Binding ElementName=compass,Path=LongTicks}">
-            <ec:PathListBox.ItemTemplate>
-                <DataTemplate>
-                   
-                    <Line Stroke="White" X1="0" Y1="{Binding ElementName=compass,Path=LongTickLength,Converter={StaticResource half}}" X2="0" Y2="{Binding ElementName=compass,Path=LongTickLength}" Fill="{x:Null}"></Line>
-                </DataTemplate>
-            </ec:PathListBox.ItemTemplate>
-            <ec:PathListBox.LayoutPaths>
-                <ec:LayoutPath Distribution="Even" Orientation="OrientToPath"
-                       SourceElement="{Binding ElementName=LongTickPath}" />
-            </ec:PathListBox.LayoutPaths>
-        </ec:PathListBox>
-        <!--  短刻度  -->
-        <ec:PathListBox x:Name="ShortTick" IsHitTestVisible="False" ItemsSource="{Binding ElementName=compass,Path=ShortTicks}">
-            <ec:PathListBox.ItemTemplate>
-                <DataTemplate>
-                    <Line Stroke="White" X1="0" Y1="{Binding ElementName=compass,Path=ShortTickLength,Converter={StaticResource half}}" X2="0" Y2="{Binding ElementName=compass,Path=ShortTickLength}" Fill="{x:Null}"></Line>
-                </DataTemplate>
-            </ec:PathListBox.ItemTemplate>
-            <ec:PathListBox.LayoutPaths>
-                <ec:LayoutPath Distribution="Even" Orientation="OrientToPath"
-                       SourceElement="{Binding ElementName=LongTickPath}" />
-            </ec:PathListBox.LayoutPaths>
-        </ec:PathListBox>
-        <!--  文字完整圆弧  -->
-        <ed:Arc x:Name="TextTickPath" Margin="{Binding ElementName=compass,Path=LongTickLength}" ArcThickness="0" ArcThicknessUnit="Pixel"
-        EndAngle="180" StartAngle="-180" Stretch="None" Stroke="Black"
-        StrokeThickness="0" />
+    <Viewbox>
+        <Canvas RenderTransformOrigin="0.5,0.5" Width="100" Height="100">
+            <ed:Arc x:Name="LongTickPath" Margin="0" ArcThicknessUnit="Pixel"
+                StartAngle="-180" EndAngle="180" Stroke="White" Width="100" Height="100" Stretch="None"
+                StrokeThickness="1" RenderTransformOrigin="0.5,0.5" >
+                <ed:Arc.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="{Binding ElementName=compass,Path=Rotation}"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </ed:Arc.RenderTransform>
+            </ed:Arc>
 
-        <ec:PathListBox x:Name="TextTick" IsHitTestVisible="False" ItemsSource="{Binding ElementName=compass,Path=TextTicks}" RenderTransformOrigin="0.5,0.5">
-            <ec:PathListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" FontSize="{Binding ElementName=compass,Path=LongTickLength,Converter={StaticResource fsize}}" Foreground="White" >
+            <ec:PathListBox x:Name="LongTick" IsHitTestVisible="False" ItemsSource="{Binding ElementName=compass,Path=LongTicks}">
+                <ec:PathListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Line Stroke="White" X1="0" Y1="7" X2="0" Y2="14"></Line>
+                    </DataTemplate>
+                </ec:PathListBox.ItemTemplate>
+                <ec:PathListBox.LayoutPaths>
+                    <ec:LayoutPath Distribution="Even" Orientation="OrientToPath"
+                       SourceElement="{Binding ElementName=LongTickPath}" />
+                </ec:PathListBox.LayoutPaths>
+            </ec:PathListBox>
 
-                    </TextBlock>
-                </DataTemplate>
-            </ec:PathListBox.ItemTemplate>
-            <ec:PathListBox.LayoutPaths>
-                <ec:LayoutPath Distribution="Even" Orientation="OrientToPath"
+            <ec:PathListBox x:Name="ShortTick" IsHitTestVisible="False" ItemsSource="{Binding ElementName=compass,Path=ShortTicks}">
+                <ec:PathListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Line Stroke="White" X1="0" Y1="3" X2="0" Y2="6" Fill="{x:Null}"></Line>
+                    </DataTemplate>
+                </ec:PathListBox.ItemTemplate>
+                <ec:PathListBox.LayoutPaths>
+                    <ec:LayoutPath Distribution="Even" Orientation="OrientToPath"
+                       SourceElement="{Binding ElementName=LongTickPath}" />
+                </ec:PathListBox.LayoutPaths>
+            </ec:PathListBox>
+
+            <ed:Arc x:Name="TextTickPath" Width="75" Height="75" Margin="12.5" ArcThickness="0" ArcThicknessUnit="Pixel"
+                EndAngle="180" StartAngle="-180" Stretch="None" Stroke="Black"
+                StrokeThickness="0" RenderTransformOrigin="0.5,0.5">
+                <ed:Arc.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="{Binding ElementName=compass,Path=Rotation}"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </ed:Arc.RenderTransform>
+            </ed:Arc>
+
+            <ec:PathListBox x:Name="TextTick" IsHitTestVisible="False" ItemsSource="{Binding ElementName=compass,Path=TextTicks}" RenderTransformOrigin="0.5,0.5">
+                <ec:PathListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontSize="8" Foreground="White" >
+
+                        </TextBlock>
+                    </DataTemplate>
+                </ec:PathListBox.ItemTemplate>
+                <ec:PathListBox.LayoutPaths>
+                    <ec:LayoutPath Distribution="Even" Orientation="OrientToPath"
                        SourceElement="{Binding ElementName=TextTickPath}" />
-            </ec:PathListBox.LayoutPaths>
-        </ec:PathListBox>
+                </ec:PathListBox.LayoutPaths>
+            </ec:PathListBox>
+            <Grid Height="10" Canvas.Left="42" Canvas.Top="25" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border Margin="0" BorderBrush="Black" BorderThickness="1" CornerRadius="3" Background="Black">
+                    
+                </Border>
+                <TextBlock x:Name="textBlock" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding ElementName=compass,Path=Heading}" VerticalAlignment="Center" Width="30" FontSize="6" TextAlignment="Center" Foreground="White"/>
 
-    </Grid>
+            </Grid>
+
+
+        </Canvas>
+    </Viewbox>
+
 </UserControl>

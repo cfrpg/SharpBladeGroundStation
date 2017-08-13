@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ec="http://schemas.microsoft.com/expression/2010/controls"
+             xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
              xmlns:local="clr-namespace:FlightDisplay"
              Name="pfdControl"
              mc:Ignorable="d" 
@@ -10,55 +12,186 @@
     <UserControl.Resources>
         <local:HalfConverter x:Key="half"/>
         <local:TwiceConverter x:Key="twice"/>
+        <local:PitchTransConverter x:Key="pitTrans"/>
     </UserControl.Resources>
-   
-    <Grid x:Name="pfdgrid">
-        <Grid.Background>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FF003163" Offset="0"/>
-                <GradientStop Color="#FF3C1E00" Offset="1"/>
-                <GradientStop Color="#FF0163C8" Offset="0.5"/>
-                <GradientStop Color="White" Offset="0.5"/>
-                <GradientStop Color="#FF643200" Offset="0.5"/>
-            </LinearGradientBrush>
-        </Grid.Background>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.5*"/>
-            <RowDefinition Height="0.5*"/>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="0.3*"/>
-            <RowDefinition Height="0.7*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*"/>
-            <ColumnDefinition Width="5*"/>
-            <ColumnDefinition Width="20*"/>
-            <ColumnDefinition Width="5*"/>
-            <ColumnDefinition Width="5*"/>
-        </Grid.ColumnDefinitions>
-        <Viewbox Grid.Column="1"  Grid.Row="3"/>
+    <Viewbox>
+        <Canvas Width="300" Height="300" ClipToBounds="True">
+            <Rectangle Name="back" Width="800" Height="800" Canvas.Top="-250" Canvas.Left="-250" RenderTransformOrigin="0.5,0.5">
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>                        
+                        <TranslateTransform Y="{Binding ElementName=pfdControl,Path=FlightState.Pitch,Converter={StaticResource pitTrans}}"/>
+                        <RotateTransform Angle="{Binding ElementName=pfdControl,Path=FlightState.Roll}"/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+                <Rectangle.Fill>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF013163" Offset="0"/>
+                        <GradientStop Color="#FF013163" Offset="0.4"/>
+                        <GradientStop Color="#FE0163C8" Offset="0.499"/>
+                        <GradientStop Color="#FEFFFFFF" Offset="0.499"/>
+                        <GradientStop Color="White" Offset="0.501"/>
+                        <GradientStop Color="#FE653300" Offset="0.501"/>
+                        <GradientStop Color="#FE3C1E00" Offset="0.6"/>
+                        <GradientStop Color="#FE3C1E00" Offset="1"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
 
+            </Rectangle>
 
-        <Rectangle x:Name="r1" Grid.Column="4" Height="52" Grid.Row="4" Width="37"/>
-        <Viewbox Grid.Column="2"  Margin="0" Grid.Row="4" >
-            <Canvas Width="200" Height="100" ClipToBounds="True">
-                <local:CompassControl x:Name="compass" Width="200" Height="200"
-                                      Heading="{Binding ElementName=pfdControl,Path=FlightState.Heading}"/>
+            <local:CompassControl x:Name="compass" Width="100" Height="100" Canvas.Left="100" Canvas.Top="250"
+                                  Heading="{Binding ElementName=pfdControl,Path=FlightState.Heading}"/>
+            <Border Width="24" Height="120" Canvas.Left="50" Canvas.Top="90" BorderBrush="White" BorderThickness="1"/>
+            <local:SliderControl x:Name="spd" Height="120" Canvas.Left="50" Canvas.Top="90"
+                                 Value="{Binding ElementName=pfdControl,Path=FlightState.AirSpeed}"/>
+            <Border Width="24" Height="120" Canvas.Right="50" Canvas.Top="90" BorderBrush="White" BorderThickness="1"/>
+            <local:SliderControl x:Name="alt" Height="120" Canvas.Right="50" Canvas.Top="90" ReverseTick="-1"
+                                 Value="{Binding ElementName=pfdControl,Path=FlightState.Altitude}"/>
 
+            <Polygon Points="0,0 3,6 -3,6" Canvas.Left="150" Canvas.Top="80" Fill="White"/>
+
+            <Canvas Height="120" Width="60" Canvas.Left="120" Canvas.Top="90" RenderTransformOrigin="0.5,0.5" ClipToBounds="True">
+                <Canvas.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="{Binding ElementName=pfdControl,Path=FlightState.Roll}"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Canvas.RenderTransform>
+
+                <Path x:Name="pitchTickpath" Data="M0,0 0,162" Canvas.Left="30" Canvas.Top="-21"  RenderTransformOrigin="0.5,0.5" >
+                    <Path.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform Y="{Binding ElementName=pfdControl,Path=PitchTranslate}"/>
+                        </TransformGroup>
+                    </Path.RenderTransform>
+                </Path>
+                <Path x:Name="pitchLeftpath" Data="M0,0 0,162" Canvas.Left="5" Canvas.Top="-21"  RenderTransformOrigin="0.5,0.5" >
+                    <Path.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform Y="{Binding ElementName=pfdControl,Path=PitchTranslate}"/>
+                        </TransformGroup>
+                    </Path.RenderTransform>
+                </Path>
+                <Path x:Name="pitchRightpath" Data="M0,0 0,162" Canvas.Right="5" Canvas.Top="-21"  RenderTransformOrigin="0.5,0.5" >
+                    <Path.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform Y="{Binding ElementName=pfdControl,Path=PitchTranslate}"/>
+                        </TransformGroup>
+                    </Path.RenderTransform>
+                </Path>
+
+                <ec:PathListBox x:Name="pitchShortTick" IsHitTestVisible="False" ItemsSource="{Binding ElementName=pfdControl,Path=PitchShortTicks}">
+                    <ec:PathListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Line X1="0" Y1="0" X2="0" Y2="{Binding}" Stroke="White" StrokeThickness="1" RenderTransformOrigin="0.5,0.5"/>
+                        </DataTemplate>
+                    </ec:PathListBox.ItemTemplate>
+                    <ec:PathListBox.LayoutPaths>
+                        <ec:LayoutPath Distribution="Even" Orientation="OrientToPath"
+                       SourceElement="{Binding ElementName=pitchTickpath}" />
+                    </ec:PathListBox.LayoutPaths>
+                </ec:PathListBox>
+
+                <ec:PathListBox x:Name="leftTextTick" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5">
+                    <ec:PathListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" FontSize="6" Foreground="White" RenderTransformOrigin="0.5,0.5" >
+                                <TextBlock.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="-90"/>
+                                        <TranslateTransform X="0" Y="0"/>
+                                    </TransformGroup>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ec:PathListBox.ItemTemplate>
+                    <ec:PathListBox.LayoutPaths>
+                        <ec:LayoutPath Distribution="Even" Orientation="OrientToPath"
+                       SourceElement="{Binding ElementName=pitchLeftpath}" />
+                    </ec:PathListBox.LayoutPaths>
+                </ec:PathListBox>
+                <ec:PathListBox x:Name="rightTextTick" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5">
+                    <ec:PathListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" FontSize="6" Foreground="White" RenderTransformOrigin="0.5,0.5" >
+                                <TextBlock.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="-90"/>
+                                        <TranslateTransform X="0" Y="0"/>
+                                    </TransformGroup>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ec:PathListBox.ItemTemplate>
+                    <ec:PathListBox.LayoutPaths>
+                        <ec:LayoutPath Distribution="Even" Orientation="OrientToPath"
+                       SourceElement="{Binding ElementName=pitchRightpath}" />
+                    </ec:PathListBox.LayoutPaths>
+                </ec:PathListBox>
             </Canvas>
+            <ed:Arc x:Name="rollPath" Canvas.Left="75" Canvas.Top="80" ArcThickness="0" ArcThicknessUnit="Pixel"
+                EndAngle="45" StartAngle="-45" Stretch="None" Stroke="White"
+                    Width="150" Height="150"
+                StrokeThickness="1" RenderTransformOrigin="0.5,0.5">
+                <ed:Arc.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="{Binding ElementName=pfdControl,Path=FlightState.Roll}"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </ed:Arc.RenderTransform>
+            </ed:Arc>
+            <ec:PathListBox x:Name="rollLongTick" IsHitTestVisible="False" ItemsSource="{Binding ElementName=pfdControl,Path=RollLongTicks}">
+                <ec:PathListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Line X1="0" Y1="-6" X2="0" Y2="0" Stroke="White" StrokeThickness="1" RenderTransformOrigin="0.5,0.5"/>
+                    </DataTemplate>
+                </ec:PathListBox.ItemTemplate>
+                <ec:PathListBox.LayoutPaths>
+                    <ec:LayoutPath Distribution="Even" Orientation="OrientToPath"
+                       SourceElement="{Binding ElementName=rollPath}" />
+                </ec:PathListBox.LayoutPaths>
+            </ec:PathListBox>
+            <ec:PathListBox x:Name="rollShortTick" IsHitTestVisible="False" ItemsSource="{Binding ElementName=pfdControl,Path=RollShortTicks}">
+                <ec:PathListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Line X1="0" Y1="-3" X2="0" Y2="0" Stroke="White" StrokeThickness="1" RenderTransformOrigin="0.5,0.5"/>
+                    </DataTemplate>
+                </ec:PathListBox.ItemTemplate>
+                <ec:PathListBox.LayoutPaths>
+                    <ec:LayoutPath Distribution="Even" Orientation="OrientToPath"
+                       SourceElement="{Binding ElementName=rollPath}" />
+                </ec:PathListBox.LayoutPaths>
+            </ec:PathListBox>
 
-        </Viewbox>
-        <Border BorderBrush="White" BorderThickness="1" Grid.Column="1"  Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" >
-            <local:SliderControl x:Name="speed" Margin="0" Value="{Binding ElementName=pfdControl,Path=FlightState.AirSpeed}" TickNumber="7"/>
-        </Border>
-        <Border BorderBrush="White" BorderThickness="1" Grid.Column="3"  Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Right">
-            <local:SliderControl x:Name="altitude" Margin="0" ReverseTick="-1" Value="{Binding ElementName=pfdControl,Path=FlightState.Altitude}" TickNumber="7"/>
-        </Border>
-        <Canvas Grid.Column="2" Grid.Row="3"/>
-        <local:HorizonControl x:Name="horizon" Grid.Column="2" Grid.Row="2" Pitch="{Binding ElementName=pfdControl,Path=FlightState.Pitch}" Roll="{Binding ElementName=pfdControl,Path=FlightState.Roll}">
-            
-        </local:HorizonControl>
-        
-    </Grid>
+            <Polygon Points="0,0 30,7 0,5 -30,7" Fill="Yellow"
+                     Canvas.Left="150" Canvas.Top="150"/>
+            <Line X1="0" Y1="0" X2="30" Y2="0" Stroke="Yellow" StrokeThickness="2"
+                  Canvas.Left="90" Canvas.Top="150"/>
+            <Line X1="0" Y1="0" X2="30" Y2="0" Stroke="Yellow" StrokeThickness="2"
+                  Canvas.Right="90" Canvas.Top="150"/>
+            <Polygon Points="-3,-6 3,-6 0,0" Fill="White"
+                     Canvas.Top="250" Canvas.Left="150"/>
+        </Canvas>
+    </Viewbox>
+
+
 </UserControl>

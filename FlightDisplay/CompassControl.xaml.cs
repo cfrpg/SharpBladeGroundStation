@@ -49,18 +49,7 @@ namespace FlightDisplay
         }
         public static readonly DependencyProperty LongTickLengthProperty =
             DependencyProperty.Register("LongTickLength", typeof(double), typeof(CompassControl));
-        public double LongTickLength
-        {
-            get { return (double)GetValue(LongTickLengthProperty); }
-            set { SetValue(LongTickLengthProperty, value); }
-        }
-        public static readonly DependencyProperty ShortTickLengthProperty =
-            DependencyProperty.Register("ShortTickLength", typeof(double), typeof(CompassControl));
-        public double ShortTickLength
-        {
-            get { return (double)GetValue(ShortTickLengthProperty); }
-            set { SetValue(ShortTickLengthProperty, value); }
-        }
+        
 
         public static readonly DependencyProperty HeadingProperty =
             DependencyProperty.Register("Heading", typeof(int), typeof(CompassControl), new PropertyMetadata(0, CompassControl.OnHeadingPropertyChanged));
@@ -116,19 +105,7 @@ namespace FlightDisplay
             this.TextTicks[0] = "W";
             this.TextTicks[3] = "N";
             this.TextTicks[6] = "E";
-            this.TextTicks[9] = "S";
-            Binding b1 = new Binding();
-            b1.Source = compass;
-            b1.Path = new PropertyPath("Width");
-            b1.Converter = new CompassTickConverter();
-            b1.Mode = BindingMode.OneWay;
-            this.SetBinding(LongTickLengthProperty, b1);
-            Binding b2 = new Binding();
-            b2.Source = compass;
-            b2.Path = new PropertyPath("LongTickLength");
-            b2.Converter = new HalfConverter();
-            b2.Mode = BindingMode.OneWay;
-            this.SetBinding(ShortTickLengthProperty, b2);
+            this.TextTicks[9] = "S";           
         }
     }
 }
