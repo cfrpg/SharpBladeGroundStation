@@ -13,7 +13,8 @@ namespace SharpBladeGroundStation.CommLink
 		int maxDataSize;
 		int timeout;
 		LinkProtocol protocol;
-		int baudRate;		
+		int baudRate;
+        bool isStarted;
 
 		System.Timers.Timer scantimer;
 		List<PortData> ports;
@@ -32,6 +33,8 @@ namespace SharpBladeGroundStation.CommLink
 			scantimer = new System.Timers.Timer(500);
 			scantimer.Elapsed += Scantimer_Elapsed;
 			ports = new List<PortData>();
+            IsStarted = false;
+
 		}
 
 		private void Scantimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -80,7 +83,7 @@ namespace SharpBladeGroundStation.CommLink
 						}
 						break;
 					case PortScannerState.Available:
-						ports[i].link.ClosePort();
+                        ports[i].link.ClosePort();                     
 						OnFindPort(this, new EventArgs());
 						break;
 					case PortScannerState.Unavailable:
@@ -118,14 +121,22 @@ namespace SharpBladeGroundStation.CommLink
 			set { timeout = value; }
 		}
 
-		public void Start()
+        public bool IsStarted
+        {
+            get { return isStarted; }
+            set { isStarted = value; }
+        }
+
+        public void Start()
 		{
 			scantimer.Start();
+            IsStarted = true;
 		}
 
 		public void Stop()
 		{
 			scantimer.Stop();
+            IsStarted = false;
 		}
 	}
 

@@ -7,10 +7,12 @@
         mc:Ignorable="d"
         Title="SharpBladeGroundStation" Height="600" Width="1113">
     <Window.Resources>
-       
+
     </Window.Resources>
-    <Grid Margin="0,0,202,0">
-        <TextBlock x:Name="textBlock" Height="559" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBlock" Width="972" HorizontalAlignment="Left"/>
-        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Height="32" Margin="982,156,-172,0" VerticalAlignment="Top" Width="93" Click="button_Click" RenderTransformOrigin="0.355,-3.156"/>
+    <Grid>
+        <Button x:Name="button" Content="FlushMsg" HorizontalAlignment="Left" Height="32" Margin="984,54,0,0" VerticalAlignment="Top" Width="92" Click="button_Click" RenderTransformOrigin="0.355,-3.156"/>
+        <Button x:Name="button1" Content="SwitchScanner" HorizontalAlignment="Left" Margin="984,112,0,0" VerticalAlignment="Top" Width="92" Height="32" Click="button1_Click"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="394" Margin="347,0,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="565"/>
+          
     </Grid>
 </Window>

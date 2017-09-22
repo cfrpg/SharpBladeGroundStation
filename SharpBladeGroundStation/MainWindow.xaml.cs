@@ -21,30 +21,53 @@ namespace SharpBladeGroundStation
     /// </summary>
     public partial class MainWindow : Window
     {
-		SerialLink link;
-		LinkPackage package;
-		string msg="";
+        SerialLink link;
+        LinkPackage package;
+        string msg = "";
+
+        PortScanner portscanner;
+
         public MainWindow()
         {
             InitializeComponent();
-			link = new SerialLink("COM3", LinkProtocol.MAVLink);
-			link.OnReceivePackage += Link_OnReceivePackage;
+            //link = new SerialLink("COM3", LinkProtocol.MAVLink);
+            //link.OnReceivePackage += Link_OnReceivePackage;
+
+            portscanner = new PortScanner(LinkProtocol.ANOLink, 115200, 20480, 1);
+            portscanner.OnFindPort += Portscanner_OnFindPort;
         }
 
-		private void Link_OnReceivePackage(SerialLink sender, EventArgs e)
-		{
-			while(link.ReceivedPackageQueue.Count!=0)
-			{
-				package = link.ReceivedPackageQueue.Dequeue();
-				msg += package.ToString()+System.Environment.NewLine;
-				
-			}
-		}
+        private void Portscanner_OnFindPort(PortScanner sender, EventArgs e)
+        {
 
-		private void button_Click(object sender, RoutedEventArgs e)
-		{
-			textBlock.Text = msg;
-			msg = "";
-		}
-	}
+        }
+
+        private void Link_OnReceivePackage(SerialLink sender, EventArgs e)
+        {
+            while (link.ReceivedPackageQueue.Count != 0)
+            {
+                package = link.ReceivedPackageQueue.Dequeue();
+                msg += package.ToString() + System.Environment.NewLine;
+
+            }
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+
+            msg = "";
+        }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            if (portscanner.IsStarted)
+            {
+                portscanner.Stop();
+            }
+            else
+            {
+                portscanner.Start();
+            }
+        }
+    }
 }
