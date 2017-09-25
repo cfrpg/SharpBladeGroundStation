@@ -38,6 +38,12 @@
     <Reference Include="FlightDisplay">
       <HintPath>..\FlightDisplay.dll</HintPath>
     </Reference>
+    <Reference Include="GMap.NET.Core">
+      <HintPath>..\..\..\Projects\WpfApplication1\GMap.NET.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="GMap.NET.WindowsPresentation">
+      <HintPath>..\..\..\Projects\WpfApplication1\GMap.NET.WindowsPresentation.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -58,6 +64,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataStructs\WayPoint.cs" />
+    <Compile Include="UIData.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -78,6 +86,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Map\AMapProvider.cs" />
+    <Compile Include="Map\GPS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

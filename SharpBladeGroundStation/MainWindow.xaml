@@ -5,33 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SharpBladeGroundStation"
         xmlns:fd="clr-namespace:FlightDisplay;assembly=FlightDisplay"
+        xmlns:gmwpf="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
         mc:Ignorable="d"
-        Title="SharpBladeGroundStation" Height="700" Width="1200">
+        Title="SharpBladeGroundStation" Height="700" Width="1200" SizeChanged="Window_SizeChanged">
     <Window.Resources>
 
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300*" MaxWidth="400" MinWidth="250"/>
+            <ColumnDefinition Name="leftcol" Width="300*" MaxWidth="400" MinWidth="250"/>
             <ColumnDefinition Width="892*"/>
         </Grid.ColumnDefinitions>
-        <Grid >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="300*" MaxHeight="400" MinHeight="250"/>
-                <RowDefinition Height="184*"/>
-                <RowDefinition Height="185*"/>
-            </Grid.RowDefinitions>
-            <fd:PFDControl x:Name="pfd" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-
-        </Grid>
+        <StackPanel  Margin="0" Orientation="Vertical">
+            <fd:PFDControl x:Name="pfd" Grid.Row="0" VerticalAlignment="Top" />
+            <Viewbox HorizontalAlignment="Left">
+                <TextBlock x:Name="wpText"  Margin="5"  TextWrapping="Wrap" Text="TextBlock" Width="289" Height="105" VerticalAlignment="Top"/>
+            </Viewbox>
+            
+        </StackPanel>
+        
+        
         <TabControl x:Name="tabControl" Grid.Column="1" Margin="0">
             <TabItem Header="TabItem">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <gmwpf:GMapControl x:Name="gmap"  Margin="0"  MaxZoom="18" Zoom="13"/>
+                </Grid>
             </TabItem>
             <TabItem Header="TabItem">
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
         </TabControl>
+        
 
 
     </Grid>

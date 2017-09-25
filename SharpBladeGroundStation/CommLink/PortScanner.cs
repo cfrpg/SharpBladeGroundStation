@@ -157,8 +157,7 @@ namespace SharpBladeGroundStation.CommLink
 		public DateTime lastCheckTime;
 		public void SetState(PortScannerState s)
 		{
-			this.state = s;
-			int a = 0;
+			this.state = s;			
 		}
 	}
 	public class PortScannerEventArgs : EventArgs
@@ -173,6 +172,7 @@ namespace SharpBladeGroundStation.CommLink
 		public PortScannerEventArgs(SerialLink l)
 		{
 			link = l;
+			portName = l.Port.PortName;
 		}
 	}
 	public enum PortScannerState

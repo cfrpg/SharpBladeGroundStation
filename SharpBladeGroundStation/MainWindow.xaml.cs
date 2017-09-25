@@ -13,7 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SharpBladeGroundStation.CommLink;
-
+using SharpBladeGroundStation.Map;
+using GMap.NET;
 using System.Diagnostics;
 
 namespace SharpBladeGroundStation
@@ -32,15 +33,25 @@ namespace SharpBladeGroundStation
         public MainWindow()
         {
             InitializeComponent();
-            //link = new SerialLink("COM3", LinkProtocol.MAVLink);
-            //link.OnReceivePackage += Link_OnReceivePackage;
-
+			//link = new SerialLink("COM3", LinkProtocol.MAVLink);
+			//link.OnReceivePackage += Link_OnReceivePackage;
+			initGmap();
             portscanner = new PortScanner(LinkProtocol.ANOLink, 115200, 20480, 1);
             portscanner.OnFindPort += Portscanner_OnFindPort;
 			portscanner.Start();
         }
 
-        private void Portscanner_OnFindPort(PortScanner sender, PortScannerEventArgs e)
+		private void initGmap()
+		{
+			gmap.Zoom = 3;
+			gmap.MapProvider = AMapSatProvider.Instance;
+			GMaps.Instance.Mode = AccessMode.ServerOnly;
+			gmap.Position = new PointLatLng(34.242947, 108.916225);
+			gmap.Zoom = 18;
+			
+		}
+
+		private void Portscanner_OnFindPort(PortScanner sender, PortScannerEventArgs e)
         {
 			Debug.WriteLine("[main] find port {0}", e.Link.Port.PortName);
 			portscanner.Stop();
@@ -58,6 +69,16 @@ namespace SharpBladeGroundStation
                 package = link.ReceivedPackageQueue.Dequeue();
                 
             }
-        }       
-    }
+        }
+
+		private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+
+		}
+
+		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+		{
+			leftcol.MaxWidth = (e.NewSize.Height-30)/669*300;
+		}
+	}
 }
