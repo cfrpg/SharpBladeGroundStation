@@ -4,15 +4,35 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SharpBladeGroundStation"
+        xmlns:fd="clr-namespace:FlightDisplay;assembly=FlightDisplay"
         mc:Ignorable="d"
-        Title="SharpBladeGroundStation" Height="600" Width="1113">
+        Title="SharpBladeGroundStation" Height="700" Width="1200">
     <Window.Resources>
 
     </Window.Resources>
     <Grid>
-        <Button x:Name="button" Content="FlushMsg" HorizontalAlignment="Left" Height="32" Margin="984,54,0,0" VerticalAlignment="Top" Width="92" Click="button_Click" RenderTransformOrigin="0.355,-3.156"/>
-        <Button x:Name="button1" Content="SwitchScanner" HorizontalAlignment="Left" Margin="984,112,0,0" VerticalAlignment="Top" Width="92" Height="32" Click="button1_Click"/>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="394" Margin="347,0,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="565"/>
-          
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300*" MaxWidth="400" MinWidth="250"/>
+            <ColumnDefinition Width="892*"/>
+        </Grid.ColumnDefinitions>
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="300*" MaxHeight="400" MinHeight="250"/>
+                <RowDefinition Height="184*"/>
+                <RowDefinition Height="185*"/>
+            </Grid.RowDefinitions>
+            <fd:PFDControl x:Name="pfd" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+
+        </Grid>
+        <TabControl x:Name="tabControl" Grid.Column="1" Margin="0">
+            <TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
+
+
     </Grid>
 </Window>

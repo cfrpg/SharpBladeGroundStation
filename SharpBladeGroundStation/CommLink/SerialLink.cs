@@ -149,10 +149,10 @@ namespace SharpBladeGroundStation.CommLink
 			int offset = 0;
 			bool flag = false;
 			bool received = false;
-			while(offset<bufferSize&&(!flag))
+			while (offset < bufferSize && (!flag))
 			{
-				PackageParseResult res= receivePackage.ReadFromBuffer(buffer, bufferSize, offset);
-				switch(res)
+				PackageParseResult res = receivePackage.ReadFromBuffer(buffer, bufferSize, offset);
+				switch (res)
 				{
 					case PackageParseResult.NoSTX:
 						offset++;
@@ -166,18 +166,20 @@ namespace SharpBladeGroundStation.CommLink
 					case PackageParseResult.Yes:
 						offset += receivePackage.PackageSize;
 						receivedPackageQueue.Enqueue(receivePackage.Clone());
-						received = true;					
+						received = true;
 						break;
 				}
 			}
-			for(int i=offset;i<bufferSize;i++)
+			for (int i = offset; i < bufferSize; i++)
 			{
 				buffer[i - offset] = buffer[i];
 			}
 			bufferSize -= offset;
 			isParsingBuffer = false;
-			if(received)
-				OnReceivePackage(this, new EventArgs());
+			if (received)
+			{
+				OnReceivePackage?.Invoke(this, new EventArgs());
+			}
 		}
 
 		public void OpenPort()

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.IO.Ports;
 
+using System.Diagnostics;
+
 namespace SharpBladeGroundStation.CommLink
 {
 	public class PortScanner
@@ -19,7 +21,7 @@ namespace SharpBladeGroundStation.CommLink
 		System.Timers.Timer scantimer;
 		List<PortData> ports;
 
-		public delegate void FindPortEvent(PortScanner sender, EventArgs e);
+		public delegate void FindPortEvent(PortScanner sender, PortScannerEventArgs e);
 
 		public event FindPortEvent OnFindPort;
 
@@ -58,7 +60,8 @@ namespace SharpBladeGroundStation.CommLink
 					port.link = new SerialLink(pn, protocol);
 					port.lastCheckTime = DateTime.Now;
 					port.state = PortScannerState.NewPort;
-					ports.Add(port);		
+					ports.Add(port);
+					Debug.WriteLine("[port scanner]find new port:"+ pn);
 				}
 			}
 			for(int i=0;i<ports.Count;i++)
@@ -68,26 +71,32 @@ namespace SharpBladeGroundStation.CommLink
 					case PortScannerState.NewPort:
 						ports[i].link.ResetLink();
 						ports[i].link.OpenPort();
+						ports[i].SetState(PortScannerState.Scanning);
+						Debug.WriteLine("[port scanner]start scanning:" + ports[i].name);
 						break;
 					case PortScannerState.Scanning:
 						if(ports[i].link.ReceivedPackageQueue.Count>1)
 						{
 							ports[i].SetState(PortScannerState.Available);
+							ports[i].lastCheckTime = DateTime.Now;
+							Debug.WriteLine("[port scanner]find port:" + ports[i].name);
 						}
 						else
 						{
 							if(ports[i].link.DataReceived>3000|| DateTime.Now.Subtract(ports[i].lastCheckTime).TotalSeconds > 5.0)
 							{
 								ports[i].SetState(PortScannerState.Unavailable);
+								ports[i].lastCheckTime = DateTime.Now;
+								Debug.WriteLine("[port scanner]unavilable port:" + ports[i].name);
 							}
 						}
 						break;
 					case PortScannerState.Available:
-                        ports[i].link.ClosePort();                     
-						OnFindPort(this, new EventArgs());
+						ports[i].link.ResetLink();                
+						OnFindPort?.Invoke(this, new PortScannerEventArgs(ports[i].link));
 						break;
 					case PortScannerState.Unavailable:
-						ports[i].link.ClosePort();
+						ports[i].link.ResetLink();
 						if(DateTime.Now.Subtract(ports[i].lastCheckTime).TotalSeconds > 2.0)
 						{
 							ports[i].SetState(PortScannerState.NewPort);
@@ -140,19 +149,32 @@ namespace SharpBladeGroundStation.CommLink
 		}
 	}
 
-	struct PortData
+	public class PortData
 	{
-		public string name;
-		public Thread scanner;
+		public string name;		
 		public PortScannerState state;
 		public SerialLink link;
 		public DateTime lastCheckTime;
 		public void SetState(PortScannerState s)
 		{
-			state = s;
+			this.state = s;
+			int a = 0;
 		}
 	}
+	public class PortScannerEventArgs : EventArgs
+	{
+		string portName;
+		SerialLink link;
+		public SerialLink Link
+		{
+			get { return link; }
+		}
 
+		public PortScannerEventArgs(SerialLink l)
+		{
+			link = l;
+		}
+	}
 	public enum PortScannerState
 	{
 		/// <summary>
