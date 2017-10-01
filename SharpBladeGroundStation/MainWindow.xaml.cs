@@ -87,7 +87,7 @@ namespace SharpBladeGroundStation
 
 						break;
 					case LinkProtocol.ANOLink:
-
+						analyzeANOPackage(package);
 						break;
 				}
             }
@@ -101,6 +101,7 @@ namespace SharpBladeGroundStation
 
 		private void setSensorData(string name,double x,double y,double z)
 		{
+			bool flag = true;
 			for(int i=0;i<sensorData.Count;i++)
 			{
 				if(sensorData[i].Name==name)
@@ -108,18 +109,24 @@ namespace SharpBladeGroundStation
 					sensorData[i].X = x;
 					sensorData[i].Y = y;
 					sensorData[i].Z = z;
-					sensorDataList.Items.Refresh();
-					return;
+					flag = false;			
+					
 				}
 			}
-			sensorData.Add(new Vector3Data(name, x, y, z));
-			sensorDataList.Items.Refresh();
+			if (flag)
+			{
+				sensorData.Add(new Vector3Data(name, x, y, z));
+			}
+			Action action = () => { sensorDataList.Items.Refresh(); };
+			sensorDataList.Dispatcher.Invoke(action);
+			
 
 		}
 
 		private void analyzeANOPackage(LinkPackage p)
 		{
 			ANOLinkPackage package = (ANOLinkPackage)p;
+			package.StartRead();
 			switch(package.Function)
 			{
 				case 0x00://VER
@@ -129,7 +136,18 @@ namespace SharpBladeGroundStation
 
 					break;
 				case 0x02://SENSER
-
+					short x = package.NextShort();
+					short y = package.NextShort();
+					short z = package.NextShort();
+					setSensorData("ACCEL", x, y, z);
+					x = package.NextShort();
+					y = package.NextShort();
+					z = package.NextShort();
+					setSensorData("GYRO", x, y, z);
+					x = package.NextShort();
+					y = package.NextShort();
+					z = package.NextShort();
+					setSensorData("MAG", x, y, z);
 					break;
 				case 0x03://RCDATA
 

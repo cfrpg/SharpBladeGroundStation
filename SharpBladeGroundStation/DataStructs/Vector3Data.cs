@@ -36,7 +36,7 @@ namespace SharpBladeGroundStation.DataStructs
 			{
 				x = value;
 				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("X"));
-				UpdateTime = DateTime.Now;
+				
 			}
 		}
 
@@ -47,7 +47,7 @@ namespace SharpBladeGroundStation.DataStructs
 			{
 				y = value;
 				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Y"));
-				UpdateTime = DateTime.Now;
+				
 			}
 		}
 
@@ -77,13 +77,14 @@ namespace SharpBladeGroundStation.DataStructs
 			get { return updateTime; }
 			private set
 			{
-				UpdateFrequency=1000.0/value.Subtract(updateTime).TotalMilliseconds;
+				double dt=value.Subtract(updateTime).TotalMilliseconds;
+				Frequency = 1000.0 / dt;
 				updateTime = value;
 				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UpdateTime"));
 			}
 		}
 
-		public double UpdateFrequency
+		public double Frequency
 		{
 			get { return updateFrequency; }
 			private set
