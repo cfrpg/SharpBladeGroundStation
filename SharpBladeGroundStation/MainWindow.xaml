@@ -7,7 +7,9 @@
         xmlns:fd="clr-namespace:FlightDisplay;assembly=FlightDisplay"
         xmlns:gmwpf="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
         mc:Ignorable="d"
-        Title="SharpBladeGroundStation" Height="700" Width="1200" SizeChanged="Window_SizeChanged">
+        Title="SharpBladeGroundStation" Height="700" Width="1200" SizeChanged="Window_SizeChanged"
+        x:Name="mainwindow">
+        
     <Window.Resources>
 
     </Window.Resources>
@@ -16,15 +18,30 @@
             <ColumnDefinition Name="leftcol" Width="300*" MaxWidth="400" MinWidth="250"/>
             <ColumnDefinition Width="892*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel  Margin="0" Orientation="Vertical">
-            <fd:PFDControl x:Name="pfd" Grid.Row="0" VerticalAlignment="Top" />
-            <Viewbox HorizontalAlignment="Left">
-                <TextBlock x:Name="wpText"  Margin="5"  TextWrapping="Wrap" Text="TextBlock" Width="289" Height="105" VerticalAlignment="Top"/>
-            </Viewbox>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="640*"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <StackPanel  Margin="0" Orientation="Vertical" Grid.Row="0">
+                <fd:PFDControl x:Name="pfd" Grid.Row="0" VerticalAlignment="Top" />
+                <Viewbox HorizontalAlignment="Left">
+                    <TextBlock x:Name="wpText"  Margin="5"  TextWrapping="Wrap" Text="TextBlock" Width="289" Height="105" VerticalAlignment="Top"/>
+                </Viewbox>
+            </StackPanel>
+            <Grid Grid.Row="1" Background="#FFB4B4B4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+                <fd:LinkSpeedControl x:Name="linkspd" Grid.Column="1"/>
+                <TextBlock x:Name="linkStateText" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text=""  Background="#FFB4B4AF" FontSize="10" VerticalAlignment="Center" Margin="3,0,0,0"/>
+            </Grid>
             
-        </StackPanel>
-        
-        
+            
+            
+        </Grid>
+
         <TabControl x:Name="tabControl" Grid.Column="1" Margin="0">
             <TabItem Header="TabItem">
                 <Grid Background="#FFE5E5E5">
@@ -32,10 +49,24 @@
                 </Grid>
             </TabItem>
             <TabItem Header="TabItem">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <ListView x:Name="sensorDataList" HorizontalAlignment="Left" Height="268" Margin="481,0,0,0" VerticalAlignment="Top" Width="405" ItemsSource="{Binding}">
+                        <ListView.View>
+                            <GridView>
+                                <GridView.Columns>
+                                    <GridViewColumn Header="Name" Width="50" DisplayMemberBinding="{Binding Path=Name}"/>
+                                    <GridViewColumn Header="X" Width="50" DisplayMemberBinding="{Binding Path=X}"/>
+                                    <GridViewColumn Header="Y" Width="50" DisplayMemberBinding="{Binding Path=Y}"/>
+                                    <GridViewColumn Header="Z" Width="50" DisplayMemberBinding="{Binding Path=Z}"/>
+                                    <GridViewColumn Header="Freq" Width="50" DisplayMemberBinding="{Binding Path=Frequency}"/>
+                                </GridView.Columns>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
             </TabItem>
         </TabControl>
-        
+
 
 
     </Grid>
