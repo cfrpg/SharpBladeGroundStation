@@ -57,6 +57,16 @@ namespace SharpBladeGroundStation.CommLink
 			dataSize = 0;
 		}
 
+		public byte[] PackageBuffer
+		{
+			get
+			{
+				byte[] b = new byte[PackageSize];
+				Array.Copy(buffer, b, PackageSize);
+				return b;
+			}
+		}
+
 #region Read&Write
 		public bool AddData(byte[] data)
 		{

@@ -71,11 +71,16 @@ namespace SharpBladeGroundStation.CommLink
 		{
 			byte v = 0;
 			int i = 0;
+			buffer[0] = 0xAA;
+			buffer[1] = 0xAF;
+			buffer[2] = function;
+			buffer[3] = (byte)dataSize;
 			for (i = 0; i < HeaderSize + dataSize; i++)
 			{
 				v += buffer[i];
 			}
 			buffer[i] = v;
+			
 		}
 		public override string ToString()
 		{

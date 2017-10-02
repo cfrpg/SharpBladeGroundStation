@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.ComponentModel;
 
 namespace SharpBladeGroundStation.CommLink
 {
-	public class SerialLink
+	public class SerialLink:INotifyPropertyChanged
 	{
 		SerialPort port;
 		LinkState state;
@@ -21,6 +22,7 @@ namespace SharpBladeGroundStation.CommLink
 
 		Queue<LinkPackage> receivedPackageQueue;
 		LinkPackage receivePackage;
+		Queue<LinkPackage> sendPackageQueue;
 
 		bool isUpdatingBuffer;
 		bool isParsingBuffer;
@@ -28,6 +30,7 @@ namespace SharpBladeGroundStation.CommLink
 
 		Thread backgroundListener;
 
+		public event PropertyChangedEventHandler PropertyChanged;
 
 		public SerialPort Port
 		{
@@ -80,6 +83,12 @@ namespace SharpBladeGroundStation.CommLink
 			get { return dataSent; }
 		}
 
+		public Queue<LinkPackage> SendPackageQueue
+		{
+			get { return sendPackageQueue; }
+			set { sendPackageQueue = value; }
+		}
+
 		public delegate void ReceivePackageEvent(SerialLink sender, EventArgs e);
 
 		public event ReceivePackageEvent OnReceivePackage;
@@ -98,6 +107,7 @@ namespace SharpBladeGroundStation.CommLink
 
 			state = LinkState.Disconnected;
 			receivedPackageQueue = new Queue<LinkPackage>();
+			sendPackageQueue = new Queue<LinkPackage>();
 			switch(p)
 			{
 				case LinkProtocol.ANOLink:
@@ -117,14 +127,26 @@ namespace SharpBladeGroundStation.CommLink
 			receiveTimeOut = 5000;
 			backgroundListener = new Thread(backgroundWorker);
 			backgroundListener.IsBackground = true;
-			//backgroundListener.Start();			
+			backgroundListener.Start();			
 		}
 
 		private void backgroundWorker()
 		{
 			while(true)
 			{
-
+				if (!port.IsOpen)
+				{
+					Thread.Sleep(500);
+					continue;
+				}
+				if(port.BytesToWrite==0)
+				{
+					if (sendPackageQueue.Count != 0)
+					{
+						LinkPackage p = sendPackageQueue.Dequeue();
+						port.Write(p.Buffer, 0, p.PackageSize);
+					}
+				}
 			}
 		}
 
@@ -206,5 +228,7 @@ namespace SharpBladeGroundStation.CommLink
 			isUpdatingBuffer = false;
 			receivedPackageQueue.Clear();
 		}
+
+		
 	}
 }

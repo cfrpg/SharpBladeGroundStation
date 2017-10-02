@@ -28,7 +28,7 @@ namespace SharpBladeGroundStation
         SerialLink link;
         LinkPackage package;
         string msg = "";
-		string linkStateMsg;
+		
 
         PortScanner portscanner;
 
@@ -43,15 +43,12 @@ namespace SharpBladeGroundStation
             portscanner = new PortScanner(LinkProtocol.ANOLink, 115200, 20480, 1);
             portscanner.OnFindPort += Portscanner_OnFindPort;
 			portscanner.Start();
-			linkStateMsg = "Connecting";
+			linkStateText.Text = "Connecting";
 
 			sensorData = new List<Vector3Data>();
 			sensorDataList.ItemsSource = sensorData;
 
-			Binding b = new Binding();
-			b.Source = linkStateMsg;
-			b.Mode = BindingMode.OneWay;
-			linkStateText.SetBinding(TextBlock.TextProperty, b);
+			
         }
 
 		private void initGmap()
@@ -73,7 +70,8 @@ namespace SharpBladeGroundStation
 			link = e.Link;
 			link.OnReceivePackage += Link_OnReceivePackage;
 			link.OpenPort();
-			linkStateMsg = link.Port.PortName + ":" + link.Protocol.ToString();
+			Action a = () => { linkStateText.Text = link.Port.PortName + ":" + link.Protocol.ToString(); };
+			linkStateText.Dispatcher.Invoke(a);
         }
 
 		private void Link_OnReceivePackage(SerialLink sender, EventArgs e)
@@ -130,7 +128,7 @@ namespace SharpBladeGroundStation
 			switch(package.Function)
 			{
 				case 0x00://VER
-
+					int a = 0;
 					break;
 				case 0x01://STATUS
 
@@ -188,6 +186,16 @@ namespace SharpBladeGroundStation
 			}
 		}
 
-	
+		private void button_Click(object sender, RoutedEventArgs e)
+		{
+			ANOLinkPackage p = new ANOLinkPackage();
+			p.Function = 0x02;
+			p.AddData((byte)(0x01));
+			p.SetVerify();
+			if(link.Port.IsOpen)
+			{
+				link.SendPackageQueue.Enqueue(p);
+			}
+		}
 	}
 }

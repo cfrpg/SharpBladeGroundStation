@@ -8,8 +8,10 @@
         xmlns:gmwpf="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
         mc:Ignorable="d"
         Title="SharpBladeGroundStation" Height="700" Width="1200" SizeChanged="Window_SizeChanged"
-        x:Name="mainwindow">
-        
+        x:Name="mainwindow"
+        MinWidth="1200"
+        MinHeight="700">
+
     <Window.Resources>
 
     </Window.Resources>
@@ -18,55 +20,67 @@
             <ColumnDefinition Name="leftcol" Width="300*" MaxWidth="400" MinWidth="250"/>
             <ColumnDefinition Width="892*"/>
         </Grid.ColumnDefinitions>
-        <Grid>
+
+        <StackPanel  Margin="0" Orientation="Vertical">
+            <fd:PFDControl x:Name="pfd" Grid.Row="0" VerticalAlignment="Top" />
+            <Viewbox>
+                <TextBlock x:Name="wpText"  Margin="5"  TextWrapping="Wrap" Text="这里显示航点,经纬度,大概4行" Width="289" Height="105" VerticalAlignment="Top"/>
+            </Viewbox>
+            <Viewbox>
+                
+            </Viewbox>
+        </StackPanel>
+
+
+
+        <Grid Grid.Column="1" Background="#FFB4B4B4">
             <Grid.RowDefinitions>
-                <RowDefinition Height="640*"/>
+                <RowDefinition Height="1*"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <StackPanel  Margin="0" Orientation="Vertical" Grid.Row="0">
-                <fd:PFDControl x:Name="pfd" Grid.Row="0" VerticalAlignment="Top" />
-                <Viewbox HorizontalAlignment="Left">
-                    <TextBlock x:Name="wpText"  Margin="5"  TextWrapping="Wrap" Text="TextBlock" Width="289" Height="105" VerticalAlignment="Top"/>
-                </Viewbox>
-            </StackPanel>
-            <Grid Grid.Row="1" Background="#FFB4B4B4">
+            <TabControl x:Name="tabControl" Margin="0" TabStripPlacement="Bottom" Grid.RowSpan="2">
+                <TabItem Header="导航">
+                    <Grid Background="#FFE5E5E5">
+                        <gmwpf:GMapControl x:Name="gmap"  Margin="0"  MaxZoom="18" Zoom="13"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="数据">
+                    <Grid Background="#FFE5E5E5">
+                        <ListView x:Name="sensorDataList" HorizontalAlignment="Left" Height="221" VerticalAlignment="Top" Width="256" ItemsSource="{Binding}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridView.Columns>
+                                        <GridViewColumn Header="Name" Width="50" DisplayMemberBinding="{Binding Path=Name}"/>
+                                        <GridViewColumn Header="X" Width="50" DisplayMemberBinding="{Binding Path=X}"/>
+                                        <GridViewColumn Header="Y" Width="50" DisplayMemberBinding="{Binding Path=Y}"/>
+                                        <GridViewColumn Header="Z" Width="50" DisplayMemberBinding="{Binding Path=Z}"/>
+                                        <GridViewColumn Header="Freq" Width="50" DisplayMemberBinding="{Binding Path=Frequency}"/>
+                                    </GridView.Columns>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Height="38" Margin="560,294,0,0" VerticalAlignment="Top" Width="97" Click="button_Click"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="波形" Height="30">
+                    <Grid Background="#FFE5E5E5">
+
+                    </Grid>
+                </TabItem>
+
+            </TabControl>
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="200"/>
                 </Grid.ColumnDefinitions>
-                <fd:LinkSpeedControl x:Name="linkspd" Grid.Column="1"/>
-                <TextBlock x:Name="linkStateText" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text=""  Background="#FFB4B4AF" FontSize="10" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                <fd:LinkSpeedControl x:Name="linkspd" Grid.Column="2"/>
+                <TextBlock x:Name="linkStateText" HorizontalAlignment="Right" TextWrapping="Wrap" Text="COM1"  Background="#FFB4B4AF" FontSize="10" VerticalAlignment="Center" Margin="3,0,0,0" Grid.Column="1"/>
             </Grid>
-            
-            
-            
+
         </Grid>
-
-        <TabControl x:Name="tabControl" Grid.Column="1" Margin="0">
-            <TabItem Header="TabItem">
-                <Grid Background="#FFE5E5E5">
-                    <gmwpf:GMapControl x:Name="gmap"  Margin="0"  MaxZoom="18" Zoom="13"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="TabItem">
-                <Grid Background="#FFE5E5E5">
-                    <ListView x:Name="sensorDataList" HorizontalAlignment="Left" Height="268" Margin="481,0,0,0" VerticalAlignment="Top" Width="405" ItemsSource="{Binding}">
-                        <ListView.View>
-                            <GridView>
-                                <GridView.Columns>
-                                    <GridViewColumn Header="Name" Width="50" DisplayMemberBinding="{Binding Path=Name}"/>
-                                    <GridViewColumn Header="X" Width="50" DisplayMemberBinding="{Binding Path=X}"/>
-                                    <GridViewColumn Header="Y" Width="50" DisplayMemberBinding="{Binding Path=Y}"/>
-                                    <GridViewColumn Header="Z" Width="50" DisplayMemberBinding="{Binding Path=Z}"/>
-                                    <GridViewColumn Header="Freq" Width="50" DisplayMemberBinding="{Binding Path=Frequency}"/>
-                                </GridView.Columns>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </Grid>
-            </TabItem>
-        </TabControl>
-
+        
 
 
     </Grid>
