@@ -21,13 +21,36 @@
             <ColumnDefinition Width="892*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel  Margin="0" Orientation="Vertical">
+        <StackPanel  Margin="0" Orientation="Vertical" Background="#FFE5E5E5">
             <fd:PFDControl x:Name="pfd" Grid.Row="0" VerticalAlignment="Top" />
             <Viewbox>
-                <TextBlock x:Name="wpText"  Margin="5"  TextWrapping="Wrap" Text="这里显示航点,经纬度,大概4行" Width="289" Height="105" VerticalAlignment="Top"/>
+                <GroupBox x:Name="groupBox" Header="导航信息" Width="300" Height="120" BorderBrush="Black" FontSize="14">
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="lonText" TextWrapping="Wrap" Text="经度:000.0000000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" FontSize="16"/>
+                        <TextBlock x:Name="latText" TextWrapping="Wrap" Text="纬度:000.0000000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Grid.Column="1" FontSize="16"/>
+                        <TextBlock x:Name="heightText" TextWrapping="Wrap" Text="高度:0000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Grid.Row="1" FontSize="16"/>
+                        <TextBlock x:Name="gspeedText" TextWrapping="Wrap" Text="地速:0000.00m/s" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Grid.Row="1" Grid.Column="1" FontSize="16"/>
+                        <TextBlock x:Name="wpnumText" TextWrapping="Wrap" Text="航点:000/000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Grid.Row="3" FontSize="16"/>
+                        <TextBlock x:Name="wpdistText" TextWrapping="Wrap" Text="距离:00000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Grid.Row="3" FontSize="16" Grid.Column="1"/>
+                        <TextBlock x:Name="hdgText" TextWrapping="Wrap" Text="航向:000.00" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Grid.Row="2" FontSize="16"/>
+                        <TextBlock x:Name="distText" TextWrapping="Wrap" Text="航程:000000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Grid.Row="2" FontSize="16" Grid.Column="1"/>
+                    </Grid>
+                </GroupBox>
+
+
             </Viewbox>
             <Viewbox>
-                
+
             </Viewbox>
         </StackPanel>
 
@@ -44,7 +67,7 @@
                         <gmwpf:GMapControl x:Name="gmap"  Margin="0"  MaxZoom="18" Zoom="13"/>
                     </Grid>
                 </TabItem>
-                <TabItem Header="数据">
+                <TabItem Header="数据*">
                     <Grid Background="#FFE5E5E5">
                         <ListView x:Name="sensorDataList" HorizontalAlignment="Left" Height="221" VerticalAlignment="Top" Width="256" ItemsSource="{Binding}">
                             <ListView.View>
@@ -67,20 +90,51 @@
 
                     </Grid>
                 </TabItem>
+                <TabItem Header="参数" Height="30">
+                    <Grid Background="#FFE5E5E5">
 
+                    </Grid>
+                </TabItem>
+                <TabItem Header="设置" Height="30">
+                    <Grid Background="#FFE5E5E5">
+
+                    </Grid>
+                </TabItem>
             </TabControl>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="200"/>
                 </Grid.ColumnDefinitions>
-                <fd:LinkSpeedControl x:Name="linkspd" Grid.Column="2"/>
-                <TextBlock x:Name="linkStateText" HorizontalAlignment="Right" TextWrapping="Wrap" Text="COM1"  Background="#FFB4B4AF" FontSize="10" VerticalAlignment="Center" Margin="3,0,0,0" Grid.Column="1"/>
+                <fd:LinkSpeedControl x:Name="linkspd" Grid.Column="7"/>
+
+                <TextBlock x:Name="linkStateText" HorizontalAlignment="Right" TextWrapping="Wrap" Text="COM1"  Background="#FFB4B4AF" FontSize="10" VerticalAlignment="Center" Margin="0,9,198,8" Grid.Column="6" Grid.ColumnSpan="2"/>
+                <TextBlock x:Name="battText" HorizontalAlignment="Left" TextWrapping="Wrap" Text="22.2V 1000.0A" VerticalAlignment="Center" Grid.Column="5" FontSize="14" Margin="0,6"/>
+                <Image x:Name="image"  Grid.Column="4" Source="Contents/battery.png" Margin="2"/>
+                <TextBlock x:Name="gpsStateText" HorizontalAlignment="Left" TextWrapping="Wrap" Text="99星 3D Fixed" VerticalAlignment="Center" Grid.Column="2" FontSize="14" Margin="5,6,0,6"/>
+                <TextBlock x:Name="textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="VDOP:00.0" VerticalAlignment="Center" Grid.Column="3" Margin="5,0,0,0"/>
+                <Image x:Name="image1" HorizontalAlignment="Left"  VerticalAlignment="Top" Grid.Column="1" Source="Contents/satellite.png" Margin="2" RenderTransformOrigin="0.5,0.5">
+                    <Image.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                            <SkewTransform AngleY="0" AngleX="0"/>
+                            <RotateTransform Angle="0"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Image.RenderTransform>
+                </Image>
+
+
             </Grid>
 
         </Grid>
-        
+
 
 
     </Grid>

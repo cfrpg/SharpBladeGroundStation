@@ -94,7 +94,7 @@ namespace SharpBladeGroundStation
 
 		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
 		{
-			leftcol.MaxWidth = (e.NewSize.Height-30)/669*300;
+			leftcol.MaxWidth = Math.Min(400, (e.NewSize.Height-30)/669*300);
 		}
 
 		private void setSensorData(string name,double x,double y,double z)
@@ -128,7 +128,7 @@ namespace SharpBladeGroundStation
 			switch(package.Function)
 			{
 				case 0x00://VER
-					int a = 0;
+					
 					break;
 				case 0x01://STATUS
 
@@ -154,7 +154,11 @@ namespace SharpBladeGroundStation
 
 					break;
 				case 0x05://POWER
+					ushort v = package.NextUShort();
+					ushort c = package.NextUShort();
 
+					Action a05 = () => { battText.Text = string.Format("{0:F2}V {1:F2}A", (double)v / 100.0, (double)c / 100.0); };
+					battText.Dispatcher.Invoke(a05);
 					break;
 				case 0x06://MOTO
 

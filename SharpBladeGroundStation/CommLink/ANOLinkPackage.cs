@@ -33,6 +33,7 @@ namespace SharpBladeGroundStation.CommLink
 		public ANOLinkPackage():base(256)
 		{
 			function = 0;
+			reverseBytes = true;
 		}
 
 		

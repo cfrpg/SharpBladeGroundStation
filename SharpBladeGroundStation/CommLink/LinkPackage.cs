@@ -14,7 +14,7 @@ namespace SharpBladeGroundStation.CommLink
 		protected byte[] buffer;
 		protected int dataSize;
 		protected int cursor;
-
+		protected bool reverseBytes;
 
 		public byte[] Buffer
 		{
@@ -55,6 +55,7 @@ namespace SharpBladeGroundStation.CommLink
 		{
 			buffer = new byte[buffsize];
 			dataSize = 0;
+			reverseBytes = false;
 		}
 
 		public byte[] PackageBuffer
@@ -72,6 +73,10 @@ namespace SharpBladeGroundStation.CommLink
 		{
 			if (data.Length + dataSize + HeaderSize > buffer.Length)
 				return false;
+			if(reverseBytes)
+			{
+				Array.Reverse(data);				
+			}
 			data.CopyTo(buffer, dataSize + HeaderSize);
 			dataSize += data.Length;
 			return true;
@@ -117,7 +122,7 @@ namespace SharpBladeGroundStation.CommLink
 		/// <param name="data"></param>
 		/// <returns></returns>
 		public bool AddData(ushort data)
-		{
+		{			
 			return AddData(BitConverter.GetBytes(data));
 		}
 		/// <summary>
@@ -203,6 +208,13 @@ namespace SharpBladeGroundStation.CommLink
 			if (cursor + 2 <= dataSize)
 			{
 				cursor += 2;
+				if(reverseBytes)
+				{
+					byte[] b = new byte[2];
+					Array.Copy(buffer, cursor + HeaderSize - 2, b, 0, 2);
+					Array.Reverse(b);
+					return BitConverter.ToInt16(b,0);
+				}
 				return BitConverter.ToInt16(buffer, cursor + HeaderSize - 2);
 			}
 			else
@@ -216,6 +228,13 @@ namespace SharpBladeGroundStation.CommLink
 			if (cursor + 2 <= dataSize)
 			{
 				cursor += 2;
+				if (reverseBytes)
+				{
+					byte[] b = new byte[2];
+					Array.Copy(buffer, cursor + HeaderSize - 2, b, 0, 2);
+					Array.Reverse(b);
+					return BitConverter.ToUInt16(b, 0);
+				}
 				return BitConverter.ToUInt16(buffer, cursor + HeaderSize - 2);
 			}
 			else
@@ -229,6 +248,13 @@ namespace SharpBladeGroundStation.CommLink
 			if (cursor + 4 <= dataSize)
 			{
 				cursor += 4;
+				if (reverseBytes)
+				{
+					byte[] b = new byte[4];
+					Array.Copy(buffer, cursor + HeaderSize - 4, b, 0, 4);
+					Array.Reverse(b);
+					return BitConverter.ToInt32(b, 0);
+				}
 				return BitConverter.ToInt32(buffer, cursor + HeaderSize - 4);
 			}
 			else
@@ -242,6 +268,13 @@ namespace SharpBladeGroundStation.CommLink
 			if (cursor + 4 <= dataSize)
 			{
 				cursor += 4;
+				if (reverseBytes)
+				{
+					byte[] b = new byte[4];
+					Array.Copy(buffer, cursor + HeaderSize - 4, b, 0, 4);
+					Array.Reverse(b);
+					return BitConverter.ToUInt32(b, 0);
+				}
 				return BitConverter.ToUInt32(buffer, cursor + HeaderSize - 4);
 			}
 			else
@@ -255,6 +288,13 @@ namespace SharpBladeGroundStation.CommLink
 			if (cursor + 4 <= dataSize)
 			{
 				cursor += 4;
+				if (reverseBytes)
+				{
+					byte[] b = new byte[4];
+					Array.Copy(buffer, cursor + HeaderSize - 4, b, 0, 4);
+					Array.Reverse(b);
+					return BitConverter.ToSingle(b, 0);
+				}
 				return BitConverter.ToSingle(buffer, cursor + HeaderSize - 4);
 			}
 			else
@@ -268,6 +308,13 @@ namespace SharpBladeGroundStation.CommLink
 			if (cursor + 8 <= dataSize)
 			{
 				cursor += 8;
+				if (reverseBytes)
+				{
+					byte[] b = new byte[8];
+					Array.Copy(buffer, cursor + HeaderSize - 8, b, 0, 8);
+					Array.Reverse(b);
+					return BitConverter.ToDouble(b, 0);
+				}
 				return BitConverter.ToDouble(buffer, cursor + HeaderSize - 8);
 			}
 			else
@@ -306,7 +353,8 @@ namespace SharpBladeGroundStation.CommLink
 		{
 			LinkPackage p = new LinkPackage(buffer.Length);
 			buffer.CopyTo(p.buffer,0);
-			p.dataSize = dataSize;			
+			p.dataSize = dataSize;
+			p.reverseBytes = this.reverseBytes;	
 			return p;
 		}
 		
