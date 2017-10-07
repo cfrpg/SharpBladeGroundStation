@@ -70,7 +70,7 @@ namespace SharpBladeGroundStation
 			link = e.Link;
 			link.OnReceivePackage += Link_OnReceivePackage;
 			link.OpenPort();
-			Action a = () => { linkStateText.Text = link.Port.PortName + ":" + link.Protocol.ToString(); };
+			Action a = () => { linkStateText.Text = link.Port.PortName + Environment.NewLine+ link.Protocol.ToString(); };
 			linkStateText.Dispatcher.Invoke(a);
         }
 
