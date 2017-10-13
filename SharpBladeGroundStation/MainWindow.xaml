@@ -22,7 +22,7 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel  Margin="0" Orientation="Vertical" Background="#FFE5E5E5">
-            <fd:PFDControl x:Name="pfd" Grid.Row="0" VerticalAlignment="Top" />
+            <fd:PFDControl x:Name="pfd" Grid.Row="0" VerticalAlignment="Top" FlightState="{Binding}" />
             <Viewbox>
                 <GroupBox x:Name="groupBox" Header="导航信息" Width="300" Height="120" BorderBrush="Black" FontSize="14">
                     <Grid >
@@ -38,14 +38,23 @@
                             <ColumnDefinition Width="40*"/>
                             <ColumnDefinition Width="104*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock x:Name="lonText" TextWrapping="Wrap" Text="000.0000000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,2,0,0.75" FontSize="16" Grid.Column="1"/>
-                        <TextBlock x:Name="latText" TextWrapping="Wrap" Text="000.0000000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,2,0,0.75" Grid.Column="3" FontSize="16"/>
-                        <TextBlock x:Name="heightText" TextWrapping="Wrap" Text="0000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,2.25,0,0.5" Grid.Row="1" FontSize="16" Grid.Column="1"/>
-                        <TextBlock x:Name="gspeedText" TextWrapping="Wrap" Text="0000.00m/s" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,2.25,0,0.5" Grid.Row="1" Grid.Column="3" FontSize="16"/>
-                        <TextBlock x:Name="wpnumText" TextWrapping="Wrap" Text="000/000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,1.75,0,1" Grid.Row="3" FontSize="16" Grid.Column="1"/>
-                        <TextBlock x:Name="wpdistText" TextWrapping="Wrap" Text="00000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,1.75,0,1" Grid.Row="3" FontSize="16" Grid.Column="3"/>
-                        <TextBlock x:Name="hdgText" TextWrapping="Wrap" Text="000.00" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,1.5,0,1.25" Grid.Row="2" FontSize="16" Grid.Column="1"/>
-                        <TextBlock x:Name="distText" TextWrapping="Wrap" Text="000000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,1.5,0,1.25" Grid.Row="2" FontSize="16" Grid.Column="3"/>
+                        <TextBlock x:Name="lonText" TextWrapping="Wrap" Text="000.0000000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,2,0,0.75" FontSize="15" Grid.Column="1"/>
+                        <TextBlock x:Name="latText" TextWrapping="Wrap" Text="000.0000000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,2,0,0.75" Grid.Column="3" FontSize="15"/>
+                        <TextBlock x:Name="heightText" TextWrapping="Wrap" Text="0000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,2.25,0,0.5" Grid.Row="1" FontSize="15" Grid.Column="1"/>
+                        <TextBlock x:Name="gspeedText" TextWrapping="Wrap" Text="0000.00m/s" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,2.25,0,0.5" Grid.Row="1" Grid.Column="3" FontSize="15"/>
+                        <TextBlock x:Name="wpnumText" TextWrapping="Wrap" Text="000/000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,1.75,0,1" Grid.Row="3" FontSize="15" Grid.Column="1"/>
+                        <TextBlock x:Name="wpdistText" TextWrapping="Wrap" Text="00000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,1.75,0,1" Grid.Row="3" FontSize="15" Grid.Column="3"/>
+                        <TextBlock x:Name="hdgText" TextWrapping="Wrap" Text="000.00" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,1.5,0,1.25" Grid.Row="2" FontSize="15" Grid.Column="1"/>
+                        <TextBlock x:Name="distText" TextWrapping="Wrap" Text="000000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,1.5,0,1.25" Grid.Row="2" FontSize="15" Grid.Column="3"/>
+                        <TextBlock x:Name="textBlock1" HorizontalAlignment="Left" Margin="3,0,0,0" TextWrapping="Wrap" Grid.Column="0" Grid.Row="0" Text="经度:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="textBlock2" HorizontalAlignment="Left" Margin="3,0,0,0" TextWrapping="Wrap" Grid.Column="0" Grid.Row="1" Text="高度:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="textBlock3" HorizontalAlignment="Left" Margin="3,0,0,0" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Text="航向:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="textBlock4" HorizontalAlignment="Left" Margin="3,0,0,0" TextWrapping="Wrap" Grid.Column="0" Grid.Row="3" Text="航点:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="textBlock5" HorizontalAlignment="Left" Margin="3,0,0,0" TextWrapping="Wrap" Grid.Column="2" Grid.Row="0" Text="纬度:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="textBlock6" HorizontalAlignment="Left" Margin="3,0,0,0" TextWrapping="Wrap" Grid.Column="2" Grid.Row="1" Text="地速:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="textBlock7" HorizontalAlignment="Left" Margin="3,0,0,0" TextWrapping="Wrap" Grid.Column="2" Grid.Row="2" Text="航程:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="textBlock8" HorizontalAlignment="Left" Margin="3,0,0,0" TextWrapping="Wrap" Grid.Column="2" Grid.Row="3" Text="距离:" VerticalAlignment="Center"/>
+                        
                     </Grid>
                 </GroupBox>
 

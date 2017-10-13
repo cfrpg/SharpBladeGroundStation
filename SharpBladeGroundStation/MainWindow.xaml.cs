@@ -42,7 +42,20 @@ namespace SharpBladeGroundStation
 
         FlightState flightState;
 
-        public MainWindow()
+		public FlightState FlightState
+		{
+			get
+			{
+				return flightState;
+			}
+
+			set
+			{
+				flightState = value;
+			}
+		}
+
+		public MainWindow()
         {
             InitializeComponent();
 			//link = new SerialLink("COM3", LinkProtocol.MAVLink);
@@ -59,9 +72,8 @@ namespace SharpBladeGroundStation
 			pidDataList.ItemsSource = pidData;
             motorData = new ObservableCollection<Vector3Data>();
             motorDataList.ItemsSource = motorData;
-            flightState = new FlightState();
-            
-			
+            FlightState = new FlightState();
+			pfd.DataContext = flightState;
         }
 
 		private void initGmap()
@@ -197,6 +209,10 @@ namespace SharpBladeGroundStation
 					
 					break;
 				case 0x01://STATUS
+					flightState.Roll = package.NextShort()/100f;
+					flightState.Pitch = package.NextShort() / 100f;
+					flightState.Yaw = package.NextShort()/100f;
+					flightState.Altitude = package.NextInt32()/100f;
 
 					break;
 				case 0x02://SENSER
@@ -269,7 +285,11 @@ namespace SharpBladeGroundStation
 
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
-            flightState.Altitude += 10;
+            FlightState.Altitude += 10;
+			flightState.Pitch += 3;
+			flightState.Roll += 3;
+			flightState.Heading += 13;
+			
 		}
 
 		private void button1_Click(object sender, RoutedEventArgs e)
