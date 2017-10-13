@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Threading;
+using FlightDisplay;
 
 namespace SharpBladeGroundStation
 {
@@ -37,6 +38,9 @@ namespace SharpBladeGroundStation
 
 		ObservableCollection<Vector3Data> sensorData;
 		ObservableCollection<Vector3Data> pidData;
+        ObservableCollection<Vector3Data> motorData;
+
+        FlightState flightState;
 
         public MainWindow()
         {
@@ -53,7 +57,10 @@ namespace SharpBladeGroundStation
 			sensorDataList.ItemsSource = sensorData;
 			pidData = new ObservableCollection<Vector3Data>();
 			pidDataList.ItemsSource = pidData;
-
+            motorData = new ObservableCollection<Vector3Data>();
+            motorDataList.ItemsSource = motorData;
+            flightState = new FlightState();
+            
 			
         }
 
@@ -61,7 +68,7 @@ namespace SharpBladeGroundStation
 		{
 			gmap.Zoom = 3;
 			gmap.MapProvider = AMapSatProvider.Instance;
-			GMaps.Instance.Mode = AccessMode.ServerOnly;
+			GMaps.Instance.Mode = AccessMode.ServerAndCache;
 			gmap.Position = new PointLatLng(34.242947, 108.916225);
 			gmap.Zoom = 18;
 			
@@ -102,6 +109,28 @@ namespace SharpBladeGroundStation
 		{
 			leftcol.MaxWidth = Math.Min(400, (e.NewSize.Height-30)/669*300);
 		}
+
+        private void setVector3Data(string name,double x,double y,double z,ObservableCollection<Vector3Data> list)
+        {
+            bool flag = true;
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i].Name == name)
+                {
+                    list[i].X = x;
+                    list[i].Y = y;
+                    list[i].Z = z;
+                    flag = false;
+
+                }
+            }
+            if (flag)
+            {
+                Action a = () => { list.Add(new Vector3Data(name, x, y, z)); };
+                Dispatcher.BeginInvoke(a, DispatcherPriority.Background);
+                
+            }
+        }
 
 		private void setSensorData(string name,double x,double y,double z,bool refresh)
 		{
@@ -198,7 +227,11 @@ namespace SharpBladeGroundStation
 					battText.Dispatcher.Invoke(a05);
 					break;
 				case 0x06://MOTO
-
+                    for(int i=1;i<=8;i++)
+                    {
+                        short pwm = package.NextShort();
+                        setVector3Data("PWM" + i.ToString(), pwm, pwm, pwm, motorData);
+                    }
 					break;
 				case 0x07://SENSER2
 
@@ -236,7 +269,7 @@ namespace SharpBladeGroundStation
 
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
-			
+            flightState.Altitude += 10;
 		}
 
 		private void button1_Click(object sender, RoutedEventArgs e)

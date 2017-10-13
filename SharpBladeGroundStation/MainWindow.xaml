@@ -33,17 +33,19 @@
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="41*"/>
+                            <ColumnDefinition Width="103*"/>
+                            <ColumnDefinition Width="40*"/>
+                            <ColumnDefinition Width="104*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock x:Name="lonText" TextWrapping="Wrap" Text="经度:000.0000000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" FontSize="16"/>
-                        <TextBlock x:Name="latText" TextWrapping="Wrap" Text="纬度:000.0000000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Grid.Column="1" FontSize="16"/>
-                        <TextBlock x:Name="heightText" TextWrapping="Wrap" Text="高度:0000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Grid.Row="1" FontSize="16"/>
-                        <TextBlock x:Name="gspeedText" TextWrapping="Wrap" Text="地速:0000.00m/s" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Grid.Row="1" Grid.Column="1" FontSize="16"/>
-                        <TextBlock x:Name="wpnumText" TextWrapping="Wrap" Text="航点:000/000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Grid.Row="3" FontSize="16"/>
-                        <TextBlock x:Name="wpdistText" TextWrapping="Wrap" Text="距离:00000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Grid.Row="3" FontSize="16" Grid.Column="1"/>
-                        <TextBlock x:Name="hdgText" TextWrapping="Wrap" Text="航向:000.00" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Grid.Row="2" FontSize="16"/>
-                        <TextBlock x:Name="distText" TextWrapping="Wrap" Text="航程:000000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Grid.Row="2" FontSize="16" Grid.Column="1"/>
+                        <TextBlock x:Name="lonText" TextWrapping="Wrap" Text="000.0000000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,2,0,0.75" FontSize="16" Grid.Column="1"/>
+                        <TextBlock x:Name="latText" TextWrapping="Wrap" Text="000.0000000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,2,0,0.75" Grid.Column="3" FontSize="16"/>
+                        <TextBlock x:Name="heightText" TextWrapping="Wrap" Text="0000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,2.25,0,0.5" Grid.Row="1" FontSize="16" Grid.Column="1"/>
+                        <TextBlock x:Name="gspeedText" TextWrapping="Wrap" Text="0000.00m/s" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,2.25,0,0.5" Grid.Row="1" Grid.Column="3" FontSize="16"/>
+                        <TextBlock x:Name="wpnumText" TextWrapping="Wrap" Text="000/000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,1.75,0,1" Grid.Row="3" FontSize="16" Grid.Column="1"/>
+                        <TextBlock x:Name="wpdistText" TextWrapping="Wrap" Text="00000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,1.75,0,1" Grid.Row="3" FontSize="16" Grid.Column="3"/>
+                        <TextBlock x:Name="hdgText" TextWrapping="Wrap" Text="000.00" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,1.5,0,1.25" Grid.Row="2" FontSize="16" Grid.Column="1"/>
+                        <TextBlock x:Name="distText" TextWrapping="Wrap" Text="000000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,1.5,0,1.25" Grid.Row="2" FontSize="16" Grid.Column="3"/>
                     </Grid>
                 </GroupBox>
 
@@ -151,7 +153,7 @@
                             </ListView>
                         </GroupBox>
                         <GroupBox x:Name="groupBox3_Copy" Header="PWM输出" HorizontalAlignment="Left" Height="260" Margin="347,273,0,0" VerticalAlignment="Top" Width="323" BorderBrush="Black">
-                            <ListView x:Name="listView1"  Margin="0,10,0,0">
+                            <ListView x:Name="motorDataList"  Margin="0,10,0,0">
                                 <ListView.Resources>
                                     <Style TargetType="{x:Type GridViewColumnHeader}">
                                         <Setter Property="Visibility" Value="Collapsed"/>
