@@ -64,6 +64,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataStructs\UIDisplayData.cs" />
     <Compile Include="DataStructs\Vector3Data.cs" />
     <Compile Include="DataStructs\WayPoint.cs" />
     <Compile Include="UIData.cs" />

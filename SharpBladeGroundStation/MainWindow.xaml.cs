@@ -17,6 +17,9 @@ using SharpBladeGroundStation.Map;
 using SharpBladeGroundStation.DataStructs;
 using GMap.NET;
 using System.Diagnostics;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Threading;
 
 namespace SharpBladeGroundStation
 {
@@ -32,7 +35,8 @@ namespace SharpBladeGroundStation
 
         PortScanner portscanner;
 
-		List<Vector3Data> sensorData;
+		ObservableCollection<Vector3Data> sensorData;
+		ObservableCollection<Vector3Data> pidData;
 
         public MainWindow()
         {
@@ -45,8 +49,10 @@ namespace SharpBladeGroundStation
 			portscanner.Start();
 			linkStateText.Text = "Connecting";
 
-			sensorData = new List<Vector3Data>();
+			sensorData = new ObservableCollection<Vector3Data>();
 			sensorDataList.ItemsSource = sensorData;
+			pidData = new ObservableCollection<Vector3Data>();
+			pidDataList.ItemsSource = pidData;
 
 			
         }
@@ -70,7 +76,7 @@ namespace SharpBladeGroundStation
 			link = e.Link;
 			link.OnReceivePackage += Link_OnReceivePackage;
 			link.OpenPort();
-			Action a = () => { linkStateText.Text = link.Port.PortName + ":" + link.Protocol.ToString(); };
+			Action a = () => { linkStateText.Text = link.Port.PortName + Environment.NewLine+ link.Protocol.ToString(); };
 			linkStateText.Dispatcher.Invoke(a);
         }
 
@@ -97,7 +103,7 @@ namespace SharpBladeGroundStation
 			leftcol.MaxWidth = Math.Min(400, (e.NewSize.Height-30)/669*300);
 		}
 
-		private void setSensorData(string name,double x,double y,double z)
+		private void setSensorData(string name,double x,double y,double z,bool refresh)
 		{
 			bool flag = true;
 			for(int i=0;i<sensorData.Count;i++)
@@ -113,14 +119,45 @@ namespace SharpBladeGroundStation
 			}
 			if (flag)
 			{
-				sensorData.Add(new Vector3Data(name, x, y, z));
+				Action a = () => { sensorData.Add(new Vector3Data(name, x, y, z)); };
+				Dispatcher.BeginInvoke(a, DispatcherPriority.Background);
+				//sensorData.Add(new Vector3Data(name, x, y, z));
 			}
-			Action action = () => { sensorDataList.Items.Refresh(); };
-			sensorDataList.Dispatcher.Invoke(action);
-			
+			if (refresh)
+			{
+				//Action action = () => { sensorDataList.Items.Refresh(); };
+				//sensorDataList.Dispatcher.Invoke(action);
+			}
 
 		}
 
+		private void setPidData(int id, double p, double i, double d, bool refresh)
+		{
+			bool flag = true;
+			string name = transPidName(id);
+			for (int j = 0; j < pidData.Count; j++)
+			{
+				if (pidData[j].Name == name)
+				{
+					pidData[j].X = p;
+					pidData[j].Y = i;
+					pidData[j].Z = d;
+					flag = false;
+
+				}
+			}
+			if (flag)
+			{
+				Action a = () => { pidData.Add(new Vector3Data(name, p, i, d)); };
+				Dispatcher.BeginInvoke(a, DispatcherPriority.Background);
+				//pidData.Add(new Vector3Data(name, p, i, d));
+			}
+			if (refresh)
+			{
+				//Action action = () => { pidDataList.Items.Refresh(); };
+				//pidDataList.Dispatcher.Invoke(action);
+			}
+		}
 		private void analyzeANOPackage(LinkPackage p)
 		{
 			ANOLinkPackage package = (ANOLinkPackage)p;
@@ -137,15 +174,15 @@ namespace SharpBladeGroundStation
 					short x = package.NextShort();
 					short y = package.NextShort();
 					short z = package.NextShort();
-					setSensorData("ACCEL", x, y, z);
+					setSensorData("ACCEL", x, y, z,false);
 					x = package.NextShort();
 					y = package.NextShort();
 					z = package.NextShort();
-					setSensorData("GYRO", x, y, z);
+					setSensorData("GYRO", x, y, z,false);
 					x = package.NextShort();
 					y = package.NextShort();
 					z = package.NextShort();
-					setSensorData("MAG", x, y, z);
+					setSensorData("MAG", x, y, z,true);
 					break;
 				case 0x03://RCDATA
 
@@ -184,7 +221,14 @@ namespace SharpBladeGroundStation
 				default:
 					if(package.Function>=0x10&&package.Function<=0x15)
 					{
-
+						int id = (package.Function - 0x10)*3;
+						for(int i=0;i<3;i++)
+						{
+							short P = package.NextShort();
+							short I = package.NextShort();
+							short D = package.NextShort();
+							setPidData(id + i+1, P, I, D, i==2);
+						}
 					}
 					break;
 			}
@@ -192,14 +236,56 @@ namespace SharpBladeGroundStation
 
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
+			
+		}
+
+		private void button1_Click(object sender, RoutedEventArgs e)
+		{
 			ANOLinkPackage p = new ANOLinkPackage();
 			p.Function = 0x02;
-			p.AddData((byte)(0x01));
+			p.AddData((byte)0x01);
 			p.SetVerify();
-			if(link.Port.IsOpen)
+			link.SendPackageQueue.Enqueue(p.Clone());
+		}
+
+		private void button2_Click(object sender, RoutedEventArgs e)
+		{
+			Vector3Data[] pids = new Vector3Data[18];
+			for(int i=0;i<pidData.Count;i++)
 			{
+				int id = transPidName(pidData[i].Name);
+				pids[id-1] = pidData[i].Clone();
+			}
+			for(int i=0;i<18;i++)
+			{
+				if (pids[i] == null)
+					pids[i] = new Vector3Data(transPidName(i + 1));
+			}
+			for(int i=0;i<6;i++)
+			{
+				ANOLinkPackage p = new ANOLinkPackage();
+				p.Function = (byte)i;
+				p.Function += 0x10;
+				for(int j=0;j<3;j++)
+				{
+					p.AddData((short)pids[i * 3 + j].X);
+					p.AddData((short)pids[i * 3 + j].Y);
+					p.AddData((short)pids[i * 3 + j].Z);
+				}
+				p.SetVerify();
 				link.SendPackageQueue.Enqueue(p);
 			}
 		}
+
+		private string transPidName(int id)
+		{
+			return "PID" + id.ToString();
+		}
+
+		private int transPidName(string name)
+		{
+			return int.Parse(name.Substring(3));
+		}
+
 	}
 }

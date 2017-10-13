@@ -109,8 +109,12 @@ namespace SharpBladeGroundStation.DataStructs
 			Name = n;
 			X = _x;
 			Y = _y;
-			Z = _z;
-			
+			Z = _z;			
+		}
+
+		public Vector3Data Clone()
+		{
+			return new Vector3Data(name, x, y, z);
 		}
 	}
 }
