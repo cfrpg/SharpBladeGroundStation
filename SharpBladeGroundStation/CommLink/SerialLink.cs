@@ -19,6 +19,8 @@ namespace SharpBladeGroundStation.CommLink
 		int receiveTimeOut;
 		int dataReceived;
 		int dataSent;
+		int txRate;
+		int rxRate;
 
 		Queue<LinkPackage> receivedPackageQueue;
 		LinkPackage receivePackage;
@@ -89,6 +91,26 @@ namespace SharpBladeGroundStation.CommLink
 			set { sendPackageQueue = value; }
 		}
 
+		public int TxRate
+		{
+			get { return txRate; }
+			set
+			{
+				txRate = value;
+				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TxRate"));
+			}
+		}
+
+		public int RxRate
+		{
+			get { return rxRate; }
+			set
+			{
+				rxRate = value;
+				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RxRate"));
+			}
+		}
+
 		public delegate void ReceivePackageEvent(SerialLink sender, EventArgs e);
 
 		public event ReceivePackageEvent OnReceivePackage;
@@ -104,6 +126,8 @@ namespace SharpBladeGroundStation.CommLink
 			protocol = p;
 			dataReceived = 0;
 			dataSent = 0;
+			TxRate = 0;
+			RxRate = 0;
 
 			state = LinkState.Disconnected;
 			receivedPackageQueue = new Queue<LinkPackage>();
@@ -132,11 +156,14 @@ namespace SharpBladeGroundStation.CommLink
 
 		private void backgroundWorker()
 		{
+			DateTime lasttime=DateTime.Now;
+			int lasttx = 0, lastrx = 0;
 			while(true)
 			{
 				if (!port.IsOpen)
 				{
 					Thread.Sleep(500);
+					lasttime = DateTime.Now;
 					continue;
 				}
 				if(port.BytesToWrite==0)
@@ -146,6 +173,20 @@ namespace SharpBladeGroundStation.CommLink
 						LinkPackage p = sendPackageQueue.Dequeue();
 						port.Write(p.Buffer, 0, p.PackageSize);
 					}
+				}
+				else
+				{
+					Thread.Sleep(50);
+				}
+				DateTime now = DateTime.Now;
+				double dt = now.Subtract(lasttime).TotalMilliseconds;
+				if(dt>500)
+				{
+					TxRate = (int)((dataReceived - lastrx) / (dt / 1000));
+					RxRate = (int)((dataSent - lasttx) / (dt / 1000));
+					lastrx = dataReceived;
+					lasttx = dataSent;
+					lasttime = now;
 				}
 			}
 		}

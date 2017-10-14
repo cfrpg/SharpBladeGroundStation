@@ -29,18 +29,19 @@ namespace SharpBladeGroundStation
     /// </summary>
     public partial class MainWindow : Window
     {
-        SerialLink link;
-        LinkPackage package;
-        string msg = "";
-		
+        SerialLink link;       
+        string msg = "";		
 
         PortScanner portscanner;
 
+		//displayed data
 		ObservableCollection<Vector3Data> sensorData;
 		ObservableCollection<Vector3Data> pidData;
         ObservableCollection<Vector3Data> motorData;
+		ObservableCollection<Vector3Data> rcData;
 
         FlightState flightState;
+		GPSData gpsData;
 
 		public FlightState FlightState
 		{
@@ -72,8 +73,16 @@ namespace SharpBladeGroundStation
 			pidDataList.ItemsSource = pidData;
             motorData = new ObservableCollection<Vector3Data>();
             motorDataList.ItemsSource = motorData;
+			rcData = new ObservableCollection<Vector3Data>();
+			rcDataList.ItemsSource = rcData;
             FlightState = new FlightState();
 			pfd.DataContext = flightState;
+			gpsData = new GPSData();
+			vdopText.DataContext = gpsData;
+			hdopText.DataContext = gpsData;
+			gpsStateText.DataContext = gpsData;
+
+			
         }
 
 		private void initGmap()
@@ -95,15 +104,16 @@ namespace SharpBladeGroundStation
 			link = e.Link;
 			link.OnReceivePackage += Link_OnReceivePackage;
 			link.OpenPort();
-			Action a = () => { linkStateText.Text = link.Port.PortName + Environment.NewLine+ link.Protocol.ToString(); };
+			Action a = () => { linkStateText.Text = link.Port.PortName + Environment.NewLine+ link.Protocol.ToString(); linkspd.DataContext = link; };
 			linkStateText.Dispatcher.Invoke(a);
+			
         }
 
 		private void Link_OnReceivePackage(SerialLink sender, EventArgs e)
         {
             while (link.ReceivedPackageQueue.Count != 0)
             {
-                package = link.ReceivedPackageQueue.Dequeue();
+                LinkPackage package = link.ReceivedPackageQueue.Dequeue();
 				switch(sender.Protocol)
 				{
 					case LinkProtocol.MAVLink:
@@ -230,9 +240,18 @@ namespace SharpBladeGroundStation
 					setSensorData("MAG", x, y, z,true);
 					break;
 				case 0x03://RCDATA
-
+					for(int i=0;i<10;i++)
+					{
+						short rc = package.NextShort();
+						setVector3Data(getRCChannelName(i), rc, rc, rc, rcData);
+					}
 					break;
 				case 0x04://GPSDATA
+					gpsData.State = (GPSPositionState)package.NextByte();
+					gpsData.SatelliteCount = package.NextByte();
+					gpsData.Longitude = package.NextInt32() / 10000000.0f;
+					gpsData.Latitude = package.NextInt32() / 10000000.0f;
+					gpsData.HomingAngle = package.NextShort() / 10.0f;
 
 					break;
 				case 0x05://POWER
@@ -275,7 +294,7 @@ namespace SharpBladeGroundStation
 						{
 							short P = package.NextShort();
 							short I = package.NextShort();
-							short D = package.NextShort();
+							short D = package.NextShort();							
 							setPidData(id + i+1, P, I, D, i==2);
 						}
 					}
@@ -283,13 +302,13 @@ namespace SharpBladeGroundStation
 			}
 		}
 
+		private string getRCChannelName(int id)
+		{
+			return "CH" + id.ToString();
+		}
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
-            FlightState.Altitude += 10;
-			flightState.Pitch += 3;
-			flightState.Roll += 3;
-			flightState.Heading += 13;
-			
+			MessageBox.Show("Only for developers.", "Orz");
 		}
 
 		private void button1_Click(object sender, RoutedEventArgs e)

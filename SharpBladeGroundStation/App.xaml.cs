@@ -13,5 +13,6 @@ namespace SharpBladeGroundStation
     /// </summary>
     public partial class App : Application
     {
-    }
+		
+	}
 }
