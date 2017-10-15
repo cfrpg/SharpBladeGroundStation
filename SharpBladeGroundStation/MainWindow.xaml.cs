@@ -39,6 +39,7 @@ namespace SharpBladeGroundStation
 		ObservableCollection<Vector3Data> pidData;
         ObservableCollection<Vector3Data> motorData;
 		ObservableCollection<Vector3Data> rcData;
+		ObservableCollection<Vector3Data> otherData;
 
         FlightState flightState;
 		GPSData gpsData;
@@ -82,6 +83,10 @@ namespace SharpBladeGroundStation
 			hdopText.DataContext = gpsData;
 			gpsStateText.DataContext = gpsData;
 
+			flightDataGrid.DataContext = FlightState;
+
+			otherData = new ObservableCollection<Vector3Data>();
+			otherDataList.ItemsSource = otherData;
 			
         }
 
@@ -223,7 +228,8 @@ namespace SharpBladeGroundStation
 					flightState.Pitch = package.NextShort() / 100f;
 					flightState.Yaw = package.NextShort()/100f;
 					flightState.Altitude = package.NextInt32()/100f;
-
+					flightState.FlightModeText = getFlightModeText( package.NextByte());
+					flightState.IsArmed = package.NextByte() == 1;
 					break;
 				case 0x02://SENSER
 					short x = package.NextShort();
@@ -269,13 +275,19 @@ namespace SharpBladeGroundStation
                     }
 					break;
 				case 0x07://SENSER2
-
+					int altbar = package.NextInt32();
+					setVector3Data("ALT_BAR", altbar, 0, 0, otherData);
+					altbar = package.NextUShort();
+					setVector3Data("ALT_CSB", altbar, 0, 0, otherData);
 					break;
 				case 0x0A://FLY MODEL
 
 					break;
 				case 0x0B://
-
+					short sr = package.NextShort();
+					short sp = package.NextShort();
+					FlightState.ClimbRate = package.NextShort() / 100.0f;
+					setVector3Data("角速度", sr, sp, 0, otherData);
 					break;
 				case 0x20://FP_NUMBER
 
@@ -306,10 +318,7 @@ namespace SharpBladeGroundStation
 		{
 			return "CH" + id.ToString();
 		}
-		private void button_Click(object sender, RoutedEventArgs e)
-		{
-			MessageBox.Show("Only for developers.", "Orz");
-		}
+		
 
 		private void button1_Click(object sender, RoutedEventArgs e)
 		{
@@ -357,6 +366,42 @@ namespace SharpBladeGroundStation
 		private int transPidName(string name)
 		{
 			return int.Parse(name.Substring(3));
+		}
+
+		private string getFlightModeText(int id)
+		{
+			switch(id)
+			{
+				case 0:
+					return "未知";
+					
+				case 1:
+					return "姿态";
+					
+				case 2:
+					return "定高";
+					
+				case 3:
+					return "定点";
+					
+				case 11:
+					return "航线";
+					
+				case 20:
+					return "降落";
+					
+				case 21:
+					return "返航";
+					
+				default:
+					return "未知";
+					
+			}
+		}
+
+		private void button_Click(object sender, RoutedEventArgs e)
+		{			
+			MessageBox.Show("Only for developers.", "Orz");
 		}
 
 	}

@@ -70,9 +70,17 @@ namespace SharpBladeGroundStation.CommLink
 				{
 					case PortScannerState.NewPort:
 						ports[i].link.ResetLink();
-						ports[i].link.OpenPort();
-						ports[i].SetState(PortScannerState.Scanning);
-						Debug.WriteLine("[port scanner]start scanning:" + ports[i].name);
+						try
+						{
+							ports[i].link.OpenPort();
+							ports[i].SetState(PortScannerState.Scanning);
+							Debug.WriteLine("[port scanner]start scanning:" + ports[i].name);
+						}
+						catch
+						{
+							ports[i].SetState(PortScannerState.Unavailable);
+							Debug.WriteLine("[port scanner]cannot start scanning:" + ports[i].name);
+						}
 						break;
 					case PortScannerState.Scanning:
 						if(ports[i].link.ReceivedPackageQueue.Count>1)
@@ -97,7 +105,7 @@ namespace SharpBladeGroundStation.CommLink
 						break;
 					case PortScannerState.Unavailable:
 						ports[i].link.ResetLink();
-						if(DateTime.Now.Subtract(ports[i].lastCheckTime).TotalSeconds > 2.0)
+						if(DateTime.Now.Subtract(ports[i].lastCheckTime).TotalSeconds > 1.0)
 						{
 							ports[i].SetState(PortScannerState.NewPort);
 						}

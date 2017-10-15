@@ -20,6 +20,8 @@ namespace FlightDisplay
 		float climbRate;
 		float altitude;
 
+		string flightModeText;
+		bool isArmed;
         public static FlightState Zero
         {
             get
@@ -108,6 +110,26 @@ namespace FlightDisplay
 			}
 		}
 
+		public string FlightModeText
+		{
+			get { return flightModeText; }
+			set
+			{
+				flightModeText = value;
+				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FlightModeText"));
+			}
+		}
+
+		public bool IsArmed
+		{
+			get { return isArmed; }
+			set
+			{
+				isArmed = value;
+				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsArmed"));
+			}
+		}
+
 		public FlightState()
         {
             Yaw = 0;
@@ -117,6 +139,8 @@ namespace FlightDisplay
             GroundSpeed = 0;
             AirSpeed = 0;
             ClimbRate = 0;
+			FlightModeText = "未知";
+			IsArmed = false;
         }
     }
 }

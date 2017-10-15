@@ -63,6 +63,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Configuration\GCSConfiguration.cs" />
+    <Compile Include="Configuration\VehicleConfiguration.cs" />
+    <Compile Include="Converters.cs" />
     <Compile Include="DataStructs\GPSData.cs" />
     <Compile Include="DataStructs\UIDisplayData.cs" />
     <Compile Include="DataStructs\Vector3Data.cs" />
