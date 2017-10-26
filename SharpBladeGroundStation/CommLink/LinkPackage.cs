@@ -15,6 +15,7 @@ namespace SharpBladeGroundStation.CommLink
 		protected int dataSize;
 		protected int cursor;
 		protected bool reverseBytes;
+		protected double timeStamp;
 
 		public byte[] Buffer
 		{
@@ -56,6 +57,7 @@ namespace SharpBladeGroundStation.CommLink
 			buffer = new byte[buffsize];
 			dataSize = 0;
 			reverseBytes = false;
+			timeStamp = 0;
 		}
 
 		public byte[] PackageBuffer
@@ -68,7 +70,13 @@ namespace SharpBladeGroundStation.CommLink
 			}
 		}
 
-#region Read&Write
+		public double TimeStamp
+		{
+			get { return timeStamp; }
+			set { timeStamp = value; }
+		}
+
+		#region Read&Write
 		public bool AddData(byte[] data)
 		{
 			if (data.Length + dataSize + HeaderSize > buffer.Length)
@@ -354,7 +362,8 @@ namespace SharpBladeGroundStation.CommLink
 			LinkPackage p = new LinkPackage(buffer.Length);
 			buffer.CopyTo(p.buffer,0);
 			p.dataSize = dataSize;
-			p.reverseBytes = this.reverseBytes;	
+			p.reverseBytes = this.reverseBytes;
+			p.timeStamp = timeStamp;
 			return p;
 		}
 		

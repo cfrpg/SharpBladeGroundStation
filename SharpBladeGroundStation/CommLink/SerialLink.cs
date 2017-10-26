@@ -29,6 +29,7 @@ namespace SharpBladeGroundStation.CommLink
 		bool isUpdatingBuffer;
 		bool isParsingBuffer;
 		DateTime lastPackageTime;
+		DateTime connectedTime;
 
 		Thread backgroundListener;
 
@@ -111,6 +112,17 @@ namespace SharpBladeGroundStation.CommLink
 			}
 		}
 
+		/// <summary>
+		/// 建立连接后经过的总毫秒数
+		/// </summary>
+		public double ConnectedTime
+		{
+			get
+			{
+				return DateTime.Now.Subtract(connectedTime).TotalMilliseconds;
+			}
+		}
+
 		public delegate void ReceivePackageEvent(SerialLink sender, EventArgs e);
 
 		public event ReceivePackageEvent OnReceivePackage;
@@ -151,7 +163,8 @@ namespace SharpBladeGroundStation.CommLink
 			receiveTimeOut = 5000;
 			backgroundListener = new Thread(backgroundWorker);
 			backgroundListener.IsBackground = true;
-			backgroundListener.Start();			
+			backgroundListener.Start();
+			connectedTime = DateTime.Now;
 		}
 
 		private void backgroundWorker()
@@ -228,6 +241,7 @@ namespace SharpBladeGroundStation.CommLink
 						break;
 					case PackageParseResult.Yes:
 						offset += receivePackage.PackageSize;
+						receivePackage.TimeStamp = this.ConnectedTime;
 						receivedPackageQueue.Enqueue(receivePackage.Clone());
 						received = true;
 						break;
@@ -249,6 +263,7 @@ namespace SharpBladeGroundStation.CommLink
 		{
 			if(!port.IsOpen)
 				port.Open();
+			connectedTime = DateTime.Now;
 		}
 
 		public void ClosePort()

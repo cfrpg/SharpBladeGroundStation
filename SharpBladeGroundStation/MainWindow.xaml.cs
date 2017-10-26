@@ -21,6 +21,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Threading;
 using FlightDisplay;
+using Microsoft.Research.DynamicDataDisplay;
+using Microsoft.Research.DynamicDataDisplay.DataSources;
 
 namespace SharpBladeGroundStation
 {
@@ -40,6 +42,8 @@ namespace SharpBladeGroundStation
         ObservableCollection<Vector3Data> motorData;
 		ObservableCollection<Vector3Data> rcData;
 		ObservableCollection<Vector3Data> otherData;
+
+		ObservableDataSource<Point> graphdata;
 
         FlightState flightState;
 		GPSData gpsData;
@@ -87,6 +91,13 @@ namespace SharpBladeGroundStation
 
 			otherData = new ObservableCollection<Vector3Data>();
 			otherDataList.ItemsSource = otherData;
+
+			graphdata = new ObservableDataSource<Point>();
+			for(int i=0;i<10;i++)
+			{
+				graphdata.AppendAsync(Dispatcher,new Point(i, i * i));
+			}
+			graph.AddLineGraph(graphdata, Colors.Blue, 2);
 			
         }
 
@@ -401,7 +412,11 @@ namespace SharpBladeGroundStation
 
 		private void button_Click(object sender, RoutedEventArgs e)
 		{			
-			MessageBox.Show("Only for developers.", "Orz");
+			//MessageBox.Show("Only for developers.", "Orz");
+			for(int i=10;i<20;i++)
+			{
+				graphdata.AppendAsync(Dispatcher, new Point(i, (i-20) * (i-20)));
+			}
 		}
 
 	}

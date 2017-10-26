@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DynamicDataDisplay">
+      <HintPath>..\DynamicDataDisplay.dll</HintPath>
+    </Reference>
     <Reference Include="GMap.NET.Core, Version=1.7.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\GMap.NET.Core.dll</HintPath>
@@ -67,6 +70,7 @@
     <Compile Include="Configuration\VehicleConfiguration.cs" />
     <Compile Include="Converters.cs" />
     <Compile Include="DataStructs\GPSData.cs" />
+    <Compile Include="DataStructs\NavigationData.cs" />
     <Compile Include="DataStructs\UIDisplayData.cs" />
     <Compile Include="DataStructs\Vector3Data.cs" />
     <Compile Include="DataStructs\WayPoint.cs" />

@@ -13,8 +13,8 @@ namespace SharpBladeGroundStation.DataStructs
 
 		int satelliteCount;
 		GPSPositionState state;
-		float longitude;
-		float latitude;
+		double longitude;
+		double latitude;
 		float homingAngle;
 		float vdop;
 		float hdop;
@@ -42,7 +42,7 @@ namespace SharpBladeGroundStation.DataStructs
 			}
 		}
 
-		public float Longitude
+		public double Longitude
 		{
 			get { return longitude; }
 			set
@@ -52,7 +52,7 @@ namespace SharpBladeGroundStation.DataStructs
 			}
 		}
 
-		public float Latitude
+		public double Latitude
 		{
 			get { return latitude; }
 			set
