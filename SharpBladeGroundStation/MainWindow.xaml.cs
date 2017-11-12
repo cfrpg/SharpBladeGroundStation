@@ -43,9 +43,14 @@ namespace SharpBladeGroundStation
 		ObservableCollection<Vector3Data> rcData;
 		ObservableCollection<Vector3Data> otherData;
 
-		ObservableDataSource<Point> graphdata;
+		
+		ObservableDataSource<Point>[] accelGraphData = new ObservableDataSource<Point>[3];
+		ObservableDataSource<Point>[] gyroGraphData = new ObservableDataSource<Point>[3];
+		ObservableDataSource<Point>[] attitudeGraphData = new ObservableDataSource<Point>[3];
+		ObservableDataSource<Point> altitudeGraphData;
+		Dictionary<int, UInt64> dataSkipCount;
 
-        FlightState flightState;
+		FlightState flightState;
 		GPSData gpsData;
 
 		public FlightState FlightState
@@ -67,8 +72,9 @@ namespace SharpBladeGroundStation
 			//link = new SerialLink("COM3", LinkProtocol.MAVLink);
 			//link.OnReceivePackage += Link_OnReceivePackage;
 			initGmap();
-            portscanner = new PortScanner(LinkProtocol.ANOLink, 115200, 20480, 1);
-            portscanner.OnFindPort += Portscanner_OnFindPort;
+            //portscanner = new PortScanner(LinkProtocol.ANOLink, 115200, 20480, 1);
+			portscanner = new PortScanner(LinkProtocol.MAVLink, 115200, 20480, 1);
+			portscanner.OnFindPort += Portscanner_OnFindPort;
 			portscanner.Start();
 			linkStateText.Text = "Connecting";
 
@@ -92,14 +98,29 @@ namespace SharpBladeGroundStation
 			otherData = new ObservableCollection<Vector3Data>();
 			otherDataList.ItemsSource = otherData;
 
-			graphdata = new ObservableDataSource<Point>();
-			for(int i=0;i<10;i++)
+			string[] xyz = { "X", "Y", "Z" };
+			string[] ypr = { "Roll", "Pitch", "Yaw" };
+			for(int i=0;i<3;i++)
 			{
-				graphdata.AppendAsync(Dispatcher,new Point(i, i * i));
+				accelGraphData[i] = new ObservableDataSource<Point>();
+				accelPlotter.AddLineGraph(accelGraphData[i],"Accel "+xyz[i]);
+				gyroGraphData[i] = new ObservableDataSource<Point>();
+				gyroPlotter.AddLineGraph(gyroGraphData[i], "Gyro " + xyz[i]);
 			}
-			graph.AddLineGraph(graphdata, Colors.Blue, 2);
-			
-        }
+			for(int i=0;i<3;i++)
+			{
+				attitudeGraphData[i] = new ObservableDataSource<Point>();
+				attPlotter.AddLineGraph(attitudeGraphData[i], ypr[i]);
+			}
+			altitudeGraphData = new ObservableDataSource<Point>();
+			altPlotter.AddLineGraph(altitudeGraphData, "Altitude");
+
+			dataSkipCount = new Dictionary<int, ulong>();
+			for(int i=0;i<255;i++)
+			{
+				dataSkipCount[i] = 0;
+			}
+		}
 
 		private void initGmap()
 		{
@@ -133,7 +154,7 @@ namespace SharpBladeGroundStation
 				switch(sender.Protocol)
 				{
 					case LinkProtocol.MAVLink:
-
+						analyzeMAVPackage(package);
 						break;
 					case LinkProtocol.ANOLink:
 						analyzeANOPackage(package);
@@ -225,6 +246,120 @@ namespace SharpBladeGroundStation
 				//pidDataList.Dispatcher.Invoke(action);
 			}
 		}
+
+		private void analyzeMAVPackage(LinkPackage p)
+		{
+			MAVLinkPackage package = (MAVLinkPackage)p;
+			package.StartRead();
+			UInt32 time = 0;
+			UInt64 time64 = 0;
+			UInt64 dt = 100000;
+			switch(package.Function)
+			{
+				case 1:		//SYS_STATUS
+
+					break;
+
+				case 24:    //GPS_RAW_INT 
+					time64 = package.NextUInt64();
+					gpsData.State = (GPSPositionState)package.NextByte();
+					gpsData.Latitude = package.NextInt32()*1.0 / 1e7;
+					gpsData.Longitude = package.NextInt32()*1.0 / 1e7;
+					gpsData.Hdop = package.NextUShort();
+					if (gpsData.Hdop > 1000)
+						gpsData.Hdop = -1;
+					gpsData.Vdop = package.NextUShort();
+					if (gpsData.Vdop > 1000)
+						gpsData.Vdop = -1;
+					flightState.GroundSpeed = package.NextUShort()/100.0f;
+					
+					gpsData.SatelliteCount = package.NextUShort();
+					gpsData.SatelliteCount = package.NextByte();
+
+					break;
+				case 30:
+					time = package.NextUInt32();
+					flightState.Roll = -rad2deg(package.NextSingle());
+					flightState.Pitch = rad2deg(package.NextSingle());
+					flightState.Yaw = rad2deg(package.NextSingle());
+					float h = flightState.Yaw;
+					flightState.Heading = h < 0 ? 360 + h : h;
+					if ((ulong)time * 1000-dataSkipCount[package.Function]  > dt)
+					{						
+						attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Roll));
+						attitudeGraphData[1].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Pitch));
+						attitudeGraphData[2].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Yaw));
+						dataSkipCount[package.Function] = (ulong)time * 1000;
+					}
+					break;
+				
+				case 32:    //LOCAL_POSITION_NED
+					time = package.NextUInt32();
+					float vx = package.NextSingle();
+					float vy = package.NextSingle();
+					float vz = package.NextSingle();
+					vx = package.NextSingle();
+					vy = package.NextSingle();
+					vz = package.NextSingle();
+					flightState.ClimbRate = -vz;
+
+					break;
+				case 141:   //ALTITUDE 
+					time64 = package.NextUInt64();
+					flightState.Altitude = package.NextSingle();
+					if (time64-dataSkipCount[package.Function] > dt)
+					{
+						altitudeGraphData.AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, flightState.Altitude));
+						dataSkipCount[package.Function] = time64;
+					}
+					break;
+				case 105:   //HIGHRES_IMU
+					time64 = package.NextUInt64();
+					float[] sd = { 0, 0, 0 };
+					sd[0] = package.NextSingle();
+					sd[1] = package.NextSingle();
+					sd[2] = package.NextSingle();
+					setSensorData("ACCEL", sd[0], sd[1], sd[2], false);
+					if (time64 - dataSkipCount[package.Function] > dt)
+					{
+						for (int i = 0; i < 3; i++)
+						{
+							accelGraphData[i].AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, sd[i]));
+						}
+					}
+
+					sd[0] = package.NextSingle();
+					sd[1] = package.NextSingle();
+					sd[2] = package.NextSingle();
+					setSensorData("GYRO", sd[0], sd[1], sd[2], false);
+					if (time64-dataSkipCount[package.Function] > dt)
+					{
+						for (int i = 0; i < 3; i++)
+						{
+							gyroGraphData[i].AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, sd[i]));
+						}
+						dataSkipCount[package.Function] = time64;
+					}
+
+					sd[0] = package.NextSingle();
+					sd[1] = package.NextSingle();
+					sd[2] = package.NextSingle();
+					setSensorData("MAG", sd[0], sd[1], sd[2], true);
+					break;
+				default:
+
+					break;
+			}
+
+		}
+		private float rad2deg(float rad)
+		{
+			return (float)(rad / Math.PI * 180);
+		}
+		private float deg2rad(float deg)
+		{
+			return (float)(deg * Math.PI / 180);
+		}
 		private void analyzeANOPackage(LinkPackage p)
 		{
 			ANOLinkPackage package = (ANOLinkPackage)p;
@@ -241,20 +376,36 @@ namespace SharpBladeGroundStation
 					flightState.Altitude = package.NextInt32()/100f;
 					flightState.FlightModeText = getFlightModeText( package.NextByte());
 					flightState.IsArmed = package.NextByte() == 1;
+					attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, flightState.Roll));
+					attitudeGraphData[1].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, flightState.Pitch));
+					attitudeGraphData[2].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, flightState.Yaw));
+					altitudeGraphData.AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, flightState.Altitude / 100.0));
 					break;
 				case 0x02://SENSER
-					short x = package.NextShort();
-					short y = package.NextShort();
-					short z = package.NextShort();
-					setSensorData("ACCEL", x, y, z,false);
-					x = package.NextShort();
-					y = package.NextShort();
-					z = package.NextShort();
-					setSensorData("GYRO", x, y, z,false);
-					x = package.NextShort();
-					y = package.NextShort();
-					z = package.NextShort();
-					setSensorData("MAG", x, y, z,true);
+					short[] sd = { 0, 0, 0 };
+					sd[0] = package.NextShort();
+					sd[1] = package.NextShort();
+					sd[2] = package.NextShort();
+					setSensorData("ACCEL", sd[0], sd[1], sd[2], false);
+					for(int i=0;i<3;i++)
+					{
+						accelGraphData[i].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, sd[i]));
+					}					
+
+					sd[0] = package.NextShort();
+					sd[1] = package.NextShort();
+					sd[2] = package.NextShort();
+					setSensorData("GYRO", sd[0], sd[1], sd[2], false);
+					for (int i = 0; i < 3; i++)
+					{
+						gyroGraphData[i].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, sd[i]));
+					}
+
+					sd[0] = package.NextShort();
+					sd[1] = package.NextShort();
+					sd[2] = package.NextShort();
+					setSensorData("MAG", sd[0], sd[1], sd[2], true);
+					
 					break;
 				case 0x03://RCDATA
 					for(int i=0;i<10;i++)
@@ -288,6 +439,7 @@ namespace SharpBladeGroundStation
 				case 0x07://SENSER2
 					int altbar = package.NextInt32();
 					setVector3Data("ALT_BAR", altbar, 0, 0, otherData);
+					
 					altbar = package.NextUShort();
 					setVector3Data("ALT_CSB", altbar, 0, 0, otherData);
 					break;
@@ -412,11 +564,8 @@ namespace SharpBladeGroundStation
 
 		private void button_Click(object sender, RoutedEventArgs e)
 		{			
-			//MessageBox.Show("Only for developers.", "Orz");
-			for(int i=10;i<20;i++)
-			{
-				graphdata.AppendAsync(Dispatcher, new Point(i, (i-20) * (i-20)));
-			}
+			MessageBox.Show("Only for developers.", "Orz");
+			
 		}
 
 	}

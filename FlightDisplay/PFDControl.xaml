@@ -47,7 +47,7 @@
                                  Value="{Binding ElementName=pfdControl,Path=FlightState.AirSpeed}" TickNumber="7"/>
             <Border Width="36" Height="180" Canvas.Right="5" Canvas.Top="60" BorderBrush="White" BorderThickness="1"/>
             <local:SliderControl x:Name="alt" Height="180" Canvas.Right="5" Canvas.Top="60" ReverseTick="-1"
-                                 Value="{Binding ElementName=pfdControl,Path=FlightState.Altitude}" TickNumber="7"/>
+                                 Value="{Binding ElementName=pfdControl,Path=FlightState.Altitude}" TickNumber="7" />
 
             <Polygon Points="0,0 5,10 -5,10" Canvas.Left="150" Canvas.Top="45" Fill="White"/>
 

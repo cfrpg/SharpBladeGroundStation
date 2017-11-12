@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SharpBladeGroundStation.App" Collapsed="true">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpBladeGroundStation.FloatTextConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SharpBladeGroundStation.ArmConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SharpBladeGroundStation.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>JAAACAAIAMAAAAhCQIAIAgAAAAABCGUIAGQAAAABSkg=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SharpBladeGroundStation.CourseInfo" Collapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAQAAAAAAAABAAAABABAgAQAAIAQABAAAA=</HashCode>
+      <FileName>UIData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpBladeGroundStation.CommLink.ANOLinkPackage" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAEAANgwAAAAIAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>CommLink\ANOLinkPackage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpBladeGroundStation.CommLink.LinkPackage" Collapsed="true">
+    <Position X="1.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIgAAACwAYAAEYEJgRAAAAAAAAAgCAQAAABAAAAAWBA=</HashCode>
+      <FileName>CommLink\LinkPackage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpBladeGroundStation.CommLink.MAVLinkPackage" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAEAANgwAAAAIAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>CommLink\MAVLinkPackage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpBladeGroundStation.CommLink.PortScanner" Collapsed="true">
+    <Position X="12.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAEAAAAgAAAAEBAQABAQEIAIAASAAAFAAA=</HashCode>
+      <FileName>CommLink\PortScanner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpBladeGroundStation.CommLink.PortData" Collapsed="true">
+    <Position X="10.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABABAAAAAAAAAAAAAAAAAAAAAAEAAAEAAAAAAAAAEA=</HashCode>
+      <FileName>CommLink\PortScanner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpBladeGroundStation.CommLink.PortScannerEventArgs" Collapsed="true">
+    <Position X="5.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEA=</HashCode>
+      <FileName>CommLink\PortScanner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpBladeGroundStation.CommLink.SerialLink" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAIAAAARAIAAAQCoQgAAhgqWAIQAwkSgBABEgAAQI=</HashCode>
+      <FileName>CommLink\SerialLink.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SharpBladeGroundStation.Configuration.GCSConfiguration" Collapsed="true">
+    <Position X="12.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Configuration\GCSConfiguration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpBladeGroundStation.Configuration.VehicleConfiguration" Collapsed="true">
+    <Position X="8.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Configuration\VehicleConfiguration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpBladeGroundStation.DataStructs.GPSData" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQEQAAEAEEQAAAAEIAAAAmEAAAAAEQAAABAAQAAA=</HashCode>
+      <FileName>DataStructs\GPSData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SharpBladeGroundStation.DataStructs.NavigationData" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAQAAAAEAAEAAAAAgIAAAIiAAAAAAAAAAAAEAQAAA=</HashCode>
+      <FileName>DataStructs\NavigationData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SharpBladeGroundStation.DataStructs.UIDisplayData" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACABAAACAAABAAAAAQACgIACgICAAAAIAAACCAAgAQA=</HashCode>
+      <FileName>DataStructs\UIDisplayData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.21" Collapsed="true" />
+  </Class>
+  <Class Name="SharpBladeGroundStation.DataStructs.Vector3Data" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAQAAAAAAAAQAgIAEAQAAAABgAQAAYBE=</HashCode>
+      <FileName>DataStructs\Vector3Data.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SharpBladeGroundStation.DataStructs.WayPoint" Collapsed="true">
+    <Position X="10.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAABAAAgAQgAAAAIAAAAAAAAAAAAAAAACAAAhA=</HashCode>
+      <FileName>DataStructs\WayPoint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpBladeGroundStation.Map.AMapProviderBase" Collapsed="true">
+    <Position X="1.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQACA=</HashCode>
+      <FileName>Map\AMapProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpBladeGroundStation.Map.AMapProvider" Collapsed="true">
+    <Position X="0.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAQAAAAAAAAAAAAAAAAQAAAAEAAAAQAAAAAAEIgA=</HashCode>
+      <FileName>Map\AMapProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpBladeGroundStation.Map.AMapSatProvider" Collapsed="true">
+    <Position X="2.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAQAAAAAAAAAAAAAAAAQAAAAEAAAAQAAAAAAEIgA=</HashCode>
+      <FileName>Map\AMapProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpBladeGroundStation.Map.PositionHelper" Collapsed="true">
+    <Position X="7" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAQAAAAAAACACACAAAAAACAgAA=</HashCode>
+      <FileName>Map\GPS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpBladeGroundStation.Properties.Resources" Collapsed="true">
+    <Position X="8.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SharpBladeGroundStation.Properties.Settings" Collapsed="true">
+    <Position X="12.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="SharpBladeGroundStation.CommLink.PackageParseResult" Collapsed="true">
+    <Position X="12.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAQAAAAAAAAAIAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>CommLink\Enums.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SharpBladeGroundStation.CommLink.ANOFunction" Collapsed="true">
+    <Position X="5.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>CommLink\Enums.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SharpBladeGroundStation.CommLink.LinkState" Collapsed="true">
+    <Position X="10.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAACAAAAAAAAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>CommLink\Enums.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SharpBladeGroundStation.CommLink.LinkProtocol" Collapsed="true">
+    <Position X="8.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CommLink\Enums.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SharpBladeGroundStation.CommLink.PortScannerState" Collapsed="true">
+    <Position X="5.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAQAAAAAAAAAAAAAABAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>CommLink\PortScanner.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SharpBladeGroundStation.DataStructs.GPSPositionState" Collapsed="true">
+    <Position X="7" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAA5wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>DataStructs\GPSData.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

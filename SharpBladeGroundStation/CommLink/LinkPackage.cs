@@ -331,6 +331,26 @@ namespace SharpBladeGroundStation.CommLink
 			}
 			
 		}
+
+		public UInt64 NextUInt64()
+		{
+			if (cursor + 8 <= dataSize)
+			{
+				cursor += 8;
+				if (reverseBytes)
+				{
+					byte[] b = new byte[8];
+					Array.Copy(buffer, cursor + HeaderSize - 8, b, 0, 8);
+					Array.Reverse(b);
+					return BitConverter.ToUInt64(b, 0);
+				}
+				return BitConverter.ToUInt64(buffer, cursor + HeaderSize - 8);
+			}
+			else
+			{
+				throw new IndexOutOfRangeException("No enough data to read.");
+			}
+		}
 		#endregion
 
 		public virtual void SetVerify()

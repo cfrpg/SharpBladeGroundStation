@@ -126,12 +126,15 @@ namespace SharpBladeGroundStation.DataStructs
 
 	public enum GPSPositionState
 	{
-		Undefined1=0,
-		Undefined2,
-		Undefined3,
-		Undefined4,
-		Undefined5,
-		Undefined6,
+		NoGPS=0,
+		NoFix,
+		Fix2D,
+		Fix3D,
+		DGPS,
+		RTK_FLT,
+		RTK_FIXED,
+		STATIC,
+		PPP,
 		Undefined	//This one is real "Undefined"
 	}
 }

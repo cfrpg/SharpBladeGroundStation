@@ -88,6 +88,7 @@ namespace SharpBladeGroundStation.CommLink
 			buffer.CopyTo(p.buffer, 0);
 			p.dataSize = dataSize;
 			p.function = function;
+			p.timeStamp = timeStamp;
 			return p;
 		}
 	}

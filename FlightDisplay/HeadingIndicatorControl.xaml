@@ -55,7 +55,7 @@
             <Polygon Canvas.Left="140" Canvas.Top="15" Points="0,0 4,0 0,10 -4,0" Fill="White"/>
             <Grid  Canvas.Left="125">
                 <Border Width="30" Height="17" BorderBrush="Black" BorderThickness="1" CornerRadius="3" Background="Black"/>
-                <TextBlock x:Name="textBlock" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding ElementName=hdgind,Path=Heading}" VerticalAlignment="Center" Foreground="White" TextAlignment="Center"/>
+                <TextBlock x:Name="textBlock" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding ElementName=hdgind,Path=Heading,StringFormat={}{0:0}}" VerticalAlignment="Center" Foreground="White" TextAlignment="Center"/>
 
             </Grid>
            
