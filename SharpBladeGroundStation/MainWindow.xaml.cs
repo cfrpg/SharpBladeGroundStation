@@ -194,6 +194,7 @@ namespace SharpBladeGroundStation
 		private void Wp_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
 			reGeneRoute();
+            e.Handled = true;
 		}
 
 		private void Wp_MouseRightButtonDown(object sender, MouseButtonEventArgs e)

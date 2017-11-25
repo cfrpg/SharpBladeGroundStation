@@ -62,6 +62,7 @@ namespace SharpBladeGroundStation.Map.Markers
 			{
 				Mouse.Capture(null);
 			}
+            //e.Handled = true;
 		}
 
 		private void WayPointMarker_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -80,6 +81,7 @@ namespace SharpBladeGroundStation.Map.Markers
 				Point p = e.GetPosition(mainWindow.gmap);
 				Marker.Position = mainWindow.gmap.FromLocalToLatLng((int)(p.X), (int)(p.Y));
 			}
+            e.Handled = true;
 		}
 
 		private void WayPointMarker_MouseLeave(object sender, MouseEventArgs e)
@@ -108,6 +110,7 @@ namespace SharpBladeGroundStation.Map.Markers
 
 		private void WayPointMarker_Unloaded(object sender, RoutedEventArgs e)
 		{
+            popup.IsOpen = false;
 			popup = null;
 			labelText = null;
 		}
