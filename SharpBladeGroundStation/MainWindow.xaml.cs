@@ -66,6 +66,9 @@ namespace SharpBladeGroundStation
 		WayPointMarker wp;
 		List<WayPointMarker> waypointMarkers;
 
+		//temps
+		PointLatLng positionWhenTouch;
+
 		public FlightState FlightState
 		{
 			get
@@ -157,25 +160,35 @@ namespace SharpBladeGroundStation
 			gmap.Markers.Add(mapRoute);
 
 			gmap.MouseLeftButtonDown += Gmap_MouseLeftButtonDown;
+			gmap.MouseLeftButtonUp += Gmap_MouseLeftButtonUp;
 			waypointMarkers = new List<WayPointMarker>();
 
 			
 			
 		}
 
+		private void Gmap_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+		{
+			if(gmap.Position==positionWhenTouch)
+			{
+				Point p = e.GetPosition(gmap);
+				GMapMarker m = new GMapMarker(gmap.FromLocalToLatLng((int)(p.X), (int)(p.Y)));
+				wp = new WayPointMarker(this, m, (waypointMarkers.Count + 1).ToString(), string.Format("Waypoint {0}\nLat {1}\nLon {2}\n", waypointMarkers.Count + 1, m.Position.Lat, m.Position.Lng));
+				m.Shape = wp;
+				m.ZIndex = 1000;
+				waypointMarkers.Add(wp);
+				gmap.Markers.Add(m);
+				reGeneRoute();
+
+				wp.MouseRightButtonDown += Wp_MouseRightButtonDown;
+				wp.MouseLeftButtonUp += Wp_MouseLeftButtonUp;
+			}
+		}
+
 		private void Gmap_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			Point p = e.GetPosition(gmap);
-			GMapMarker m = new GMapMarker(gmap.FromLocalToLatLng((int)(p.X), (int)(p.Y)));
-			wp = new WayPointMarker(this, m, (waypointMarkers.Count+1).ToString(), string.Format("Waypoint {0}\nLat {1}\nLon {2}\n",waypointMarkers.Count+1,m.Position.Lat,m.Position.Lng));
-			m.Shape = wp;
-			m.ZIndex = 1000;
-			waypointMarkers.Add(wp);
-			gmap.Markers.Add(m);
-			reGeneRoute();			
+			positionWhenTouch = gmap.Position;
 			
-			wp.MouseRightButtonDown += Wp_MouseRightButtonDown;
-			wp.MouseLeftButtonUp += Wp_MouseLeftButtonUp;
 		}
 
 		private void Wp_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -185,6 +198,7 @@ namespace SharpBladeGroundStation
 
 		private void Wp_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
+			
 			WayPointMarker wp = sender as WayPointMarker;
 			waypointMarkers.Remove(wp);
 			gmap.Markers.Remove(wp.Marker);
