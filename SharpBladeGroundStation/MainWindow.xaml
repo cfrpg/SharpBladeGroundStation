@@ -16,10 +16,11 @@
     <Window.Resources>
         <local:ArmConverter x:Key="arm2str"/>
     </Window.Resources>
-    <Grid>
+    <Grid Background="#FF8D8D8D">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Name="leftcol" Width="300*" MaxWidth="400" MinWidth="250"/>
-            <ColumnDefinition Width="892*"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="869*"/>
         </Grid.ColumnDefinitions>
 
         <StackPanel  Margin="0" Orientation="Vertical" Background="#FFE5E5E5">
@@ -47,7 +48,7 @@
                         <TextBlock x:Name="wpdistText" TextWrapping="Wrap" Text="00000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,1.75,0,1" Grid.Row="3" FontSize="14" Grid.Column="3"/>
                         <TextBlock x:Name="hdgText" TextWrapping="Wrap" Text="000.00" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,1.5,0,1.25" Grid.Row="2" FontSize="14" Grid.Column="1"/>
                         <TextBlock x:Name="distText" TextWrapping="Wrap" Text="000000.00m" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,1.5,0,1.25" Grid.Row="2" FontSize="14" Grid.Column="3"/>
-                        
+
                         <TextBlock x:Name="textBlock1" HorizontalAlignment="Left" Margin="3,0,0,0" TextWrapping="Wrap" Grid.Column="0" Grid.Row="0" Text="经度:" VerticalAlignment="Center" FontSize="14"/>
                         <TextBlock x:Name="textBlock2" HorizontalAlignment="Left" Margin="3,0,0,0" TextWrapping="Wrap" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" FontSize="14"><Run Text="参数"/><Run Text=":"/></TextBlock>
                         <TextBlock x:Name="textBlock3" HorizontalAlignment="Left" Margin="3,0,0,0" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Text="回航:" VerticalAlignment="Center" FontSize="14"/>
@@ -61,7 +62,7 @@
                 </GroupBox>
             </Viewbox>
             <Viewbox>
-                <GroupBox x:Name="groupBox4" Header="飞行数据" Width="300" Height="250" BorderBrush="Black">
+                <GroupBox x:Name="groupBox4" Header="飞行数据" Width="300" Height="250" BorderBrush="Black" FontSize="14">
                     <Grid x:Name="flightDataGrid">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
@@ -85,7 +86,7 @@
                             <TextBlock x:Name="pramText1" Margin="0" Grid.Row="1" Grid.Column="2" TextWrapping="NoWrap" Text="{Binding Altitude,StringFormat={}{0:0.0}}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="26" />
 
                         </Viewbox>
-                        
+
                         <TextBlock x:Name="textBlock15" HorizontalAlignment="Center" Margin="0" Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Text="垂直速度(m/s)" VerticalAlignment="Center" FontSize="14"/>
                         <TextBlock x:Name="pramText2" Margin="0" Grid.Row="3" Grid.Column="0" TextWrapping="NoWrap" Text="{Binding ClimbRate,StringFormat={}{0:0.0}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
                         <TextBlock x:Name="textBlock16" HorizontalAlignment="Center" Margin="0" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" Text="水平速度(m/s)" VerticalAlignment="Center" FontSize="14"/>
@@ -109,7 +110,7 @@
 
 
 
-        <Grid Grid.Column="1" Background="#FFB4B4B4">
+        <Grid Grid.Column="2" Background="#FFB4B4B4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="30"/>
@@ -230,9 +231,10 @@
                                 </ListView.View>
                             </ListView>
                         </GroupBox>
+                        <GroupBox x:Name="groupBox5" Header="地图" HorizontalAlignment="Left" Height="297" Margin="713,275,0,0" VerticalAlignment="Top" Width="168" BorderBrush="Black"/>
                     </Grid>
                 </TabItem>
-               
+
                 <TabItem Header="波形*" Height="30">
                     <Grid Background="#FFE5E5E5">
                         <Grid.ColumnDefinitions>
@@ -245,14 +247,14 @@
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
-                       
+
                         <TextBlock Text="AccelState" FontSize="18" Padding="0" TextAlignment="Center" Height="23"/>
                         <d3:ChartPlotter x:Name="accelPlotter" Margin="5" Grid.Row="1" >
                             <d3:ChartPlotter.VerticalAxis>
                                 <d3:VerticalAxis Margin="0"/>
                             </d3:ChartPlotter.VerticalAxis>
                         </d3:ChartPlotter>
-                        
+
                         <TextBlock Text="GyroState" FontSize="18" Padding="0" TextAlignment="Center" Height="23" Grid.Column="1"/>
                         <d3:ChartPlotter x:Name="gyroPlotter" Margin="5" Grid.Row="1" Grid.Column="1">
                             <d3:ChartPlotter.VerticalAxis>
@@ -283,11 +285,9 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="设置" Height="30">
-                    <Grid Background="#FFE5E5E5">
-
-                    </Grid>
+                    <Grid Background="#FFE5E5E5"/>
                 </TabItem>
-              
+
             </TabControl>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -324,6 +324,7 @@
                 </StackPanel>
             </Grid>
         </Grid>
+        <Button x:Name="button3" Content="◀" Grid.Column="1" Height="200"  VerticalAlignment="Center" Click="button3_Click"/>
 
 
 

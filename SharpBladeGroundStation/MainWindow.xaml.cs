@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,17 +15,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using SharpBladeGroundStation.CommLink;
-using SharpBladeGroundStation.Map;
-using SharpBladeGroundStation.DataStructs;
-using GMap.NET;
-using System.Diagnostics;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Windows.Threading;
 using FlightDisplay;
+using GMap.NET;
+using GMap.NET.WindowsPresentation;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
+using SharpBladeGroundStation.CommLink;
+using SharpBladeGroundStation.DataStructs;
+using SharpBladeGroundStation.Map;
+using SharpBladeGroundStation.Map.Markers;
+using SharpBladeGroundStation.Configuration;
 
 namespace SharpBladeGroundStation
 {
@@ -52,6 +55,16 @@ namespace SharpBladeGroundStation
 
 		FlightState flightState;
 		GPSData gpsData;
+
+		//GMap
+		GMapMarker currentMarker;
+		GMapMarker uavMarker;
+		MapCenterPositionConfig mapCenterConfig = MapCenterPositionConfig.Free;
+		GMapRoute mapRoute;
+		List<PointLatLng> waypointPosition;
+
+		WayPointMarker wp;
+		List<WayPointMarker> waypointMarkers;
 
 		public FlightState FlightState
 		{
@@ -125,11 +138,86 @@ namespace SharpBladeGroundStation
 		private void initGmap()
 		{
 			gmap.Zoom = 3;
-			gmap.MapProvider = AMapSatProvider.Instance;
-			GMaps.Instance.Mode = AccessMode.ServerAndCache;
+			gmap.MapProvider = AMapHybirdProvider.Instance;
+
+			GMaps.Instance.Mode = AccessMode.ServerOnly;
 			gmap.Position = new PointLatLng(34.242947, 108.916225);
 			gmap.Zoom = 18;
+
+			uavMarker = new GMapMarker(gmap.Position);
+			uavMarker.Shape = new UAVMarker();
+			uavMarker.Offset = new Point(-15, -15);
+			uavMarker.ZIndex = 100000;
+			waypointPosition = new List<PointLatLng>();	
 			
+			mapRoute = new GMapRoute(waypointPosition);
+			
+			
+			gmap.Markers.Add(uavMarker);
+			gmap.Markers.Add(mapRoute);
+
+			gmap.MouseLeftButtonDown += Gmap_MouseLeftButtonDown;
+			waypointMarkers = new List<WayPointMarker>();
+
+			
+			
+		}
+
+		private void Gmap_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			Point p = e.GetPosition(gmap);
+			GMapMarker m = new GMapMarker(gmap.FromLocalToLatLng((int)(p.X), (int)(p.Y)));
+			wp = new WayPointMarker(this, m, (waypointMarkers.Count+1).ToString(), string.Format("Waypoint {0}\nLat {1}\nLon {2}\n",waypointMarkers.Count+1,m.Position.Lat,m.Position.Lng));
+			m.Shape = wp;
+			m.ZIndex = 1000;
+			waypointMarkers.Add(wp);
+			gmap.Markers.Add(m);
+			reGeneRoute();			
+			
+			wp.MouseRightButtonDown += Wp_MouseRightButtonDown;
+			wp.MouseLeftButtonUp += Wp_MouseLeftButtonUp;
+		}
+
+		private void Wp_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+		{
+			reGeneRoute();
+		}
+
+		private void Wp_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			WayPointMarker wp = sender as WayPointMarker;
+			waypointMarkers.Remove(wp);
+			gmap.Markers.Remove(wp.Marker);
+			for(int i=0;i<waypointMarkers.Count;i++)
+			{
+				waypointMarkers[i].MarkerText = (i + 1).ToString();
+			}
+			reGeneRoute();
+			e.Handled = true;
+		}
+		private void reGeneRoute()
+		{
+			List<PointLatLng> points=new List<PointLatLng>();
+			foreach(var v in waypointMarkers)
+			{
+				points.Add(v.Marker.Position);
+			}
+			gmap.Markers.Remove(mapRoute);
+			mapRoute = new GMapRoute(points);
+			setRouteColor();
+
+			gmap.Markers.Add(mapRoute);
+		}
+		private void setRouteColor()
+		{
+			mapRoute.RegenerateShape(gmap);
+			if (mapRoute.Shape != null)
+			{
+				((Path)mapRoute.Shape).Stroke = new SolidColorBrush(Colors.Red);
+				((Path)mapRoute.Shape).StrokeThickness = 4;
+				((Path)mapRoute.Shape).Opacity = 1;
+				((Path)mapRoute.Shape).Effect = null;
+			}
 		}
 
 		private void Portscanner_OnFindPort(PortScanner sender, PortScannerEventArgs e)
@@ -275,7 +363,8 @@ namespace SharpBladeGroundStation
 					
 					gpsData.SatelliteCount = package.NextUShort();
 					gpsData.SatelliteCount = package.NextByte();
-
+					Action a24 = () => { uavMarker.Position = new PointLatLng(gpsData.Latitude, gpsData.Longitude); };
+					Dispatcher.BeginInvoke(a24);
 					break;
 				case 30:
 					time = package.NextUInt32();
@@ -284,6 +373,9 @@ namespace SharpBladeGroundStation
 					flightState.Yaw = rad2deg(package.NextSingle());
 					float h = flightState.Yaw;
 					flightState.Heading = h < 0 ? 360 + h : h;
+					Action a30 = () => { uavMarker.Shape.RenderTransform = new RotateTransform(flightState.Heading, 15, 15); };
+					Dispatcher.BeginInvoke(a30);
+					
 					if ((ulong)time * 1000-dataSkipCount[package.Function]  > dt)
 					{						
 						attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Roll));
@@ -564,9 +656,25 @@ namespace SharpBladeGroundStation
 
 		private void button_Click(object sender, RoutedEventArgs e)
 		{			
-			MessageBox.Show("Only for developers.", "Orz");
+			//MessageBox.Show("Only for developers.", "Orz");
+			
 			
 		}
 
+		private void button3_Click(object sender, RoutedEventArgs e)
+		{
+			if (leftcol.Width.Value != 0)
+			{
+				leftcol.MinWidth = 0;
+				leftcol.Width = new GridLength(0, GridUnitType.Star);
+				button3.Content = "▶";
+			}
+			else
+			{
+				leftcol.MinWidth = 250;
+				leftcol.Width = new GridLength(300, GridUnitType.Star);
+				button3.Content = "◀";
+			}
+		}
 	}
 }
