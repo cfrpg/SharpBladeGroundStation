@@ -143,7 +143,7 @@ namespace SharpBladeGroundStation
 			gmap.Zoom = 3;
 			gmap.MapProvider = AMapHybirdProvider.Instance;
 
-			GMaps.Instance.Mode = AccessMode.ServerOnly;
+			GMaps.Instance.Mode = AccessMode.CacheOnly;
 			gmap.Position = new PointLatLng(34.242947, 108.916225);
 			gmap.Zoom = 18;
 
@@ -365,20 +365,25 @@ namespace SharpBladeGroundStation
 
 				case 24:    //GPS_RAW_INT 
 					time64 = package.NextUInt64();
-					gpsData.State = (GPSPositionState)package.NextByte();
+					//gpsData.State = (GPSPositionState)package.NextByte();
 					gpsData.Latitude = package.NextInt32()*1.0 / 1e7;
 					gpsData.Longitude = package.NextInt32()*1.0 / 1e7;
+                    int talt = package.NextInt32();
 					gpsData.Hdop = package.NextUShort();
-					if (gpsData.Hdop > 1000)
+					if (gpsData.Hdop > 10000)
 						gpsData.Hdop = -1;
 					gpsData.Vdop = package.NextUShort();
-					if (gpsData.Vdop > 1000)
+					if (gpsData.Vdop > 10000)
 						gpsData.Vdop = -1;
+                    gpsData.Vdop /= 100f;
+                    gpsData.Hdop /= 100f;
 					flightState.GroundSpeed = package.NextUShort()/100.0f;
 					
 					gpsData.SatelliteCount = package.NextUShort();
-					gpsData.SatelliteCount = package.NextByte();
-					Action a24 = () => { uavMarker.Position = new PointLatLng(gpsData.Latitude, gpsData.Longitude); };
+                    gpsData.State = (GPSPositionState)package.NextByte();
+                    gpsData.SatelliteCount = package.NextByte();
+
+					Action a24 = () => { uavMarker.Position = PositionHelper.WGS84ToGCJ02( new PointLatLng(gpsData.Latitude, gpsData.Longitude)); };
 					Dispatcher.BeginInvoke(a24);
 					break;
 				case 30:
