@@ -6,6 +6,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -35,9 +38,11 @@ namespace SharpBladeGroundStation
     public partial class MainWindow : Window
     {
         SerialLink link;       
-        string msg = "";		
+        string msg = "";
+		GCSConfiguration GCSconfig;
 
         PortScanner portscanner;
+
 
 		//displayed data
 		ObservableCollection<Vector3Data> sensorData;
@@ -66,25 +71,27 @@ namespace SharpBladeGroundStation
 		WayPointMarker wp;
 		List<WayPointMarker> waypointMarkers;
 
+		GMapRoute flightRoute;
+		List<PointLatLng> flightRoutePoints;
 		//temps
 		PointLatLng positionWhenTouch;
 
 		public FlightState FlightState
 		{
-			get
-			{
-				return flightState;
-			}
+			get { return flightState; }
+			set { flightState = value; }
+		}
 
-			set
-			{
-				flightState = value;
-			}
+		public GCSConfiguration GCSConfig
+		{
+			get { return GCSconfig; }
+			set { GCSconfig = value; }
 		}
 
 		public MainWindow()
         {
             InitializeComponent();
+			initConfig();
 			//link = new SerialLink("COM3", LinkProtocol.MAVLink);
 			//link.OnReceivePackage += Link_OnReceivePackage;
 			initGmap();
@@ -137,28 +144,73 @@ namespace SharpBladeGroundStation
 				dataSkipCount[i] = 0;
 			}
 		}
-
+		private void initConfig()
+		{
+			string path = Environment.CurrentDirectory+"\\config";
+			DirectoryInfo di = new DirectoryInfo(path);
+			if (!di.Exists)
+				di.Create();
+			//FileInfo fi = new FileInfo(path + "\\gcs.cfg");
+			XmlSerializer xs = new XmlSerializer(typeof(GCSConfiguration));
+			Stream s = new FileStream(path + "\\gcs.xml", FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.None);
+			try
+			{
+				GCSconfig=(GCSConfiguration)xs.Deserialize(s);
+				s.Close();
+			}
+			catch
+			{
+				s.Close();
+				s= new FileStream(path + "\\gcs.xml", FileMode.Create, FileAccess.Write, FileShare.None);
+				GCSconfig = GCSConfiguration.DefaultConfig();				
+				xs.Serialize(s, GCSConfig);
+				s.Close();
+			}
+			
+					
+		}
 		private void initGmap()
 		{
 			gmap.Zoom = 3;
 			gmap.MapProvider = AMapHybirdProvider.Instance;
-
-			GMaps.Instance.Mode = AccessMode.CacheOnly;
+			//gmap.MapProvider = GMap.NET.MapProviders.BingHybridMapProvider.Instance;
+			
 			gmap.Position = new PointLatLng(34.242947, 108.916225);
 			gmap.Zoom = 18;
+			System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
+			try
+			{
+				if(ping.Send("www.autonavi.com").Status!=System.Net.NetworkInformation.IPStatus.Success)
+				{
+					GMaps.Instance.Mode = AccessMode.CacheOnly;
+				}
+				else
+				{
+					GMaps.Instance.Mode = AccessMode.ServerOnly;
 
+				}
+			}
+			catch
+			{
+				GMaps.Instance.Mode = AccessMode.CacheOnly;
+			}
+			//gmap.Manager.Mode = AccessMode.CacheOnly;		
+			
+			//GMaps.Instance.Mode = AccessMode.CacheOnly;
 			uavMarker = new GMapMarker(gmap.Position);
 			uavMarker.Shape = new UAVMarker();
 			uavMarker.Offset = new Point(-15, -15);
 			uavMarker.ZIndex = 100000;
-			waypointPosition = new List<PointLatLng>();	
-			
+			waypointPosition = new List<PointLatLng>();				
 			mapRoute = new GMapRoute(waypointPosition);
-			
+
+			flightRoutePoints = new List<PointLatLng>();
+			flightRoute = new GMapRoute(flightRoutePoints);		
 			
 			gmap.Markers.Add(uavMarker);
 			gmap.Markers.Add(mapRoute);
-
+			gmap.Markers.Add(flightRoute);		
+			
 			gmap.MouseLeftButtonDown += Gmap_MouseLeftButtonDown;
 			gmap.MouseLeftButtonUp += Gmap_MouseLeftButtonUp;
 			waypointMarkers = new List<WayPointMarker>();
@@ -169,7 +221,8 @@ namespace SharpBladeGroundStation
 
 		private void Gmap_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
-			if(gmap.Position==positionWhenTouch)
+			RectLatLng area = gmap.SelectedArea;			
+			if(area.IsEmpty&&gmap.Position==positionWhenTouch)
 			{
 				Point p = e.GetPosition(gmap);
 				GMapMarker m = new GMapMarker(gmap.FromLocalToLatLng((int)(p.X), (int)(p.Y)));
@@ -183,10 +236,33 @@ namespace SharpBladeGroundStation
 				wp.MouseRightButtonDown += Wp_MouseRightButtonDown;
 				wp.MouseLeftButtonUp += Wp_MouseLeftButtonUp;
 			}
+			if(!area.IsEmpty)
+			{
+				if(MessageBox.Show("缓存选定区域地图？","SharpBladeGroundStation",MessageBoxButton.YesNo)==MessageBoxResult.Yes)
+				{
+					if(MessageBox.Show("清除原有缓存？", "SharpBladeGroundStation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+					{
+						gmap.Manager.PrimaryCache.DeleteOlderThan(DateTime.Now, null);
+					}
+					AccessMode m = GMaps.Instance.Mode;
+					GMaps.Instance.Mode = AccessMode.ServerAndCache;
+					for(int i=(int)gmap.Zoom;i<=gmap.MaxZoom;i++)
+					{
+						TilePrefetcher tp = new TilePrefetcher();
+						tp.Owner = this;
+						tp.ShowCompleteMessage = true;
+						tp.Start(area, i, gmap.MapProvider, 100);
+					}
+					GMaps.Instance.Mode = m;
+					
+				}				
+				gmap.SelectedArea = new RectLatLng();
+			}
 		}
 
 		private void Gmap_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
+			
 			positionWhenTouch = gmap.Position;
 			
 		}
@@ -228,13 +304,32 @@ namespace SharpBladeGroundStation
 			mapRoute.RegenerateShape(gmap);
 			if (mapRoute.Shape != null)
 			{
-				((Path)mapRoute.Shape).Stroke = new SolidColorBrush(Colors.Red);
-				((Path)mapRoute.Shape).StrokeThickness = 4;
-				((Path)mapRoute.Shape).Opacity = 1;
-				((Path)mapRoute.Shape).Effect = null;
+				((System.Windows.Shapes.Path)mapRoute.Shape).Stroke = new SolidColorBrush(Colors.Red);
+				((System.Windows.Shapes.Path)mapRoute.Shape).StrokeThickness = 4;
+				((System.Windows.Shapes.Path)mapRoute.Shape).Opacity = 1;
+				((System.Windows.Shapes.Path)mapRoute.Shape).Effect = null;
 			}
 		}
-
+		private void updateFlightRoute(PointLatLng p)
+		{
+			flightRoutePoints.Add(p);
+			if(flightRoutePoints.Count>GCSconfig.MaxCoursePoint)
+			{
+				flightRoutePoints.RemoveAt(0);
+			}
+			gmap.Markers.Remove(flightRoute);
+			flightRoute = new GMapRoute(flightRoutePoints);
+			flightRoute.RegenerateShape(gmap);
+			if(flightRoute.Shape!=null)
+			{
+				((System.Windows.Shapes.Path)flightRoute.Shape).Stroke = new SolidColorBrush(Colors.Red);
+				((System.Windows.Shapes.Path)flightRoute.Shape).StrokeThickness = 4;
+				((System.Windows.Shapes.Path)flightRoute.Shape).Opacity = 1;
+				((System.Windows.Shapes.Path)flightRoute.Shape).Effect = null;
+			}
+			flightRoute.ZIndex = 10000;
+			gmap.Markers.Add(flightRoute);
+		}
 		private void Portscanner_OnFindPort(PortScanner sender, PortScannerEventArgs e)
         {
 			Debug.WriteLine("[main] find port {0}", e.Link.Port.PortName);
@@ -294,69 +389,13 @@ namespace SharpBladeGroundStation
             }
         }
 
-		private void setSensorData(string name,double x,double y,double z,bool refresh)
-		{
-			bool flag = true;
-			for(int i=0;i<sensorData.Count;i++)
-			{
-				if(sensorData[i].Name==name)
-				{
-					sensorData[i].X = x;
-					sensorData[i].Y = y;
-					sensorData[i].Z = z;
-					flag = false;			
-					
-				}
-			}
-			if (flag)
-			{
-				Action a = () => { sensorData.Add(new Vector3Data(name, x, y, z)); };
-				Dispatcher.BeginInvoke(a, DispatcherPriority.Background);
-				//sensorData.Add(new Vector3Data(name, x, y, z));
-			}
-			if (refresh)
-			{
-				//Action action = () => { sensorDataList.Items.Refresh(); };
-				//sensorDataList.Dispatcher.Invoke(action);
-			}
-
-		}
-
-		private void setPidData(int id, double p, double i, double d, bool refresh)
-		{
-			bool flag = true;
-			string name = transPidName(id);
-			for (int j = 0; j < pidData.Count; j++)
-			{
-				if (pidData[j].Name == name)
-				{
-					pidData[j].X = p;
-					pidData[j].Y = i;
-					pidData[j].Z = d;
-					flag = false;
-
-				}
-			}
-			if (flag)
-			{
-				Action a = () => { pidData.Add(new Vector3Data(name, p, i, d)); };
-				Dispatcher.BeginInvoke(a, DispatcherPriority.Background);
-				//pidData.Add(new Vector3Data(name, p, i, d));
-			}
-			if (refresh)
-			{
-				//Action action = () => { pidDataList.Items.Refresh(); };
-				//pidDataList.Dispatcher.Invoke(action);
-			}
-		}
-
 		private void analyzeMAVPackage(LinkPackage p)
 		{
 			MAVLinkPackage package = (MAVLinkPackage)p;
 			package.StartRead();
 			UInt32 time = 0;
 			UInt64 time64 = 0;
-			UInt64 dt = 100000;
+			UInt64 dt = (ulong)GCSconfig.PlotTimeInterval*1000;
 			switch(package.Function)
 			{
 				case 1:		//SYS_STATUS
@@ -365,7 +404,6 @@ namespace SharpBladeGroundStation
 
 				case 24:    //GPS_RAW_INT 
 					time64 = package.NextUInt64();
-					//gpsData.State = (GPSPositionState)package.NextByte();
 					gpsData.Latitude = package.NextInt32()*1.0 / 1e7;
 					gpsData.Longitude = package.NextInt32()*1.0 / 1e7;
                     int talt = package.NextInt32();
@@ -380,9 +418,29 @@ namespace SharpBladeGroundStation
 					flightState.GroundSpeed = package.NextUShort()/100.0f;
 					
 					gpsData.SatelliteCount = package.NextUShort();
-                    gpsData.State = (GPSPositionState)package.NextByte();
-                    gpsData.SatelliteCount = package.NextByte();
+					GPSPositionState gpss= (GPSPositionState)package.NextByte();//sb文档害我debug一天!
+					
 
+					if ((ulong)time * 1000 - dataSkipCount[package.Function] > dt)
+					{
+						attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Roll));
+						attitudeGraphData[1].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Pitch));
+						attitudeGraphData[2].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Yaw));
+
+						dataSkipCount[package.Function] = (ulong)time * 1000;
+					}
+					if (gpsData.State == GPSPositionState.NoGPS && gpss != GPSPositionState.NoGPS)
+					{
+						flightRoutePoints.Clear();
+						dataSkipCount[package.Function] = 0;
+					}
+					gpsData.State = gpss;
+					if ((ulong)time - dataSkipCount[package.Function] > (ulong)GCSconfig.CourseTimeInterval*1000)
+					{
+						Action a241 = () => { updateFlightRoute(new PointLatLng(gpsData.Latitude, gpsData.Longitude)); };
+						Dispatcher.BeginInvoke(a241);
+					}
+					gpsData.SatelliteCount = package.NextByte();
 					Action a24 = () => { uavMarker.Position = PositionHelper.WGS84ToGCJ02( new PointLatLng(gpsData.Latitude, gpsData.Longitude)); };
 					Dispatcher.BeginInvoke(a24);
 					break;
@@ -401,6 +459,7 @@ namespace SharpBladeGroundStation
 						attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Roll));
 						attitudeGraphData[1].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Pitch));
 						attitudeGraphData[2].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Yaw));
+						
 						dataSkipCount[package.Function] = (ulong)time * 1000;
 					}
 					break;
@@ -431,7 +490,8 @@ namespace SharpBladeGroundStation
 					sd[0] = package.NextSingle();
 					sd[1] = package.NextSingle();
 					sd[2] = package.NextSingle();
-					setSensorData("ACCEL", sd[0], sd[1], sd[2], false);
+					//setSensorData("ACCEL", sd[0], sd[1], sd[2], false);
+					setVector3Data("ACCEL", sd[0], sd[1], sd[2], sensorData);
 					if (time64 - dataSkipCount[package.Function] > dt)
 					{
 						for (int i = 0; i < 3; i++)
@@ -443,7 +503,8 @@ namespace SharpBladeGroundStation
 					sd[0] = package.NextSingle();
 					sd[1] = package.NextSingle();
 					sd[2] = package.NextSingle();
-					setSensorData("GYRO", sd[0], sd[1], sd[2], false);
+					//setSensorData("GYRO", sd[0], sd[1], sd[2], false);
+					setVector3Data("GYRO", sd[0], sd[1], sd[2], sensorData);
 					if (time64-dataSkipCount[package.Function] > dt)
 					{
 						for (int i = 0; i < 3; i++)
@@ -456,7 +517,8 @@ namespace SharpBladeGroundStation
 					sd[0] = package.NextSingle();
 					sd[1] = package.NextSingle();
 					sd[2] = package.NextSingle();
-					setSensorData("MAG", sd[0], sd[1], sd[2], true);
+					//setSensorData("MAG", sd[0], sd[1], sd[2], true);
+					setVector3Data("MAG", sd[0], sd[1], sd[2], sensorData);
 					break;
 				default:
 
@@ -498,8 +560,9 @@ namespace SharpBladeGroundStation
 					sd[0] = package.NextShort();
 					sd[1] = package.NextShort();
 					sd[2] = package.NextShort();
-					setSensorData("ACCEL", sd[0], sd[1], sd[2], false);
-					for(int i=0;i<3;i++)
+					//setSensorData("ACCEL", sd[0], sd[1], sd[2], false);
+					setVector3Data("ACCEL", sd[0], sd[1], sd[2], sensorData);
+					for (int i=0;i<3;i++)
 					{
 						accelGraphData[i].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, sd[i]));
 					}					
@@ -507,7 +570,8 @@ namespace SharpBladeGroundStation
 					sd[0] = package.NextShort();
 					sd[1] = package.NextShort();
 					sd[2] = package.NextShort();
-					setSensorData("GYRO", sd[0], sd[1], sd[2], false);
+					//setSensorData("GYRO", sd[0], sd[1], sd[2], false);
+					setVector3Data("GYRO", sd[0], sd[1], sd[2], sensorData);
 					for (int i = 0; i < 3; i++)
 					{
 						gyroGraphData[i].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, sd[i]));
@@ -516,8 +580,8 @@ namespace SharpBladeGroundStation
 					sd[0] = package.NextShort();
 					sd[1] = package.NextShort();
 					sd[2] = package.NextShort();
-					setSensorData("MAG", sd[0], sd[1], sd[2], true);
-					
+					//setSensorData("MAG", sd[0], sd[1], sd[2], true);
+					setVector3Data("MAG", sd[0], sd[1], sd[2], sensorData);
 					break;
 				case 0x03://RCDATA
 					for(int i=0;i<10;i++)
@@ -582,7 +646,8 @@ namespace SharpBladeGroundStation
 							short P = package.NextShort();
 							short I = package.NextShort();
 							short D = package.NextShort();							
-							setPidData(id + i+1, P, I, D, i==2);
+							//setPidData(id + i+1, P, I, D, i==2);
+							setVector3Data(transPidName(id + i + 1), P,I,D, sensorData);
 						}
 					}
 					break;
