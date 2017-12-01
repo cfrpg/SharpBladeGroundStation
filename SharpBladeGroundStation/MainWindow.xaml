@@ -118,9 +118,7 @@
             <TabControl x:Name="tabControl" Margin="0" TabStripPlacement="Bottom" Grid.RowSpan="2">
                 <TabItem Header="导航" Height="30">
                     <Grid Background="#FFE5E5E5">
-                        <gmwpf:GMapControl x:Name="gmap"  Margin="0"  MaxZoom="18" Zoom="13">
-                           
-                        </gmwpf:GMapControl>
+                        <gmwpf:GMapControl x:Name="gmap"  Margin="0"  MaxZoom="18" Zoom="13"/>
                         <Slider x:Name="slider" Orientation="Vertical"  Margin="0,50,0,50" Width="22" HorizontalAlignment="Right" Value="{Binding ElementName=gmap,Path=Zoom}" Minimum="3" Maximum="18" SmallChange="1"/>
                     </Grid>
                 </TabItem>
@@ -298,7 +296,7 @@
                     <ColumnDefinition Width="30"/>
                     <ColumnDefinition Width="120"/>
                     <ColumnDefinition Width="45"/>
-                    <ColumnDefinition Width="54"/>
+                    <ColumnDefinition Width="55"/>
                     <ColumnDefinition Width="20"/>
                     <ColumnDefinition Width="110"/>
                     <ColumnDefinition Width="100"/>
