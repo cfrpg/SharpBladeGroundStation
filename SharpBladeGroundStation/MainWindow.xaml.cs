@@ -421,27 +421,24 @@ namespace SharpBladeGroundStation
 					GPSPositionState gpss= (GPSPositionState)package.NextByte();//sb文档害我debug一天!
 					
 
-					if ((ulong)time * 1000 - dataSkipCount[package.Function] > dt)
-					{
-						attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Roll));
-						attitudeGraphData[1].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Pitch));
-						attitudeGraphData[2].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Yaw));
-
-						dataSkipCount[package.Function] = (ulong)time * 1000;
-					}
+					
 					if (gpsData.State == GPSPositionState.NoGPS && gpss != GPSPositionState.NoGPS)
 					{
 						flightRoutePoints.Clear();
 						dataSkipCount[package.Function] = 0;
 					}
 					gpsData.State = gpss;
-					if ((ulong)time - dataSkipCount[package.Function] > (ulong)GCSconfig.CourseTimeInterval*1000)
+                    PointLatLng pos = PositionHelper.WGS84ToGCJ02(new PointLatLng(gpsData.Latitude, gpsData.Longitude));
+
+                    if (time64 - dataSkipCount[package.Function] > (ulong)GCSconfig.CourseTimeInterval*1000)
 					{
-						Action a241 = () => { updateFlightRoute(new PointLatLng(gpsData.Latitude, gpsData.Longitude)); };
+						Action a241 = () => { updateFlightRoute(pos); };
 						Dispatcher.BeginInvoke(a241);
-					}
+                        dataSkipCount[package.Function] = time64;
+
+                    }
 					gpsData.SatelliteCount = package.NextByte();
-					Action a24 = () => { uavMarker.Position = PositionHelper.WGS84ToGCJ02( new PointLatLng(gpsData.Latitude, gpsData.Longitude)); };
+					Action a24 = () => { uavMarker.Position = pos; };
 					Dispatcher.BeginInvoke(a24);
 					break;
 				case 30:
