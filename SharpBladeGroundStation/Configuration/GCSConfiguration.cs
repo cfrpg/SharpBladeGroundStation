@@ -22,14 +22,18 @@ namespace SharpBladeGroundStation.Configuration
 		/// 航线绘制采样间隔(ms)
 		/// </summary>
 		public int CourseTimeInterval { get; set; } = 500;
-
+		/// <summary>
+		/// 默认波特率
+		/// </summary>
+		public int BaudRate { get; set; } = 115200;
 		public static GCSConfiguration DefaultConfig()
 		{
 			return new GCSConfiguration
-			{				
-				PlotTimeInterval=100,
-				MaxCoursePoint=100,
-				CourseTimeInterval=500
+			{
+				PlotTimeInterval = 100,
+				MaxCoursePoint = 100,
+				CourseTimeInterval = 500,
+				BaudRate = 115200
 			};
 		}
 	}

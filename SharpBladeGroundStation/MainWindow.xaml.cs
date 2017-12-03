@@ -38,11 +38,11 @@ namespace SharpBladeGroundStation
     public partial class MainWindow : Window
     {
         SerialLink link;       
-        string msg = "";
+       
 		GCSConfiguration GCSconfig;
 
-        PortScanner portscanner;
-
+        //PortScanner portscanner;
+		AdvancedPortScanner portscanner;
 
 		//displayed data
 		ObservableCollection<Vector3Data> sensorData;
@@ -76,6 +76,8 @@ namespace SharpBladeGroundStation
 		//temps
 		PointLatLng positionWhenTouch;
 
+
+		const string messageboxTitle = "SharpBladeGroundStation";
 		public FlightState FlightState
 		{
 			get { return flightState; }
@@ -95,8 +97,11 @@ namespace SharpBladeGroundStation
 			//link = new SerialLink("COM3", LinkProtocol.MAVLink);
 			//link.OnReceivePackage += Link_OnReceivePackage;
 			initGmap();
-            //portscanner = new PortScanner(LinkProtocol.ANOLink, 115200, 20480, 1);
-			portscanner = new PortScanner(LinkProtocol.MAVLink, 115200, 20480, 1);
+			//portscanner = new PortScanner(LinkProtocol.ANOLink, 115200, 20480, 1);
+			//portscanner = new PortScanner(LinkProtocol.MAVLink, 115200, 20480, 1);
+			//portscanner.OnFindPort += Portscanner_OnFindPort;
+			//portscanner.Start();
+			portscanner = new AdvancedPortScanner(GCSconfig.BaudRate, 1000, 3);
 			portscanner.OnFindPort += Portscanner_OnFindPort;
 			portscanner.Start();
 			linkStateText.Text = "Connecting";
@@ -186,7 +191,7 @@ namespace SharpBladeGroundStation
 				}
 				else
 				{
-					GMaps.Instance.Mode = AccessMode.ServerOnly;
+					GMaps.Instance.Mode = AccessMode.ServerAndCache;
 
 				}
 			}
@@ -261,10 +266,8 @@ namespace SharpBladeGroundStation
 		}
 
 		private void Gmap_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-		{
-			
-			positionWhenTouch = gmap.Position;
-			
+		{			
+			positionWhenTouch = gmap.Position;			
 		}
 
 		private void Wp_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -329,8 +332,12 @@ namespace SharpBladeGroundStation
 			}
 			flightRoute.ZIndex = 10000;
 			gmap.Markers.Add(flightRoute);
+			if(mapCenterConfig==MapCenterPositionConfig.FollowUAV)
+			{
+				gmap.Position = p;
+			}
 		}
-		private void Portscanner_OnFindPort(PortScanner sender, PortScannerEventArgs e)
+		private void Portscanner_OnFindPort(AdvancedPortScanner sender, PortScannerEventArgs e)
         {
 			Debug.WriteLine("[main] find port {0}", e.Link.Port.PortName);
 			portscanner.Stop();
@@ -738,8 +745,7 @@ namespace SharpBladeGroundStation
 
 		private void button_Click(object sender, RoutedEventArgs e)
 		{			
-			//MessageBox.Show("Only for developers.", "Orz");
-			
+			MessageBox.Show("Only for developers.", "Orz");
 			
 		}
 
@@ -756,6 +762,49 @@ namespace SharpBladeGroundStation
 				leftcol.MinWidth = 250;
 				leftcol.Width = new GridLength(300, GridUnitType.Star);
 				button3.Content = "◀";
+			}
+		}
+
+		private void clearBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if(MessageBox.Show("清空所有航线?",messageboxTitle,MessageBoxButton.YesNoCancel)==MessageBoxResult.Yes)
+			{
+				foreach(var wp in waypointMarkers)
+				{
+					gmap.Markers.Remove(wp.Marker);
+				}
+				waypointMarkers.Clear();
+				reGeneRoute();
+			}
+		}
+
+		private void uploadBtn_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("这是没有实装的上传航线", "orz");
+		}
+
+		private void downloadBtn_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("这是没有实装的下载航线", "orz");
+		}
+
+		private void pathPlanBtn_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("这是没有实装的规划", "orz");
+		}
+
+		private void followBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if (mapCenterConfig == MapCenterPositionConfig.Free)
+			{
+				mapCenterConfig = MapCenterPositionConfig.FollowUAV;
+				followBtn.Background = new SolidColorBrush(Color.FromArgb(204, 255, 20, 20));
+				
+			}
+			else
+			{
+				mapCenterConfig = MapCenterPositionConfig.Free;
+				followBtn.Background = new SolidColorBrush(Color.FromArgb(204, 100, 100, 100));
 			}
 		}
 	}

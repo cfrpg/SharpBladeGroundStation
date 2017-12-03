@@ -41,7 +41,21 @@ namespace SharpBladeGroundStation.CommLink
 
 	public enum LinkProtocol
 	{
+		/// <summary>
+		/// 无协议的普通串口
+		/// </summary>
+		NoLink,
+		/// <summary>
+		/// 假的MAVLink2.0协议
+		/// </summary>
 		MAVLink,
-		ANOLink
+		/// <summary>
+		/// 匿名飞控协议
+		/// </summary>
+		ANOLink,
+		/// <summary>
+		/// SharpBlade协议,敬请期待
+		/// </summary>
+		SBLink
 	}
 }

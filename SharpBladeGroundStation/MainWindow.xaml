@@ -120,6 +120,63 @@
                     <Grid Background="#FFE5E5E5">
                         <gmwpf:GMapControl x:Name="gmap"  Margin="0"  MaxZoom="18" Zoom="13"/>
                         <Slider x:Name="slider" Orientation="Vertical"  Margin="0,50,0,50" Width="22" HorizontalAlignment="Right" Value="{Binding ElementName=gmap,Path=Zoom}" Minimum="3" Maximum="18" SmallChange="1"/>
+                        
+
+                        <StackPanel HorizontalAlignment="Left" Width="40" Margin="5,5,0,0">
+                            <Button x:Name="uploadBtn" Background="#CC646464" BorderBrush="White" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="4" Click="uploadBtn_Click" >
+                                <Button.Content>
+                                    <Image Source="Contents/upload.png" Margin="2"/>
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <TextBlock>上传航线</TextBlock>
+                                </Button.ToolTip>
+                            </Button>
+                            <Button x:Name="downloadBtn" Background="#CC646464" BorderBrush="White" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="4" Click="downloadBtn_Click" >
+                                <Button.Content>
+                                    <Image Source="Contents/upload.png" Margin="2" RenderTransformOrigin="0.5,0.5">
+                                        <Image.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform ScaleY="-1" ScaleX="1"/>
+                                                <SkewTransform AngleY="0" AngleX="0"/>
+                                                <RotateTransform Angle="0"/>
+                                                <TranslateTransform/>
+                                            </TransformGroup>
+                                        </Image.RenderTransform>
+                                    </Image>
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <TextBlock>下载航线</TextBlock>
+                                </Button.ToolTip>
+                            </Button>
+                            <Button x:Name="pathPlanBtn" Background="#CC646464" BorderBrush="White" HorizontalAlignment="Left" VerticalAlignment="Center" BorderThickness="4" Click="pathPlanBtn_Click" >
+                                <Button.Content>
+                                    <Image Source="Contents/pathplan.png" Margin="2"/>
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <TextBlock>航线规划航线</TextBlock>
+                                </Button.ToolTip>
+                            </Button>
+                            <Button x:Name="followBtn" Background="#CC646464" BorderBrush="White" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="4" Click="followBtn_Click"  >
+                                <Button.Content>
+                                    <Image Source="Contents/follow.png" Margin="2"/>
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <TextBlock>跟随无人机</TextBlock>
+                                </Button.ToolTip>
+                            </Button>
+                            <Button x:Name="clearBtn" Background="#CC646464" BorderBrush="White" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="4" Click="clearBtn_Click" >
+                                <Button.Content>
+                                    <Image Source="Contents/trashbin.png" Margin="2"/>
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <TextBlock>清空航线</TextBlock>
+                                </Button.ToolTip>
+                            </Button>
+                            
+                        </StackPanel>
+
+
+
                     </Grid>
                 </TabItem>
                 <TabItem Header="数据*" Height="30">

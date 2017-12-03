@@ -179,17 +179,24 @@ namespace SharpBladeGroundStation.CommLink
 					lasttime = DateTime.Now;
 					continue;
 				}
-				if(!port.IsOpen&&port.BytesToWrite==0)
+				try
 				{
-					if (sendPackageQueue.Count != 0)
+					if (port.BytesToWrite == 0)
 					{
-						LinkPackage p = sendPackageQueue.Dequeue();
-						port.Write(p.Buffer, 0, p.PackageSize);
+						if (sendPackageQueue.Count != 0)
+						{
+							LinkPackage p = sendPackageQueue.Dequeue();
+							port.Write(p.Buffer, 0, p.PackageSize);
+						}
+					}
+					else
+					{
+						Thread.Sleep(50);
 					}
 				}
-				else
+				catch
 				{
-					Thread.Sleep(50);
+					
 				}
 				DateTime now = DateTime.Now;
 				double dt = now.Subtract(lasttime).TotalMilliseconds;

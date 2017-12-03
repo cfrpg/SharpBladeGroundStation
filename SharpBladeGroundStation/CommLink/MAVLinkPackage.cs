@@ -21,7 +21,7 @@ namespace SharpBladeGroundStation.CommLink
 
 		public override int PackageSize
 		{
-			get { return dataSize + HeaderSize + 1; }
+			get { return dataSize + HeaderSize + 2; }
 		}
 
 		public byte Function

@@ -78,11 +78,13 @@ namespace SharpBladeGroundStation.Map
 			return GetTileImageUsingHttp(url);
 		}
 
+		
 		string MakeTileImageUrl(GPoint pos, int zoom, string language)
 		{
 
 			//http://webrd04.is.autonavi.com/appmaptile?x=5&y=2&z=3&lang=zh_cn&size=1&scale=1&style=7
 			string url = string.Format(UrlFormat, pos.X, pos.Y, zoom);
+		
 			Console.WriteLine("url:" + url);
 			return url;
 		}
