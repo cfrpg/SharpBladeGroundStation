@@ -17,7 +17,7 @@ namespace SharpBladeGroundStation.Configuration
 		/// <summary>
 		/// 航线显示最大点数
 		/// </summary>
-		public int MaxCoursePoint { get; set; } = 100;
+		public int MaxCoursePoint { get; set; } = 500;
 		/// <summary>
 		/// 航线绘制采样间隔(ms)
 		/// </summary>
@@ -31,7 +31,7 @@ namespace SharpBladeGroundStation.Configuration
 			return new GCSConfiguration
 			{
 				PlotTimeInterval = 100,
-				MaxCoursePoint = 100,
+				MaxCoursePoint = 500,
 				CourseTimeInterval = 500,
 				BaudRate = 115200
 			};

@@ -152,6 +152,7 @@ namespace SharpBladeGroundStation
 		private void initConfig()
 		{
 			string path = Environment.CurrentDirectory+"\\config";
+			
 			DirectoryInfo di = new DirectoryInfo(path);
 			if (!di.Exists)
 				di.Create();
@@ -171,8 +172,8 @@ namespace SharpBladeGroundStation
 				xs.Serialize(s, GCSConfig);
 				s.Close();
 			}
-			
-					
+			gcsCfgGroup.DataContext = GCSconfig;
+
 		}
 		private void initGmap()
 		{
@@ -806,6 +807,17 @@ namespace SharpBladeGroundStation
 				mapCenterConfig = MapCenterPositionConfig.Free;
 				followBtn.Background = new SolidColorBrush(Color.FromArgb(204, 100, 100, 100));
 			}
+		}
+
+		private void mainwindow_Closing(object sender, CancelEventArgs e)
+		{
+			string path = Environment.CurrentDirectory + "\\config";
+			
+			XmlSerializer xs = new XmlSerializer(typeof(GCSConfiguration));
+			Stream s = new FileStream(path + "\\gcs.xml", FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);	
+			xs.Serialize(s, GCSConfig);
+			s.Close();
+			
 		}
 	}
 }

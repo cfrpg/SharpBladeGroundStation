@@ -11,7 +11,7 @@
         Title="SharpBladeGroundStation - cfrpg" Height="700" Width="1200" SizeChanged="Window_SizeChanged"
         x:Name="mainwindow"
         MinWidth="1200"
-        MinHeight="700">
+        MinHeight="700" Closing="mainwindow_Closing">
 
     <Window.Resources>
         <local:ArmConverter x:Key="arm2str"/>
@@ -120,7 +120,7 @@
                     <Grid Background="#FFE5E5E5">
                         <gmwpf:GMapControl x:Name="gmap"  Margin="0"  MaxZoom="18" Zoom="13"/>
                         <Slider x:Name="slider" Orientation="Vertical"  Margin="0,50,0,50" Width="22" HorizontalAlignment="Right" Value="{Binding ElementName=gmap,Path=Zoom}" Minimum="3" Maximum="18" SmallChange="1"/>
-                        
+
 
                         <StackPanel HorizontalAlignment="Left" Width="40" Margin="5,5,0,0">
                             <Button x:Name="uploadBtn" Background="#CC646464" BorderBrush="White" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="4" Click="uploadBtn_Click" >
@@ -172,7 +172,7 @@
                                     <TextBlock>清空航线</TextBlock>
                                 </Button.ToolTip>
                             </Button>
-                            
+
                         </StackPanel>
 
 
@@ -343,7 +343,48 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="设置" Height="30">
-                    <Grid Background="#FFE5E5E5"/>
+                    <Grid Background="#FFE5E5E5">
+                        <GroupBox x:Name="gcsCfgGroup" Header="地面站设置" HorizontalAlignment="Left" VerticalAlignment="Top" Height="238" Width="464" BorderBrush="Black">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="90*"/>
+                                    <ColumnDefinition Width="293*"/>
+                                    <ColumnDefinition Width="69*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock  HorizontalAlignment="Right" TextWrapping="Wrap" Text="曲线采样间隔&#13;(ms)" VerticalAlignment="Center" Margin="0,0,10,0" TextAlignment="Center">
+                                    <TextBlock.ToolTip>
+                                        <TextBlock Text="曲线图中两个采样点最小时间间隔&#13;增大间隔可以提高性能"/>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <Slider VerticalAlignment="Center" Grid.Column="1" Maximum="2000" Minimum="100" LargeChange="100" SmallChange="100" TickFrequency="100" Value="{Binding PlotTimeInterval}" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
+                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding PlotTimeInterval}" VerticalAlignment="Center" Grid.Column="2" Margin="10,0,0,0"/>
+
+                                <TextBlock  HorizontalAlignment="Right" TextWrapping="Wrap" Text="航迹采样间隔&#13;(ms)" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Row="1" TextAlignment="Center">
+                                    <TextBlock.ToolTip>
+                                        <TextBlock Text="航迹显示的采样间隔&#13;增大间隔可以提高性能,减小间隔可以使航迹更加平滑"/>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <Slider VerticalAlignment="Center" Grid.Column="1" Maximum="5000" Minimum="100" LargeChange="100" SmallChange="100" TickFrequency="100" Value="{Binding CourseTimeInterval}" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="1"/>
+                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding CourseTimeInterval}" VerticalAlignment="Center" Grid.Column="2" Margin="10,0,0,0" Grid.Row="1"/>
+
+                                <TextBlock  HorizontalAlignment="Right" TextWrapping="Wrap" Text="最大航迹点数" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Row="2" TextAlignment="Center">
+                                    <TextBlock.ToolTip>
+                                        <TextBlock Text="航迹中的最大点数&#13;点数越多航迹保留的时间越长"/>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <Slider VerticalAlignment="Center" Grid.Column="1" Maximum="10000" Minimum="500" LargeChange="500" SmallChange="500" TickFrequency="500" Value="{Binding MaxCoursePoint}" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="2"/>
+                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding MaxCoursePoint}" VerticalAlignment="Center" Grid.Column="2" Margin="10,0,0,0" Grid.Row="2"/>
+                            </Grid>
+
+                        </GroupBox>
+
+                    </Grid>
                 </TabItem>
 
             </TabControl>
