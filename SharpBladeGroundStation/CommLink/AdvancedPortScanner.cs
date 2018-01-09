@@ -164,35 +164,26 @@ namespace SharpBladeGroundStation.CommLink
 					len = buffersize;
 				port.Read(buff, 0, len);
 				port.Close();
-				PackageParseResult ppr;
 
 				offset = 0;
-				MAVLinkPackage mavp = new MAVLinkPackage();				
-				ppr = mavp.ReadFromBuffer(buff, len, offset);
-				if(ppr==PackageParseResult.Yes)
+				MAVLinkPackage mavp = new MAVLinkPackage();					
+				if(tryGetPackage(buff,len,0,mavp))
 				{
 					offset = mavp.PackageSize;
-					ppr = mavp.ReadFromBuffer(buff, len - offset, offset);
-					if(ppr==PackageParseResult.Yes)
+					if (tryGetPackage(buff,len,offset,mavp))
 					{
 						state = PortScannerState.Available;
 						protocol = LinkProtocol.MAVLink;
 						return;
 					}
-					else
-					{
-						Debug.WriteLine("[port scanner]cannot get package:" + name+" "+ppr.ToString());
-					}
 				}
 
 				offset = 0;
 				ANOLinkPackage anop = new ANOLinkPackage();
-				ppr = anop.ReadFromBuffer(buff, len, offset);
-				if (ppr == PackageParseResult.Yes)
+				if (tryGetPackage(buff, len, 0, anop))
 				{
 					offset = anop.PackageSize;
-					ppr = anop.ReadFromBuffer(buff, len - offset, offset);
-					if (ppr == PackageParseResult.Yes)
+					if (tryGetPackage(buff, len, offset, anop))
 					{
 						state = PortScannerState.Available;
 						protocol = LinkProtocol.ANOLink;
@@ -201,6 +192,32 @@ namespace SharpBladeGroundStation.CommLink
 				}
 				Debug.WriteLine("[port scanner]unavilable port(no link):" + name);
 				state = PortScannerState.Unavailable;
+			}
+
+			private bool tryGetPackage(byte[] buff,int len,int offset,LinkPackage package)
+			{
+				
+				bool flag = false;
+				while(offset<len&&(!flag))
+				{
+					PackageParseResult res = package.ReadFromBuffer(buff, len, offset);
+					switch (res)
+					{
+						case PackageParseResult.NoSTX:
+							offset++;
+							break;
+						case PackageParseResult.NoEnoughData:
+							flag = true;
+							break;
+						case PackageParseResult.BadCheckSum:
+							offset++;
+							break;
+						case PackageParseResult.Yes:
+							return true;
+							
+					}
+				}
+				return false;
 			}
 		}
 	}

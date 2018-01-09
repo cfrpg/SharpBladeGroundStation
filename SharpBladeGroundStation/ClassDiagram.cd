@@ -118,11 +118,11 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="SharpBladeGroundStation.DataStructs.UIDisplayData" Collapsed="true" BaseTypeListCollapsed="true">
+  <Class Name="SharpBladeGroundStation.DataStructs.Marker" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="9.5" Y="4.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ACABAAACAAABAAAAAQACgIACgICAAAAIAAACCAAgAQA=</HashCode>
-      <FileName>DataStructs\UIDisplayData.cs</FileName>
+      <FileName>DataStructs\Marker.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.21" Collapsed="true" />
   </Class>

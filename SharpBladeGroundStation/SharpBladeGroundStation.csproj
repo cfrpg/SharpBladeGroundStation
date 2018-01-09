@@ -48,6 +48,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Speech" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -72,7 +73,6 @@
     <Compile Include="Converters.cs" />
     <Compile Include="DataStructs\GPSData.cs" />
     <Compile Include="DataStructs\NavigationData.cs" />
-    <Compile Include="DataStructs\UIDisplayData.cs" />
     <Compile Include="DataStructs\Vector3Data.cs" />
     <Compile Include="DataStructs\WayPoint.cs" />
     <Compile Include="Configuration\Enums.cs" />

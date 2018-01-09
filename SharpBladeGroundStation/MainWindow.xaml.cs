@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Speech.Synthesis;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using System.Windows;
@@ -102,6 +103,7 @@ namespace SharpBladeGroundStation
 			//portscanner.OnFindPort += Portscanner_OnFindPort;
 			//portscanner.Start();
 			portscanner = new AdvancedPortScanner(GCSconfig.BaudRate, 1000, 3);
+			//portscanner = new AdvancedPortScanner(57600, 1000, 3);
 			portscanner.OnFindPort += Portscanner_OnFindPort;
 			portscanner.Start();
 			linkStateText.Text = "Connecting";
@@ -745,9 +747,11 @@ namespace SharpBladeGroundStation
 		}
 
 		private void button_Click(object sender, RoutedEventArgs e)
-		{			
-			MessageBox.Show("Only for developers.", "Orz");
-			
+		{
+			//MessageBox.Show("Only for developers.", "Orz");
+			SpeechSynthesizer ss = new SpeechSynthesizer();
+			ss.Rate = 0;
+			ss.SpeakAsync("鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，启动失败。");
 		}
 
 		private void button3_Click(object sender, RoutedEventArgs e)
