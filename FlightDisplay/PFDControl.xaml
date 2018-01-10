@@ -13,15 +13,16 @@
         <local:HalfConverter x:Key="half"/>
         <local:TwiceConverter x:Key="twice"/>
         <local:PitchTransConverter x:Key="pitTrans"/>
+        
     </UserControl.Resources>
 
     <Viewbox>
         <Canvas Width="300" Height="300" ClipToBounds="True">
-            <Rectangle Name="back" Width="800" Height="800" Canvas.Top="-250" Canvas.Left="-250" RenderTransformOrigin="0.5,0.5">
+            <Rectangle Name="back" Width="300" Height="300" Canvas.Top="0" Canvas.Left="0" RenderTransformOrigin="0.5,0.5">
                 <Rectangle.RenderTransform>
                     <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>                        
+                        <ScaleTransform ScaleX="4" ScaleY="4"/>
+                        <SkewTransform/>
                         <TranslateTransform Y="{Binding ElementName=pfdControl,Path=FlightState.Pitch,Converter={StaticResource pitTrans}}"/>
                         <RotateTransform Angle="{Binding ElementName=pfdControl,Path=FlightState.Roll}"/>
                     </TransformGroup>
@@ -40,19 +41,17 @@
                 </Rectangle.Fill>
 
             </Rectangle>
+            <local:HeadingIndicatorControl x:Name="hdgInd" Width="280"  Canvas.Left="10" Canvas.Top="5" Heading="{Binding ElementName=pfdControl,Path=FlightState.Heading}"/>           
+            <Border Width="36" Height="180" Canvas.Left="5" Canvas.Top="60" BorderBrush="White" BorderThickness="1"/>
+            <local:SliderControl x:Name="spd" Height="180" Canvas.Left="5" Canvas.Top="60"
+                                 Value="{Binding ElementName=pfdControl,Path=FlightState.AirSpeed}" TickNumber="7"/>
+            <Border Width="36" Height="180" Canvas.Right="5" Canvas.Top="60" BorderBrush="White" BorderThickness="1"/>
+            <local:SliderControl x:Name="alt" Height="180" Canvas.Right="5" Canvas.Top="60" ReverseTick="-1"
+                                 Value="{Binding ElementName=pfdControl,Path=FlightState.Altitude}" TickNumber="7" TickSize="10"/>
 
-            <local:CompassControl x:Name="compass" Width="100" Height="100" Canvas.Left="100" Canvas.Top="250"
-                                  Heading="{Binding ElementName=pfdControl,Path=FlightState.Heading}"/>
-            <Border Width="24" Height="120" Canvas.Left="50" Canvas.Top="90" BorderBrush="White" BorderThickness="1"/>
-            <local:SliderControl x:Name="spd" Height="120" Canvas.Left="50" Canvas.Top="90"
-                                 Value="{Binding ElementName=pfdControl,Path=FlightState.AirSpeed}"/>
-            <Border Width="24" Height="120" Canvas.Right="50" Canvas.Top="90" BorderBrush="White" BorderThickness="1"/>
-            <local:SliderControl x:Name="alt" Height="120" Canvas.Right="50" Canvas.Top="90" ReverseTick="-1"
-                                 Value="{Binding ElementName=pfdControl,Path=FlightState.Altitude}"/>
+            <Polygon Points="0,0 5,10 -5,10" Canvas.Left="150" Canvas.Top="45" Fill="White"/>
 
-            <Polygon Points="0,0 3,6 -3,6" Canvas.Left="150" Canvas.Top="80" Fill="White"/>
-
-            <Canvas Height="120" Width="60" Canvas.Left="120" Canvas.Top="90" RenderTransformOrigin="0.5,0.5" ClipToBounds="True">
+            <Canvas Height="180" Width="90" Canvas.Left="105" Canvas.Top="60" RenderTransformOrigin="0.5,0.5" ClipToBounds="True">
                 <Canvas.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -62,7 +61,7 @@
                     </TransformGroup>
                 </Canvas.RenderTransform>
 
-                <Path x:Name="pitchTickpath" Data="M0,0 0,162" Canvas.Left="30" Canvas.Top="-21"  RenderTransformOrigin="0.5,0.5" >
+                <Path x:Name="pitchTickpath" Data="M0,0 0,252" Canvas.Left="45" Canvas.Top="-36"  RenderTransformOrigin="0.5,0.5" >
                     <Path.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -72,7 +71,7 @@
                         </TransformGroup>
                     </Path.RenderTransform>
                 </Path>
-                <Path x:Name="pitchLeftpath" Data="M0,0 0,162" Canvas.Left="5" Canvas.Top="-21"  RenderTransformOrigin="0.5,0.5" >
+                <Path x:Name="pitchLeftpath" Data="M0,0 0,252" Canvas.Left="8" Canvas.Top="-36"  RenderTransformOrigin="0.5,0.5" >
                     <Path.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -82,7 +81,7 @@
                         </TransformGroup>
                     </Path.RenderTransform>
                 </Path>
-                <Path x:Name="pitchRightpath" Data="M0,0 0,162" Canvas.Right="5" Canvas.Top="-21"  RenderTransformOrigin="0.5,0.5" >
+                <Path x:Name="pitchRightpath" Data="M0,0 0,252" Canvas.Right="8" Canvas.Top="-36"  RenderTransformOrigin="0.5,0.5" >
                     <Path.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -108,7 +107,7 @@
                 <ec:PathListBox x:Name="leftTextTick" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5">
                     <ec:PathListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding}" FontSize="6" Foreground="White" RenderTransformOrigin="0.5,0.5" >
+                            <TextBlock Text="{Binding}" FontSize="10" Foreground="White" RenderTransformOrigin="0.5,0.5" >
                                 <TextBlock.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -128,7 +127,7 @@
                 <ec:PathListBox x:Name="rightTextTick" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5">
                     <ec:PathListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding}" FontSize="6" Foreground="White" RenderTransformOrigin="0.5,0.5" >
+                            <TextBlock Text="{Binding}" FontSize="10" Foreground="White" RenderTransformOrigin="0.5,0.5" >
                                 <TextBlock.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -146,9 +145,9 @@
                     </ec:PathListBox.LayoutPaths>
                 </ec:PathListBox>
             </Canvas>
-            <ed:Arc x:Name="rollPath" Canvas.Left="75" Canvas.Top="80" ArcThickness="0" ArcThicknessUnit="Pixel"
+            <ed:Arc x:Name="rollPath" Canvas.Left="45" Canvas.Top="45" ArcThickness="0" ArcThicknessUnit="Pixel"
                 EndAngle="45" StartAngle="-45" Stretch="None" Stroke="White"
-                    Width="150" Height="150"
+                    Width="210" Height="210"
                 StrokeThickness="1" RenderTransformOrigin="0.5,0.5">
                 <ed:Arc.RenderTransform>
                     <TransformGroup>
@@ -182,14 +181,13 @@
                 </ec:PathListBox.LayoutPaths>
             </ec:PathListBox>
 
-            <Polygon Points="0,0 30,7 0,5 -30,7" Fill="Yellow"
+            <Polygon Points="0,0 50,10 0,5 -50,10" Fill="Yellow"
                      Canvas.Left="150" Canvas.Top="150"/>
             <Line X1="0" Y1="0" X2="30" Y2="0" Stroke="Yellow" StrokeThickness="2"
-                  Canvas.Left="90" Canvas.Top="150"/>
+                  Canvas.Left="75" Canvas.Top="150"/>
             <Line X1="0" Y1="0" X2="30" Y2="0" Stroke="Yellow" StrokeThickness="2"
-                  Canvas.Right="90" Canvas.Top="150"/>
-            <Polygon Points="-3,-6 3,-6 0,0" Fill="White"
-                     Canvas.Top="250" Canvas.Left="150"/>
+                  Canvas.Right="75" Canvas.Top="150"/>
+
         </Canvas>
     </Viewbox>
 

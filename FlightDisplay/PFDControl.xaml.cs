@@ -59,6 +59,7 @@ namespace FlightDisplay
             private set { SetValue(PitchTranslateProperty, value); }
         }
         
+
         public static readonly DependencyProperty FlightStateProperty =
             DependencyProperty.Register("FlightState", typeof(FlightState), typeof(PFDControl), new PropertyMetadata(FlightState.Zero, PFDControl.OnFlightStatePropertyChanged));
         public FlightState FlightState
@@ -142,7 +143,7 @@ namespace FlightDisplay
            
             for (int i = 0; i < 13; i++)
             {
-                PitchShortTicks.Add(i%2==0?40:20);
+                PitchShortTicks.Add(i%2==0?60:40);
             }
             SetPitchTicks(0);
         }
@@ -152,6 +153,8 @@ namespace FlightDisplay
             float v2 = v / 10;
             int vint = (int)v2;
             int num = 7;
+
+			int longTickSize = 42;
             PitchTextTicks.Clear();
             if (vint < 6 && vint > -6)
             {
@@ -160,7 +163,7 @@ namespace FlightDisplay
                 {
                     PitchTextTicks.Add(Math.Abs(((vint - i + 3) * 10)).ToString());
                 }
-                PitchTranslate = (v2 - vint) * 27;
+                PitchTranslate = (v2 - vint) * longTickSize;
             }
             else if (vint >= 6)
             {
@@ -169,7 +172,7 @@ namespace FlightDisplay
                 {
                     PitchTextTicks.Add(Math.Abs(((9 - i) * 10)).ToString());
                 }
-                PitchTranslate = (v2 - vint + (vint - 6)) * 27;
+                PitchTranslate = (v2 - vint + (vint - 6)) * longTickSize;
             }
             else if (vint <= -6)
             {
@@ -178,7 +181,7 @@ namespace FlightDisplay
                 {
                     PitchTextTicks.Add(Math.Abs(((-9 + 6 - i) * 10)).ToString());
                 }
-                PitchTranslate = (v2 - vint + (vint + 6)) * 27;
+                PitchTranslate = (v2 - vint + (vint + 6)) * longTickSize;
             }
             leftTextTick.ItemsSource = null;
             leftTextTick.ItemsSource = PitchTextTicks;

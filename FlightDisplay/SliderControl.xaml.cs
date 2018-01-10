@@ -88,7 +88,26 @@ namespace FlightDisplay
             get { return (int)GetValue(MaxValueProperty); }
             set { SetValue(MaxValueProperty, value); }
         }
-        public static void OnMaxValuePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+
+		public static readonly DependencyProperty TickSizeProperty =
+			DependencyProperty.Register("TickSize", typeof(float), typeof(SliderControl), new PropertyMetadata(1f, SliderControl.OnTickSizePropertyChanged));
+		public float TickSize
+		{
+			get { return (float)GetValue(TickSizeProperty); }
+			set { SetValue(TickSizeProperty, value); }
+		}
+		public static void OnTickSizePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+		{
+			SliderControl s = sender as SliderControl;
+			s.OnTickSizeChanged(e);
+		}
+		public void OnTickSizeChanged(DependencyPropertyChangedEventArgs e)
+		{
+			SetTicks();
+			SetText(Value);
+		}
+
+		public static void OnMaxValuePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             SliderControl s = sender as SliderControl;
             s.OnMaxValueChanged(e);
@@ -168,7 +187,8 @@ namespace FlightDisplay
         }
 
         private void SetText(float v)
-        {            
+        {
+			v /= TickSize;  
             int intv = (int)v;
             int t;
             this.TextTicks.Clear();
@@ -181,7 +201,7 @@ namespace FlightDisplay
                 }
                 else
                 {
-                    this.TextTicks.Add(t.ToString());
+                    this.TextTicks.Add((t*TickSize).ToString("F0"));
                 }
                 
             }
