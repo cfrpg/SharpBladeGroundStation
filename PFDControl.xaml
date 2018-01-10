@@ -13,15 +13,16 @@
         <local:HalfConverter x:Key="half"/>
         <local:TwiceConverter x:Key="twice"/>
         <local:PitchTransConverter x:Key="pitTrans"/>
+        
     </UserControl.Resources>
 
     <Viewbox>
         <Canvas Width="300" Height="300" ClipToBounds="True">
-            <Rectangle Name="back" Width="1200" Height="1200" Canvas.Top="-450" Canvas.Left="-450" RenderTransformOrigin="0.5,0.5">
+            <Rectangle Name="back" Width="300" Height="300" Canvas.Top="0" Canvas.Left="0" RenderTransformOrigin="0.5,0.5">
                 <Rectangle.RenderTransform>
                     <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>                        
+                        <ScaleTransform ScaleX="4" ScaleY="4"/>
+                        <SkewTransform/>
                         <TranslateTransform Y="{Binding ElementName=pfdControl,Path=FlightState.Pitch,Converter={StaticResource pitTrans}}"/>
                         <RotateTransform Angle="{Binding ElementName=pfdControl,Path=FlightState.Roll}"/>
                     </TransformGroup>
@@ -40,15 +41,13 @@
                 </Rectangle.Fill>
 
             </Rectangle>
-
-            <local:CompassControl x:Name="compass" Width="150" Height="150" Canvas.Left="75" Canvas.Top="250"
-                                  Heading="{Binding ElementName=pfdControl,Path=FlightState.Heading}"/>
+            <local:HeadingIndicatorControl x:Name="hdgInd" Width="280"  Canvas.Left="10" Canvas.Top="5" Heading="{Binding ElementName=pfdControl,Path=FlightState.Heading}"/>           
             <Border Width="36" Height="180" Canvas.Left="5" Canvas.Top="60" BorderBrush="White" BorderThickness="1"/>
             <local:SliderControl x:Name="spd" Height="180" Canvas.Left="5" Canvas.Top="60"
-                                 Value="{Binding ElementName=pfdControl,Path=FlightState.AirSpeed}"/>
+                                 Value="{Binding ElementName=pfdControl,Path=FlightState.AirSpeed}" TickNumber="7"/>
             <Border Width="36" Height="180" Canvas.Right="5" Canvas.Top="60" BorderBrush="White" BorderThickness="1"/>
             <local:SliderControl x:Name="alt" Height="180" Canvas.Right="5" Canvas.Top="60" ReverseTick="-1"
-                                 Value="{Binding ElementName=pfdControl,Path=FlightState.Altitude}"/>
+                                 Value="{Binding ElementName=pfdControl,Path=FlightState.Altitude}" TickNumber="7" TickSize="10"/>
 
             <Polygon Points="0,0 5,10 -5,10" Canvas.Left="150" Canvas.Top="45" Fill="White"/>
 
@@ -188,8 +187,7 @@
                   Canvas.Left="75" Canvas.Top="150"/>
             <Line X1="0" Y1="0" X2="30" Y2="0" Stroke="Yellow" StrokeThickness="2"
                   Canvas.Right="75" Canvas.Top="150"/>
-            <Polygon Points="-3,-6 3,-6 0,0" Fill="White"
-                     Canvas.Top="250" Canvas.Left="150"/>
+
         </Canvas>
     </Viewbox>
 

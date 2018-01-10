@@ -53,6 +53,9 @@
     </Compile>
     <Compile Include="Converters.cs" />
     <Compile Include="FlightState.cs" />
+    <Compile Include="HeadingIndicatorControl.xaml.cs">
+      <DependentUpon>HeadingIndicatorControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HorizonControl.xaml.cs">
       <DependentUpon>HorizonControl.xaml</DependentUpon>
     </Compile>
@@ -69,6 +72,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="CompassControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HeadingIndicatorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -59,6 +59,7 @@ namespace FlightDisplay
             private set { SetValue(PitchTranslateProperty, value); }
         }
         
+
         public static readonly DependencyProperty FlightStateProperty =
             DependencyProperty.Register("FlightState", typeof(FlightState), typeof(PFDControl), new PropertyMetadata(FlightState.Zero, PFDControl.OnFlightStatePropertyChanged));
         public FlightState FlightState

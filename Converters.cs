@@ -74,5 +74,17 @@ namespace FlightDisplay
             return (float)value / 4.2f;
         }
     }
+
+	public class HeadingConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			return (float)value * -3;
+		}
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			return (float)value / -3;
+		}
+	}
 }
 
