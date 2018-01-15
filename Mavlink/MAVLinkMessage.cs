@@ -83,7 +83,7 @@ namespace System.MAVLink
                             MavlinkUtil.ByteArrayToStructure(buffer, ref _data, 6, payloadlength);
                         }
                     }
-                    catch (Exception ex)
+                    catch
                     {
                         //log.Error(ex);
                     }

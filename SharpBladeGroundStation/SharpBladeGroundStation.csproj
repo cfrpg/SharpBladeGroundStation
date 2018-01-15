@@ -72,16 +72,19 @@
     <Compile Include="Configuration\VehicleConfiguration.cs" />
     <Compile Include="Converters.cs" />
     <Compile Include="DataStructs\GPSData.cs" />
-    <Compile Include="DataStructs\NavigationData.cs" />
+    <Compile Include="DataStructs\MapRouteData.cs" />
     <Compile Include="DataStructs\Vector3Data.cs" />
     <Compile Include="DataStructs\WayPoint.cs" />
     <Compile Include="Configuration\Enums.cs" />
+    <Compile Include="MainWindow\mapOperation.cs" />
     <Compile Include="Map\Markers\UAVMarker.xaml.cs">
       <DependentUpon>UAVMarker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Map\Markers\WayPointMarker.xaml.cs">
       <DependentUpon>WayPointMarker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MainWindow\analyzeANOPackage.cs" />
+    <Compile Include="MainWindow\analyzeMAVPackage.cs" />
     <Compile Include="UIData.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
