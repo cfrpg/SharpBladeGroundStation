@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.MAVLink;
 
 namespace SharpBladeGroundStation.CommLink
 {
@@ -45,12 +46,19 @@ namespace SharpBladeGroundStation.CommLink
 				return PackageParseResult.NoSTX;
 			//Get LEN
 			int len = buff[offset + 1];
-			if (len + HeaderSize+3 + offset > length)
+			if (len + HeaderSize+2 + offset > length)
 				return PackageParseResult.NoEnoughData;
-			
-			//Check checksum
-			if (buff[len + HeaderSize + 2 + offset]!=0xFE)
-				return PackageParseResult.BadCheckSum;
+
+            //Check checksum
+            ushort crc = MavlinkCRC.Calculate(buff, len + HeaderSize, offset);
+            crc = MavlinkCRC.Accumulate(MAVLink.MAVLINK_MESSAGE_INFOS.GetMessageInfo(buff[offset + 5]).crc, crc);
+            if(buff[len+HeaderSize+offset]!=((byte)(crc&0xFF)))
+                return PackageParseResult.BadCheckSum;
+            if (buff[len + HeaderSize + offset + 1]!=((byte)(crc>>8)))
+                return PackageParseResult.BadCheckSum;
+
+            //if (buff[len + HeaderSize + 2 + offset]!=0xFE)
+				//return PackageParseResult.BadCheckSum;
 			for(int i=0;i<buffer.Length;i++)
 			{
 				buffer[i] = 0;

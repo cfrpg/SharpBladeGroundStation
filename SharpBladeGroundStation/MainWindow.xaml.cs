@@ -30,6 +30,7 @@ using SharpBladeGroundStation.DataStructs;
 using SharpBladeGroundStation.Map;
 using SharpBladeGroundStation.Map.Markers;
 using SharpBladeGroundStation.Configuration;
+using System.MAVLink;
 
 namespace SharpBladeGroundStation
 {
@@ -406,13 +407,13 @@ namespace SharpBladeGroundStation
 			UInt32 time = 0;
 			UInt64 time64 = 0;
 			UInt64 dt = (ulong)GCSconfig.PlotTimeInterval*1000;
-			switch(package.Function)
+			switch((MAVLINK_MSG_ID)package.Function)
 			{
-				case 1:		//SYS_STATUS
+				case MAVLINK_MSG_ID.SYS_STATUS:		//SYS_STATUS
 
 					break;
 
-				case 24:    //GPS_RAW_INT 
+				case MAVLINK_MSG_ID.GPS_RAW_INT:    //GPS_RAW_INT 
 					time64 = package.NextUInt64();
 					gpsData.Latitude = package.NextInt32()*1.0 / 1e7;
 					gpsData.Longitude = package.NextInt32()*1.0 / 1e7;
@@ -451,7 +452,7 @@ namespace SharpBladeGroundStation
 					Action a24 = () => { uavMarker.Position = pos; };
 					Dispatcher.BeginInvoke(a24);
 					break;
-				case 30:
+				case MAVLINK_MSG_ID.ATTITUDE:
 					time = package.NextUInt32();
 					flightState.Roll = -rad2deg(package.NextSingle());
 					flightState.Pitch = rad2deg(package.NextSingle());
@@ -471,7 +472,7 @@ namespace SharpBladeGroundStation
 					}
 					break;
 				
-				case 32:    //LOCAL_POSITION_NED
+				case MAVLINK_MSG_ID.LOCAL_POSITION_NED:    //LOCAL_POSITION_NED
 					time = package.NextUInt32();
 					float vx = package.NextSingle();
 					float vy = package.NextSingle();
@@ -482,7 +483,7 @@ namespace SharpBladeGroundStation
 					flightState.ClimbRate = -vz;
 
 					break;
-				case 141:   //ALTITUDE 
+				case MAVLINK_MSG_ID.ALTITUDE:   //ALTITUDE 
 					time64 = package.NextUInt64();
 					flightState.Altitude = package.NextSingle();
 					if (time64-dataSkipCount[package.Function] > dt)
@@ -491,7 +492,7 @@ namespace SharpBladeGroundStation
 						dataSkipCount[package.Function] = time64;
 					}
 					break;
-				case 105:   //HIGHRES_IMU
+				case MAVLINK_MSG_ID.HIGHRES_IMU:   //HIGHRES_IMU
 					time64 = package.NextUInt64();
 					float[] sd = { 0, 0, 0 };
 					sd[0] = package.NextSingle();

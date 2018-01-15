@@ -178,6 +178,10 @@
       <Project>{b2c623aa-b8e6-4c77-bff9-55c257bf8ae9}</Project>
       <Name>FlightDisplay</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mavlink\Mavlink.csproj">
+      <Project>{f0eebe5f-ccfa-485d-8a29-271df7e38b03}</Project>
+      <Name>Mavlink</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

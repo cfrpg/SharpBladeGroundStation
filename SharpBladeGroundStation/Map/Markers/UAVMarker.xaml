@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="30">
     <Grid>
-        <Polygon Points="15,1 28,28 1,28" Stroke="White" Fill="Red" StrokeThickness="2"/>
-        <Line X1="15" Y1="0" X2="15" Y2="20" Stroke="White" StrokeThickness="2"/>
+        <Polygon Points="15,1 25,28 15,23 5,28" Stroke="White" Fill="Red" StrokeThickness="2"/>
+        <Line X1="15" Y1="0" X2="15" Y2="17" Stroke="White" StrokeThickness="2"/>
     </Grid>
 </UserControl>
