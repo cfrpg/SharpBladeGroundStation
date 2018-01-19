@@ -8,6 +8,7 @@ using GMap.NET.WindowsPresentation;
 using SharpBladeGroundStation.Map;
 using SharpBladeGroundStation.Map.Markers;
 using SharpBladeGroundStation.Configuration;
+using SharpBladeGroundStation.DataStructs;
 
 namespace SharpBladeGroundStation
 {
@@ -15,15 +16,12 @@ namespace SharpBladeGroundStation
     {
         //GMap
         GMapMarker uavMarker;
-        MapCenterPositionConfig mapCenterConfig = MapCenterPositionConfig.Free;
-        GMapRoute mapRoute;
-        List<PointLatLng> waypointPosition;
+        MapCenterPositionConfig mapCenterConfig = MapCenterPositionConfig.Free;  
 
-        WayPointMarker wp;
-        List<WayPointMarker> waypointMarkers;
+        PointLatLng positionWhenTouch;
 
-        GMapRoute flightRoute;
-        List<PointLatLng> flightRoutePoints;
+		MapRouteData newroute;
+		MapRouteData flightRoute;
 
         private void initGmap()
         {
@@ -52,38 +50,28 @@ namespace SharpBladeGroundStation
             uavMarker = new GMapMarker(gmap.Position);
             uavMarker.Shape = new UAVMarker();
             uavMarker.Offset = new Point(-15, -15);
-            uavMarker.ZIndex = 100000;
-            waypointPosition = new List<PointLatLng>();
-            mapRoute = new GMapRoute(waypointPosition);
-
-            flightRoutePoints = new List<PointLatLng>();
-            flightRoute = new GMapRoute(flightRoutePoints);
-
+            uavMarker.ZIndex = 100000;  
             gmap.Markers.Add(uavMarker);
-            gmap.Markers.Add(mapRoute);
-            gmap.Markers.Add(flightRoute);
 
             gmap.MouseLeftButtonDown += Gmap_MouseLeftButtonDown;
-            gmap.MouseLeftButtonUp += Gmap_MouseLeftButtonUp;
-            waypointMarkers = new List<WayPointMarker>();
-        }
+            gmap.MouseLeftButtonUp += Gmap_MouseLeftButtonUp;           
+
+			newroute = new MapRouteData(gmap, 1000, true, true);
+			newroute.LeftMouseButtonUp += Wp_MouseLeftButtonUp;
+			newroute.RightMouseButtonDown += Wp_MouseRightButtonDown;
+			flightRoute = new MapRouteData(gmap);			
+		}
 
         private void Gmap_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             RectLatLng area = gmap.SelectedArea;
             if (area.IsEmpty && gmap.Position == positionWhenTouch)
-            {
-                Point p = e.GetPosition(gmap);
-                GMapMarker m = new GMapMarker(gmap.FromLocalToLatLng((int)(p.X), (int)(p.Y)));
-                wp = new WayPointMarker(this, m, (waypointMarkers.Count + 1).ToString(), string.Format("Waypoint {0}\nLat {1}\nLon {2}\n", waypointMarkers.Count + 1, m.Position.Lat, m.Position.Lng));
-                m.Shape = wp;
-                m.ZIndex = 1000;
-                waypointMarkers.Add(wp);
-                gmap.Markers.Add(m);
-                reGeneRoute();
+            {	
+				Point p = e.GetPosition(gmap);
+				GMapMarker m = new GMapMarker(gmap.FromLocalToLatLng((int)(p.X), (int)(p.Y)));
+				WayPointMarker wp = new WayPointMarker(newroute, m, (newroute.Markers.Count + 1).ToString(), string.Format("Waypoint {0}\nLat {1}\nLon {2}\n", newroute.Markers.Count + 1, m.Position.Lat, m.Position.Lng));
+				newroute.AddWaypoint(wp, m);
 
-                wp.MouseRightButtonDown += Wp_MouseRightButtonDown;
-                wp.MouseLeftButtonUp += Wp_MouseLeftButtonUp;
             }
             if (!area.IsEmpty)
             {
@@ -114,72 +102,34 @@ namespace SharpBladeGroundStation
             positionWhenTouch = gmap.Position;
         }
 
+		//move waypoint,almost ok
         private void Wp_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            reGeneRoute();
-            e.Handled = true;
-        }
+		{
+			WayPointMarker wp = sender as WayPointMarker;			
+			newroute.RefreshWayPoint(wp);
+			e.Handled = true;
+		}
 
+		//remove wp,ok
         private void Wp_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-
-            WayPointMarker wp = sender as WayPointMarker;
-            waypointMarkers.Remove(wp);
-            gmap.Markers.Remove(wp.Marker);
-            for (int i = 0; i < waypointMarkers.Count; i++)
-            {
-                waypointMarkers[i].MarkerText = (i + 1).ToString();
-            }
-            reGeneRoute();
-            e.Handled = true;
+			WayPointMarker wp = sender as WayPointMarker;
+			int cnt = 1;
+			foreach(GMapElement ge in newroute.Markers)
+			{
+				if (ge == wp)
+					continue;
+				((WayPointMarker)ge).MarkerText = cnt.ToString();
+				cnt++;
+			}
+			newroute.RemoveWayPoint(wp);
+			e.Handled = true;
         }
-        private void reGeneRoute()
-        {
-            List<PointLatLng> points = new List<PointLatLng>();
-            foreach (var v in waypointMarkers)
-            {
-                points.Add(v.Marker.Position);
-            }
-            gmap.Markers.Remove(mapRoute);
-            mapRoute = new GMapRoute(points);
-            setRouteColor();
-
-            gmap.Markers.Add(mapRoute);
-        }
-        private void setRouteColor()
-        {
-            mapRoute.RegenerateShape(gmap);
-            if (mapRoute.Shape != null)
-            {
-                ((System.Windows.Shapes.Path)mapRoute.Shape).Stroke = new SolidColorBrush(Colors.Red);
-                ((System.Windows.Shapes.Path)mapRoute.Shape).StrokeThickness = 4;
-                ((System.Windows.Shapes.Path)mapRoute.Shape).Opacity = 1;
-                ((System.Windows.Shapes.Path)mapRoute.Shape).Effect = null;
-            }
-        }
+       
+		//ok
         private void updateFlightRoute(PointLatLng p)
-        {
-            flightRoutePoints.Add(p);
-            if (flightRoutePoints.Count > GCSconfig.MaxCoursePoint)
-            {
-                flightRoutePoints.RemoveAt(0);
-            }
-            gmap.Markers.Remove(flightRoute);
-            flightRoute = new GMapRoute(flightRoutePoints);
-            flightRoute.RegenerateShape(gmap);
-            if (flightRoute.Shape != null)
-            {
-                ((System.Windows.Shapes.Path)flightRoute.Shape).Stroke = new SolidColorBrush(Colors.Red);
-                ((System.Windows.Shapes.Path)flightRoute.Shape).StrokeThickness = 4;
-                ((System.Windows.Shapes.Path)flightRoute.Shape).Opacity = 1;
-                ((System.Windows.Shapes.Path)flightRoute.Shape).Effect = null;
-            }
-            flightRoute.ZIndex = 10000;
-            gmap.Markers.Add(flightRoute);
-            if (mapCenterConfig == MapCenterPositionConfig.FollowUAV)
-            {
-                gmap.Position = p;
-            }
+        {			
+			flightRoute.AddWaypoint(p);
         }
     }
 }

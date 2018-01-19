@@ -48,7 +48,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Speech" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -77,6 +79,7 @@
     <Compile Include="DataStructs\WayPoint.cs" />
     <Compile Include="Configuration\Enums.cs" />
     <Compile Include="MainWindow\mapOperation.cs" />
+    <Compile Include="Map\Markers\GMapElement.cs" />
     <Compile Include="Map\Markers\UAVMarker.xaml.cs">
       <DependentUpon>UAVMarker.xaml</DependentUpon>
     </Compile>
@@ -133,7 +136,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

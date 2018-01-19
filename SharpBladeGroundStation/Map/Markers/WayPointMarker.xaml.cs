@@ -14,24 +14,23 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GMap.NET.WindowsPresentation;
+using SharpBladeGroundStation.DataStructs;
 
 namespace SharpBladeGroundStation.Map.Markers
 {
 	/// <summary>
 	/// WayPointMarker.xaml 的交互逻辑
 	/// </summary>
-	public partial class WayPointMarker : UserControl
+	public partial class WayPointMarker : GMapElement
 	{
 		string markerText;
 		Popup popup;
 		TextBlock labelText;
-		GMapMarker marker;
-		MainWindow mainWindow;
-
-		public WayPointMarker(MainWindow window,GMapMarker m,string wptext, string labeltext)
+		MapRouteData route;
+		public WayPointMarker(MapRouteData r,GMapMarker m,string wptext, string labeltext)
 		{
 			InitializeComponent();
-			mainWindow = window;
+			route = r;
 			marker = m;
 			MarkerText = wptext;
 
@@ -53,8 +52,8 @@ namespace SharpBladeGroundStation.Map.Markers
 			this.MouseMove += WayPointMarker_MouseMove;
 			this.MouseLeftButtonDown += WayPointMarker_MouseLeftButtonDown;
 			this.MouseLeftButtonUp += WayPointMarker_MouseLeftButtonUp;
-
 		}
+
 
 		private void WayPointMarker_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
@@ -78,29 +77,29 @@ namespace SharpBladeGroundStation.Map.Markers
 		{
 			if (e.LeftButton == MouseButtonState.Pressed && IsMouseCaptured)
 			{
-				Point p = e.GetPosition(mainWindow.gmap);
-				Marker.Position = mainWindow.gmap.FromLocalToLatLng((int)(p.X), (int)(p.Y));
+				Point p = e.GetPosition(route.Map);
+				marker.Position = route.Map.FromLocalToLatLng((int)(p.X), (int)(p.Y));
 			}
             e.Handled = true;
 		}
 
 		private void WayPointMarker_MouseLeave(object sender, MouseEventArgs e)
 		{
-			Marker.ZIndex -= 10000;
+			marker.ZIndex -= 10000;
 			if (popup != null)
 				popup.IsOpen = false;
 		}
 
 		private void WayPointMarker_MouseEnter(object sender, MouseEventArgs e)
 		{
-			Marker.ZIndex += 10000;
+			marker.ZIndex += 10000;
 			if (popup != null)
 				popup.IsOpen = true;
 		}
 
 		private void WayPointMarker_SizeChanged(object sender, SizeChangedEventArgs e)
 		{
-			Marker.Offset = new Point(-e.NewSize.Width / 2, -e.NewSize.Height / 2);
+			marker.Offset = new Point(-e.NewSize.Width / 2, -e.NewSize.Height / 2);
 		}
 
 		private void WayPointMarker_Loaded(object sender, RoutedEventArgs e)
@@ -125,13 +124,10 @@ namespace SharpBladeGroundStation.Map.Markers
 			}
 		}
 
-		public GMapMarker Marker
+		public string LabelText
 		{
-			get
-			{
-				return marker;
-			}
-
+			get { return labelText.Text; }
+			set { labelText.Text = value; }
 		}
 	}
 }

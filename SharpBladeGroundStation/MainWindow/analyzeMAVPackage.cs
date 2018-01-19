@@ -47,7 +47,7 @@ namespace SharpBladeGroundStation
 
                     if (gpsData.State == GPSPositionState.NoGPS && gpss != GPSPositionState.NoGPS)
                     {
-                        flightRoutePoints.Clear();
+						flightRoute.Clear();
                         dataSkipCount[package.Function] = 0;
                     }
                     gpsData.State = gpss;

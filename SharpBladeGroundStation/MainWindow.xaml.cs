@@ -65,7 +65,7 @@ namespace SharpBladeGroundStation
 
 		
 		//temps
-		PointLatLng positionWhenTouch;
+		
 
 
 		const string messageboxTitle = "SharpBladeGroundStation";
@@ -343,12 +343,7 @@ namespace SharpBladeGroundStation
 		{
 			if(MessageBox.Show("清空所有航线?",messageboxTitle,MessageBoxButton.YesNoCancel)==MessageBoxResult.Yes)
 			{
-				foreach(var wp in waypointMarkers)
-				{
-					gmap.Markers.Remove(wp.Marker);
-				}
-				waypointMarkers.Clear();
-				reGeneRoute();
+				newroute.Clear();
 			}
 		}
 
