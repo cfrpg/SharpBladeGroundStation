@@ -342,7 +342,7 @@
                 </TabItem>
                 <TabItem Header="设置" Height="30">
                     <Grid Background="#FFE5E5E5">
-                        <GroupBox x:Name="gcsCfgGroup" Header="地面站设置" HorizontalAlignment="Left" VerticalAlignment="Top" Height="238" Width="464" BorderBrush="Black">
+                        <GroupBox x:Name="gcsCfgGroup" Header="地面站设置" HorizontalAlignment="Left" VerticalAlignment="Top" Height="229" Width="464" BorderBrush="Black">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="1*"/>

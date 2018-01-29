@@ -31,6 +31,7 @@ using SharpBladeGroundStation.Map;
 using SharpBladeGroundStation.Map.Markers;
 using SharpBladeGroundStation.Configuration;
 using System.MAVLink;
+using SlimDX.DirectInput;
 
 namespace SharpBladeGroundStation
 {
@@ -318,9 +319,10 @@ namespace SharpBladeGroundStation
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
 			//MessageBox.Show("Only for developers.", "Orz");
-			SpeechSynthesizer ss = new SpeechSynthesizer();
-			ss.Rate = 0;
-			ss.SpeakAsync("鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，启动失败。");
+			//SpeechSynthesizer ss = new SpeechSynthesizer();
+			//ss.Rate = 0;
+			//ss.SpeakAsync("鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，启动失败。");
+			getJoysticks();
 		}
 
 		private void button3_Click(object sender, RoutedEventArgs e)

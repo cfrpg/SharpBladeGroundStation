@@ -46,6 +46,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\GMap.NET.WindowsPresentation.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero2" />
+    <Reference Include="SlimDX, Version=4.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9, processorArchitecture=x86" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -78,6 +80,7 @@
     <Compile Include="DataStructs\Vector3Data.cs" />
     <Compile Include="DataStructs\WayPoint.cs" />
     <Compile Include="Configuration\Enums.cs" />
+    <Compile Include="MainWindow\joystick.cs" />
     <Compile Include="MainWindow\mapOperation.cs" />
     <Compile Include="Map\Markers\GMapElement.cs" />
     <Compile Include="Map\Markers\UAVMarker.xaml.cs">
