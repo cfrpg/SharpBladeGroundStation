@@ -66,7 +66,7 @@ namespace SharpBladeGroundStation
         {
             RectLatLng area = gmap.SelectedArea;
             if (area.IsEmpty && gmap.Position == positionWhenTouch)
-            {	
+            {	              
 				Point p = e.GetPosition(gmap);
 				GMapMarker m = new GMapMarker(gmap.FromLocalToLatLng((int)(p.X), (int)(p.Y)));
 				WayPointMarker wp = new WayPointMarker(newroute, m, (newroute.Markers.Count + 1).ToString(), string.Format("Waypoint {0}\nLat {1}\nLon {2}\n", newroute.Markers.Count + 1, m.Position.Lat, m.Position.Lng));
@@ -100,6 +100,7 @@ namespace SharpBladeGroundStation
         private void Gmap_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             positionWhenTouch = gmap.Position;
+            
         }
 
 		//move waypoint,almost ok

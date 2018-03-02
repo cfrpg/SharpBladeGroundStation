@@ -27,12 +27,17 @@ namespace SharpBladeGroundStation.Map.Markers
 		Popup popup;
 		TextBlock labelText;
 		MapRouteData route;
+        bool isMoving;
+        Point offset;
+        Point clickPos;
 		public WayPointMarker(MapRouteData r,GMapMarker m,string wptext, string labeltext)
 		{
 			InitializeComponent();
 			route = r;
 			marker = m;
 			MarkerText = wptext;
+            isMoving = false;
+            offset = new Point();
 
 			popup = new Popup();
 			labelText = new TextBlock();
@@ -54,11 +59,16 @@ namespace SharpBladeGroundStation.Map.Markers
 			this.MouseLeftButtonUp += WayPointMarker_MouseLeftButtonUp;
 		}
 
+        public WayPointMarker(Waypoint wp)
+        {
+
+        }
 
 		private void WayPointMarker_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
 			if(IsMouseCaptured)
 			{
+                isMoving = false;
 				Mouse.Capture(null);
 			}
             //e.Handled = true;
@@ -68,6 +78,8 @@ namespace SharpBladeGroundStation.Map.Markers
 		{
 			if (!IsMouseCaptured)
 			{
+                isMoving = false;
+                clickPos = e.GetPosition(this);
 				Mouse.Capture(this);
 			}
 			e.Handled = true;
@@ -77,8 +89,26 @@ namespace SharpBladeGroundStation.Map.Markers
 		{
 			if (e.LeftButton == MouseButtonState.Pressed && IsMouseCaptured)
 			{
-				Point p = e.GetPosition(route.Map);
-				marker.Position = route.Map.FromLocalToLatLng((int)(p.X), (int)(p.Y));
+                if (!isMoving)
+                {
+                    offset = e.GetPosition(this);
+                    offset.X -= clickPos.X;
+                    offset.Y -= clickPos.Y;
+                    if(Math.Abs(offset.X)>this.ActualWidth/4||Math.Abs(offset.Y)>this.ActualHeight/4)
+                    {
+                        isMoving = true;
+                        offset = e.GetPosition(this);
+                        offset.X -= this.ActualWidth / 2;
+                        offset.Y -= this.ActualHeight / 2;
+                    }
+                }
+                if(isMoving)
+                {
+                    Point p = e.GetPosition(route.Map);
+                    p.X -= offset.X;
+                    p.Y -= offset.Y;
+                    marker.Position = route.Map.FromLocalToLatLng((int)(p.X), (int)(p.Y));
+                }
 			}
             e.Handled = true;
 		}

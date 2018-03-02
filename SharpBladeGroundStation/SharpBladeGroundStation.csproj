@@ -77,8 +77,8 @@
     <Compile Include="Converters.cs" />
     <Compile Include="DataStructs\GPSData.cs" />
     <Compile Include="DataStructs\MapRouteData.cs" />
+    <Compile Include="DataStructs\Mission\MissionData.cs" />
     <Compile Include="DataStructs\Vector3Data.cs" />
-    <Compile Include="DataStructs\WayPoint.cs" />
     <Compile Include="Configuration\Enums.cs" />
     <Compile Include="MainWindow\joystick.cs" />
     <Compile Include="MainWindow\mapOperation.cs" />
@@ -91,7 +91,12 @@
     </Compile>
     <Compile Include="MainWindow\analyzeANOPackage.cs" />
     <Compile Include="MainWindow\analyzeMAVPackage.cs" />
-    <Compile Include="UIData.cs" />
+    <Compile Include="DataStructs\Mission\HomeWaypoint.cs" />
+    <Compile Include="DataStructs\Mission\LandWaypoint.cs" />
+    <Compile Include="DataStructs\Mission\TakeoffWaypoint.cs" />
+    <Compile Include="DataStructs\Mission\Waypoint.cs" />
+    <Compile Include="DataStructs\Mission\WaypointAction.cs" />
+    <Compile Include="DataStructs\Mission\WaypointBase.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -120,7 +125,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Map\AMapProvider.cs" />
+    <Compile Include="Map\MapProviders\AMapProvider.cs" />
     <Compile Include="Map\GPS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
