@@ -7,10 +7,12 @@ using GMap.NET;
 
 namespace SharpBladeGroundStation.DataStructs
 {
+    /// <summary>
+    /// 描述普通航点的类
+    /// </summary>
     public class Waypoint:WaypointBase
     {
         float holdTime;
-        float heading;
         float radius;
 
         public float HoldTime
@@ -19,21 +21,15 @@ namespace SharpBladeGroundStation.DataStructs
             set { holdTime = value; }
         }
 
-        public float Heading
-        {
-            get { return heading; }
-            set { heading = value; }
-        }
-
         public float Radius
         {
             get { return radius; }
             set { radius = value; }
         }
 
-        public Waypoint() : this(new PointLatLng(0, 0), 0) { }
+        public Waypoint(int i) : this(i,new PointLatLng(0, 0), 0) { }
        
-        public Waypoint(PointLatLng pos,float alt):base(pos,alt)
+        public Waypoint(int i,PointLatLng pos,float alt):base(i,pos,alt)
         {
             holdTime = 0;
             heading = float.NaN;
@@ -41,3 +37,4 @@ namespace SharpBladeGroundStation.DataStructs
         }
     }
 }
+    

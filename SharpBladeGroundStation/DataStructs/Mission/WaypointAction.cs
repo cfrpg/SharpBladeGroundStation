@@ -7,7 +7,11 @@ using GMap.NET;
 
 namespace SharpBladeGroundStation.DataStructs
 {
-    class WaypointAction:WaypointBase
+    /// <summary>
+    /// 航点上执行的动作的基类
+    /// </summary>
+    public class MissionAction:MissionItem
     {
+        
     }
 }

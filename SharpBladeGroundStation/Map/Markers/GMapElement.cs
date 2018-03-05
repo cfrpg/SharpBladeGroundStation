@@ -26,7 +26,7 @@ namespace SharpBladeGroundStation.Map.Markers
 
 		public GMapElement() : base()
 		{
-
+            
 		}
 	}
 }

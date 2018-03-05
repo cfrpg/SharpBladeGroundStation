@@ -8,19 +8,24 @@ using GMap.NET.WindowsPresentation;
 
 namespace SharpBladeGroundStation.DataStructs
 {
-    public class WaypointBase
+    /// <summary>
+    /// 航点的基类
+    /// </summary>
+    public class WaypointBase:MissionItem
     {
         protected PointLatLng position;
         protected float altitude;
-        private bool useRelativeAlt;
+        protected float heading;
+        protected bool useRelativeAlt;
 
-        public WaypointBase() : this(new PointLatLng(0, 0), 0) { }
+        public WaypointBase(int i) : this(i,new PointLatLng(0, 0), 0) { }
 
-        public WaypointBase(PointLatLng pos,float alt)
+        public WaypointBase(int i,PointLatLng pos,float alt):base()
         {
             position = pos;
             altitude = alt;
-            useRelativeAlt = true;          
+            useRelativeAlt = true;
+            id = i;    
         }
 
         public PointLatLng Position
@@ -35,10 +40,23 @@ namespace SharpBladeGroundStation.DataStructs
             set { altitude = value; }
         }
 
-        protected bool UseRelativeAlt
+        public bool UseRelativeAlt
         {
             get { return useRelativeAlt; }
             set { useRelativeAlt = value; }
+        }
+
+        public float Heading
+        {
+            get
+            {
+                return heading;
+            }
+
+            set
+            {
+                heading = value;
+            }
         }
     }
 }

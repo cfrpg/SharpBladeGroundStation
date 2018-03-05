@@ -7,7 +7,11 @@ using GMap.NET;
 
 namespace SharpBladeGroundStation.DataStructs
 {
-    class LandWaypoint:WaypointBase
+    /// <summary>
+    /// 降落的航点
+    /// </summary>
+    public class LandWaypoint:WaypointBase
     {
+        public LandWaypoint(int i, PointLatLng pos, float alt) : base(i, pos, alt) { }
     }
 }

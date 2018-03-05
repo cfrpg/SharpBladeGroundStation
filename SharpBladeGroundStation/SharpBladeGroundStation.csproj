@@ -77,14 +77,20 @@
     <Compile Include="Converters.cs" />
     <Compile Include="DataStructs\GPSData.cs" />
     <Compile Include="DataStructs\MapRouteData.cs" />
+    <Compile Include="DataStructs\Mission\Mission.cs" />
     <Compile Include="DataStructs\Mission\MissionData.cs" />
+    <Compile Include="DataStructs\Mission\MissionItem.cs" />
     <Compile Include="DataStructs\Vector3Data.cs" />
     <Compile Include="Configuration\Enums.cs" />
     <Compile Include="MainWindow\joystick.cs" />
     <Compile Include="MainWindow\mapOperation.cs" />
+    <Compile Include="Map\Markers\ClickableGMapMarker.cs" />
     <Compile Include="Map\Markers\GMapElement.cs" />
     <Compile Include="Map\Markers\UAVMarker.xaml.cs">
       <DependentUpon>UAVMarker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Map\Markers\VertexMarker.xaml.cs">
+      <DependentUpon>VertexMarker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Map\Markers\WayPointMarker.xaml.cs">
       <DependentUpon>WayPointMarker.xaml</DependentUpon>
@@ -116,6 +122,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Map\Markers\UAVMarker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Map\Markers\VertexMarker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
