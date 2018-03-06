@@ -69,6 +69,9 @@
     <Compile Include="LinkSpeedControl.xaml.cs">
       <DependentUpon>LinkSpeedControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MapScaleControl.xaml.cs">
+      <DependentUpon>MapScaleControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PFDControl.xaml.cs">
       <DependentUpon>PFDControl.xaml</DependentUpon>
     </Compile>
@@ -95,6 +98,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="LinkSpeedControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MapScaleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

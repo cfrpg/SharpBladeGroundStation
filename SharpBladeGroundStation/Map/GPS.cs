@@ -24,7 +24,7 @@ namespace SharpBladeGroundStation.Map
 	{
 		private static double Offset = 0.00669342162296594323;
 		private static double Axis = 6378245.0;
-
+        
 		public static PointLatLng WGS84ToGCJ02(PointLatLng p)
 		{
 			if (IsOutOfChina(p))

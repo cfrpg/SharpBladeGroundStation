@@ -167,6 +167,7 @@ namespace SharpBladeGroundStation.DataStructs
 				RemoveRange(0, points.Count - maxPointNumber);
 			}
 			regeneRoute();
+            
         }
 
         public void InsertWaypoint(int id, GMapElement shape,GMapMarker m)

@@ -70,7 +70,7 @@ namespace SharpBladeGroundStation.Map.Markers
 
 		private void WayPointMarker_Loaded(object sender, RoutedEventArgs e)
 		{
-			
+
 		}
 
 		private void WayPointMarker_Unloaded(object sender, RoutedEventArgs e)

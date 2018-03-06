@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GMap.NET.WindowsPresentation;
 
 namespace SharpBladeGroundStation.DataStructs
 {
@@ -13,6 +14,7 @@ namespace SharpBladeGroundStation.DataStructs
     {
         protected int id;
         protected List<MissionItem> childItems;
+        List<GMapMarker> markers;
 
         /// <summary>
         /// 子项
@@ -38,6 +40,15 @@ namespace SharpBladeGroundStation.DataStructs
         public virtual bool ChildItemVisible
         {
             get { return true; }
+        }
+
+        /// <summary>
+        /// 显示在地图上的标识
+        /// </summary>
+        public List<GMapMarker> Markers
+        {
+            get { return markers; }
+            set { markers = value; }
         }
 
         public MissionItem()
