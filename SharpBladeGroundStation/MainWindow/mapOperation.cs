@@ -54,15 +54,21 @@ namespace SharpBladeGroundStation
             gmap.Markers.Add(uavMarker);
 
             gmap.MouseLeftButtonDown += Gmap_MouseLeftButtonDown;
-            gmap.MouseLeftButtonUp += Gmap_MouseLeftButtonUp;           
+            gmap.MouseLeftButtonUp += Gmap_MouseLeftButtonUp;
+			gmap.OnMapZoomChanged += Gmap_OnMapZoomChanged;			
 
 			newroute = new MapRouteData(gmap, 1000, true, true);
 			newroute.LeftMouseButtonUp += Wp_MouseLeftButtonUp;
 			newroute.RightMouseButtonDown += Wp_MouseRightButtonDown;
 			flightRoute = new MapRouteData(gmap);			
+		}	
+
+		private void Gmap_OnMapZoomChanged()
+		{
+			mapscale.Scale = (float)(PositionHelper.GetDistance(gmap.FromLocalToLatLng(0, 0), gmap.FromLocalToLatLng(100, 0)) / 100);
 		}
 
-        private void Gmap_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+		private void Gmap_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             RectLatLng area = gmap.SelectedArea;
             if (area.IsEmpty && gmap.Position == positionWhenTouch)

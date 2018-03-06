@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CustomeControlLib">
+      <HintPath>..\CustomeControlLib.dll</HintPath>
+    </Reference>
     <Reference Include="DynamicDataDisplay">
       <HintPath>..\DynamicDataDisplay.dll</HintPath>
     </Reference>
@@ -78,7 +81,6 @@
     <Compile Include="DataStructs\GPSData.cs" />
     <Compile Include="DataStructs\MapRouteData.cs" />
     <Compile Include="DataStructs\Mission\Mission.cs" />
-    <Compile Include="DataStructs\Mission\MissionData.cs" />
     <Compile Include="DataStructs\Mission\MissionItem.cs" />
     <Compile Include="DataStructs\Vector3Data.cs" />
     <Compile Include="Configuration\Enums.cs" />

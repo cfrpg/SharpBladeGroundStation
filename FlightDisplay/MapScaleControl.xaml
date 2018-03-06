@@ -4,12 +4,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FlightDisplay"
+             xmlns:ccl="clr-namespace:CustomeControlLib;assembly=CustomeControlLib"
              mc:Ignorable="d" 
+             Name="mapscale"
              d:DesignHeight="30" d:DesignWidth="200">
     <Viewbox>
         <Canvas Height="30" Width="200">
-            <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="200m" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0"/>
-            <Border VerticalAlignment="Center" Width="200" Height="15" Canvas.Left="0" Canvas.Top="15" BorderThickness="3,0,3,3" BorderBrush="Black"/>
+            <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="{Binding ElementName=mapscale,Path=ScaleText}" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0"/>           
+            <Border VerticalAlignment="Center" Width="{Binding ElementName=mapscale,Path=ScaleLength}" Height="15" Canvas.Left="0" Canvas.Top="13" BorderThickness="1.5,0,1.5,1.5" BorderBrush="White">
+                <Border  Canvas.Left="0"  BorderThickness="2,0,2,2" BorderBrush="Black" Margin="0">
+                    <Border  Canvas.Left="0"  BorderThickness="1.5,0,1.5,1.5" BorderBrush="White" Margin="0"/>
+                </Border>
+            </Border>
         </Canvas>
     </Viewbox>
 </UserControl>
