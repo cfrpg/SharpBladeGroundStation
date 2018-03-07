@@ -9,6 +9,7 @@ using SharpBladeGroundStation.Map;
 using SharpBladeGroundStation.Map.Markers;
 using SharpBladeGroundStation.Configuration;
 using SharpBladeGroundStation.DataStructs;
+using System.Threading;
 
 namespace SharpBladeGroundStation
 {
@@ -60,12 +61,16 @@ namespace SharpBladeGroundStation
 			newroute = new MapRouteData(gmap, 1000, true, true);
 			newroute.LeftMouseButtonUp += Wp_MouseLeftButtonUp;
 			newroute.RightMouseButtonDown += Wp_MouseRightButtonDown;
-			flightRoute = new MapRouteData(gmap);			
+			flightRoute = new MapRouteData(gmap);
+
+			Thread.Sleep(1000);
+			Gmap_OnMapZoomChanged();
 		}	
 
 		private void Gmap_OnMapZoomChanged()
 		{
 			mapscale.Scale = (float)(PositionHelper.GetDistance(gmap.FromLocalToLatLng(0, 0), gmap.FromLocalToLatLng(100, 0)) / 100);
+			int a = 1;
 		}
 
 		private void Gmap_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

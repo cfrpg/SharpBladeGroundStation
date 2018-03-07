@@ -35,9 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CustomeControlLib">
-      <HintPath>..\CustomeControlLib.dll</HintPath>
-    </Reference>
     <Reference Include="DynamicDataDisplay">
       <HintPath>..\DynamicDataDisplay.dll</HintPath>
     </Reference>
@@ -207,6 +204,10 @@
     <ProjectReference Include="..\Mavlink\Mavlink.csproj">
       <Project>{f0eebe5f-ccfa-485d-8a29-271df7e38b03}</Project>
       <Name>Mavlink</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WpfControlLib\WpfControlLib.csproj">
+      <Project>{3d615b6a-d0dc-4745-99d5-15d8eeba93b9}</Project>
+      <Name>WpfControlLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

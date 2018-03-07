@@ -81,6 +81,13 @@ namespace FlightDisplay
 		public void OnScaleChanged(DependencyPropertyChangedEventArgs e)
 		{
 			float s = (float)e.NewValue;
+			if(s<0.1)
+			{
+				this.Visibility = Visibility.Hidden;
+				s = 1;
+				return;
+			}
+			this.Visibility = Visibility.Visible;
 			int p = 0;
 			for(p=1;p<15;p++)
 			{
