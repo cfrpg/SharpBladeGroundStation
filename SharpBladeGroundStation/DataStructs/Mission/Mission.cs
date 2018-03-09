@@ -21,7 +21,7 @@ namespace SharpBladeGroundStation.DataStructs
 
         public virtual void GenerateMissionItems()
         {
-            childItems.Clear();
+            
         }
     }
 }

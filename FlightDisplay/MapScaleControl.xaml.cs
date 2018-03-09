@@ -95,7 +95,7 @@ namespace FlightDisplay
 					break;
 			}
 			p = p - 1;
-			ScaleLength = scaleSet[p]/s;
+			ScaleLength = scaleSet[p]/s+3;
 			ScaleText = getText(scaleSet[p]);
 		}
 		string getText(int a)

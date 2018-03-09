@@ -8,9 +8,9 @@ using GMap.NET.WindowsPresentation;
 namespace SharpBladeGroundStation.DataStructs
 {
     /// <summary>
-    /// 描述任务项目的类,理论上为抽象类
+    /// 描述任务项目的类,理论上为抽象类,实际上就是抽象类orz
     /// </summary>
-    public class MissionItem
+    public abstract class MissionItem
     {
         protected int id;
         protected List<MissionItem> childItems;

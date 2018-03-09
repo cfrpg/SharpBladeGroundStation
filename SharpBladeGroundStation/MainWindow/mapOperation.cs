@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using GMap.NET;
 using GMap.NET.WindowsPresentation;
 using SharpBladeGroundStation.Map;
@@ -62,16 +63,35 @@ namespace SharpBladeGroundStation
 			newroute.LeftMouseButtonUp += Wp_MouseLeftButtonUp;
 			newroute.RightMouseButtonDown += Wp_MouseRightButtonDown;
 			flightRoute = new MapRouteData(gmap);
-
-			Thread.Sleep(1000);
-			Gmap_OnMapZoomChanged();
-		}	
-
-		private void Gmap_OnMapZoomChanged()
-		{
-			mapscale.Scale = (float)(PositionHelper.GetDistance(gmap.FromLocalToLatLng(0, 0), gmap.FromLocalToLatLng(100, 0)) / 100);
-			int a = 1;
+            Gmap_OnMapZoomChanged();
+            DispatcherTimer waitMap = new DispatcherTimer();
+            waitMap.Interval = new TimeSpan(0, 0, 0, 0, 500);
+            waitMap.Tick += WaitMap_Tick;
+            waitMap.Start();
 		}
+
+        private void WaitMap_Tick(object sender, EventArgs e)
+        {
+            DispatcherTimer dt = sender as DispatcherTimer;
+            if(mapscale.Scale>0.1f)
+            {
+                dt.Stop();
+                dt = null;
+                return;               
+            }
+            Gmap_OnMapZoomChanged();
+            
+        }
+
+        private void Gmap_OnMapZoomChanged()
+		{
+            mapscale.Scale = getMapScale();
+		}
+
+        private float getMapScale()
+        {
+            return (float)(PositionHelper.GetDistance(gmap.FromLocalToLatLng(0, 0), gmap.FromLocalToLatLng(100, 0)) / 100);
+        }
 
 		private void Gmap_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
