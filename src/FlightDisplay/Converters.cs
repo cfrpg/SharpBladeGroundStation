@@ -67,7 +67,7 @@ namespace FlightDisplay
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (float)value * 4.2f;
+            return (float)value * 6.2f;
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {

@@ -183,7 +183,7 @@ namespace FlightDisplay
             int vint = (int)v2;
             int num = 7;
 
-			int longTickSize = 42;
+			int longTickSize = 63;
             PitchTextTicks.Clear();
             if (vint < 6 && vint > -6)
             {

@@ -71,7 +71,7 @@
                     </TransformGroup>
                 </Canvas.RenderTransform>
 
-                <Path x:Name="pitchTickpath" Data="M0,0 0,252" Canvas.Left="45" Canvas.Top="-36"  RenderTransformOrigin="0.5,0.5" >
+                <Path x:Name="pitchTickpath" Data="M0,-63 0,315" Canvas.Left="45" Canvas.Top="-36"  RenderTransformOrigin="0.5,0.5" >
                     <Path.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -81,7 +81,7 @@
                         </TransformGroup>
                     </Path.RenderTransform>
                 </Path>
-                <Path x:Name="pitchLeftpath" Data="M0,0 0,252" Canvas.Left="8" Canvas.Top="-36"  RenderTransformOrigin="0.5,0.5" >
+                <Path x:Name="pitchLeftpath" Data="M0,-63 0,315" Canvas.Left="8" Canvas.Top="-36"  RenderTransformOrigin="0.5,0.5" >
                     <Path.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -91,7 +91,7 @@
                         </TransformGroup>
                     </Path.RenderTransform>
                 </Path>
-                <Path x:Name="pitchRightpath" Data="M0,0 0,252" Canvas.Right="8" Canvas.Top="-36"  RenderTransformOrigin="0.5,0.5" >
+                <Path x:Name="pitchRightpath" Data="M0,-63 0,315" Canvas.Right="8" Canvas.Top="-36"  RenderTransformOrigin="0.5,0.5" >
                     <Path.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
