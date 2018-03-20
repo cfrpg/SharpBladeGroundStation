@@ -389,7 +389,13 @@ namespace SharpBladeGroundStation
 			Stream s = new FileStream(path + "\\gcs.xml", FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);	
 			xs.Serialize(s, GCSConfig);
 			s.Close();
+			closeCamera();
 			
+		}
+
+		private void mainwindow_Loaded(object sender, RoutedEventArgs e)
+		{
+			initCamera();
 		}
 	}
 }

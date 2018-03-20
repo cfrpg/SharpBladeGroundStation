@@ -18,7 +18,17 @@
 
     <Viewbox>
         <Canvas Width="300" Height="300" ClipToBounds="True">
-            <Rectangle Name="back" Width="300" Height="300" Canvas.Top="0" Canvas.Left="0" RenderTransformOrigin="0.5,0.5">
+            <Rectangle Name="horizon" Width="300" Height="2" Canvas.Top="150" Canvas.Left="0" RenderTransformOrigin="0.5,0.5" Fill="White" Visibility="Hidden">
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="4" ScaleY="1"/>
+                        <SkewTransform/>
+                        <TranslateTransform Y="{Binding ElementName=pfdControl,Path=FlightState.Pitch,Converter={StaticResource pitTrans}}"/>
+                        <RotateTransform Angle="{Binding ElementName=pfdControl,Path=FlightState.Roll}"/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+            <Rectangle Name="back" Width="300" Height="300" Canvas.Top="0" Canvas.Left="0" RenderTransformOrigin="0.5,0.5" >
                 <Rectangle.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="4" ScaleY="4"/>

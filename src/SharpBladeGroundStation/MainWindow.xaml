@@ -7,11 +7,12 @@
         xmlns:fd="clr-namespace:FlightDisplay;assembly=FlightDisplay"
         xmlns:gmwpf="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
         xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
+        xmlns:cle="clr-namespace:WPFVideoLib.CLEye;assembly=WPFVideoLib"
         mc:Ignorable="d"
         Title="SharpBladeGroundStation - cfrpg" Height="700" Width="1200" SizeChanged="Window_SizeChanged"
         x:Name="mainwindow"
         MinWidth="1200"
-        MinHeight="700" Closing="mainwindow_Closing">
+        MinHeight="700" Closing="mainwindow_Closing" Loaded="mainwindow_Loaded">
 
     <Window.Resources>
         <local:ArmConverter x:Key="arm2str"/>
@@ -24,7 +25,13 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel  Margin="0" Orientation="Vertical" Background="#FFE5E5E5">
-            <fd:PFDControl x:Name="pfd" Grid.Row="0" VerticalAlignment="Top" FlightState="{Binding}" />
+            <Viewbox>
+                <Canvas Width="300" Height="300" ClipToBounds="True">
+                    <cle:CLEyeCameraImage x:Name="camera" Width="440" Height="330"  HorizontalAlignment="Left"  VerticalAlignment="Top" Framerate="30" ColorMode="CLEYE_COLOR_PROCESSED" Resolution="CLEYE_VGA" Margin="-70,-15,0,0"/>
+                    <fd:PFDControl x:Name="pfd" Grid.Row="0" VerticalAlignment="Top" FlightState="{Binding}" />
+                </Canvas>                
+            </Viewbox>
+           
             <Viewbox>
                 <GroupBox x:Name="groupBox" Header="导航信息" Width="300" Height="120" BorderBrush="Black" FontSize="14">
                     <Grid x:Name="navDataGrid">
@@ -342,6 +349,10 @@
                 </TabItem>
                 <TabItem Header="设置" Height="30">
                     <Grid Background="#FFE5E5E5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="310*"/>
+                            <RowDefinition Height="321*"/>
+                        </Grid.RowDefinitions>
                         <GroupBox x:Name="gcsCfgGroup" Header="地面站设置" HorizontalAlignment="Left" VerticalAlignment="Top" Height="229" Width="464" BorderBrush="Black">
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -381,7 +392,7 @@
                             </Grid>
 
                         </GroupBox>
-
+                        
                     </Grid>
                 </TabItem>
 

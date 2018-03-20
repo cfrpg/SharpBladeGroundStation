@@ -21,7 +21,10 @@ namespace FlightDisplay
     public partial class PFDControl : UserControl
     {
 
-        public static readonly DependencyProperty RollLongTicksProperty =
+		bool transparent;
+
+
+		public static readonly DependencyProperty RollLongTicksProperty =
             DependencyProperty.Register("RollLongTicks", typeof(IList<Object>), typeof(PFDControl));
         public IList<Object> RollLongTicks
         {
@@ -92,7 +95,30 @@ namespace FlightDisplay
             set { SetValue(RollProperty, value); }
         }
 
-        public static void OnRollPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+		public bool Transparent
+		{
+			get
+			{
+				return transparent;
+			}
+
+			set
+			{
+				transparent = value;
+				if(transparent)
+				{
+					horizon.Visibility = Visibility.Visible;
+					back.Visibility = Visibility.Hidden;
+				}
+				else
+				{
+					horizon.Visibility = Visibility.Hidden;
+					back.Visibility = Visibility.Visible;
+				}
+			}
+		}
+
+		public static void OnRollPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             PFDControl s = sender as PFDControl;
             s.OnRollChanged(e);
@@ -125,7 +151,10 @@ namespace FlightDisplay
             pfdControl.SetBinding(PitchProperty, b1);
         }
 
-        private void InitTicks()
+		
+
+
+		private void InitTicks()
         {
             RollLongTicks = new List<Object>();
             RollShortTicks = new List<Object>();
