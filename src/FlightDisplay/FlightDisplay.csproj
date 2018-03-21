@@ -38,7 +38,6 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero2" />
-    <Reference Include="SlimDX, Version=4.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9, processorArchitecture=AMD64" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -56,7 +55,6 @@
     <Compile Include="JoystickConfigControl.xaml.cs">
       <DependentUpon>JoystickConfigControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Joystick\ChannelData.cs" />
     <Compile Include="CompassControl.xaml.cs">
       <DependentUpon>CompassControl.xaml</DependentUpon>
     </Compile>
@@ -68,7 +66,6 @@
     <Compile Include="HorizonControl.xaml.cs">
       <DependentUpon>HorizonControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Joystick\JoystickData.cs" />
     <Compile Include="LinkSpeedControl.xaml.cs">
       <DependentUpon>LinkSpeedControl.xaml</DependentUpon>
     </Compile>

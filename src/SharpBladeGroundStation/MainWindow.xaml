@@ -7,7 +7,6 @@
         xmlns:fd="clr-namespace:FlightDisplay;assembly=FlightDisplay"
         xmlns:gmwpf="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
         xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
-        xmlns:cle="clr-namespace:WPFVideoLib.CLEye;assembly=WPFVideoLib"
         mc:Ignorable="d"
         Title="SharpBladeGroundStation - cfrpg" Height="700" Width="1200" SizeChanged="Window_SizeChanged"
         x:Name="mainwindow"
@@ -27,7 +26,7 @@
         <StackPanel  Margin="0" Orientation="Vertical" Background="#FFE5E5E5">
             <Viewbox>
                 <Canvas Width="300" Height="300" ClipToBounds="True">
-                    <cle:CLEyeCameraImage x:Name="camera" Width="460" Height="345" Framerate="30" ColorMode="CLEYE_COLOR_PROCESSED" Resolution="CLEYE_VGA" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-80,-22.5,0,0" />
+                   
                     <fd:PFDControl x:Name="pfd" Grid.Row="0" VerticalAlignment="Top" FlightState="{Binding}" />
                 </Canvas>                
             </Viewbox>

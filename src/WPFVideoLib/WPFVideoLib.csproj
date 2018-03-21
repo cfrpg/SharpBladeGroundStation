@@ -52,8 +52,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CLEye\CLEyeCameraDevice.cs" />
-    <Compile Include="CLEye\CLEyeCameraImage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

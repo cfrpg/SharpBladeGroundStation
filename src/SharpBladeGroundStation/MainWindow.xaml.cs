@@ -31,7 +31,6 @@ using SharpBladeGroundStation.Map;
 using SharpBladeGroundStation.Map.Markers;
 using SharpBladeGroundStation.Configuration;
 using System.MAVLink;
-using SlimDX.DirectInput;
 
 namespace SharpBladeGroundStation
 {
@@ -324,7 +323,29 @@ namespace SharpBladeGroundStation
 			//ss.Speak("鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，启动失败。");
 			//MessageBox.Show("黑科技启动失败", "Orz");
 			//getJoysticks();
-
+			var screens=System.Windows.Forms.Screen.AllScreens;
+			var currscn=System.Windows.Forms.Screen.FromPoint(System.Windows.Forms.Cursor.Position);
+			if (screens.Count() == 1)
+			{
+				SpeechSynthesizer ss = new SpeechSynthesizer();
+				ss.Rate = 0;
+				ss.Speak("鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，启动失败。");
+				MessageBox.Show("黑科技启动失败", "Orz");
+				return;
+			}
+			int a = 0;
+			for(int i=0;i<screens.Count();i++)
+			{
+				if(screens[i].DeviceName==currscn.DeviceName)
+				{
+					a = (i + 1) % screens.Count();
+					break;
+				}
+			}
+			this.WindowState = WindowState.Normal;
+			this.Top = screens[a].WorkingArea.Top;
+			this.Left = screens[a].WorkingArea.Left;
+			this.WindowState = WindowState.Maximized;
 		}
 
 		private void button3_Click(object sender, RoutedEventArgs e)
@@ -389,13 +410,13 @@ namespace SharpBladeGroundStation
 			Stream s = new FileStream(path + "\\gcs.xml", FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);	
 			xs.Serialize(s, GCSConfig);
 			s.Close();
-			closeCamera();
+			
 			
 		}
 
 		private void mainwindow_Loaded(object sender, RoutedEventArgs e)
 		{
-			initCamera();
+			
 		}
 	}
 }
