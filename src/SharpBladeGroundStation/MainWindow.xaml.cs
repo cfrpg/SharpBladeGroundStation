@@ -63,7 +63,7 @@ namespace SharpBladeGroundStation
 		FlightState flightState;
 		GPSData gpsData;
 
-		
+		HUDWindow hudWindow;
 		//temps
 		
 
@@ -333,12 +333,13 @@ namespace SharpBladeGroundStation
 				MessageBox.Show("黑科技启动失败", "Orz");
 				return;
 			}
-			int a = 0;
+			int a = 0, b = 0;
 			for(int i=0;i<screens.Count();i++)
 			{
 				if(screens[i].DeviceName==currscn.DeviceName)
 				{
 					a = (i + 1) % screens.Count();
+					b = i;
 					break;
 				}
 			}
@@ -346,6 +347,10 @@ namespace SharpBladeGroundStation
 			this.Top = screens[a].WorkingArea.Top;
 			this.Left = screens[a].WorkingArea.Left;
 			this.WindowState = WindowState.Maximized;
+			hudWindow.WindowState = WindowState.Normal;
+			hudWindow.Top = screens[b].WorkingArea.Top;
+			hudWindow.Left = screens[b].WorkingArea.Left;
+			hudWindow.WindowState = WindowState.Maximized;
 		}
 
 		private void button3_Click(object sender, RoutedEventArgs e)
@@ -410,12 +415,15 @@ namespace SharpBladeGroundStation
 			Stream s = new FileStream(path + "\\gcs.xml", FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);	
 			xs.Serialize(s, GCSConfig);
 			s.Close();
-			
+			hudWindow.Close();
 			
 		}
 
 		private void mainwindow_Loaded(object sender, RoutedEventArgs e)
 		{
+			hudWindow = new HUDWindow();
+			hudWindow.Mainwin = this;
+			hudWindow.Show();
 			
 		}
 	}

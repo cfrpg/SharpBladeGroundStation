@@ -39,6 +39,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DirectShowLib-2005">
+      <HintPath>..\DirectShowLib-2005.dll</HintPath>
+    </Reference>
     <Reference Include="DynamicDataDisplay">
       <HintPath>..\DynamicDataDisplay.dll</HintPath>
     </Reference>
@@ -84,8 +87,10 @@
     <Compile Include="DataStructs\Mission\MissionItem.cs" />
     <Compile Include="DataStructs\Vector3Data.cs" />
     <Compile Include="Configuration\Enums.cs" />
+    <Compile Include="HUDWindow.xaml.cs">
+      <DependentUpon>HUDWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow\camera.cs" />
-    <Compile Include="MainWindow\joystick.cs" />
     <Compile Include="MainWindow\mapOperation.cs" />
     <Compile Include="Map\Markers\ClickableGMapMarker.cs" />
     <Compile Include="Map\Markers\GMapElement.cs" />
@@ -106,6 +111,10 @@
     <Compile Include="DataStructs\Mission\Waypoint.cs" />
     <Compile Include="DataStructs\Mission\WaypointAction.cs" />
     <Compile Include="DataStructs\Mission\WaypointBase.cs" />
+    <Page Include="HUDWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

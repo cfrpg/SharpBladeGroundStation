@@ -77,7 +77,7 @@ namespace FlightDisplay
         }
         public void OnFlightStateChanged(DependencyPropertyChangedEventArgs e)
         {
-            
+
         }
         public static readonly DependencyProperty PitchProperty =
             DependencyProperty.Register("Pitch", typeof(float), typeof(PFDControl), new PropertyMetadata(0f, PFDControl.OnPitchPropertyChanged));
@@ -144,12 +144,12 @@ namespace FlightDisplay
         {
             InitializeComponent();
             InitTicks();
-            Binding b1 = new Binding();
-            b1.Source = pfdControl;
-            b1.Path = new PropertyPath("FlightState.Pitch");
-            b1.Mode = BindingMode.OneWay;
-            pfdControl.SetBinding(PitchProperty, b1);
-        }
+			Binding b1 = new Binding();
+			b1.Source = pfdControl;
+			b1.Path = new PropertyPath("FlightState.Pitch");
+			b1.Mode = BindingMode.OneWay;
+			pfdControl.SetBinding(PitchProperty, b1);
+		}
 
 		
 

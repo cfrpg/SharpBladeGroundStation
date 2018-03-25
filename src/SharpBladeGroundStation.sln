@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfControlLib", "WpfControl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFVideoLib", "WPFVideoLib\WPFVideoLib.csproj", "{6DDE156D-584F-46DC-BA2F-D3DC28C9B51D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFMathHelper", "WPFMathHelper\WPFMathHelper.csproj", "{97729DF3-58FB-476D-B5E6-BE49067619DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{6DDE156D-584F-46DC-BA2F-D3DC28C9B51D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DDE156D-584F-46DC-BA2F-D3DC28C9B51D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DDE156D-584F-46DC-BA2F-D3DC28C9B51D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97729DF3-58FB-476D-B5E6-BE49067619DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97729DF3-58FB-476D-B5E6-BE49067619DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97729DF3-58FB-476D-B5E6-BE49067619DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97729DF3-58FB-476D-B5E6-BE49067619DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
