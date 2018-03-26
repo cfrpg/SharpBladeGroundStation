@@ -16,7 +16,7 @@ VS2015 Update3 + .Net 4.5.2
 
 CPU:i7 7900X
 
-GPU:GTX 1080
+GPU:GTX 1080Ti
 
 RAM:32G
 
@@ -32,4 +32,14 @@ RAM:2G
 
 分辨率:1366*768
 
+## 引用库
 
+FlightDisplay:https://github.com/cfrpg/FlightDisplay
+
+WPF MediaKit:https://github.com/Sascha-L/WPF-MediaKit
+
+Dynamic Data Display:https://archive.codeplex.com/?p=dynamicdatadisplay
+
+DirectShow.Net:http://directshownet.sourceforge.net/
+
+GMap.NET:https://archive.codeplex.com/?p=greatmaps

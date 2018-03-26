@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WPFVideoLib;
+using WPFMediaKit.DirectShow.Controls;
+
 
 namespace SharpBladeGroundStation
 {
@@ -46,7 +48,11 @@ namespace SharpBladeGroundStation
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
 			pfd.DataContext = mainwin.FlightState;
-						
+
+			if(MultimediaUtil.VideoInputDevices.Count()>0)
+			{
+				cameraCaptureElement.VideoCaptureDevice = MultimediaUtil.VideoInputDevices[0];
+			}
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

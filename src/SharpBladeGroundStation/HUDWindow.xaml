@@ -5,13 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SharpBladeGroundStation"
         xmlns:fd="clr-namespace:FlightDisplay;assembly=FlightDisplay"
+        xmlns:wmkc="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=WPFMediaKit"
         mc:Ignorable="d"
         Title="HUDWindow" Height="300" Width="400" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid Background="Black">
         <Viewbox>
             <Canvas Width="640" Height="480">
+                <wmkc:VideoCaptureElement x:Name="cameraCaptureElement" EnableSampleGrabbing="False" Visibility="Visible" DeeperColor="True" Width="640" Height="480"/>
                 <fd:PFDControl x:Name="pfd" Grid.Row="0" VerticalAlignment="Top" FlightState="{Binding}" Canvas.Left="170" HorizontalAlignment="Left" Width="300" Height="300" Canvas.Top="90" Transparent="True" />
-                <Rectangle Width="20" Height="20" Stroke="#FF46FF00" StrokeThickness="2" Canvas.Left="268" Canvas.Top="208"/>
+                
             </Canvas>
         </Viewbox>
     </Grid>

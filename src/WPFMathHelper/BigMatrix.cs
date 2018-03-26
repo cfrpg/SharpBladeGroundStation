@@ -20,14 +20,14 @@ namespace WPFMathHelper
 
 		public int Column
 		{
-			get			{				return column;			}
-			set			{				column = value;			}
+			get { return column; }
+			set { column = value; }
 		}
 
 		public int Row
 		{
-			get			{				return row;			}
-			set			{				row = value;			}
+			get { return row; }
+			set { row = value; }
 		}
 
 		public BigMatrix(int r,int c)
