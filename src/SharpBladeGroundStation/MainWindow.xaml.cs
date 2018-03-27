@@ -415,15 +415,15 @@ namespace SharpBladeGroundStation
 			Stream s = new FileStream(path + "\\gcs.xml", FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);	
 			xs.Serialize(s, GCSConfig);
 			s.Close();
-			hudWindow.Close();
+			//hudWindow.Close();
 			
 		}
 
 		private void mainwindow_Loaded(object sender, RoutedEventArgs e)
 		{
-			hudWindow = new HUDWindow();
-			hudWindow.Mainwin = this;
-			hudWindow.Show();
+			//hudWindow = new HUDWindow();
+			//hudWindow.Mainwin = this;
+			//hudWindow.Show();
 			
 		}
 	}

@@ -95,6 +95,7 @@
     <Compile Include="HUDWindow.xaml.cs">
       <DependentUpon>HUDWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HUD\HUDBase.cs" />
     <Compile Include="MainWindow\camera.cs" />
     <Compile Include="MainWindow\mapOperation.cs" />
     <Compile Include="Map\Markers\ClickableGMapMarker.cs" />
@@ -227,14 +228,8 @@
       <Project>{3d615b6a-d0dc-4745-99d5-15d8eeba93b9}</Project>
       <Name>WpfControlLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WPFVideoLib\WPFVideoLib.csproj">
-      <Project>{6dde156d-584f-46dc-ba2f-d3dc28c9b51d}</Project>
-      <Name>WPFVideoLib</Name>
-    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="HUD\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -22,10 +22,12 @@ namespace SharpBladeGroundStation
             switch ((MAVLINK_MSG_ID)package.Function)
             {
                 case MAVLINK_MSG_ID.SYS_STATUS:     //SYS_STATUS
+                {
 
                     break;
-
+                }
                 case MAVLINK_MSG_ID.GPS_RAW_INT:    //GPS_RAW_INT 
+                {
                     time64 = package.NextUInt64();
                     gpsData.Latitude = package.NextInt32() * 1.0 / 1e7;
                     gpsData.Longitude = package.NextInt32() * 1.0 / 1e7;
@@ -47,7 +49,7 @@ namespace SharpBladeGroundStation
 
                     if (gpsData.State == GPSPositionState.NoGPS && gpss != GPSPositionState.NoGPS)
                     {
-						flightRoute.Clear();
+                        flightRoute.Clear();
                         dataSkipCount[package.Function] = 0;
                     }
                     gpsData.State = gpss;
@@ -64,25 +66,25 @@ namespace SharpBladeGroundStation
                     Action a24 = () => { uavMarker.Position = pos; };
                     Dispatcher.BeginInvoke(a24);
                     break;
+                }
                 case MAVLINK_MSG_ID.ATTITUDE:
-                    time = package.NextUInt32();
-                    flightState.Roll = -rad2deg(package.NextSingle());
-                    flightState.Pitch = rad2deg(package.NextSingle());
-                    flightState.Yaw = rad2deg(package.NextSingle());
-                    float h = flightState.Yaw;
-                    flightState.Heading = h < 0 ? 360 + h : h;
-                    Action a30 = () => { uavMarker.Shape.RenderTransform = new RotateTransform(flightState.Heading, 15, 15); };
-                    Dispatcher.BeginInvoke(a30);
-
-                    if ((ulong)time * 1000 - dataSkipCount[package.Function] > dt)
                     {
-                        attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Roll));
-                        attitudeGraphData[1].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Pitch));
-                        attitudeGraphData[2].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Yaw));
+                        time = package.NextUInt32();
+                        flightState.Roll = -rad2deg(package.NextSingle());
+                        flightState.Pitch = rad2deg(package.NextSingle());
+                        flightState.Yaw = rad2deg(package.NextSingle());
 
-                        dataSkipCount[package.Function] = (ulong)time * 1000;
+
+                        if ((ulong)time * 1000 - dataSkipCount[package.Function] > dt)
+                        {
+                            attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Roll));
+                            attitudeGraphData[1].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Pitch));
+                            attitudeGraphData[2].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Yaw));
+
+                            dataSkipCount[package.Function] = (ulong)time * 1000;
+                        }
+                        break;
                     }
-                    break;
 
                 case MAVLINK_MSG_ID.LOCAL_POSITION_NED:    //LOCAL_POSITION_NED
                     time = package.NextUInt32();
@@ -97,10 +99,10 @@ namespace SharpBladeGroundStation
                     break;
                 case MAVLINK_MSG_ID.ALTITUDE:   //ALTITUDE 
                     time64 = package.NextUInt64();
-                    flightState.Altitude = package.NextSingle();
+                    float alt = package.NextSingle();
                     if (time64 - dataSkipCount[package.Function] > dt)
                     {
-                        altitudeGraphData.AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, flightState.Altitude));
+                        altitudeGraphData.AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, alt));
                         dataSkipCount[package.Function] = time64;
                     }
                     break;
@@ -139,6 +141,18 @@ namespace SharpBladeGroundStation
                     sd[2] = package.NextSingle();
                     //setSensorData("MAG", sd[0], sd[1], sd[2], true);
                     setVector3Data("MAG", sd[0], sd[1], sd[2], sensorData);
+                    break;
+                case MAVLINK_MSG_ID.VFR_HUD://辣鸡文档
+                    flightState.AirSpeed = package.NextSingle();
+                    flightState.GroundSpeed = package.NextSingle();
+                    flightState.Altitude = package.NextSingle();
+                    flightState.ClimbRate = package.NextSingle();
+                    flightState.Heading = package.NextShort();
+                    Action a30 = () => { uavMarker.Shape.RenderTransform = new RotateTransform(flightState.Heading, 15, 15); };
+                    Dispatcher.BeginInvoke(a30);
+                    ushort thro = package.NextUShort();//unused.
+                    
+
                     break;
                 default:
 
