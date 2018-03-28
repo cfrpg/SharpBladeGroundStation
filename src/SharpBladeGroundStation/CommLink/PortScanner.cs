@@ -58,7 +58,7 @@ namespace SharpBladeGroundStation.CommLink
 				{//添加新出现的串口
 					PortData port = new PortData();
 					port.name = pn;
-					port.link = new SerialLink(pn, protocol);
+					port.link = new SerialLink(pn, protocol,baudRate);
 					port.lastCheckTime = DateTime.Now;
 					port.state = PortScannerState.NewPort;
 					ports.Add(port);

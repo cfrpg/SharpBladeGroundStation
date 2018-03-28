@@ -127,10 +127,10 @@ namespace SharpBladeGroundStation.CommLink
 
 		public event ReceivePackageEvent OnReceivePackage;
 
-		public SerialLink(string portName,LinkProtocol p)
+		public SerialLink(string portName,LinkProtocol p,int br)
 		{
 			port = new SerialPort(portName);
-			port.BaudRate = 115200;
+			port.BaudRate = br;
 			port.DataBits = 8;
 			port.StopBits = System.IO.Ports.StopBits.One;
 			port.ReceivedBytesThreshold = 8;
@@ -150,6 +150,9 @@ namespace SharpBladeGroundStation.CommLink
 					receivePackage = new ANOLinkPackage();
 					break;
 				case LinkProtocol.MAVLink:
+					receivePackage = new MAVLinkPackage();
+					break;
+				case LinkProtocol.MAVLink2:
 					receivePackage = new MAVLinkPackage();
 					break;
 				default:
@@ -244,7 +247,11 @@ namespace SharpBladeGroundStation.CommLink
 						flag = true;
 						break;
 					case PackageParseResult.BadCheckSum:
-						offset++;
+						//offset++;
+						offset += receivePackage.PackageSize;
+						receivePackage.TimeStamp = this.ConnectedTime;
+						receivedPackageQueue.Enqueue(receivePackage.Clone());
+						received = true;
 						break;
 					case PackageParseResult.Yes:
 						offset += receivePackage.PackageSize;

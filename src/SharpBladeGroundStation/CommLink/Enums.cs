@@ -46,9 +46,17 @@ namespace SharpBladeGroundStation.CommLink
 		/// </summary>
 		NoLink,
 		/// <summary>
-		/// 假的MAVLink2.0协议
+		/// MAVLink1.0协议
 		/// </summary>
 		MAVLink,
+		/// <summary>
+		/// MAVLink2.0协议
+		/// </summary>
+		MAVLink2,
+		/// <summary>
+		/// 假的MAVLink2.0协议
+		/// </summary>
+		MAVLink2Adapter,
 		/// <summary>
 		/// 匿名飞控协议
 		/// </summary>
@@ -57,5 +65,6 @@ namespace SharpBladeGroundStation.CommLink
 		/// SharpBlade协议,敬请期待
 		/// </summary>
 		SBLink
+
 	}
 }

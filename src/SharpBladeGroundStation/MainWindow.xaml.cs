@@ -156,15 +156,16 @@ namespace SharpBladeGroundStation
 				GCSconfig=(GCSConfiguration)xs.Deserialize(s);
 				s.Close();
 			}
-			catch
+			catch(Exception ex)
 			{
+				MessageBox.Show(ex.ToString());
 				s.Close();
 				s= new FileStream(path + "\\gcs.xml", FileMode.Create, FileAccess.Write, FileShare.None);
 				GCSconfig = GCSConfiguration.DefaultConfig();				
 				xs.Serialize(s, GCSConfig);
 				s.Close();
 			}
-			gcsCfgGroup.DataContext = GCSconfig;
+			gcsCfgGroup.DataContext = GCSconfig;			
 
 		}
 		
@@ -196,6 +197,9 @@ namespace SharpBladeGroundStation
 						break;
 					case LinkProtocol.ANOLink:
 						analyzeANOPackage(package);
+						break;
+					case LinkProtocol.MAVLink2:
+						analyzeMAVPackage(package);
 						break;
 				}
             }
@@ -412,7 +416,7 @@ namespace SharpBladeGroundStation
 			string path = Environment.CurrentDirectory + "\\config";
 			
 			XmlSerializer xs = new XmlSerializer(typeof(GCSConfiguration));
-			Stream s = new FileStream(path + "\\gcs.xml", FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);	
+			Stream s = new FileStream(path + "\\gcs.xml", FileMode.Create, FileAccess.Write, FileShare.None);	
 			xs.Serialize(s, GCSConfig);
 			s.Close();
 			//hudWindow.Close();

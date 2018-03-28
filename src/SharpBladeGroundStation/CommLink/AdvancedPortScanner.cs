@@ -117,7 +117,7 @@ namespace SharpBladeGroundStation.CommLink
 					case PortScannerState.Available:
 						ports[i].port.Close();
 						portFound = true;
-						SerialLink link = new SerialLink(ports[i].name, ports[i].protocol);
+						SerialLink link = new SerialLink(ports[i].name, ports[i].protocol,baudRate);
 						Debug.WriteLine("[port scanner]find port:" + ports[i].name);
 						OnFindPort?.Invoke(this, new PortScannerEventArgs(link));
 						break;
@@ -177,6 +177,7 @@ namespace SharpBladeGroundStation.CommLink
 						return;
 					}
 				}
+				
 
 				offset = 0;
 				ANOLinkPackage anop = new ANOLinkPackage();
@@ -189,6 +190,12 @@ namespace SharpBladeGroundStation.CommLink
 						protocol = LinkProtocol.ANOLink;
 						return;
 					}
+				}
+				string output = "";
+				for(int i=0;i<buff.Length;i++)
+				{
+					output += ((int)buff[i]).ToString();
+					output += " ";
 				}
 				Debug.WriteLine("[port scanner]unavilable port(no link):" + name);
 				state = PortScannerState.Unavailable;

@@ -21,6 +21,9 @@ namespace SharpBladeGroundStation
             UInt64 dt = (ulong)GCSconfig.PlotTimeInterval * 1000;
             switch ((MAVLINK_MSG_ID)package.Function)
             {
+				case MAVLINK_MSG_ID.HEARTBEAT:
+
+					break;
                 case MAVLINK_MSG_ID.SYS_STATUS:     //SYS_STATUS
                 {
 
@@ -159,6 +162,6 @@ namespace SharpBladeGroundStation
                     break;
             }
 
-        }
-    }
+        }		
+	}
 }
