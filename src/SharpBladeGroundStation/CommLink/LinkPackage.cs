@@ -190,7 +190,10 @@ namespace SharpBladeGroundStation.CommLink
 			if(cursor+1<=dataSize)
 			{
 				cursor += 1;
-				return Convert.ToSByte(buffer[cursor + HeaderSize - 1]);
+                unchecked
+                {
+                    return (sbyte)buffer[cursor + HeaderSize - 1];
+                }
 			}
 			else
 			{

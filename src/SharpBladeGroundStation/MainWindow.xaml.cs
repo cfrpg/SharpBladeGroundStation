@@ -39,8 +39,9 @@ namespace SharpBladeGroundStation
     /// </summary>
     public partial class MainWindow : Window
     {
-        SerialLink link;       
-       
+        //SerialLink link;       
+
+        Vehicle currentVehicle;
 		GCSConfiguration GCSconfig;
 
         //PortScanner portscanner;
@@ -60,7 +61,7 @@ namespace SharpBladeGroundStation
 		ObservableDataSource<Point> altitudeGraphData;
 		Dictionary<int, UInt64> dataSkipCount;
 
-		FlightState flightState;
+		//FlightState flightState;
 		GPSData gpsData;
 
 		HUDWindow hudWindow;
@@ -69,11 +70,11 @@ namespace SharpBladeGroundStation
 
 
 		const string messageboxTitle = "SharpBladeGroundStation";
-		public FlightState FlightState
-		{
-			get { return flightState; }
-			set { flightState = value; }
-		}
+		//public FlightState FlightState
+		//{
+		//	get { return flightState; }
+		//	set { flightState = value; }
+		//}
 
 		public GCSConfiguration GCSConfig
 		{
@@ -81,19 +82,18 @@ namespace SharpBladeGroundStation
 			set { GCSconfig = value; }
 		}
 
-		public MainWindow()
+        public Vehicle CurrentVehicle
+        {
+            get { return currentVehicle; }
+            set { currentVehicle = value; }
+        }
+
+        public MainWindow()
         {
             InitializeComponent();
-			initConfig();
-			//link = new SerialLink("COM3", LinkProtocol.MAVLink);
-			//link.OnReceivePackage += Link_OnReceivePackage;
-			initGmap();
-			//portscanner = new PortScanner(LinkProtocol.ANOLink, 115200, 20480, 1);
-			//portscanner = new PortScanner(LinkProtocol.MAVLink, 115200, 20480, 1);
-			//portscanner.OnFindPort += Portscanner_OnFindPort;
-			//portscanner.Start();
+			initConfig();			
+			initGmap();			
 			portscanner = new AdvancedPortScanner(GCSconfig.BaudRate, 1000, 3);
-			//portscanner = new AdvancedPortScanner(57600, 1000, 3);
 			portscanner.OnFindPort += Portscanner_OnFindPort;
 			portscanner.Start();
 			linkStateText.Text = "Connecting";
@@ -106,14 +106,14 @@ namespace SharpBladeGroundStation
             motorDataList.ItemsSource = motorData;
 			rcData = new ObservableCollection<Vector3Data>();
 			rcDataList.ItemsSource = rcData;
-            FlightState = new FlightState();
-			pfd.DataContext = flightState;
+            currentVehicle = new Vehicle(0);
+            pfd.DataContext = currentVehicle.FlightState;
 			gpsData = new GPSData();
 			vdopText.DataContext = gpsData;
 			hdopText.DataContext = gpsData;
 			gpsStateText.DataContext = gpsData;
-
-			flightDataGrid.DataContext = FlightState;
+            battText.DataContext = currentVehicle.Battery;
+			flightDataGrid.DataContext = currentVehicle.FlightState;
 
 			otherData = new ObservableCollection<Vector3Data>();
 			otherDataList.ItemsSource = otherData;
@@ -175,21 +175,21 @@ namespace SharpBladeGroundStation
         {
 			Debug.WriteLine("[main] find port {0}", e.Link.Port.PortName);
 			portscanner.Stop();
-			if (link != null)
+			if (currentVehicle.Link != null)
 				return;
-			link = e.Link;
-			link.OnReceivePackage += Link_OnReceivePackage;
-			link.OpenPort();
-			Action a = () => { linkStateText.Text = link.Port.PortName + Environment.NewLine+ link.Protocol.ToString(); linkspd.DataContext = link; };
+			currentVehicle.Link = e.Link;
+            currentVehicle.Link.OnReceivePackage += Link_OnReceivePackage;
+            currentVehicle.Link.OpenPort();
+			Action a = () => { linkStateText.Text = currentVehicle.Link.Port.PortName + Environment.NewLine+ currentVehicle.Link.Protocol.ToString(); linkspd.DataContext = currentVehicle.Link; };
 			linkStateText.Dispatcher.Invoke(a);
 			
         }
 
 		private void Link_OnReceivePackage(SerialLink sender, EventArgs e)
         {
-            while (link.ReceivedPackageQueue.Count != 0)
+            while (currentVehicle.Link.ReceivedPackageQueue.Count != 0)
             {
-                LinkPackage package = link.ReceivedPackageQueue.Dequeue();
+                LinkPackage package = currentVehicle.Link.ReceivedPackageQueue.Dequeue();
 				switch(sender.Protocol)
 				{
 					case LinkProtocol.MAVLink:
@@ -229,22 +229,12 @@ namespace SharpBladeGroundStation
                 Action a = () => { list.Add(new Vector3Data(name, x, y, z)); };
                 Dispatcher.BeginInvoke(a, DispatcherPriority.Background);                
             }
-        }
-
-		
-		private float rad2deg(float rad)
-		{
-			return (float)(rad / Math.PI * 180);
-		}
-		private float deg2rad(float deg)
-		{
-			return (float)(deg * Math.PI / 180);
-		}
+        }	
 		
 
 		private string getRCChannelName(int id)
 		{
-			return "CH" + id.ToString();
+			return "CH" + id.ToString();            
 		}
 		
 
@@ -254,7 +244,7 @@ namespace SharpBladeGroundStation
 			p.Function = 0x02;
 			p.AddData((byte)0x01);
 			p.SetVerify();
-			link.SendPackageQueue.Enqueue(p.Clone());
+            currentVehicle.Link.SendPackageQueue.Enqueue(p.Clone());
 		}
 
 		private void button2_Click(object sender, RoutedEventArgs e)
@@ -282,7 +272,7 @@ namespace SharpBladeGroundStation
 					p.AddData((short)pids[i * 3 + j].Z);
 				}
 				p.SetVerify();
-				link.SendPackageQueue.Enqueue(p);
+                currentVehicle.Link.SendPackageQueue.Enqueue(p);
 			}
 		}
 
@@ -350,12 +340,12 @@ namespace SharpBladeGroundStation
 			this.WindowState = WindowState.Normal;
 			this.Top = screens[a].WorkingArea.Top;
 			this.Left = screens[a].WorkingArea.Left;
-			this.WindowState = WindowState.Maximized;
-			hudWindow.WindowState = WindowState.Normal;
-			hudWindow.Top = screens[b].WorkingArea.Top;
-			hudWindow.Left = screens[b].WorkingArea.Left;
-			hudWindow.WindowState = WindowState.Maximized;
-		}
+            this.WindowState = WindowState.Maximized;
+            hudWindow.WindowState = WindowState.Normal;
+            hudWindow.Top = screens[b].WorkingArea.Top;
+            hudWindow.Left = screens[b].WorkingArea.Left;
+            hudWindow.WindowState = WindowState.Maximized;
+        }
 
 		private void button3_Click(object sender, RoutedEventArgs e)
 		{
@@ -419,15 +409,14 @@ namespace SharpBladeGroundStation
 			Stream s = new FileStream(path + "\\gcs.xml", FileMode.Create, FileAccess.Write, FileShare.None);	
 			xs.Serialize(s, GCSConfig);
 			s.Close();
-			//hudWindow.Close();
-			
+			hudWindow.Close();
 		}
 
 		private void mainwindow_Loaded(object sender, RoutedEventArgs e)
 		{
-			//hudWindow = new HUDWindow();
+			hudWindow = new HUDWindow(this);
 			//hudWindow.Mainwin = this;
-			//hudWindow.Show();
+			hudWindow.Show();
 			
 		}
 	}

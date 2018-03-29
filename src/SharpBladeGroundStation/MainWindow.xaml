@@ -413,7 +413,7 @@
                 <fd:LinkSpeedControl x:Name="linkspd" Grid.Column="8" TxSpeed="{Binding TxRate}" RxSpeed="{Binding RxRate}" MaxSpeed="20000"/>
 
                 <TextBlock x:Name="linkStateText" HorizontalAlignment="Right" TextWrapping="Wrap" Text="COM1"  Background="#FFB4B4AF" FontSize="10" VerticalAlignment="Center" Margin="0" Grid.Column="7" TextAlignment="Right" />
-                <TextBlock x:Name="battText" HorizontalAlignment="Left" TextWrapping="NoWrap" Text="22.2V 1000.00A" VerticalAlignment="Center" Grid.Column="6" FontSize="14" Margin="2,6,0,6"/>
+                <TextBlock x:Name="battText" HorizontalAlignment="Left" TextWrapping="NoWrap" Text="{Binding SimpleBattText}" VerticalAlignment="Center" Grid.Column="6" FontSize="14" Margin="2,6,0,6"/>
                 <Image x:Name="image"  Grid.Column="5" Source="Contents/battery.png" Margin="2"/>
                 <TextBlock x:Name="gpsStateText" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding GPSStateText}" VerticalAlignment="Center" Grid.Column="2" FontSize="14" Margin="5,6,0,6" MinWidth="100"/>
                 <TextBlock x:Name="gpsDopText" HorizontalAlignment="Left" TextWrapping="Wrap" Text="VDOP: &#13;HDOP:" VerticalAlignment="Center" Grid.Column="3" Margin="3,2,0,0" Height="31" Width="41" FontSize="11.5"/>

@@ -85,17 +85,22 @@
     <Compile Include="Configuration\GCSConfiguration.cs" />
     <Compile Include="Configuration\VehicleConfiguration.cs" />
     <Compile Include="Converters.cs" />
+    <Compile Include="DataStructs\BatteryData.cs" />
     <Compile Include="DataStructs\GPSData.cs" />
     <Compile Include="DataStructs\MapRouteData.cs" />
     <Compile Include="DataStructs\Mission\Mission.cs" />
     <Compile Include="DataStructs\Mission\MissionItem.cs" />
     <Compile Include="DataStructs\Vector3Data.cs" />
     <Compile Include="Configuration\Enums.cs" />
+    <Compile Include="DataStructs\Vehicle\Camera.cs" />
     <Compile Include="DataStructs\Vehicle\Vehicle.cs" />
     <Compile Include="HUDWindow.xaml.cs">
       <DependentUpon>HUDWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="HUD\HUDBase.cs" />
+    <Compile Include="HUD\NavHUDControl.xaml.cs">
+      <DependentUpon>NavHUDControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow\camera.cs" />
     <Compile Include="MainWindow\mapOperation.cs" />
     <Compile Include="Map\Markers\ClickableGMapMarker.cs" />
@@ -118,6 +123,10 @@
     <Compile Include="DataStructs\Mission\WaypointAction.cs" />
     <Compile Include="DataStructs\Mission\WaypointBase.cs" />
     <Page Include="HUDWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HUD\NavHUDControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

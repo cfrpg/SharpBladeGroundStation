@@ -3,6 +3,8 @@ using System.Windows;
 using FlightDisplay;
 using SharpBladeGroundStation.CommLink;
 using SharpBladeGroundStation.DataStructs;
+using Microsoft.Xna.Framework;
+using Point = System.Windows.Point;
 
 namespace SharpBladeGroundStation
 {
@@ -18,16 +20,17 @@ namespace SharpBladeGroundStation
 
                     break;
                 case 0x01://STATUS
-                    flightState.Roll = package.NextShort() / 100f;
-                    flightState.Pitch = package.NextShort() / 100f;
-                    flightState.Yaw = package.NextShort() / 100f;
-                    flightState.Altitude = package.NextInt32() / 100f;
-                    flightState.FlightModeText = getFlightModeText(package.NextByte());
-                    flightState.IsArmed = package.NextByte() == 1;
-                    attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, flightState.Roll));
-                    attitudeGraphData[1].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, flightState.Pitch));
-                    attitudeGraphData[2].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, flightState.Yaw));
-                    altitudeGraphData.AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, flightState.Altitude / 100.0));
+                    float rx = package.NextShort() / 100f;
+                    float ry = package.NextShort() / 100f;
+                    float rz = package.NextShort() / 100f;
+                    currentVehicle.EulerAngle = new Vector3(MathHelper.ToRadians(rx), MathHelper.ToRadians(ry), MathHelper.ToRadians(rz));
+                    currentVehicle.Altitude = package.NextInt32() / 100f;
+                    currentVehicle.FlightModeText = getFlightModeText(package.NextByte());
+                    currentVehicle.IsArmed = package.NextByte() == 1;
+                    attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, rx));
+                    attitudeGraphData[1].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, ry));
+                    attitudeGraphData[2].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, rz));
+                    altitudeGraphData.AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, currentVehicle.Altitude / 100.0));
                     break;
                 case 0x02://SENSER
                     short[] sd = { 0, 0, 0 };
@@ -99,7 +102,7 @@ namespace SharpBladeGroundStation
                 case 0x0B://
                     short sr = package.NextShort();
                     short sp = package.NextShort();
-                    FlightState.ClimbRate = package.NextShort() / 100.0f;
+                    currentVehicle.ClimbRate = package.NextShort() / 100.0f;
                     setVector3Data("角速度", sr, sp, 0, otherData);
                     break;
                 case 0x20://FP_NUMBER

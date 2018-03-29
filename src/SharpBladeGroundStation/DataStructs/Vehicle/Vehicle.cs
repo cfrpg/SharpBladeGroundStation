@@ -4,15 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using SharpBladeGroundStation.CommLink;
 using Microsoft.Xna.Framework;
 using FlightDisplay;
 using Matrix = Microsoft.Xna.Framework.Matrix;
 
-namespace SharpBladeGroundStation.DataStructs.Vehicle
+namespace SharpBladeGroundStation.DataStructs
 {
+    /// <summary>
+    /// 描述飞行器的类
+    /// </summary>
 	public class Vehicle:INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
+
+        int id;
+
         Vector3 position;
         Vector3 velocity;
         Vector3 angleVelocity;
@@ -28,7 +35,14 @@ namespace SharpBladeGroundStation.DataStructs.Vehicle
         bool isArmed;
 
         FlightState flightState;
+        Camera camera;
+        BatteryData battery;
 
+        SerialLink link;
+
+        /// <summary>
+        /// 位置(pn,pe,pd)
+        /// </summary>
         public Vector3 Position
         {
             get { return position; }
@@ -39,7 +53,9 @@ namespace SharpBladeGroundStation.DataStructs.Vehicle
                 //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FlightState"));
             }
         }
-
+        /// <summary>
+        /// 速度,(u,v,w)
+        /// </summary>
         public Vector3 Velocity
         {
             get { return velocity; }
@@ -50,7 +66,9 @@ namespace SharpBladeGroundStation.DataStructs.Vehicle
                 //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FlightState"));
             }
         }
-
+        /// <summary>
+        /// 角速度,(p,q,r)
+        /// </summary>
         public Vector3 AngleVelocity
         {
             get { return angleVelocity; }
@@ -61,21 +79,25 @@ namespace SharpBladeGroundStation.DataStructs.Vehicle
                 //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FlightState"));
             }
         }
-
+        /// <summary>
+        /// 欧拉角,(phi,theta,psi)
+        /// </summary>
         public Vector3 EulerAngle
         {
             get { return eulerAngle; }
             set
             {
                 eulerAngle = value;
-                flightState.Roll = eulerAngle.X;
-                flightState.Pitch = eulerAngle.Y;
-                flightState.Yaw = eulerAngle.Z;
+                flightState.Roll =MathHelper.ToDegrees(eulerAngle.X);
+                flightState.Pitch = MathHelper.ToDegrees(eulerAngle.Y);
+                flightState.Yaw = MathHelper.ToDegrees(eulerAngle.Z);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EulerAngle"));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FlightState"));
             }
         }
-
+        /// <summary>
+        /// GPS信息
+        /// </summary>
         public GPSData GpsState
         {
             get { return gpsState; }
@@ -86,7 +108,9 @@ namespace SharpBladeGroundStation.DataStructs.Vehicle
                 //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FlightState"));
             }
         }
-
+        /// <summary>
+        /// 航向,deg
+        /// </summary>
         public float Heading
         {
             get { return heading; }
@@ -98,7 +122,9 @@ namespace SharpBladeGroundStation.DataStructs.Vehicle
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FlightState"));
             }
         }
-
+        /// <summary>
+        /// 地速
+        /// </summary>
         public float GroundSpeed
         {
             get { return groundSpeed; }
@@ -110,7 +136,9 @@ namespace SharpBladeGroundStation.DataStructs.Vehicle
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FlightState"));
             }
         }
-
+        /// <summary>
+        /// 空速
+        /// </summary>
         public float AirSpeed
         {
             get { return airSpeed; }
@@ -122,7 +150,9 @@ namespace SharpBladeGroundStation.DataStructs.Vehicle
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FlightState"));
             }
         }
-
+        /// <summary>
+        /// 爬升率
+        /// </summary>
         public float ClimbRate
         {
             get { return climbRate; }
@@ -134,7 +164,9 @@ namespace SharpBladeGroundStation.DataStructs.Vehicle
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FlightState"));
             }
         }
-
+        /// <summary>
+        /// 海拔高度
+        /// </summary>
         public float Altitude
         {
             get { return altitude; }
@@ -146,7 +178,9 @@ namespace SharpBladeGroundStation.DataStructs.Vehicle
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FlightState"));
             }
         }
-
+        /// <summary>
+        /// 飞行模式文字信息
+        /// </summary>
         public string FlightModeText
         {
             get { return flightModeText; }
@@ -158,7 +192,9 @@ namespace SharpBladeGroundStation.DataStructs.Vehicle
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FlightState"));
             }
         }
-
+        /// <summary>
+        /// 是否解锁
+        /// </summary>
         public bool IsArmed
         {
             get { return isArmed; }
@@ -170,14 +206,59 @@ namespace SharpBladeGroundStation.DataStructs.Vehicle
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FlightState"));
             }
         }
-
+        /// <summary>
+        /// 适配器
+        /// </summary>
         public FlightState FlightState
         {
             get { return flightState; }
         }
-
-        public Vehicle()
+        /// <summary>
+        /// 唯一标识
+        /// </summary>
+        public int ID
         {
+            get { return id; }
+            set { id = value; }
+        }
+        /// <summary>
+        /// 使用的串口连接
+        /// </summary>
+        public SerialLink Link
+        {
+            get { return link; }
+            set { link = value; }
+        }
+        /// <summary>
+        /// 摄像机
+        /// </summary>
+        public Camera Camera
+        {
+            get { return camera; }
+            set { camera = value; }
+        }
+
+        /// <summary>
+        /// 电池状态
+        /// </summary>
+        public BatteryData Battery
+        {
+            get { return battery; }
+            set
+            {
+                battery = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Battery"));                
+            }
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="i">ID</param>
+        /// <param name="l">SerialLink</param>
+        public Vehicle(int i)
+        {
+            id = i;
             position = Vector3.Zero;
             velocity = Vector3.Zero;
             angleVelocity = Vector3.Zero;
@@ -192,6 +273,7 @@ namespace SharpBladeGroundStation.DataStructs.Vehicle
             isArmed = false;
 
             flightState = FlightState.Zero;
+            battery = new BatteryData();   
         }
         
     }

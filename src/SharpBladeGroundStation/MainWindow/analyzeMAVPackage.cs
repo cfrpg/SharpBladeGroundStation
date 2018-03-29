@@ -7,6 +7,8 @@ using SharpBladeGroundStation.CommLink;
 using SharpBladeGroundStation.DataStructs;
 using SharpBladeGroundStation.Map;
 using System.MAVLink;
+using Microsoft.Xna.Framework;
+using Point = System.Windows.Point;
 
 namespace SharpBladeGroundStation
 {
@@ -19,18 +21,24 @@ namespace SharpBladeGroundStation
             UInt32 time = 0;
             UInt64 time64 = 0;
             UInt64 dt = (ulong)GCSconfig.PlotTimeInterval * 1000;
+            Action a1,a2;
+            int tint;
+            float tfloat;
             switch ((MAVLINK_MSG_ID)package.Function)
             {
-				case MAVLINK_MSG_ID.HEARTBEAT:
-
-					break;
-                case MAVLINK_MSG_ID.SYS_STATUS:     //SYS_STATUS
-                {
+                case MAVLINK_MSG_ID.HEARTBEAT://#0
 
                     break;
-                }
-                case MAVLINK_MSG_ID.GPS_RAW_INT:    //GPS_RAW_INT 
-                {
+                case MAVLINK_MSG_ID.SYS_STATUS://#1
+
+
+                    break;
+                case MAVLINK_MSG_ID.SYSTEM_TIME://#2
+
+                    break;
+               
+
+                case MAVLINK_MSG_ID.GPS_RAW_INT: //#24
                     time64 = package.NextUInt64();
                     gpsData.Latitude = package.NextInt32() * 1.0 / 1e7;
                     gpsData.Longitude = package.NextInt32() * 1.0 / 1e7;
@@ -43,13 +51,11 @@ namespace SharpBladeGroundStation
                         gpsData.Vdop = -1;
                     gpsData.Vdop /= 100f;
                     gpsData.Hdop /= 100f;
-                    flightState.GroundSpeed = package.NextUShort() / 100.0f;
+                    currentVehicle.GroundSpeed = package.NextUShort() / 100.0f;
 
                     gpsData.SatelliteCount = package.NextUShort();
                     GPSPositionState gpss = (GPSPositionState)package.NextByte();//sb文档害我debug一天!
-
-
-
+                    
                     if (gpsData.State == GPSPositionState.NoGPS && gpss != GPSPositionState.NoGPS)
                     {
                         flightRoute.Clear();
@@ -60,56 +66,60 @@ namespace SharpBladeGroundStation
 
                     if (time64 - dataSkipCount[package.Function] > (ulong)GCSconfig.CourseTimeInterval * 1000)
                     {
-                        Action a241 = () => { updateFlightRoute(pos); };
-                        Dispatcher.BeginInvoke(a241);
+                        a1 = () => { updateFlightRoute(pos); };
+                        Dispatcher.BeginInvoke(a1);
                         dataSkipCount[package.Function] = time64;
 
                     }
                     gpsData.SatelliteCount = package.NextByte();
-                    Action a24 = () => { uavMarker.Position = pos; };
-                    Dispatcher.BeginInvoke(a24);
+                    a2 = () => { uavMarker.Position = pos; };
+                    Dispatcher.BeginInvoke(a2);
                     break;
-                }
-                case MAVLINK_MSG_ID.ATTITUDE:
+                case MAVLINK_MSG_ID.ATTITUDE://#30
+                    time = package.NextUInt32();
+                    float rx = -package.NextSingle();
+                    float ry = package.NextSingle();
+                    float rz = package.NextSingle();
+                    //rad
+                    currentVehicle.EulerAngle = new Vector3(rx, ry, rz);
+                    if ((ulong)time * 1000 - dataSkipCount[package.Function] > dt)
                     {
-                        time = package.NextUInt32();
-                        flightState.Roll = -rad2deg(package.NextSingle());
-                        flightState.Pitch = rad2deg(package.NextSingle());
-                        flightState.Yaw = rad2deg(package.NextSingle());
+                        attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(time / 1000.0, MathHelper.ToDegrees(rx)));
+                        attitudeGraphData[1].AppendAsync(this.Dispatcher, new Point(time / 1000.0, MathHelper.ToDegrees(ry)));
+                        attitudeGraphData[2].AppendAsync(this.Dispatcher, new Point(time / 1000.0, MathHelper.ToDegrees(rz)));
 
-
-                        if ((ulong)time * 1000 - dataSkipCount[package.Function] > dt)
-                        {
-                            attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Roll));
-                            attitudeGraphData[1].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Pitch));
-                            attitudeGraphData[2].AppendAsync(this.Dispatcher, new Point(time / 1000.0, flightState.Yaw));
-
-                            dataSkipCount[package.Function] = (ulong)time * 1000;
-                        }
-                        break;
+                        dataSkipCount[package.Function] = (ulong)time * 1000;
                     }
+                    break;
+                case MAVLINK_MSG_ID.ATTITUDE_QUATERNION://31
 
-                case MAVLINK_MSG_ID.LOCAL_POSITION_NED:    //LOCAL_POSITION_NED
+                    break;
+                case MAVLINK_MSG_ID.LOCAL_POSITION_NED: //#32
                     time = package.NextUInt32();
                     float vx = package.NextSingle();
                     float vy = package.NextSingle();
                     float vz = package.NextSingle();
+                    currentVehicle.Position = new Vector3(vx, vy, vz);
                     vx = package.NextSingle();
                     vy = package.NextSingle();
                     vz = package.NextSingle();
-                    flightState.ClimbRate = -vz;
+                    currentVehicle.Velocity = new Vector3(vx, vy, vz);
+                    //currentVehicle.ClimbRate = -vz;
+                    break;
+                case MAVLINK_MSG_ID.SERVO_OUTPUT_RAW://#36
 
                     break;
-                case MAVLINK_MSG_ID.ALTITUDE:   //ALTITUDE 
-                    time64 = package.NextUInt64();
-                    float alt = package.NextSingle();
-                    if (time64 - dataSkipCount[package.Function] > dt)
-                    {
-                        altitudeGraphData.AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, alt));
-                        dataSkipCount[package.Function] = time64;
-                    }
+                case MAVLINK_MSG_ID.VFR_HUD://#74
+                    currentVehicle.AirSpeed = package.NextSingle();
+                    currentVehicle.GroundSpeed = package.NextSingle();
+                    currentVehicle.Altitude = package.NextSingle();
+                    currentVehicle.ClimbRate = package.NextSingle();
+                    currentVehicle.Heading = package.NextShort();
+                    a1 = () => { uavMarker.Shape.RenderTransform = new RotateTransform(currentVehicle.Heading, 15, 15); };
+                    Dispatcher.BeginInvoke(a1);
+                    ushort thro = package.NextUShort();//unused
                     break;
-                case MAVLINK_MSG_ID.HIGHRES_IMU:   //HIGHRES_IMU
+                case MAVLINK_MSG_ID.HIGHRES_IMU://#105
                     time64 = package.NextUInt64();
                     float[] sd = { 0, 0, 0 };
                     sd[0] = package.NextSingle();
@@ -145,16 +155,83 @@ namespace SharpBladeGroundStation
                     //setSensorData("MAG", sd[0], sd[1], sd[2], true);
                     setVector3Data("MAG", sd[0], sd[1], sd[2], sensorData);
                     break;
-                case MAVLINK_MSG_ID.VFR_HUD://辣鸡文档
-                    flightState.AirSpeed = package.NextSingle();
-                    flightState.GroundSpeed = package.NextSingle();
-                    flightState.Altitude = package.NextSingle();
-                    flightState.ClimbRate = package.NextSingle();
-                    flightState.Heading = package.NextShort();
-                    Action a30 = () => { uavMarker.Shape.RenderTransform = new RotateTransform(flightState.Heading, 15, 15); };
-                    Dispatcher.BeginInvoke(a30);
-                    ushort thro = package.NextUShort();//unused.
-                    
+                case MAVLINK_MSG_ID.TIMESYNC://#111
+
+                    break;
+                case MAVLINK_MSG_ID.ACTUATOR_CONTROL_TARGET://#140
+
+                    break;
+                case MAVLINK_MSG_ID.ALTITUDE: //#141
+                    time64 = package.NextUInt64();
+                    float alt = package.NextSingle();
+                    if (time64 - dataSkipCount[package.Function] > dt)
+                    {
+                        altitudeGraphData.AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, alt));
+                        dataSkipCount[package.Function] = time64;
+                    }
+                    break;
+                case MAVLINK_MSG_ID.BATTERY_STATUS://#147
+                    //这里内容顺序跟文档和QGC里都不一样
+                    tint = package.NextInt32();
+                    if (tint > 0)
+                    {
+                        currentVehicle.Battery.CurrentConsumed = tint;
+                    }
+                    else
+                    {
+                        currentVehicle.Battery.CurrentConsumed = -1;
+                    }
+                    tint = package.NextInt32();
+                    if (tint > 0)
+                    {
+                        currentVehicle.Battery.EnergyConsumed = (float)tint / 10f;
+                    }
+                    else
+                    {
+                        currentVehicle.Battery.EnergyConsumed = -1;
+                    }
+                    currentVehicle.Battery.Temperature = package.NextShort();
+                    float battv = 0;
+                    int cellv = 0;
+                    for (int i = 0; i < 10; i++)
+                    {
+                        cellv = package.NextUShort();
+                        if (cellv > 30000)
+                        {
+                            cellv = -1;
+                            currentVehicle.Battery.CellVoltage[i] = -1;
+                        }
+                        else
+                        {
+                            currentVehicle.Battery.CellVoltage[i] = ((float)cellv) / 1000f;
+                            battv += currentVehicle.Battery.CellVoltage[i];
+                        }
+                    }
+                    currentVehicle.Battery.Voltage = battv;
+                    tint = package.NextShort();
+                    if (tint >= 0)
+                    {
+                        currentVehicle.Battery.Current = (float)tint / 100f;
+                    }
+                    else
+                    {
+                        currentVehicle.Battery.Current = -1;
+                    }
+                    currentVehicle.Battery.ID = package.NextByte();
+                    currentVehicle.Battery.Function = package.NextByte();
+                    currentVehicle.Battery.Type = package.NextByte(); 
+                    currentVehicle.Battery.Remaining = package.NextSByte();
+                    break;
+                case MAVLINK_MSG_ID.ESTIMATOR_STATUS://#230
+
+                    break;
+                case MAVLINK_MSG_ID.WIND_COV://#231
+
+                    break;
+                case MAVLINK_MSG_ID.VIBRATION://#241
+
+                    break;
+                case MAVLINK_MSG_ID.EXTENDED_SYS_STATE://#245
 
                     break;
                 default:

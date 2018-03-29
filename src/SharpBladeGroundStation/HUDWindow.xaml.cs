@@ -20,35 +20,26 @@ namespace SharpBladeGroundStation
 	/// HUDWindow.xaml 的交互逻辑
 	/// </summary>
 	public partial class HUDWindow : Window
-	{
-
-		int numCameras = 0;
-		public HUDWindow()
+	{    
+		public HUDWindow(MainWindow mw)
 		{
 			InitializeComponent();
-			
-		}
+            mainwin = mw;
+            
+        }
 
 		MainWindow mainwin;
 
-		public MainWindow Mainwin
+        public MainWindow Mainwin
+        {
+            get { return mainwin; }
+            set { mainwin = value; }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-			get
-			{
-				return mainwin;
-			}
-
-			set
-			{
-				mainwin = value;
-			}
-		}
-
-		private void Window_Loaded(object sender, RoutedEventArgs e)
-		{
-			pfd.DataContext = mainwin.FlightState;
-
-			if(MultimediaUtil.VideoInputDevices.Count()>0)
+            navhud.Vehicle = Mainwin.CurrentVehicle;
+            if (MultimediaUtil.VideoInputDevices.Count()>0)
 			{
 				cameraCaptureElement.VideoCaptureDevice = MultimediaUtil.VideoInputDevices[0];
 			}
@@ -58,5 +49,10 @@ namespace SharpBladeGroundStation
 		{
 			
 		}
-	}
+
+        private void Window_Initialized(object sender, EventArgs e)
+        {
+           
+        }
+    }
 }

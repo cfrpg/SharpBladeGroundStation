@@ -12,8 +12,7 @@
     <UserControl.Resources>
         <local:HalfConverter x:Key="half"/>
         <local:TwiceConverter x:Key="twice"/>
-        <local:PitchTransConverter x:Key="pitTrans"/>
-        
+        <local:PitchTransConverter x:Key="pitTrans"/>        
     </UserControl.Resources>
 
     <Viewbox>
