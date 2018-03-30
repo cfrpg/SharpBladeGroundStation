@@ -103,6 +103,7 @@
     </Compile>
     <Compile Include="MainWindow\camera.cs" />
     <Compile Include="MainWindow\mapOperation.cs" />
+    <Compile Include="MainWindow\testfield.cs" />
     <Compile Include="Map\Markers\ClickableGMapMarker.cs" />
     <Compile Include="Map\Markers\GMapElement.cs" />
     <Compile Include="Map\Markers\UAVMarker.xaml.cs">

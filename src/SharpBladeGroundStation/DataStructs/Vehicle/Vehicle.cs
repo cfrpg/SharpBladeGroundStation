@@ -273,7 +273,20 @@ namespace SharpBladeGroundStation.DataStructs
             isArmed = false;
 
             flightState = FlightState.Zero;
-            battery = new BatteryData();   
+            battery = new BatteryData();
+            camera = new Camera();
+            camera.CameraTransfrom = new Matrix(
+                new Vector4(496.9788f, -0.4179f, 356.3610f, 0f),
+                new Vector4(0f, 526.7737f, 288.5539f, 0f),
+                new Vector4(0f, 0f, 1f, 0f),
+                new Vector4(0f,0f,0f,1f));
+            camera.K1 = -0.400138193501512f;
+            camera.K2 = 0.180327815997683f;
+            camera.P1 = 0.002723499733555f;
+            camera.P2 = 0.003389955079601f;
+            camera.ScreenSize = new Vector2(720, 576);
+
+
         }
         
     }

@@ -30,8 +30,7 @@ namespace SharpBladeGroundStation
 
                     break;
                 case MAVLINK_MSG_ID.SYS_STATUS://#1
-
-
+                    
                     break;
                 case MAVLINK_MSG_ID.SYSTEM_TIME://#2
 
@@ -91,7 +90,7 @@ namespace SharpBladeGroundStation
                         dataSkipCount[package.Function] = (ulong)time * 1000;
                     }
                     break;
-                case MAVLINK_MSG_ID.ATTITUDE_QUATERNION://31
+                case MAVLINK_MSG_ID.ATTITUDE_QUATERNION://#31
 
                     break;
                 case MAVLINK_MSG_ID.LOCAL_POSITION_NED: //#32
@@ -233,6 +232,9 @@ namespace SharpBladeGroundStation
                     break;
                 case MAVLINK_MSG_ID.EXTENDED_SYS_STATE://#245
 
+                    break;
+                case MAVLINK_MSG_ID.COMMAND_ACK://#77
+                    
                     break;
                 default:
 

@@ -30,13 +30,34 @@ namespace SharpBladeGroundStation.CommLink
 			get { return function; }
 			set { function = value; }
 		}
-
+        /// <summary>
+        /// 顺序号
+        /// </summary>
+        public byte Sequence
+        {
+            get { return buffer[2]; }
+            set { buffer[2] = value; }
+        }
+        /// <summary>
+        /// SystemID
+        /// </summary>
+        public byte System
+        {
+            get { return buffer[3]; }
+            set { buffer[3] = value; }
+        }
+        /// <summary>
+        /// ComponentID
+        /// </summary>
+        public byte Component
+        {
+            get { return buffer[4]; }
+            set { buffer[4] = value; }
+        }
 		public MAVLinkPackage() : base(512)
 		{
 			function = 0;
 		}
-
-
 		public override PackageParseResult ReadFromBuffer(byte[] buff, int length, int offset)
 		{
 			if (length - offset < HeaderSize)
@@ -71,21 +92,19 @@ namespace SharpBladeGroundStation.CommLink
 			dataSize = len;
 			return PackageParseResult.Yes;
 		}
-
 		public override bool StartRead()
 		{
 			return base.StartRead();
 		}
 		public override void SetVerify()
 		{
-			byte v = 0;
-			int i = 0;
-			for (i = 0; i < HeaderSize + dataSize; i++)
-			{
-				v += buffer[i];
-			}
-			buffer[i] = v;
-		}
+            buffer[0] = 0xFE;
+            buffer[1] = (byte)(dataSize&0xFF);
+            buffer[5] = function;
+			ushort crc= MavlinkCRC.Calculate(buffer,  dataSize+ HeaderSize);
+            crc = MavlinkCRC.Accumulate(MAVLink.MAVLINK_MESSAGE_INFOS.GetMessageInfo(function).crc, crc);
+            AddData(crc);
+        }
 		public override string ToString()
 		{
 			return string.Format("MAVLink package SIZE={2},FUN={0},LEN={1}", function, DataSize, PackageSize);

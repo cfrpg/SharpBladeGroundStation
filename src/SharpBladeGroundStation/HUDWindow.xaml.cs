@@ -41,8 +41,17 @@ namespace SharpBladeGroundStation
             navhud.Vehicle = Mainwin.CurrentVehicle;
             if (MultimediaUtil.VideoInputDevices.Count()>0)
 			{
-				cameraCaptureElement.VideoCaptureDevice = MultimediaUtil.VideoInputDevices[0];
-			}
+                //foreach(var d in MultimediaUtil.VideoInputDevices)
+                //{
+                //    if (d.Name.Contains("OEM"))
+                //    {
+                //        cameraCaptureElement.VideoCaptureDevice = d;
+                //    }
+                //}
+                cameraCaptureElement.VideoCaptureDevice = MultimediaUtil.VideoInputDevices[0];
+
+
+            }
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
