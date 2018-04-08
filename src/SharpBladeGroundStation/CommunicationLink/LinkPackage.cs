@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharpBladeGroundStation.CommLink
+namespace SharpBladeGroundStation.CommunicationLink
 {
 	/// <summary>
 	/// 数据包的基类

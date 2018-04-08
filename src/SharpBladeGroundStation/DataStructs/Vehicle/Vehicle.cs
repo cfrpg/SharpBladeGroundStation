@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
-using SharpBladeGroundStation.CommLink;
+using SharpBladeGroundStation.CommunicationLink;
 using Microsoft.Xna.Framework;
 using FlightDisplay;
 using Matrix = Microsoft.Xna.Framework.Matrix;
@@ -276,18 +276,16 @@ namespace SharpBladeGroundStation.DataStructs
             battery = new BatteryData();
             camera = new Camera();
             camera.CameraTransfrom = new Matrix(
-                new Vector4(496.9788f, -0.4179f, 356.3610f, 0f),
-                new Vector4(0f, 526.7737f, 288.5539f, 0f),
-                new Vector4(0f, 0f, 1f, 0f),
-                new Vector4(0f,0f,0f,1f));
+                new Vector4(496.9788f,	0f,	0f,	0f),
+                new Vector4(0f,	526.7737f,	0f,	0f),
+                new Vector4(0f,			0f,			1f, 0f),
+                new Vector4(360f,	288f,	0f,1f));
+			camera.CameraTransfrom = Matrix.CreateRotationX(MathHelper.ToRadians(-11f))*camera.CameraTransfrom;
             camera.K1 = -0.400138193501512f;
             camera.K2 = 0.180327815997683f;
             camera.P1 = 0.002723499733555f;
             camera.P2 = 0.003389955079601f;
-            camera.ScreenSize = new Vector2(720, 576);
-
-
-        }
-        
+            camera.ScreenSize = new Vector2(720, 576);			
+        }        
     }
 }

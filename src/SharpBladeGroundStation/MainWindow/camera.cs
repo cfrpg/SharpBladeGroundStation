@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using FlightDisplay;
-using SharpBladeGroundStation.CommLink;
+using SharpBladeGroundStation.CommunicationLink;
 using SharpBladeGroundStation.DataStructs;
 
 

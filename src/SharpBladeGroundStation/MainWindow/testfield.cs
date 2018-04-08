@@ -25,7 +25,7 @@ using GMap.NET;
 using GMap.NET.WindowsPresentation;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
-using SharpBladeGroundStation.CommLink;
+using SharpBladeGroundStation.CommunicationLink;
 using SharpBladeGroundStation.DataStructs;
 using SharpBladeGroundStation.Map;
 using SharpBladeGroundStation.Map.Markers;
@@ -50,7 +50,7 @@ namespace SharpBladeGroundStation
         }
         void testCamera()
         {
-           MessageBox.Show(currentVehicle.Camera.GetScreenPosition(new Microsoft.Xna.Framework.Vector3(0.4f, -0.2f, 0.8f)).ToString());
+           MessageBox.Show(currentVehicle.Camera.GetScreenPosition(new Microsoft.Xna.Framework.Vector3(0f, 0f, 1f)).ToString());
 
         }
         void triggerCamera()

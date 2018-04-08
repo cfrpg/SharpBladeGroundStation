@@ -12,11 +12,25 @@ namespace SharpBladeGroundStation.HUD
     public class HUDBase:UserControl
     {
         protected Vehicle vehicle;
-        
-        public Vehicle Vehicle
+		protected double xScale;
+		protected double yScale;
+
+		public Vehicle Vehicle
         {
             get { return vehicle; }
             set { vehicle = value; }
         }
-    }
+
+		public double XScale
+		{
+			get { return xScale; }
+			set { xScale = value; }
+		}
+
+		public double YScale
+		{
+			get { return yScale; }
+			set { yScale = value; }
+		}
+	}
 }

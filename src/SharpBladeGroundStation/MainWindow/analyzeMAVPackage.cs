@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
 using GMap.NET;
-using SharpBladeGroundStation.CommLink;
+using SharpBladeGroundStation.CommunicationLink;
 using SharpBladeGroundStation.DataStructs;
 using SharpBladeGroundStation.Map;
 using System.MAVLink;

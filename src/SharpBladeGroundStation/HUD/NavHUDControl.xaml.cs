@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace SharpBladeGroundStation.HUD
 {
@@ -29,6 +30,23 @@ namespace SharpBladeGroundStation.HUD
         private void heading_Loaded(object sender, RoutedEventArgs e)
         {
             heading.DataContext = vehicle;
+			if (DesignerProperties.GetIsInDesignMode(this))
+				return;
+			vehicle.PropertyChanged += Vehicle_PropertyChanged;
+			Canvas.SetTop(tgtind, 245);
+			Canvas.SetLeft(tgtind, 245);
         }
-    }
+
+		private void Vehicle_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			switch(e.PropertyName)
+			{
+
+
+				default:
+
+					break;
+			}
+		}
+	}
 }

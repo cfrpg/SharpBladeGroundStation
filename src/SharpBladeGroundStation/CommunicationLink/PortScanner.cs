@@ -8,7 +8,7 @@ using System.IO.Ports;
 
 using System.Diagnostics;
 
-namespace SharpBladeGroundStation.CommLink
+namespace SharpBladeGroundStation.CommunicationLink
 {
 	public class PortScanner
 	{

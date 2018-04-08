@@ -10,6 +10,7 @@
     <Viewbox>
         <Canvas Width="500" Height="500">
             <fd:HeadingIndicatorControl x:Name="heading" Width="280" Height="30" Canvas.Top="20" Canvas.Left="110" Heading="{Binding Heading}" Loaded="heading_Loaded"/>
+            <Ellipse x:Name="tgtind" Width="10" Height="10" Fill="#FF3DE000"/>
         </Canvas>
     </Viewbox>
 </local:HUDBase>

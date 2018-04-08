@@ -81,7 +81,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CommLink\AdvancedPortScanner.cs" />
+    <Compile Include="CommunicationLink\AdvancedPortScanner.cs" />
+    <Compile Include="CommunicationLink\CommLink.cs" />
     <Compile Include="Configuration\GCSConfiguration.cs" />
     <Compile Include="Configuration\VehicleConfiguration.cs" />
     <Compile Include="Converters.cs" />
@@ -139,12 +140,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CommLink\ANOLinkPackage.cs" />
-    <Compile Include="CommLink\Enums.cs" />
-    <Compile Include="CommLink\LinkPackage.cs" />
-    <Compile Include="CommLink\MAVLinkPackage.cs" />
-    <Compile Include="CommLink\PortScanner.cs" />
-    <Compile Include="CommLink\SerialLink.cs" />
+    <Compile Include="CommunicationLink\ANOLinkPackage.cs" />
+    <Compile Include="CommunicationLink\Enums.cs" />
+    <Compile Include="CommunicationLink\LinkPackage.cs" />
+    <Compile Include="CommunicationLink\MAVLinkPackage.cs" />
+    <Compile Include="CommunicationLink\PortScanner.cs" />
+    <Compile Include="CommunicationLink\SerialLink.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

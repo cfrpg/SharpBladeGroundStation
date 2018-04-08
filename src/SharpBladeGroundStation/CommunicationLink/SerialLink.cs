@@ -7,33 +7,21 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.ComponentModel;
 
-namespace SharpBladeGroundStation.CommLink
+namespace SharpBladeGroundStation.CommunicationLink
 {
-	public class SerialLink:INotifyPropertyChanged
+	public class SerialLink : CommLink
 	{
-		SerialPort port;
-		LinkState state;
-		LinkProtocol protocol;
+		SerialPort port;		
 		byte[] buffer;
 		int bufferSize;
-		int receiveTimeOut;
-		int dataReceived;
-		int dataSent;
-		int txRate;
-		int rxRate;
-
-		Queue<LinkPackage> receivedPackageQueue;
-		LinkPackage receivePackage;
-		Queue<LinkPackage> sendPackageQueue;
+		int receiveTimeOut;		
 
 		bool isUpdatingBuffer;
 		bool isParsingBuffer;
 		DateTime lastPackageTime;
 		DateTime connectedTime;
 
-		Thread backgroundListener;
-
-		public event PropertyChangedEventHandler PropertyChanged;
+		Thread backgroundListener;		
 
 		public SerialPort Port
 		{
@@ -41,29 +29,7 @@ namespace SharpBladeGroundStation.CommLink
 			set { port = value; }
 		}
 
-		public LinkState State
-		{
-			get { return state; }
-			set { state = value; }
-		}
-
-		public Queue<LinkPackage> ReceivedPackageQueue
-		{
-			get { return receivedPackageQueue; }
-			set { receivedPackageQueue = value; }
-		}
-
-		public LinkProtocol Protocol
-		{
-			get { return protocol; }
-			set { protocol = value; }
-		}
-
-		public LinkPackage ReceivePackage
-		{
-			get { return receivePackage; }
-			set { receivePackage = value; }
-		}
+		
 
 		public int BufferSize
 		{
@@ -74,43 +40,7 @@ namespace SharpBladeGroundStation.CommLink
 		{
 			get { return receiveTimeOut; }
 			set { receiveTimeOut = value; }
-		}
-
-		public int DataReceived
-		{
-			get { return dataReceived; }
-		}
-
-		public int DataSent
-		{
-			get { return dataSent; }
-		}
-
-		public Queue<LinkPackage> SendPackageQueue
-		{
-			get { return sendPackageQueue; }
-			set { sendPackageQueue = value; }
-		}
-
-		public int TxRate
-		{
-			get { return txRate; }
-			set
-			{
-				txRate = value;
-				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TxRate"));
-			}
-		}
-
-		public int RxRate
-		{
-			get { return rxRate; }
-			set
-			{
-				rxRate = value;
-				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RxRate"));
-			}
-		}
+		}	
 
 		/// <summary>
 		/// 建立连接后经过的总毫秒数
@@ -123,16 +53,16 @@ namespace SharpBladeGroundStation.CommLink
 			}
 		}
 
-		public delegate void ReceivePackageEvent(SerialLink sender, EventArgs e);
+		
 
-		public event ReceivePackageEvent OnReceivePackage;
+		
 
 		public SerialLink(string portName,LinkProtocol p,int br)
 		{
 			port = new SerialPort(portName);
 			port.BaudRate = br;
 			port.DataBits = 8;
-			port.StopBits = System.IO.Ports.StopBits.One;
+			port.StopBits = StopBits.One;
 			port.ReceivedBytesThreshold = 8;
 			port.DataReceived += Port_DataReceived;
 			protocol = p;
@@ -176,6 +106,7 @@ namespace SharpBladeGroundStation.CommLink
 			int lasttx = 0, lastrx = 0;
 			while(true)
 			{
+				
 				if (!port.IsOpen)
 				{
 					Thread.Sleep(500);
@@ -269,7 +200,7 @@ namespace SharpBladeGroundStation.CommLink
 			isParsingBuffer = false;
 			if (received)
 			{
-				OnReceivePackage?.Invoke(this, new EventArgs());
+				OnReceivePackageEvent(this, new EventArgs());
 			}
 		}
 

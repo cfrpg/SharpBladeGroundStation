@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.MAVLink;
 
-namespace SharpBladeGroundStation.CommLink
+namespace SharpBladeGroundStation.CommunicationLink
 {
 	public class MAVLinkPackage : LinkPackage
 	{

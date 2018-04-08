@@ -25,7 +25,7 @@ using GMap.NET;
 using GMap.NET.WindowsPresentation;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
-using SharpBladeGroundStation.CommLink;
+using SharpBladeGroundStation.CommunicationLink;
 using SharpBladeGroundStation.DataStructs;
 using SharpBladeGroundStation.Map;
 using SharpBladeGroundStation.Map.Markers;
@@ -185,7 +185,7 @@ namespace SharpBladeGroundStation
 			
         }
 
-		private void Link_OnReceivePackage(SerialLink sender, EventArgs e)
+		private void Link_OnReceivePackage(CommLink sender, EventArgs e)
         {
             while (currentVehicle.Link.ReceivedPackageQueue.Count != 0)
             {
