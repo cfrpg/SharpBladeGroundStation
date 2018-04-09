@@ -17,6 +17,8 @@ namespace SharpBladeGroundStation.Configuration
 		int maxCoursePoint;
 		int courseTimeInterval;
 		int baudRate;
+		string logPath;
+		bool autoLog;
 
 		/// <summary>
 		/// 曲线最小采样间隔(ms)
@@ -66,6 +68,30 @@ namespace SharpBladeGroundStation.Configuration
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BaudRate"));
 			}
 		}
+		/// <summary>
+		/// 保存日志的路径
+		/// </summary>
+		public string LogPath
+		{
+			get { return logPath; }
+			set
+			{
+				logPath = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LogPath"));
+			}
+		}
+		/// <summary>
+		/// 是否自动保存日志
+		/// </summary>
+		public bool AutoLog
+		{
+			get { return autoLog; }
+			set
+			{
+				autoLog = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AutoLog"));
+			}
+		}
 
 		public static GCSConfiguration DefaultConfig()
 		{
@@ -74,7 +100,9 @@ namespace SharpBladeGroundStation.Configuration
 				PlotTimeInterval = 100,
 				MaxCoursePoint = 500,
 				CourseTimeInterval = 500,
-				BaudRate = 115200
+				BaudRate = 115200,
+				LogPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SharpBladeGS",
+				autoLog = true
 			};
 		}
 	}

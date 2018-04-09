@@ -70,11 +70,6 @@ namespace SharpBladeGroundStation
 
 
 		const string messageboxTitle = "SharpBladeGroundStation";
-		//public FlightState FlightState
-		//{
-		//	get { return flightState; }
-		//	set { flightState = value; }
-		//}
 
 		public GCSConfiguration GCSConfig
 		{
@@ -158,12 +153,17 @@ namespace SharpBladeGroundStation
 			}
 			catch(Exception ex)
 			{
-				MessageBox.Show(ex.ToString());
+				//MessageBox.Show(ex.ToString());
 				s.Close();
 				s= new FileStream(path + "\\gcs.xml", FileMode.Create, FileAccess.Write, FileShare.None);
 				GCSconfig = GCSConfiguration.DefaultConfig();				
 				xs.Serialize(s, GCSConfig);
 				s.Close();
+			}
+			di = new DirectoryInfo(GCSconfig.LogPath);
+			if(!di.Exists)
+			{
+				di.Create();
 			}
 			gcsCfgGroup.DataContext = GCSconfig;			
 
@@ -382,6 +382,16 @@ namespace SharpBladeGroundStation
 			hudWindow.Mainwin = this;
 			hudWindow.Show();
 			
+		}
+
+		private void logpathbtn_Click(object sender, RoutedEventArgs e)
+		{
+			System.Windows.Forms.FolderBrowserDialog fbdig = new System.Windows.Forms.FolderBrowserDialog();
+			var dr= fbdig.ShowDialog();
+			if(dr!=System.Windows.Forms.DialogResult.Cancel)
+			{
+				GCSconfig.LogPath = fbdig.SelectedPath;
+			}
 		}
 	}
 }

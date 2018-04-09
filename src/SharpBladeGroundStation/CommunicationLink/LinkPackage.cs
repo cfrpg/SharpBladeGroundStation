@@ -76,6 +76,14 @@ namespace SharpBladeGroundStation.CommunicationLink
 			set { timeStamp = value; }
 		}
 
+		/// <summary>
+		/// 数据包使用的协议
+		/// </summary>
+		public virtual LinkProtocol Protocol
+		{
+			get { return LinkProtocol.NoLink; }
+		}
+
 		#region Read&Write
 		public bool AddData(byte[] data)
 		{

@@ -24,6 +24,11 @@ namespace SharpBladeGroundStation.CommunicationLink
 			get { return dataSize + HeaderSize + 1; }
 		}
 
+		public override LinkProtocol Protocol
+		{
+			get { return LinkProtocol.ANOLink; }
+		}
+
 		public byte Function
 		{
 			get { return function; }

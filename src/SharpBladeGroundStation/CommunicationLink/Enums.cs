@@ -39,32 +39,27 @@ namespace SharpBladeGroundStation.CommunicationLink
 		Connecting
 	}
 
-	public enum LinkProtocol
+	public enum LinkProtocol : byte
 	{
 		/// <summary>
 		/// 无协议的普通串口
 		/// </summary>
-		NoLink,
+		NoLink = 0,
 		/// <summary>
 		/// MAVLink1.0协议
 		/// </summary>
-		MAVLink,
+		MAVLink = 1,
 		/// <summary>
 		/// MAVLink2.0协议
 		/// </summary>
-		MAVLink2,
-		/// <summary>
-		/// 假的MAVLink2.0协议
-		/// </summary>
-		MAVLink2Adapter,
+		MAVLink2 = 2,		
 		/// <summary>
 		/// 匿名飞控协议
 		/// </summary>
-		ANOLink,
+		ANOLink = 3,
 		/// <summary>
 		/// SharpBlade协议,敬请期待
 		/// </summary>
 		SBLink
-
 	}
 }

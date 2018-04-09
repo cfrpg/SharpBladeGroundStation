@@ -23,9 +23,9 @@ namespace SharpBladeGroundStation.CommunicationLink
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		public delegate void ReceivePackageEvent(CommLink sender, EventArgs e);
-		public event ReceivePackageEvent OnReceivePackage;
-
+		public delegate void PackageEvent(CommLink sender, LinkEventArgs e);
+		public event PackageEvent OnReceivePackage;
+		public event PackageEvent OnSendPackage;
 		public Queue<LinkPackage> ReceivedPackageQueue
 		{
 			get { return receivedPackageQueue; }
@@ -86,9 +86,24 @@ namespace SharpBladeGroundStation.CommunicationLink
 			set { state = value; }
 		}
 
-		protected void OnReceivePackageEvent(CommLink sender, EventArgs e)
+		protected void OnReceivePackageEvent(CommLink sender, LinkEventArgs e)
 		{
-			OnReceivePackage?.Invoke(this, new EventArgs());
+			OnReceivePackage?.Invoke(this, e);
+		}
+
+		protected void OnSendPackageEvent(CommLink sender, LinkEventArgs e)
+		{
+			OnSendPackage?.Invoke(this, e);
+		}
+	}
+
+	public class LinkEventArgs : EventArgs
+	{
+		public LinkPackage Package { get; set; }
+
+		public LinkEventArgs(LinkPackage p)
+		{
+			Package = p;
 		}
 	}
 }

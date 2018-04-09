@@ -121,6 +121,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 						{
 							LinkPackage p = sendPackageQueue.Dequeue();
 							port.Write(p.Buffer, 0, p.PackageSize);
+							OnSendPackageEvent(this, new LinkEventArgs(p));
 						}
 					}
 					else
@@ -200,7 +201,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			isParsingBuffer = false;
 			if (received)
 			{
-				OnReceivePackageEvent(this, new EventArgs());
+				OnReceivePackageEvent(this, new LinkEventArgs(receivePackage.Clone()));
 			}
 		}
 
