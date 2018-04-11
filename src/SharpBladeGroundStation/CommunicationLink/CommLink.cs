@@ -20,6 +20,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		protected int dataSent;
 		protected LinkState state;
 		protected LinkProtocol protocol;
+		protected DateTime connectTime;
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -86,6 +87,47 @@ namespace SharpBladeGroundStation.CommunicationLink
 			set { state = value; }
 		}
 
+		public virtual string LinkName
+		{
+			get { return "NoLink"; }
+		}
+
+		public DateTime ConnectTime
+		{
+			get { return connectTime; }
+		}
+
+		public CommLink(LinkProtocol p)
+		{
+			protocol = p;
+			dataReceived = 0;
+			dataSent = 0;
+			TxRate = 0;
+			RxRate = 0;
+			state = LinkState.Disconnected;
+			receivedPackageQueue = new Queue<LinkPackage>();
+			sendPackageQueue = new Queue<LinkPackage>();
+			switch (p)
+			{
+				case LinkProtocol.ANOLink:
+					receivePackage = new ANOLinkPackage();
+					break;
+				case LinkProtocol.MAVLink:
+					receivePackage = new MAVLinkPackage();
+					break;
+				case LinkProtocol.MAVLink2:
+					receivePackage = new MAVLinkPackage();
+					break;
+				default:
+					receivePackage = new LinkPackage(2048);
+					break;
+			}
+		}
+
+		public CommLink():this(LinkProtocol.NoLink)
+		{
+
+		}
 		protected void OnReceivePackageEvent(CommLink sender, LinkEventArgs e)
 		{
 			OnReceivePackage?.Invoke(this, e);
@@ -94,6 +136,16 @@ namespace SharpBladeGroundStation.CommunicationLink
 		protected void OnSendPackageEvent(CommLink sender, LinkEventArgs e)
 		{
 			OnSendPackage?.Invoke(this, e);
+		}
+
+		public virtual void OpenLink()
+		{
+
+		}
+
+		public virtual void CloseLink()
+		{
+
 		}
 	}
 

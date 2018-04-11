@@ -19,7 +19,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		bool isUpdatingBuffer;
 		bool isParsingBuffer;
 		DateTime lastPackageTime;
-		DateTime connectedTime;
+		
 
 		Thread backgroundListener;		
 
@@ -49,15 +49,23 @@ namespace SharpBladeGroundStation.CommunicationLink
 		{
 			get
 			{
-				return DateTime.Now.Subtract(connectedTime).TotalMilliseconds;
+				return DateTime.Now.Subtract(ConnectTime).TotalMilliseconds;
 			}
 		}
 
-		
+		public override string LinkName
+		{
+			get
+			{
+				if (port != null)
+					return port.PortName;
+				return base.LinkName;
+			}
+		}
 
-		
 
-		public SerialLink(string portName,LinkProtocol p,int br)
+
+		public SerialLink(string portName,LinkProtocol p,int br):base(p)
 		{
 			port = new SerialPort(portName);
 			port.BaudRate = br;
@@ -65,30 +73,6 @@ namespace SharpBladeGroundStation.CommunicationLink
 			port.StopBits = StopBits.One;
 			port.ReceivedBytesThreshold = 8;
 			port.DataReceived += Port_DataReceived;
-			protocol = p;
-			dataReceived = 0;
-			dataSent = 0;
-			TxRate = 0;
-			RxRate = 0;
-
-			state = LinkState.Disconnected;
-			receivedPackageQueue = new Queue<LinkPackage>();
-			sendPackageQueue = new Queue<LinkPackage>();
-			switch(p)
-			{
-				case LinkProtocol.ANOLink:
-					receivePackage = new ANOLinkPackage();
-					break;
-				case LinkProtocol.MAVLink:
-					receivePackage = new MAVLinkPackage();
-					break;
-				case LinkProtocol.MAVLink2:
-					receivePackage = new MAVLinkPackage();
-					break;
-				default:
-					receivePackage = new LinkPackage(2048);
-					break;
-			}
 			buffer = new byte[1048576];//1M
 			isUpdatingBuffer = false;
 			isParsingBuffer = false;
@@ -97,7 +81,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			backgroundListener = new Thread(backgroundWorker);
 			backgroundListener.IsBackground = true;
 			backgroundListener.Start();
-			connectedTime = DateTime.Now;
+			connectTime = DateTime.Now;
 		}
 
 		private void backgroundWorker()
@@ -167,7 +151,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			int offset = 0;
 			bool flag = false;
 			bool received = false;
-			while (offset < bufferSize && (!flag))
+			while (offset < bufferSize)
 			{
 				PackageParseResult res = receivePackage.ReadFromBuffer(buffer, bufferSize, offset);
 				switch (res)
@@ -192,6 +176,8 @@ namespace SharpBladeGroundStation.CommunicationLink
 						received = true;
 						break;
 				}
+				if (flag)
+					break;
 			}
 			for (int i = offset; i < bufferSize; i++)
 			{
@@ -209,7 +195,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		{
 			if(!port.IsOpen)
 				port.Open();
-			connectedTime = DateTime.Now;
+			connectTime = DateTime.Now;
 		}
 
 		public void ClosePort()
@@ -218,6 +204,15 @@ namespace SharpBladeGroundStation.CommunicationLink
 				port.Close();
 		}
 
+		public override void OpenLink()
+		{
+			OpenPort();
+		}
+
+		public override void CloseLink()
+		{
+			ClosePort();
+		}
 		public void ResetLink()
 		{
 			if (port.IsOpen)

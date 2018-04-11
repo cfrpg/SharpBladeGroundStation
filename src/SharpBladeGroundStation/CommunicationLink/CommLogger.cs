@@ -12,7 +12,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 	{
 		string path;
 		FileStream fileStream;
-		Queue<Tuple<LinkPackage,bool>> packageQueue;
+		Queue<Tuple<LinkPackage, LinkPackageDirection>> packageQueue;
 		DateTime startTime;
 		CommLink link;
 		
@@ -49,7 +49,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		public CommLogger(string p,CommLink cl)
 		{
 			path = p;
-			packageQueue = new Queue<Tuple<LinkPackage, bool>>();
+			packageQueue = new Queue<Tuple<LinkPackage, LinkPackageDirection>>();
 			backgroundWorker = new Thread(worker);
 			backgroundWorker.IsBackground = true;
 			isStarted = false;
@@ -63,12 +63,12 @@ namespace SharpBladeGroundStation.CommunicationLink
 
 		private void Link_OnSendPackage(CommLink sender, LinkEventArgs e)
 		{
-			LogPackage(e.Package, false);
+			LogPackage(e.Package, LinkPackageDirection.ToUAV);
 		}
 
 		private void Link_OnReceivePackage(CommLink sender, LinkEventArgs e)
 		{
-			LogPackage(e.Package, true);
+			LogPackage(e.Package, LinkPackageDirection.ToGCS);
 		}
 
 		/// <summary>
@@ -79,7 +79,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		{
 			startTime = starttime;
 			fileStream = new FileStream(path, FileMode.Create);
-			fileStream.Write(getHeader(), 0, 13);
+			fileStream.Write(getHeader(), 0, FileHeaderSize);
 			isStarted = true;
 			backgroundWorker.Start();
 		}
@@ -98,13 +98,13 @@ namespace SharpBladeGroundStation.CommunicationLink
 		/// </summary>
 		/// <param name="p"></param>
 		/// <param name="f">发包方向，true为接收到包,false为发送出的包</param>
-		public void LogPackage(LinkPackage p,bool f)
+		public void LogPackage(LinkPackage p,LinkPackageDirection d)
 		{
 			if (!isStarted)
 				return;
 			if (isEnded)
 				return;
-			packageQueue.Enqueue(new Tuple<LinkPackage, bool>(p,f));
+			packageQueue.Enqueue(new Tuple<LinkPackage, LinkPackageDirection>(p,d));
 		}
 
 		private void worker()
@@ -133,33 +133,44 @@ namespace SharpBladeGroundStation.CommunicationLink
 
 		//len			int32	0-3
 		//timestamp		double	4-11
-		//protocol		byte	12
-		//direction		byte	13
-		//package		byte[]	14-n
-		private byte[] getBytes(LinkPackage p,bool f,out int len)
+		//direction		byte	12
+		//package		byte[]	13-n
+		private byte[] getBytes(LinkPackage p, LinkPackageDirection d,out int len)
 		{
-			len = p.PackageSize + sizeof(int) + sizeof(double) + 2 * sizeof(byte);
+			len = p.PackageSize + PackageHeaderSize;
 			byte[] buff = new byte[len];
 			BitConverter.GetBytes(len).CopyTo(buff, 0);
 			BitConverter.GetBytes(p.TimeStamp).CopyTo(buff, 4);
-			buff[12] = (byte)p.Protocol;
-			buff[13] = f ? (byte)1 : (byte)0;
-			Array.Copy(p.Buffer, 0, buff, 14, p.PackageSize);
+			buff[12] = (byte)d;
+			Array.Copy(p.Buffer, 0, buff, 13, p.PackageSize);
 			return buff;
 		}
 
 		//"SBLOG"	byte[]	0-4
-		//Time		int64	5-12
+		//protocol	byte	5
+		//Time		int64	6-13
 		private byte[] getHeader()
 		{
-			byte[] buff = new byte[13];
-			buff[0] = 123;//'S'
-			buff[1] = 102;//'B'
-			buff[2] = 114;//'L'
-			buff[3] = 117;//'O'
-			buff[4] = 107;//'G'
-			BitConverter.GetBytes(startTime.ToBinary()).CopyTo(buff, 5);
+			byte[] buff = new byte[FileHeaderSize];
+			buff[0] = 83;//'S'
+			buff[1] = 66;//'B'
+			buff[2] = 76;//'L'
+			buff[3] = 79;//'O'
+			buff[4] = 71;//'G'
+			buff[5] = (byte)link.Protocol;
+			BitConverter.GetBytes(startTime.ToBinary()).CopyTo(buff, 6);
 			return buff;
 		}
+
+		public static int FileHeaderSize
+		{
+			get { return 14; }
+		}
+
+		public static int PackageHeaderSize
+		{
+			get { return 13; }
+		}
+
 	}
 }

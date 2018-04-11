@@ -62,4 +62,31 @@ namespace SharpBladeGroundStation.CommunicationLink
 		/// </summary>
 		SBLink
 	}
+
+	public enum LinkPackageDirection : byte
+	{
+		ToUAV = 0,
+		ToGCS = 1
+	}
+
+	public enum LoadFileResualt
+	{
+		/// <summary>
+		/// 成功
+		/// </summary>
+		OK,
+		/// <summary>
+		/// 文件不存在
+		/// </summary>
+		NotExist,
+		/// <summary>
+		/// 不支持的文件类型
+		/// </summary>
+		UnkonwType,
+		/// <summary>
+		/// 文件损坏
+		/// </summary>
+		Corrupted
+		
+	}
 }

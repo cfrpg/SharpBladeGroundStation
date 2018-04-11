@@ -36,9 +36,7 @@ namespace SharpBladeGroundStation
                     short[] sd = { 0, 0, 0 };
                     sd[0] = package.NextShort();
                     sd[1] = package.NextShort();
-                    sd[2] = package.NextShort();
-                    //setSensorData("ACCEL", sd[0], sd[1], sd[2], false);
-                    setVector3Data("ACCEL", sd[0], sd[1], sd[2], sensorData);
+                    sd[2] = package.NextShort();                   
                     for (int i = 0; i < 3; i++)
                     {
                         accelGraphData[i].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, sd[i]));
@@ -46,9 +44,7 @@ namespace SharpBladeGroundStation
 
                     sd[0] = package.NextShort();
                     sd[1] = package.NextShort();
-                    sd[2] = package.NextShort();
-                    //setSensorData("GYRO", sd[0], sd[1], sd[2], false);
-                    setVector3Data("GYRO", sd[0], sd[1], sd[2], sensorData);
+                    sd[2] = package.NextShort();                    
                     for (int i = 0; i < 3; i++)
                     {
                         gyroGraphData[i].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, sd[i]));
@@ -56,15 +52,12 @@ namespace SharpBladeGroundStation
 
                     sd[0] = package.NextShort();
                     sd[1] = package.NextShort();
-                    sd[2] = package.NextShort();
-                    //setSensorData("MAG", sd[0], sd[1], sd[2], true);
-                    setVector3Data("MAG", sd[0], sd[1], sd[2], sensorData);
+                    sd[2] = package.NextShort();                  
                     break;
                 case 0x03://RCDATA
                     for (int i = 0; i < 10; i++)
                     {
-                        short rc = package.NextShort();
-                        setVector3Data(getRCChannelName(i), rc, rc, rc, rcData);
+                        short rc = package.NextShort();                        
                     }
                     break;
                 case 0x04://GPSDATA
@@ -86,15 +79,13 @@ namespace SharpBladeGroundStation
                     for (int i = 1; i <= 8; i++)
                     {
                         short pwm = package.NextShort();
-                        setVector3Data("PWM" + i.ToString(), pwm, pwm, pwm, motorData);
+                        
                     }
                     break;
                 case 0x07://SENSER2
-                    int altbar = package.NextInt32();
-                    setVector3Data("ALT_BAR", altbar, 0, 0, otherData);
-
+                    int altbar = package.NextInt32(); 
                     altbar = package.NextUShort();
-                    setVector3Data("ALT_CSB", altbar, 0, 0, otherData);
+                    
                     break;
                 case 0x0A://FLY MODEL
 
@@ -103,7 +94,7 @@ namespace SharpBladeGroundStation
                     short sr = package.NextShort();
                     short sp = package.NextShort();
                     currentVehicle.ClimbRate = package.NextShort() / 100.0f;
-                    setVector3Data("角速度", sr, sp, 0, otherData);
+                    
                     break;
                 case 0x20://FP_NUMBER
 
@@ -122,9 +113,7 @@ namespace SharpBladeGroundStation
                         {
                             short P = package.NextShort();
                             short I = package.NextShort();
-                            short D = package.NextShort();
-                            //setPidData(id + i+1, P, I, D, i==2);
-                            setVector3Data(transPidName(id + i + 1), P, I, D, sensorData);
+                            short D = package.NextShort();     
                         }
                     }
                     break;

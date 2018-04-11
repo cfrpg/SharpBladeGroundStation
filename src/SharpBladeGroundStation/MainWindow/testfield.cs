@@ -36,18 +36,20 @@ namespace SharpBladeGroundStation
 {
     public partial class MainWindow : Window
     {
+
+		LogLink logLink;
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show("Only for developers.", "Orz");
-            //SpeechSynthesizer ss = new SpeechSynthesizer();
-            //ss.Rate = 0;
-            //ss.Speak("鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，启动失败。");
-            //MessageBox.Show("黑科技启动失败", "Orz");
+			//MessageBox.Show("Only for developers.", "Orz");
+			//SpeechSynthesizer ss = new SpeechSynthesizer();
+			//ss.Rate = 0;
+			//ss.Speak("鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，启动失败。");
+			//MessageBox.Show("黑科技启动失败", "Orz");
+			replayLog();
 
-
-            //triggerCamera();
-            testCamera();
-        }
+			//triggerCamera();
+			// testCamera();
+		}
         void testCamera()
         {
            MessageBox.Show(currentVehicle.Camera.GetScreenPosition(new Microsoft.Xna.Framework.Vector3(0f, 0f, 1f)).ToString());
@@ -111,5 +113,29 @@ namespace SharpBladeGroundStation
             hudWindow.Left = screens[b].WorkingArea.Left;
             hudWindow.WindowState = WindowState.Maximized;
         }
+
+		void replayLog()
+		{
+			portscanner.Stop();
+			System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+			ofd.InitialDirectory = GCSconfig.LogPath;
+			ofd.Filter = "日志文件 (*.sblog)|*.sblog|All files (*.*)|*.*";
+			var res = ofd.ShowDialog();
+			if(res!=System.Windows.Forms.DialogResult.Cancel)
+			{
+				logLink = new LogLink();
+				LoadFileResualt lfr= logLink.OpenFile(ofd.FileName);
+				if(lfr==LoadFileResualt.OK)
+				{
+					currentVehicle.Link = logLink;
+					currentVehicle.Link.OnReceivePackage += Link_OnReceivePackage;
+					logLink.OpenLink();
+				}
+				else
+				{
+					MessageBox.Show(lfr.ToString(), "orz");
+				}
+			}
+		}
     }
 }

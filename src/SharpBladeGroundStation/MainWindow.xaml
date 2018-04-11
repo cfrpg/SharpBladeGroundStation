@@ -184,118 +184,7 @@
 
                     </Grid>
                 </TabItem>
-                <TabItem Header="数据*" Height="30">
-                    <Grid Background="#FFE5E5E5">
-                        <Button x:Name="button" Content="启动黑科技" HorizontalAlignment="Left" Height="38" Margin="10,583,0,0" VerticalAlignment="Top" Width="97" Click="button_Click"/>
-                        <GroupBox x:Name="groupBox1" Header="MPU数据" HorizontalAlignment="Left" Height="261" Margin="10,7,0,0" VerticalAlignment="Top" Width="271" BorderBrush="Black">
-                            <ListView x:Name="sensorDataList"   ItemsSource="{Binding}" Margin="0,5,0,0">
-
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="Name" Width="50" DisplayMemberBinding="{Binding Name}"/>
-                                        <GridViewColumn Header="X" Width="50" DisplayMemberBinding="{Binding X}"/>
-                                        <GridViewColumn Header="Y" Width="50" DisplayMemberBinding="{Binding Y}"/>
-                                        <GridViewColumn Header="Z" Width="50" DisplayMemberBinding="{Binding Z}"/>
-                                        <GridViewColumn Header="Freq" Width="50" DisplayMemberBinding="{Binding Frequency}"/>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                        </GroupBox>
-
-                        <GroupBox x:Name="groupBox2" Header="PID" HorizontalAlignment="Left" Height="299" Margin="10,273,0,0" VerticalAlignment="Top" Width="422" BorderBrush="Black">
-                            <Grid>
-                                <ListView x:Name="pidDataList"  Margin="0,5,0,0" VerticalAlignment="Top" Height="228" >
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn Header="Name" Width="100" DisplayMemberBinding="{Binding Name}"/>
-                                            <GridViewColumn Header="P" Width="100">
-                                                <GridViewColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <TextBox Text="{Binding X,Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="90"/>
-                                                    </DataTemplate>
-                                                </GridViewColumn.CellTemplate>
-                                            </GridViewColumn>
-                                            <GridViewColumn Header="I" Width="100">
-                                                <GridViewColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <TextBox Text="{Binding Y,Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="90"/>
-                                                    </DataTemplate>
-                                                </GridViewColumn.CellTemplate>
-                                            </GridViewColumn>
-                                            <GridViewColumn Header="D" Width="100">
-                                                <GridViewColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <TextBox Text="{Binding Z,Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="90"/>
-                                                    </DataTemplate>
-                                                </GridViewColumn.CellTemplate>
-                                            </GridViewColumn>
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
-                                <Button x:Name="button1" Content="读取" HorizontalAlignment="Left" Height="29" Margin="10,238,0,0" VerticalAlignment="Top" Width="87" Click="button1_Click"/>
-                                <Button x:Name="button2" Content="写入" HorizontalAlignment="Left" Height="29" Margin="102,238,0,0" VerticalAlignment="Top" Width="87" Click="button2_Click"/>
-                            </Grid>
-                        </GroupBox>
-                        <GroupBox x:Name="groupBox3" Header="遥控输入" HorizontalAlignment="Left" Height="260" Margin="286,10,0,0" VerticalAlignment="Top" Width="300" BorderBrush="Black">
-                            <ListView x:Name="rcDataList"  Margin="0,10,0,0">
-                                <ListView.Resources>
-                                    <Style TargetType="{x:Type GridViewColumnHeader}">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </Style>
-                                </ListView.Resources>
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Width="50" DisplayMemberBinding="{Binding Name}"/>
-                                        <GridViewColumn Width="200">
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <ProgressBar Width="190" Height="10" Maximum="2000" Value="{Binding X}"/>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                        <GridViewColumn Width="50" DisplayMemberBinding="{Binding X}"/>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                        </GroupBox>
-                        <GroupBox x:Name="groupBox3_Copy" Header="PWM输出" HorizontalAlignment="Left" Height="260" Margin="591,10,0,0" VerticalAlignment="Top" Width="270" BorderBrush="Black">
-                            <ListView x:Name="motorDataList"  Margin="0,10,0,0">
-                                <ListView.Resources>
-                                    <Style TargetType="{x:Type GridViewColumnHeader}">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </Style>
-                                </ListView.Resources>
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Width="50" DisplayMemberBinding="{Binding Name}"/>
-                                        <GridViewColumn Width="200">
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <ProgressBar Width="190" Height="10" Maximum="1000" Value="{Binding X}"/>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                        <GridViewColumn Width="40" DisplayMemberBinding="{Binding X}"/>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                        </GroupBox>
-                        <GroupBox x:Name="groupBox1_Copy" Header="传感器数据" HorizontalAlignment="Left" Height="297" Margin="437,275,0,0" VerticalAlignment="Top" Width="271" BorderBrush="Black">
-                            <ListView x:Name="otherDataList"   ItemsSource="{Binding}" Margin="0,5,0,0">
-
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="Name" Width="50" DisplayMemberBinding="{Binding Name}"/>
-                                        <GridViewColumn Header="X" Width="50" DisplayMemberBinding="{Binding X}"/>
-                                        <GridViewColumn Header="Y" Width="50" DisplayMemberBinding="{Binding Y}"/>
-                                        <GridViewColumn Header="Z" Width="50" DisplayMemberBinding="{Binding Z}"/>
-                                        <GridViewColumn Header="Freq" Width="50" DisplayMemberBinding="{Binding Frequency}"/>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                        </GroupBox>
-                    </Grid>
-                </TabItem>
+               
 
                 <TabItem Header="波形*" Height="30">
                     <Grid Background="#FFE5E5E5">
@@ -352,6 +241,7 @@
                             <RowDefinition Height="310*"/>
                             <RowDefinition Height="321*"/>
                         </Grid.RowDefinitions>
+                        <Button x:Name="button" Content="启动黑科技" HorizontalAlignment="Left" Height="38"  VerticalAlignment="Bottom" Width="97" Click="button_Click" Grid.Row="1" Margin="20,0,0,20"/>
                         <GroupBox x:Name="gcsCfgGroup" Header="地面站设置" HorizontalAlignment="Left" VerticalAlignment="Top" Height="229" Width="514" BorderBrush="Black">
                             <Grid>
                                 <Grid.RowDefinitions>

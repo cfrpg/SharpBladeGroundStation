@@ -111,8 +111,9 @@ namespace SharpBladeGroundStation
                 case MAVLINK_MSG_ID.VFR_HUD://#74
                     currentVehicle.AirSpeed = package.NextSingle();
                     currentVehicle.GroundSpeed = package.NextSingle();
-                    currentVehicle.Altitude = package.NextSingle();
-                    currentVehicle.ClimbRate = package.NextSingle();
+					currentVehicle.Altitude = package.NextSingle();
+
+					currentVehicle.ClimbRate = package.NextSingle();
                     currentVehicle.Heading = package.NextShort();
                     a1 = () => { uavMarker.Shape.RenderTransform = new RotateTransform(currentVehicle.Heading, 15, 15); };
                     Dispatcher.BeginInvoke(a1);
@@ -124,8 +125,7 @@ namespace SharpBladeGroundStation
                     sd[0] = package.NextSingle();
                     sd[1] = package.NextSingle();
                     sd[2] = package.NextSingle();
-                    //setSensorData("ACCEL", sd[0], sd[1], sd[2], false);
-                    setVector3Data("ACCEL", sd[0], sd[1], sd[2], sensorData);
+                   
                     if (time64 - dataSkipCount[package.Function] > dt)
                     {
                         for (int i = 0; i < 3; i++)
@@ -136,9 +136,7 @@ namespace SharpBladeGroundStation
 
                     sd[0] = package.NextSingle();
                     sd[1] = package.NextSingle();
-                    sd[2] = package.NextSingle();
-                    //setSensorData("GYRO", sd[0], sd[1], sd[2], false);
-                    setVector3Data("GYRO", sd[0], sd[1], sd[2], sensorData);
+                    sd[2] = package.NextSingle();                   
                     if (time64 - dataSkipCount[package.Function] > dt)
                     {
                         for (int i = 0; i < 3; i++)
@@ -150,9 +148,7 @@ namespace SharpBladeGroundStation
 
                     sd[0] = package.NextSingle();
                     sd[1] = package.NextSingle();
-                    sd[2] = package.NextSingle();
-                    //setSensorData("MAG", sd[0], sd[1], sd[2], true);
-                    setVector3Data("MAG", sd[0], sd[1], sd[2], sensorData);
+                    sd[2] = package.NextSingle();                    
                     break;
                 case MAVLINK_MSG_ID.TIMESYNC://#111
 
@@ -163,10 +159,11 @@ namespace SharpBladeGroundStation
                 case MAVLINK_MSG_ID.ALTITUDE: //#141
                     time64 = package.NextUInt64();
                     float alt = package.NextSingle();
-                    if (time64 - dataSkipCount[package.Function] > dt)
+					
+					if (time64 - dataSkipCount[package.Function] > dt)
                     {
-                        altitudeGraphData.AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, alt));
-                        dataSkipCount[package.Function] = time64;
+                        altitudeGraphData.AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, alt));						
+						dataSkipCount[package.Function] = time64;
                     }
                     break;
                 case MAVLINK_MSG_ID.BATTERY_STATUS://#147

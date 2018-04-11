@@ -46,19 +46,12 @@ namespace SharpBladeGroundStation
 
         //PortScanner portscanner;
 		AdvancedPortScanner portscanner;
-
-		//displayed data
-		ObservableCollection<Vector3Data> sensorData;
-		ObservableCollection<Vector3Data> pidData;
-        ObservableCollection<Vector3Data> motorData;
-		ObservableCollection<Vector3Data> rcData;
-		ObservableCollection<Vector3Data> otherData;
-
 		
 		ObservableDataSource<Point>[] accelGraphData = new ObservableDataSource<Point>[3];
 		ObservableDataSource<Point>[] gyroGraphData = new ObservableDataSource<Point>[3];
 		ObservableDataSource<Point>[] attitudeGraphData = new ObservableDataSource<Point>[3];
 		ObservableDataSource<Point> altitudeGraphData;
+		
 		Dictionary<int, UInt64> dataSkipCount;
 
 		//FlightState flightState;
@@ -66,7 +59,7 @@ namespace SharpBladeGroundStation
 
 		HUDWindow hudWindow;
 		//temps
-		
+		CommLogger logger;
 
 
 		const string messageboxTitle = "SharpBladeGroundStation";
@@ -92,15 +85,7 @@ namespace SharpBladeGroundStation
 			portscanner.OnFindPort += Portscanner_OnFindPort;
 			portscanner.Start();
 			linkStateText.Text = "Connecting";
-
-			sensorData = new ObservableCollection<Vector3Data>();
-			sensorDataList.ItemsSource = sensorData;
-			pidData = new ObservableCollection<Vector3Data>();
-			pidDataList.ItemsSource = pidData;
-            motorData = new ObservableCollection<Vector3Data>();
-            motorDataList.ItemsSource = motorData;
-			rcData = new ObservableCollection<Vector3Data>();
-			rcDataList.ItemsSource = rcData;
+		
             currentVehicle = new Vehicle(0);
             pfd.DataContext = currentVehicle.FlightState;
 			gpsData = new GPSData();
@@ -109,9 +94,7 @@ namespace SharpBladeGroundStation
 			gpsStateText.DataContext = gpsData;
             battText.DataContext = currentVehicle.Battery;
 			flightDataGrid.DataContext = currentVehicle.FlightState;
-
-			otherData = new ObservableCollection<Vector3Data>();
-			otherDataList.ItemsSource = otherData;
+						
 
 			string[] xyz = { "X", "Y", "Z" };
 			string[] ypr = { "Roll", "Pitch", "Yaw" };
@@ -129,6 +112,8 @@ namespace SharpBladeGroundStation
 			}
 			altitudeGraphData = new ObservableDataSource<Point>();
 			altPlotter.AddLineGraph(altitudeGraphData, "Altitude");
+			
+			
 
 			dataSkipCount = new Dictionary<int, ulong>();
 			for(int i=0;i<255;i++)
@@ -179,10 +164,12 @@ namespace SharpBladeGroundStation
 				return;
 			currentVehicle.Link = e.Link;
             currentVehicle.Link.OnReceivePackage += Link_OnReceivePackage;
-            currentVehicle.Link.OpenPort();
-			Action a = () => { linkStateText.Text = currentVehicle.Link.Port.PortName + Environment.NewLine+ currentVehicle.Link.Protocol.ToString(); linkspd.DataContext = currentVehicle.Link; };
+			currentVehicle.Link.OpenLink();
+			Action a = () => { linkStateText.Text = currentVehicle.Link.LinkName + Environment.NewLine+ currentVehicle.Link.Protocol.ToString(); linkspd.DataContext = currentVehicle.Link; };
 			linkStateText.Dispatcher.Invoke(a);
-			
+
+			logger = new CommLogger(GCSconfig.LogPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".sblog",e.Link);
+			logger.Start(e.Link.ConnectTime);
         }
 
 		private void Link_OnReceivePackage(CommLink sender, EventArgs e)
@@ -211,80 +198,26 @@ namespace SharpBladeGroundStation
 			leftcol.MaxWidth = Math.Min(400, (e.NewSize.Height-30)/669*300);
 		}
 
-        private void setVector3Data(string name,double x,double y,double z,ObservableCollection<Vector3Data> list)
-        {
-            bool flag = true;
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (list[i].Name == name)
-                {
-                    list[i].X = x;
-                    list[i].Y = y;
-                    list[i].Z = z;
-                    flag = false;
-                }
-            }
-            if (flag)
-            {
-                Action a = () => { list.Add(new Vector3Data(name, x, y, z)); };
-                Dispatcher.BeginInvoke(a, DispatcherPriority.Background);                
-            }
-        }	
-		
-
-		private string getRCChannelName(int id)
-		{
-			return "CH" + id.ToString();            
-		}
-		
-
-		private void button1_Click(object sender, RoutedEventArgs e)
-		{
-			ANOLinkPackage p = new ANOLinkPackage();
-			p.Function = 0x02;
-			p.AddData((byte)0x01);
-			p.SetVerify();
-            currentVehicle.Link.SendPackageQueue.Enqueue(p.Clone());
-		}
-
-		private void button2_Click(object sender, RoutedEventArgs e)
-		{
-			Vector3Data[] pids = new Vector3Data[18];
-			for(int i=0;i<pidData.Count;i++)
-			{
-				int id = transPidName(pidData[i].Name);
-				pids[id-1] = pidData[i].Clone();
-			}
-			for(int i=0;i<18;i++)
-			{
-				if (pids[i] == null)
-					pids[i] = new Vector3Data(transPidName(i + 1));
-			}
-			for(int i=0;i<6;i++)
-			{
-				ANOLinkPackage p = new ANOLinkPackage();
-				p.Function = (byte)i;
-				p.Function += 0x10;
-				for(int j=0;j<3;j++)
-				{
-					p.AddData((short)pids[i * 3 + j].X);
-					p.AddData((short)pids[i * 3 + j].Y);
-					p.AddData((short)pids[i * 3 + j].Z);
-				}
-				p.SetVerify();
-                currentVehicle.Link.SendPackageQueue.Enqueue(p);
-			}
-		}
-
-		private string transPidName(int id)
-		{
-			return "PID" + id.ToString();
-		}
-
-		private int transPidName(string name)
-		{
-			return int.Parse(name.Substring(3));
-		}
+        //private void setVector3Data(string name,double x,double y,double z,ObservableCollection<Vector3Data> list)
+        //{
+        //    bool flag = true;
+        //    for (int i = 0; i < list.Count; i++)
+        //    {
+        //        if (list[i].Name == name)
+        //        {
+        //            list[i].X = x;
+        //            list[i].Y = y;
+        //            list[i].Z = z;
+        //            flag = false;
+        //        }
+        //    }
+        //    if (flag)
+        //    {
+        //        Action a = () => { list.Add(new Vector3Data(name, x, y, z)); };
+        //        Dispatcher.BeginInvoke(a, DispatcherPriority.Background);                
+        //    }
+        //}	
+				
 
 		private string getFlightModeText(int id)
 		{
@@ -373,7 +306,8 @@ namespace SharpBladeGroundStation
 			Stream s = new FileStream(path + "\\gcs.xml", FileMode.Create, FileAccess.Write, FileShare.None);	
 			xs.Serialize(s, GCSConfig);
 			s.Close();
-			hudWindow.Close();
+			hudWindow.Close();			
+			logger?.End();
 		}
 
 		private void mainwindow_Loaded(object sender, RoutedEventArgs e)

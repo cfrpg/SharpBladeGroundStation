@@ -38,7 +38,7 @@ namespace SharpBladeGroundStation.DataStructs
         Camera camera;
         BatteryData battery;
 
-        SerialLink link;
+        CommLink link;
 
         /// <summary>
         /// 位置(pn,pe,pd)
@@ -222,9 +222,9 @@ namespace SharpBladeGroundStation.DataStructs
             set { id = value; }
         }
         /// <summary>
-        /// 使用的串口连接
+        /// 使用的连接
         /// </summary>
-        public SerialLink Link
+        public CommLink Link
         {
             get { return link; }
             set { link = value; }
@@ -286,6 +286,6 @@ namespace SharpBladeGroundStation.DataStructs
             camera.P1 = 0.002723499733555f;
             camera.P2 = 0.003389955079601f;
             camera.ScreenSize = new Vector2(720, 576);			
-        }        
+        }
     }
 }
