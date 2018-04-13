@@ -129,7 +129,7 @@ namespace SharpBladeGroundStation
 				{
 					currentVehicle.Link = logLink;
 					currentVehicle.Link.OnReceivePackage += Link_OnReceivePackage;
-					logLink.OpenLink();
+                    logLink.Play();
 				}
 				else
 				{

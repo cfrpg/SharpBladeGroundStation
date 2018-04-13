@@ -138,7 +138,13 @@ namespace SharpBladeGroundStation.CommunicationLink
 			OnSendPackage?.Invoke(this, e);
 		}
 
-		public virtual void OpenLink()
+        protected void PropertyChangedEvent(Object sender,string name)
+        {
+            this.PropertyChanged?.Invoke(sender, new PropertyChangedEventArgs(name));
+        }
+
+
+        public virtual void OpenLink()
 		{
 
 		}

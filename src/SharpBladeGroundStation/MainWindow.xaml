@@ -26,8 +26,8 @@
         <StackPanel  Margin="0" Orientation="Vertical" Background="#FFE5E5E5">
             <Viewbox>
                 <Canvas Width="300" Height="300" ClipToBounds="True">
-
                     <fd:PFDControl x:Name="pfd" Grid.Row="0" VerticalAlignment="Top" FlightState="{Binding}" />
+                    
                 </Canvas>
             </Viewbox>
 
@@ -184,7 +184,7 @@
 
                     </Grid>
                 </TabItem>
-               
+
 
                 <TabItem Header="波形*" Height="30">
                     <Grid Background="#FFE5E5E5">
@@ -292,7 +292,7 @@
                             </Grid>
 
                         </GroupBox>
-
+                        
                     </Grid>
                 </TabItem>
 

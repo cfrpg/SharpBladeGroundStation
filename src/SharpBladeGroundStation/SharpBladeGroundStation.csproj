@@ -87,6 +87,9 @@
     <Compile Include="CommunicationLink\LogLink.cs" />
     <Compile Include="Configuration\GCSConfiguration.cs" />
     <Compile Include="Configuration\VehicleConfiguration.cs" />
+    <Compile Include="Controls\LogPlayerControl.xaml.cs">
+      <DependentUpon>LogPlayerControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters.cs" />
     <Compile Include="DataStructs\BatteryData.cs" />
     <Compile Include="DataStructs\GPSData.cs" />
@@ -126,6 +129,10 @@
     <Compile Include="DataStructs\Mission\Waypoint.cs" />
     <Compile Include="DataStructs\Mission\WaypointAction.cs" />
     <Compile Include="DataStructs\Mission\WaypointBase.cs" />
+    <Page Include="Controls\LogPlayerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="HUDWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

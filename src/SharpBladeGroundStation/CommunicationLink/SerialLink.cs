@@ -163,11 +163,11 @@ namespace SharpBladeGroundStation.CommunicationLink
 						flag = true;
 						break;
 					case PackageParseResult.BadCheckSum:
-						//offset++;
-						offset += receivePackage.PackageSize;
-						receivePackage.TimeStamp = this.ConnectedTime;
-						receivedPackageQueue.Enqueue(receivePackage.Clone());
-						received = true;
+						offset++;
+						//offset += receivePackage.PackageSize;
+						//receivePackage.TimeStamp = this.ConnectedTime;
+						//receivedPackageQueue.Enqueue(receivePackage.Clone());
+						//received = true;
 						break;
 					case PackageParseResult.Yes:
 						offset += receivePackage.PackageSize;

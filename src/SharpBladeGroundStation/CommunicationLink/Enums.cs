@@ -89,4 +89,24 @@ namespace SharpBladeGroundStation.CommunicationLink
 		Corrupted
 		
 	}
+
+    public enum LogReplayState
+    {
+        /// <summary>
+        /// 未载入文件
+        /// </summary>
+        NoFile,
+        /// <summary>
+        /// 暂停
+        /// </summary>
+        Pause,
+        /// <summary>
+        /// 播放
+        /// </summary>
+        Playing,
+        /// <summary>
+        /// 播放完毕，停止
+        /// </summary>
+        Stop
+    }
 }
