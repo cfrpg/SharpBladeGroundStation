@@ -108,6 +108,7 @@
       <DependentUpon>NavHUDControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow\camera.cs" />
+    <Compile Include="MainWindow\handleLink.cs" />
     <Compile Include="MainWindow\mapOperation.cs" />
     <Compile Include="MainWindow\testfield.cs" />
     <Compile Include="Map\Markers\ClickableGMapMarker.cs" />
@@ -249,7 +250,12 @@
       <Name>WpfControlLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Contents\ComPort.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Contents\Log.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

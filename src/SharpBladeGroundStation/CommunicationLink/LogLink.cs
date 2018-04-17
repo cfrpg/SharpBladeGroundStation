@@ -152,8 +152,14 @@ namespace SharpBladeGroundStation.CommunicationLink
                 {
                     if (currPkgDir == LinkPackageDirection.ToGCS)
                     {
-                        receivePackage = currentPackage.Clone();
-                        ReceivedPackageQueue.Enqueue(currentPackage.Clone());
+                        if(currentPackage==null)
+						{
+
+						}
+						lock (ReceivedPackageQueue)
+						{
+							ReceivedPackageQueue.Enqueue(currentPackage.Clone());
+						}
                         OnReceivePackageEvent(this, new LinkEventArgs(receivePackage));
                     }
                     res = readPackage();

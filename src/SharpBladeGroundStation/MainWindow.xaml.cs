@@ -76,12 +76,8 @@ namespace SharpBladeGroundStation
         {
             InitializeComponent();
 			initConfig();			
-			initGmap();			
-			portscanner = new AdvancedPortScanner(GCSconfig.BaudRate, 1000, 3);
-			portscanner.OnFindPort += Portscanner_OnFindPort;
-			portscanner.Start();
-			linkStateText.Text = "Connecting";
-		
+			initGmap();
+			initLinkListener();
             currentVehicle = new Vehicle(0);
             pfd.DataContext = currentVehicle.FlightState;
 			gpsData = new GPSData();
@@ -152,41 +148,7 @@ namespace SharpBladeGroundStation
 		
 
 		
-		private void Portscanner_OnFindPort(AdvancedPortScanner sender, PortScannerEventArgs e)
-        {
-			Debug.WriteLine("[main] find port {0}", e.Link.Port.PortName);
-			portscanner.Stop();
-			if (currentVehicle.Link != null)
-				return;
-			currentVehicle.Link = e.Link;
-            currentVehicle.Link.OnReceivePackage += Link_OnReceivePackage;
-			currentVehicle.Link.OpenLink();
-			Action a = () => { linkStateText.Text = currentVehicle.Link.LinkName + Environment.NewLine+ currentVehicle.Link.Protocol.ToString(); linkspd.DataContext = currentVehicle.Link; };
-			linkStateText.Dispatcher.Invoke(a);
-
-			logger = new CommLogger(GCSconfig.LogPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".sblog",e.Link);
-			logger.Start(e.Link.ConnectTime);
-        }
-
-		private void Link_OnReceivePackage(CommLink sender, EventArgs e)
-        {
-            while (currentVehicle.Link.ReceivedPackageQueue.Count != 0)
-            {
-                LinkPackage package = currentVehicle.Link.ReceivedPackageQueue.Dequeue();
-				switch(sender.Protocol)
-				{
-					case LinkProtocol.MAVLink:
-						analyzeMAVPackage(package);
-						break;
-					case LinkProtocol.ANOLink:
-						analyzeANOPackage(package);
-						break;
-					case LinkProtocol.MAVLink2:
-						analyzeMAVPackage(package);
-						break;
-				}
-            }
-        }
+		
 		
 
 		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)

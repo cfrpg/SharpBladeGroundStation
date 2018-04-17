@@ -45,10 +45,12 @@ namespace SharpBladeGroundStation
 			//ss.Rate = 0;
 			//ss.Speak("鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，启动失败。");
 			//MessageBox.Show("黑科技启动失败", "Orz");
-			replayLog();
+			//replayLog();
 
 			//triggerCamera();
 			// testCamera();
+
+			loadHospital();
 		}
         void testCamera()
         {
@@ -128,13 +130,39 @@ namespace SharpBladeGroundStation
 				if(lfr==LoadFileResualt.OK)
 				{
 					currentVehicle.Link = logLink;
-					currentVehicle.Link.OnReceivePackage += Link_OnReceivePackage;
+					//currentVehicle.Link.OnReceivePackage += Link_OnReceivePackage;
                     logLink.Play();
 				}
 				else
 				{
 					MessageBox.Show(lfr.ToString(), "orz");
 				}
+			}
+		}
+
+		void loadHospital()
+		{
+			StreamReader sr = new StreamReader("E:\\temp\\hospos.txt");
+			string str;
+			string name;
+			int lvl;
+			double lon, lat;
+			MapRouteData orz = new MapRouteData(gmap);
+
+			while (!sr.EndOfStream)
+			{
+				name = sr.ReadLine();
+				lvl = int.Parse(sr.ReadLine());
+				str = sr.ReadLine();
+				lon = double.Parse(str);
+				str = sr.ReadLine();
+				lat = double.Parse(str);
+				//GMapMarker m = new GMapMarker(PositionHelper.WGS84ToGCJ02(new PointLatLng(lat, lon)));
+				GMapMarker m = new GMapMarker(new PointLatLng(lat, lon));
+				WayPointMarker wp = new WayPointMarker(orz, m, lvl.ToString(), name);
+				m.Shape = wp;
+				m.ZIndex = 99999;
+				gmap.Markers.Add(m);
 			}
 		}
     }

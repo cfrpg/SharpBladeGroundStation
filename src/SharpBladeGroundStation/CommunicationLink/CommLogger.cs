@@ -78,6 +78,24 @@ namespace SharpBladeGroundStation.CommunicationLink
 		public void Start(DateTime starttime)
 		{
 			startTime = starttime;
+			FileInfo fi = new FileInfo(path);
+			if(fi.Exists)
+			{
+				string ext = fi.Extension;
+				string name=path.Substring(0,path.Length-ext.Length);
+				int cnt = 1;
+				while(true)
+				{
+					string p = name + "_" + cnt.ToString() + ext;
+					fi = new FileInfo(p);
+					if(!fi.Exists)
+					{
+						path = p;
+						break;
+					}
+					cnt++;
+				}
+			}
 			fileStream = new FileStream(path, FileMode.Create);
 			fileStream.Write(getHeader(), 0, FileHeaderSize);
 			isStarted = true;
@@ -104,24 +122,38 @@ namespace SharpBladeGroundStation.CommunicationLink
 				return;
 			if (isEnded)
 				return;
-			packageQueue.Enqueue(new Tuple<LinkPackage, LinkPackageDirection>(p,d));
+			lock (packageQueue)
+			{
+				packageQueue.Enqueue(new Tuple<LinkPackage, LinkPackageDirection>(p, d));
+			}
 		}
 
 		private void worker()
 		{
 			int len;
-			while(true)
+			bool flag;
+			Tuple<LinkPackage, LinkPackageDirection> p=new Tuple<LinkPackage, LinkPackageDirection>(null,LinkPackageDirection.ToGCS);
+			while (true)
 			{
-				if (packageQueue.Count != 0)
+				flag = false;
+				lock (packageQueue)
 				{
-					var p = packageQueue.Dequeue();
+					if (packageQueue.Count != 0)
+					{
+						p = packageQueue.Dequeue();
+						flag = true;
+					}
+				}
+				if(flag)
+				{
 					var b = getBytes(p.Item1, p.Item2, out len);
-					fileStream.Write(b, 0, len);					
+					fileStream.Write(b, 0, len);
 				}
 				else
 				{
 					Thread.Sleep(50);
 				}
+				
 				if (isEnded && packageQueue.Count == 0)
 				{
 					fileStream.Flush();

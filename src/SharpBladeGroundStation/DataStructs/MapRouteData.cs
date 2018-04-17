@@ -111,7 +111,7 @@ namespace SharpBladeGroundStation.DataStructs
 		{
 			get { return color; }
 			set
-			{
+			{ 
 				color = value;
 				regeneRoute();
 			}

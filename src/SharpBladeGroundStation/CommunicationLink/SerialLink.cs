@@ -172,7 +172,10 @@ namespace SharpBladeGroundStation.CommunicationLink
 					case PackageParseResult.Yes:
 						offset += receivePackage.PackageSize;
 						receivePackage.TimeStamp = this.ConnectedTime;
-						receivedPackageQueue.Enqueue(receivePackage.Clone());
+						lock (ReceivedPackageQueue)
+						{
+							receivedPackageQueue.Enqueue(receivePackage.Clone());
+						}
 						received = true;
 						break;
 				}
