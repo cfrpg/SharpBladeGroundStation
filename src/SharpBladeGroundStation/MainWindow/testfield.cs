@@ -36,8 +36,6 @@ namespace SharpBladeGroundStation
 {
     public partial class MainWindow : Window
     {
-
-		LogLink logLink;
         private void button_Click(object sender, RoutedEventArgs e)
         {
 			//MessageBox.Show("Only for developers.", "Orz");
@@ -48,9 +46,8 @@ namespace SharpBladeGroundStation
 			//replayLog();
 
 			//triggerCamera();
-			// testCamera();
-
-			loadHospital();
+			// testCamera();			
+			//loadHospital();
 		}
         void testCamera()
         {
@@ -115,30 +112,6 @@ namespace SharpBladeGroundStation
             hudWindow.Left = screens[b].WorkingArea.Left;
             hudWindow.WindowState = WindowState.Maximized;
         }
-
-		void replayLog()
-		{
-			portscanner.Stop();
-			System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
-			ofd.InitialDirectory = GCSconfig.LogPath;
-			ofd.Filter = "日志文件 (*.sblog)|*.sblog|All files (*.*)|*.*";
-			var res = ofd.ShowDialog();
-			if(res!=System.Windows.Forms.DialogResult.Cancel)
-			{
-				logLink = new LogLink();
-				LoadFileResualt lfr= logLink.OpenFile(ofd.FileName);
-				if(lfr==LoadFileResualt.OK)
-				{
-					currentVehicle.Link = logLink;
-					//currentVehicle.Link.OnReceivePackage += Link_OnReceivePackage;
-                    logLink.Play();
-				}
-				else
-				{
-					MessageBox.Show(lfr.ToString(), "orz");
-				}
-			}
-		}
 
 		void loadHospital()
 		{

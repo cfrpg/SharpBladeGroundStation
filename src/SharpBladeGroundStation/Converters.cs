@@ -30,4 +30,17 @@ namespace SharpBladeGroundStation
 			return ((string)value)=="锁定";
 		}
 	}
+
+	public class MilliSecondsConvert: IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			int s = (int)((double)value/1000);
+			return (new TimeSpan(0, 0, s)).ToString();
+		}
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			return 0.0;
+		}
+	}
 }

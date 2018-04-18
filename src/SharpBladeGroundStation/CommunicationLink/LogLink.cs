@@ -7,6 +7,7 @@ using System.Threading;
 using System.IO;
 using System.ComponentModel;
 using System.Timers;
+using System.Diagnostics;
 
 using Timer = System.Timers.Timer;
 
@@ -60,7 +61,7 @@ namespace SharpBladeGroundStation.CommunicationLink
         public double FullTime
         {
             get { return fullTime; }
-            private set
+            set
             {
                 fullTime = value;
                 PropertyChangedEvent(this, "FullTime");
@@ -73,10 +74,10 @@ namespace SharpBladeGroundStation.CommunicationLink
         public double CurrentTime
         {
             get { return currentTime; }
-            set
+            private set
             {
                 double t = value > fullTime ? fullTime : value;
-                currentTime = Math.Round(t / 1000) * 1000;
+                currentTime = t;
                 PropertyChangedEvent(this, "CurrentTime");
             }
         }
@@ -97,6 +98,11 @@ namespace SharpBladeGroundStation.CommunicationLink
         public LogReplayState ReplayState
         {
             get { return replayState; }
+			set
+			{
+				replayState = value;
+				PropertyChangedEvent(this, "ReplayState");
+			}
         }
 
 
@@ -112,8 +118,20 @@ namespace SharpBladeGroundStation.CommunicationLink
             lastUpdateTime = DateTime.MinValue;
             replayState = LogReplayState.NoFile;
             timerRunning = false;
+			replayState = LogReplayState.NoFile;
             speed = 1;
         }
+
+		/// <summary>
+		/// 手动初始化为初始状态
+		/// </summary>
+		public void Initialize()
+		{
+			ReplayState = LogReplayState.NoFile;
+			CurrentTime = 0;
+			FullTime = 1;
+			Speed = 1;
+		}
 
         private void BackgroundTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -125,12 +143,21 @@ namespace SharpBladeGroundStation.CommunicationLink
                 return;
             }
             TimeSpan dt = e.SignalTime.Subtract(lastUpdateTime);
+			if(dt.TotalMilliseconds!=0)
+			{
+				Debug.WriteLine("[LogLink]" + dt.TotalMilliseconds.ToString()+" "+speed.ToString());
+			}
             lastUpdateTime = e.SignalTime;
-            currentTime += dt.TotalMilliseconds * speed;
-            bool res = getPackages();
-            if (!res)
-                replayState = LogReplayState.Stop;
-            if (replayState == LogReplayState.Stop || replayState == LogReplayState.Pause)
+            CurrentTime += dt.TotalMilliseconds * speed;
+			lock (stream)
+			{
+				
+				bool res = getPackages();
+
+				if (!res)
+					ReplayState = LogReplayState.Stop;
+			}
+            if (ReplayState == LogReplayState.Stop || ReplayState == LogReplayState.Pause)
             {
                 timerRunning = false;
                 backgroundTimer.Stop();
@@ -160,8 +187,8 @@ namespace SharpBladeGroundStation.CommunicationLink
 						{
 							ReceivedPackageQueue.Enqueue(currentPackage.Clone());
 						}
-                        OnReceivePackageEvent(this, new LinkEventArgs(receivePackage));
-                    }
+                        OnReceivePackageEvent(this, new LinkEventArgs(receivePackage));						
+					}
                     res = readPackage();
                 }
                 else
@@ -183,7 +210,7 @@ namespace SharpBladeGroundStation.CommunicationLink
         {
             if (replayState == LogReplayState.Stop)
             {
-                replayState = LogReplayState.NoFile;
+                ReplayState = LogReplayState.NoFile;
                 stream.Close();
             }
         }
@@ -192,11 +219,43 @@ namespace SharpBladeGroundStation.CommunicationLink
         {
             if(replayState==LogReplayState.Pause)
             {
-                replayState = LogReplayState.Playing;
+                ReplayState = LogReplayState.Playing;
                 timerRunning = true;
+				lastUpdateTime = DateTime.MinValue;
                 backgroundTimer.Start(); 
             }
+			if(replayState==LogReplayState.Stop)
+			{
+				ReplayState = LogReplayState.Playing;
+				stream.Position = logMetadata[0].Item2;
+				CurrentTime = 0;
+				currentPackageTime = -1;
+				lastUpdateTime = DateTime.MinValue;
+				timerRunning = true;
+				backgroundTimer.Start();
+			}
         }
+
+		public void Pause()
+		{
+			if(replayState==LogReplayState.Playing)
+			{
+				ReplayState = LogReplayState.Pause;
+				timerRunning = false;
+				backgroundTimer.Stop();
+			}
+		}
+
+		public void Stop()
+		{
+			if(replayState!=LogReplayState.NoFile)
+			{
+				ReplayState = LogReplayState.Stop;
+				timerRunning = false;
+				backgroundTimer.Stop();
+				CurrentTime = fullTime;
+			}
+		}
 
         public LoadFileResualt OpenFile(string p)
         {
@@ -234,7 +293,7 @@ namespace SharpBladeGroundStation.CommunicationLink
             }
             logMetadata = new List<Tuple<double, long>>();
             long pos;
-            double ts;
+            double ts=0;
             pos = stream.Position;
             while (readPackage())
             {
@@ -243,12 +302,15 @@ namespace SharpBladeGroundStation.CommunicationLink
                 pos = stream.Position;
             }
             stream.Position = logMetadata[0].Item2;
-            replayState = LogReplayState.Pause;
-            currentPackageTime = -1;
+            ReplayState = LogReplayState.Pause;
+			FullTime = ts;
+			CurrentTime = 0;
+			currentPackageTime = -1;
+			lastUpdateTime = DateTime.MinValue;		
             return LoadFileResualt.OK;
         }
-             
 
+		
         private bool readPackage()
         {
             long rem = stream.Length - stream.Position;

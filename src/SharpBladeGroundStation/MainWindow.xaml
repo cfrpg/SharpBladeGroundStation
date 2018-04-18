@@ -52,8 +52,12 @@
                     <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
                 </Trigger>
                 <Trigger Property="IsHighlighted" Value="True">
+                    <!--
                     <Setter Property="Background" TargetName="templateRoot" Value="#3D26A0DA"/>
                     <Setter Property="BorderBrush" TargetName="templateRoot" Value="#FF26A0DA"/>
+                    -->
+                    <Setter Property="Background" TargetName="templateRoot" Value="#00FFFFFF"/>
+                    <Setter Property="BorderBrush" TargetName="templateRoot" Value="#00FFFFFF"/>
                 </Trigger>
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="#FF707070"/>
@@ -171,12 +175,16 @@
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <TabControl x:Name="tabControl" Margin="0" TabStripPlacement="Bottom" Grid.RowSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1.2*" MaxWidth="500"/>
+            </Grid.ColumnDefinitions>
+            <TabControl x:Name="tabControl" Margin="0" TabStripPlacement="Bottom" Grid.RowSpan="2" Grid.ColumnSpan="2">
                 <TabItem Header="导航" Height="30">
                     <Grid Background="#FFE5E5E5">
                         <gmwpf:GMapControl x:Name="gmap"  Margin="0"  MaxZoom="18" Zoom="13"/>
                         <fd:MapScaleControl x:Name="mapscale" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="200" Margin="10,0,0,20" />
-                        <Slider x:Name="slider" Orientation="Vertical"  Margin="0,50,0,50" Width="22" HorizontalAlignment="Right" Value="{Binding ElementName=gmap,Path=Zoom}" Minimum="3" Maximum="18" SmallChange="1"/>
+                        <Slider x:Name="slider" Orientation="Vertical"  Margin="0,50,0,100" Width="22" HorizontalAlignment="Right" Value="{Binding ElementName=gmap,Path=Zoom}" Minimum="3" Maximum="18" SmallChange="1"/>
                         <StackPanel HorizontalAlignment="Left" Width="40" Margin="5,5,0,0">
                             <Button x:Name="uploadBtn" Background="#CC646464" BorderBrush="White" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="4" Click="uploadBtn_Click" >
                                 <Button.Content>
@@ -344,12 +352,12 @@
 
                         </GroupBox>
 
-                        <local:LogPlayerControl Grid.Row="1" Margin="286,110,279,162"/>
+                        
                     </Grid>
                 </TabItem>
 
             </TabControl>
-            <Grid  Grid.Row="1">
+            <Grid  Grid.Row="1" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="30"/>
@@ -365,12 +373,12 @@
                 <TextBlock x:Name="linkStateText" HorizontalAlignment="Right" TextWrapping="Wrap" Text="COM1"  Background="#FFB4B4AF" FontSize="10" VerticalAlignment="Center" Margin="0" Grid.Column="7" TextAlignment="Right" />
                 <Menu Grid.Column="7" Background="{x:Null}">
                     <MenuItem Header="" Width="100" Height="30" Template="{DynamicResource MenuItemControlTemplate1}">
-                        <MenuItem Header="串口连接">
+                        <MenuItem x:Name="portMenuItem" Header="串口连接" Click="portMenuItem_Click">
                             <MenuItem.Icon>
                                 <Image Source="Contents/ComPort.png" HorizontalAlignment="Center" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="日志回放">
+                        <MenuItem x:Name="logMenuItem" Header="日志回放" Click="logMenuItem_Click">
                             <MenuItem.Icon>
                                 <Image Source="Contents/Log.png" HorizontalAlignment="Center" />
                             </MenuItem.Icon>
@@ -398,8 +406,32 @@
                     <TextBlock x:Name="hdopText" TextWrapping="Wrap" Text="{Binding Hdop}" FontSize="12" Margin="0,-0.5,0,0"/>
                 </StackPanel>
             </Grid>
+            <Border x:Name="logCtrlBorder" VerticalAlignment="Bottom" Grid.Column="2" Padding="5" Background="#FFE5E5E5" BorderBrush="Black" Margin="0,0,5,10" BorderThickness="1" >
+                <StackPanel>
+                    <Grid x:Name="logCtrlGrid" Margin="0,0,0,2" Visibility="Visible">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="openLogBtn" Height="25" Margin="0,1" Content="打开日志" Click="openLogBtn_Click"/>
+                        <TextBlock x:Name="logPathText"  Grid.Column="1" Text="" VerticalAlignment="Center" Margin="4,0,0,0" TextTrimming="CharacterEllipsis" />
+
+                        <Button x:Name="openVideoBtn" Height="25" Grid.Row="1" Margin="0,1" Content="打开视频" IsEnabled="False"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="" VerticalAlignment="Center" Margin="4,0,0,0" TextTrimming="CharacterEllipsis" />
+                    </Grid>
+                    <Button x:Name="logCtrlBtn" Height="10" Content="▲" FontSize="14" Padding="0,-3,0,1" Click="logCtrlBtn_Click"/>
+                    <local:LogPlayerControl x:Name="logPlayerCtrl" Grid.Row="0" Margin="0" VerticalAlignment="Bottom"  Height="50" 
+                                            CurrentTime="{Binding CurrentTime}" FullTime="{Binding FullTime}" ReplayState="{Binding ReplayState}" Speed="{Binding Speed,Mode=TwoWay}"/>
+                </StackPanel>
+                
+            </Border>
             
         </Grid>
         <Button x:Name="button3" Content="◀" Grid.Column="1" Height="200"  VerticalAlignment="Center" Click="button3_Click"/>
+        
     </Grid>
 </Window>

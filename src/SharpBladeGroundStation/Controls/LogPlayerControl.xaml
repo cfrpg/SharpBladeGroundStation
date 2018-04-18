@@ -5,7 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SharpBladeGroundStation"
              mc:Ignorable="d" 
+             Name="lpc"
              d:DesignHeight="50" d:DesignWidth="300">
+    <UserControl.Resources>
+        <local:MilliSecondsConvert x:Key="ms2str"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -13,37 +17,55 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="30"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <Slider x:Name="slider" VerticalAlignment="Center" Grid.ColumnSpan="2" />
+        <Slider x:Name="slider" VerticalAlignment="Center" Grid.ColumnSpan="3" Maximum="{Binding ElementName=lpc,Path=FullTime}" Value="{Binding ElementName=lpc,Path=CurrentTime,Mode=OneWay}" ValueChanged="slider_ValueChanged" SmallChange="1000" IsEnabled="False"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
-            <Button x:Name="decSpdBtn" Margin="2,0">
+            <Button x:Name="decSpdBtn" Margin="2,0" Click="decSpdBtn_Click">
                 <Button.Content>
-                    <Image Source="/SharpBladeGroundStation;component/Contents/follow.png"/>
+                    <Image Source="/SharpBladeGroundStation;component/Contents/ffw.png" RenderTransformOrigin="0.5,0.5">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                <SkewTransform AngleY="0" AngleX="0"/>
+                                <RotateTransform Angle="0"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
                 </Button.Content>
             </Button>
-            <Button x:Name="playBtn"  Margin="2,0">
+            <Button x:Name="playBtn"  Margin="2,0" Click="playBtn_Click" IsEnabled="False">
                 <Button.Content>
-                    <Image Source="/SharpBladeGroundStation;component/Contents/follow.png"/>
+                    <Image Source="/SharpBladeGroundStation;component/Contents/play.png"/>
                 </Button.Content>
             </Button>
-            <Button x:Name="stopBtn"  Margin="2,0">
+
+            <Button x:Name="pauseBtn"  Margin="2,0" Visibility="Collapsed" Click="pauseBtn_Click">
                 <Button.Content>
-                    <Image Source="/SharpBladeGroundStation;component/Contents/follow.png"/>
+                    <Image Source="/SharpBladeGroundStation;component/Contents/pause.png"/>
                 </Button.Content>
             </Button>
-            <Button x:Name="incSpdBtn"  Margin="2,0">
+
+            <Button x:Name="stopBtn"  Margin="2,0" Click="stopBtn_Click">
                 <Button.Content>
-                    <Image Source="/SharpBladeGroundStation;component/Contents/follow.png"/>
+                    <Image Source="/SharpBladeGroundStation;component/Contents/stop.png"/>
                 </Button.Content>
             </Button>
-            <TextBlock x:Name="spdText" Text="0.0x" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            <Button x:Name="incSpdBtn"  Margin="2,0" Click="incSpdBtn_Click">
+                <Button.Content>
+                    <Image Source="/SharpBladeGroundStation;component/Contents/ffw.png"/>
+                </Button.Content>
+            </Button>
+           
         </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
-            
-            <TextBlock x:Name="currTimeText" Text="00:00:01"/>
+        <TextBlock x:Name="spdText" Text="1.0x" Margin="0" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center"/>
+        <StackPanel Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
+
+            <TextBlock x:Name="currTimeText" Text="{Binding ElementName=lpc,Path=CurrentTime,Converter={StaticResource ms2str}}"/>
             <TextBlock Text="/"/>
-            <TextBlock x:Name="fullTimeText" Text="00:00:00"/>
+            <TextBlock x:Name="fullTimeText" Text="{Binding ElementName=lpc,Path=FullTime,Converter={StaticResource ms2str}}"/>
         </StackPanel>
 
        

@@ -40,8 +40,7 @@ namespace SharpBladeGroundStation
         Vehicle currentVehicle;
 		GCSConfiguration GCSconfig;
 
-        //PortScanner portscanner;
-		AdvancedPortScanner portscanner;
+		
 		
 		ObservableDataSource<Point>[] accelGraphData = new ObservableDataSource<Point>[3];
 		ObservableDataSource<Point>[] gyroGraphData = new ObservableDataSource<Point>[3];
@@ -55,7 +54,7 @@ namespace SharpBladeGroundStation
 
 		HUDWindow hudWindow;
 		//temps
-		CommLogger logger;
+		
 
 
 		const string messageboxTitle = "SharpBladeGroundStation";
@@ -75,6 +74,7 @@ namespace SharpBladeGroundStation
         public MainWindow()
         {
             InitializeComponent();
+			initControls();
 			initConfig();			
 			initGmap();
 			initLinkListener();
@@ -86,24 +86,8 @@ namespace SharpBladeGroundStation
 			gpsStateText.DataContext = gpsData;
             battText.DataContext = currentVehicle.Battery;
 			flightDataGrid.DataContext = currentVehicle.FlightState;
-						
 
-			string[] xyz = { "X", "Y", "Z" };
-			string[] ypr = { "Roll", "Pitch", "Yaw" };
-			for(int i=0;i<3;i++)
-			{
-				accelGraphData[i] = new ObservableDataSource<Point>();
-				accelPlotter.AddLineGraph(accelGraphData[i],"Accel "+xyz[i]);
-				gyroGraphData[i] = new ObservableDataSource<Point>();
-				gyroPlotter.AddLineGraph(gyroGraphData[i], "Gyro " + xyz[i]);
-			}
-			for(int i=0;i<3;i++)
-			{
-				attitudeGraphData[i] = new ObservableDataSource<Point>();
-				attPlotter.AddLineGraph(attitudeGraphData[i], ypr[i]);
-			}
-			altitudeGraphData = new ObservableDataSource<Point>();
-			altPlotter.AddLineGraph(altitudeGraphData, "Altitude");
+			initGraph();
 			
 			
 
@@ -113,6 +97,32 @@ namespace SharpBladeGroundStation
 				dataSkipCount[i] = 0;
 			}
 		}
+
+		private void initGraph()
+		{
+			string[] xyz = { "X", "Y", "Z" };
+			string[] ypr = { "Roll", "Pitch", "Yaw" };
+			accelPlotter.Children.RemoveAll(typeof(LineGraph));
+			gyroPlotter.Children.RemoveAll(typeof(LineGraph));
+			attPlotter.Children.RemoveAll(typeof(LineGraph));
+			altPlotter.Children.RemoveAll(typeof(LineGraph));
+			for (int i = 0; i < 3; i++)
+			{
+				accelGraphData[i] = new ObservableDataSource<Point>();
+				accelPlotter.AddLineGraph(accelGraphData[i], "Accel " + xyz[i]);
+				gyroGraphData[i] = new ObservableDataSource<Point>();
+				gyroPlotter.AddLineGraph(gyroGraphData[i], "Gyro " + xyz[i]);
+			}
+			for (int i = 0; i < 3; i++)
+			{
+				attitudeGraphData[i] = new ObservableDataSource<Point>();
+				attPlotter.AddLineGraph(attitudeGraphData[i], ypr[i]);
+			}
+			altitudeGraphData = new ObservableDataSource<Point>();
+			altPlotter.AddLineGraph(altitudeGraphData, "Altitude");
+
+		}
+
 		private void initConfig()
 		{
 			string path = Environment.CurrentDirectory+"\\config";
@@ -200,6 +210,14 @@ namespace SharpBladeGroundStation
 			}
 		}
 
+		private void initControls()
+		{
+			logPlayerCtrl.playBtn.Click += PlayBtn_Click;
+			logPlayerCtrl.pauseBtn.Click += PauseBtn_Click;
+			logPlayerCtrl.stopBtn.Click += StopBtn_Click;
+			logPlayerCtrl.slider.ValueChanged += Slider_ValueChanged;
+		}
+
 		
 
 		private void button3_Click(object sender, RoutedEventArgs e)
@@ -272,8 +290,7 @@ namespace SharpBladeGroundStation
 		{
 			hudWindow = new HUDWindow(this);
 			hudWindow.Mainwin = this;
-			hudWindow.Show();
-			
+			hudWindow.Show();			
 		}
 
 		private void logpathbtn_Click(object sender, RoutedEventArgs e)
@@ -285,5 +302,36 @@ namespace SharpBladeGroundStation
 				GCSconfig.LogPath = fbdig.SelectedPath;
 			}
 		}
+
+		private void logCtrlBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if(logCtrlGrid.Visibility==Visibility.Visible)
+			{
+				retractLogGrid();
+			}
+			else
+			{
+				extendLogGrid();
+			}
+			
+		}
+
+		private void extendLogGrid()
+		{
+			logCtrlGrid.Visibility = Visibility.Visible;
+			logCtrlBtn.Content = "▼";
+			logCtrlBtn.FontSize = 9;
+			logCtrlBtn.Padding = new Thickness(0, -1, 0, 0);
+		}
+
+		private void retractLogGrid()
+		{
+			logCtrlGrid.Visibility = Visibility.Collapsed;
+			logCtrlBtn.Content = "▲";
+			logCtrlBtn.FontSize = 12;
+			logCtrlBtn.Padding = new Thickness(0, -3, 0, 1);
+		}
+
+		
 	}
 }
