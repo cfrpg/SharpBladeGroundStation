@@ -48,6 +48,10 @@ namespace SharpBladeGroundStation
 			//triggerCamera();
 			// testCamera();			
 			//loadHospital();
+			drawLine();
+			loadCity();
+			//getpos();
+			//loaddist();
 		}
         void testCamera()
         {
@@ -112,7 +116,30 @@ namespace SharpBladeGroundStation
             hudWindow.Left = screens[b].WorkingArea.Left;
             hudWindow.WindowState = WindowState.Maximized;
         }
+		void loaddist()
+		{
+			StreamReader sr = new StreamReader("E:\\temp\\distpos.txt");
+			string str;
+			string name;
+			int lvl;
+			double lon, lat;
+			MapRouteData orz = new MapRouteData(gmap);
 
+			while (!sr.EndOfStream)
+			{
+				str = sr.ReadLine();
+				string[] strs = str.Split('\t');				
+				lon = double.Parse(strs[2]);				
+				lat = double.Parse(strs[1]);
+				//GMapMarker m = new GMapMarker(PositionHelper.WGS84ToGCJ02(new PointLatLng(lat, lon)));
+				GMapMarker m = new GMapMarker(new PointLatLng(lat, lon));
+				WayPointMarker wp = new WayPointMarker(orz, m, "0",strs[0]);
+				m.Shape = wp;
+				m.ZIndex = 99999;
+				gmap.Markers.Add(m);
+				CreateCircle(lat, lon, 150);
+			}
+		}
 		void loadHospital()
 		{
 			StreamReader sr = new StreamReader("E:\\temp\\hospos.txt");
@@ -138,5 +165,125 @@ namespace SharpBladeGroundStation
 				gmap.Markers.Add(m);
 			}
 		}
-    }
+
+		void getpos()
+		{
+			StreamWriter sw = new StreamWriter("E:\\temp\\fence.txt");
+			foreach(var p in newroute.Points)
+			{
+				PointLatLng wgs = PositionHelper.GCJ02ToWGS84(p);
+				var p1 = PositionHelper.WGS84ToMercator(wgs.Lat, wgs.Lng);
+				sw.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}", p.Lat, p.Lng, wgs.Lat, wgs.Lng, p1.Item1, p1.Item2);
+			}
+			sw.Close();
+		}
+		void loadCity()
+		{
+			StreamReader sr = new StreamReader("E:\\temp\\cityres.txt");
+			string str;
+			string name;
+			int lvl;
+			double lon, lat;
+			MapRouteData orz = new MapRouteData(gmap);
+
+			while (!sr.EndOfStream)
+			{
+				str = sr.ReadLine();
+				string[] strs = str.Split('\t');
+				name = strs[0];
+				lvl = int.Parse(strs[2]);	
+				lon = double.Parse(strs[3]);
+				lat = double.Parse(strs[4]);
+				if (lat < fun(lon))
+				{
+					//GMapMarker m = new GMapMarker(PositionHelper.WGS84ToGCJ02(new PointLatLng(lat, lon)));
+					GMapMarker m = new GMapMarker(new PointLatLng(lat, lon));
+					WayPointMarker wp = new WayPointMarker(orz, m, strs[2], name);
+					m.Shape = wp;
+					m.ZIndex = 99999;
+					gmap.Markers.Add(m);					
+						CreateCircle(lat, lon, 150);
+				}
+			}
+		}
+		void drawLine()
+		{
+			List<PointLatLng> points = new List<PointLatLng>();
+			
+			for(double lon=94;lon<128;lon+=0.1)
+			{
+				points.Add(new PointLatLng(fun(lon), lon));
+			}
+			GMapRoute route = new GMapRoute(points);
+			route.RegenerateShape(gmap);
+			if (route.Shape != null)
+			{
+				((System.Windows.Shapes.Path)route.Shape).Stroke = new SolidColorBrush(Colors.Red);
+				((System.Windows.Shapes.Path)route.Shape).StrokeThickness = 4;
+				((System.Windows.Shapes.Path)route.Shape).Opacity = 1;
+				((System.Windows.Shapes.Path)route.Shape).Effect = null;
+			}
+			gmap.Markers.Add(route);
+		}
+
+		private void CreateCircle(double lat, Double lon, double radius)
+		{
+			PointLatLng point = new PointLatLng(lat, lon);
+			int segments = 32;
+
+			List<PointLatLng> gpollist = new List<PointLatLng>();
+			
+			for (int i = 0; i < segments; i++)
+			{
+				PointLatLng p = FindPointAtDistanceFrom(point, 2*Math.PI/segments* i, radius);
+				gpollist.Add(p);
+				
+			}
+
+			GMapPolygon gpol = new GMapPolygon(gpollist);
+			
+			gmap.Markers.Add(gpol);
+		}
+
+		PointLatLng FindPointAtDistanceFrom(PointLatLng startPoint, double initialBearingRadians, double distanceKilometres)
+		{
+			const double radiusEarthKilometres = 6371.01;
+			var distRatio = distanceKilometres / radiusEarthKilometres;
+			var distRatioSine = Math.Sin(distRatio);
+			var distRatioCosine = Math.Cos(distRatio);
+
+			var startLatRad = DegreesToRadians(startPoint.Lat);
+			var startLonRad = DegreesToRadians(startPoint.Lng);
+
+			var startLatCos = Math.Cos(startLatRad);
+			var startLatSin = Math.Sin(startLatRad);
+
+			var endLatRads = Math.Asin((startLatSin * distRatioCosine) + (startLatCos * distRatioSine * Math.Cos(initialBearingRadians)));
+
+			var endLonRads = startLonRad + Math.Atan2(
+						  Math.Sin(initialBearingRadians) * distRatioSine * startLatCos,
+						  distRatioCosine - startLatSin * Math.Sin(endLatRads));
+			
+			return new PointLatLng(RadiansToDegrees(endLatRads), RadiansToDegrees(endLonRads));
+		}
+
+		public static double DegreesToRadians(double degrees)
+		{
+			const double degToRadFactor = Math.PI / 180;
+			return degrees * degToRadFactor;
+		}
+
+		public static double RadiansToDegrees(double radians)
+		{
+			const double radToDegFactor = 180 / Math.PI;
+			return radians * radToDegFactor;
+		}
+		
+
+		double fun(double lon)
+		{
+			double k = 0.763284, b = -47.095150;
+			return k * lon + b;
+		}
+	}
 }

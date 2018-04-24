@@ -99,6 +99,13 @@ namespace SharpBladeGroundStation.Map
 			return Axis * Math.Acos(c);
 			
 		}
+		public static Tuple<double, double> WGS84ToMercator(double lat, double lon)
+		{
+			double x = lon * Math.PI / 180 * Axis;
+			double a = lat * Math.PI / 180;
+			double y = Axis / 2 * Math.Log((1.0 + Math.Sin(a)) / (1.0 - Math.Sin(a)));
+			return new Tuple<double, double>(x, y);
+		}
 
 	}
 }
