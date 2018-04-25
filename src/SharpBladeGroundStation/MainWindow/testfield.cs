@@ -179,7 +179,7 @@ namespace SharpBladeGroundStation
 		}
 		void loadCity()
 		{
-			StreamReader sr = new StreamReader("E:\\temp\\cityres.txt");
+			StreamReader sr = new StreamReader("E:\\temp\\hoscityres.txt");
 			string str;
 			string name;
 			int lvl;
@@ -201,8 +201,12 @@ namespace SharpBladeGroundStation
 					WayPointMarker wp = new WayPointMarker(orz, m, strs[2], name);
 					m.Shape = wp;
 					m.ZIndex = 99999;
-					gmap.Markers.Add(m);					
+					gmap.Markers.Add(m);
+					if (name.Contains("西安"))
+					{
 						CreateCircle(lat, lon, 150);
+						CreateCircle(lat, lon, 400);
+					}
 				}
 			}
 		}
