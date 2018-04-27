@@ -137,6 +137,11 @@ namespace SharpBladeGroundStation.CommunicationLink
         {
             if (!timerRunning)
                 return;
+			if (replayState == LogReplayState.TempPause)
+			{
+				lastUpdateTime = e.SignalTime;
+				return;
+			}
             if (lastUpdateTime == DateTime.MinValue)
             {
                 lastUpdateTime = e.SignalTime;
@@ -153,7 +158,6 @@ namespace SharpBladeGroundStation.CommunicationLink
 			{
 				
 				bool res = getPackages();
-
 				if (!res)
 					ReplayState = LogReplayState.Stop;
 			}
@@ -255,6 +259,17 @@ namespace SharpBladeGroundStation.CommunicationLink
 				backgroundTimer.Stop();
 				CurrentTime = fullTime;
 			}
+		}
+
+		public void SetProgress(double time)
+		{			
+			if (CurrentTime>time)
+			{
+				stream.Position = logMetadata[0].Item2;
+				currentPackageTime = -1;
+			}
+			CurrentTime = time;
+
 		}
 
         public LoadFileResualt OpenFile(string p)

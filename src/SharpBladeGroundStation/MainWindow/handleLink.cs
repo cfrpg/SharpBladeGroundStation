@@ -9,6 +9,7 @@ using SharpBladeGroundStation.CommunicationLink;
 using SharpBladeGroundStation.DataStructs;
 using SharpBladeGroundStation.Map;
 using System.MAVLink;
+using System.Windows.Input;
 using Microsoft.Xna.Framework;
 using Point = System.Windows.Point;
 
@@ -144,9 +145,31 @@ namespace SharpBladeGroundStation
 
 		private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-
+			if (logLink.ReplayState==LogReplayState.TempPause)
+			{
+				if(e.NewValue<e.OldValue)
+				{
+					initGraph();
+				}
+				logLink.SetProgress(e.NewValue);
+				
+			}
+		}
+		private void Slider_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+		{
+			if(logLink.ReplayState==LogReplayState.TempPause)
+			{
+				logLink.ReplayState = LogReplayState.Playing;
+			}
 		}
 
+		private void Slider_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			if(logLink.ReplayState==LogReplayState.Playing)
+			{
+				logLink.ReplayState = LogReplayState.TempPause;
+			}
+		}
 		private void StopBtn_Click(object sender, RoutedEventArgs e)
 		{
 			logLink.Stop();

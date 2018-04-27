@@ -39,21 +39,26 @@ namespace SharpBladeGroundStation
         private void button_Click(object sender, RoutedEventArgs e)
         {
 			//MessageBox.Show("Only for developers.", "Orz");
-			//SpeechSynthesizer ss = new SpeechSynthesizer();
-			//ss.Rate = 0;
-			//ss.Speak("鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，启动失败。");
-			//MessageBox.Show("黑科技启动失败", "Orz");
+			SpeechSynthesizer ss = new SpeechSynthesizer();
+			ss.Rate = 0;
+			ss.Speak("鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，启动失败。");
+			MessageBox.Show("黑科技启动失败", "Orz");
 			//replayLog();
 
 			//triggerCamera();
 			// testCamera();			
+
+
+		}
+		private void button_Click233(object sender, RoutedEventArgs e)
+		{	
 			//loadHospital();
 			drawLine();
 			loadCity();
 			//getpos();
 			//loaddist();
 		}
-        void testCamera()
+		void testCamera()
         {
            MessageBox.Show(currentVehicle.Camera.GetScreenPosition(new Microsoft.Xna.Framework.Vector3(0f, 0f, 1f)).ToString());
 

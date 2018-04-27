@@ -107,6 +107,10 @@ namespace SharpBladeGroundStation.CommunicationLink
         /// <summary>
         /// 播放完毕，停止
         /// </summary>
-        Stop
+        Stop,
+		/// <summary>
+		/// 临时暂停
+		/// </summary>
+		TempPause
     }
 }

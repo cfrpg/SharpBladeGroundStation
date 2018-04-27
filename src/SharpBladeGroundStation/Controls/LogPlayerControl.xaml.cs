@@ -21,6 +21,7 @@ namespace SharpBladeGroundStation
     /// </summary>
     public partial class LogPlayerControl : UserControl
     {
+		public bool IsDragingSlider { get; set; }
 
 		public static readonly DependencyProperty FullTimeProperty =
 			DependencyProperty.Register("FullTime", typeof(double), typeof(LogPlayerControl), new PropertyMetadata(0.0, LogPlayerControl.OnFullTimePropertyChanged));
@@ -125,6 +126,7 @@ namespace SharpBladeGroundStation
 		public LogPlayerControl()
         {
             InitializeComponent();
+			IsDragingSlider = false;
         }
 
 		private void incSpdBtn_Click(object sender, RoutedEventArgs e)
@@ -161,6 +163,26 @@ namespace SharpBladeGroundStation
 		private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
 
-		}		
+		}
+
+		private void slider_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			
+		}
+
+		private void slider_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+		{
+			
+		}
+
+		private void slider_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			
+		}
+
+		private void slider_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+		{
+			
+		}
 	}
 }

@@ -216,6 +216,8 @@ namespace SharpBladeGroundStation
 			logPlayerCtrl.pauseBtn.Click += PauseBtn_Click;
 			logPlayerCtrl.stopBtn.Click += StopBtn_Click;
 			logPlayerCtrl.slider.ValueChanged += Slider_ValueChanged;
+			logPlayerCtrl.slider.PreviewMouseLeftButtonDown += Slider_PreviewMouseLeftButtonDown;
+			logPlayerCtrl.slider.PreviewMouseLeftButtonUp += Slider_PreviewMouseLeftButtonUp;
 		}
 
 		

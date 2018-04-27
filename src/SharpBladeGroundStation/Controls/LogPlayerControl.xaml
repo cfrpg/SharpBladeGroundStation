@@ -20,7 +20,7 @@
             <ColumnDefinition Width="30"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <Slider x:Name="slider" VerticalAlignment="Center" Grid.ColumnSpan="3" Maximum="{Binding ElementName=lpc,Path=FullTime}" Value="{Binding ElementName=lpc,Path=CurrentTime,Mode=OneWay}" ValueChanged="slider_ValueChanged" SmallChange="1000" IsEnabled="False"/>
+        <Slider x:Name="slider" VerticalAlignment="Center" Grid.ColumnSpan="3" Maximum="{Binding ElementName=lpc,Path=FullTime}" Value="{Binding ElementName=lpc,Path=CurrentTime,Mode=OneWay}" ValueChanged="slider_ValueChanged" SmallChange="1000" IsEnabled="False" MouseLeftButtonDown="slider_MouseLeftButtonDown" MouseLeftButtonUp="slider_MouseLeftButtonUp" PreviewMouseLeftButtonDown="slider_PreviewMouseLeftButtonDown" PreviewMouseLeftButtonUp="slider_PreviewMouseLeftButtonUp"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
             <Button x:Name="decSpdBtn" Margin="2,0" Click="decSpdBtn_Click">
                 <Button.Content>
