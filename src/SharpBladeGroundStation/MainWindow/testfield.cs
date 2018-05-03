@@ -53,10 +53,11 @@ namespace SharpBladeGroundStation
 		private void button_Click233(object sender, RoutedEventArgs e)
 		{	
 			//loadHospital();
-			drawLine();
-			loadCity();
+			//drawLine();
+			//loadCity();
 			//getpos();
 			//loaddist();
+			drawrefine();
 		}
 		void testCamera()
         {
@@ -123,7 +124,7 @@ namespace SharpBladeGroundStation
         }
 		void loaddist()
 		{
-			StreamReader sr = new StreamReader("E:\\temp\\distpos.txt");
+			StreamReader sr = new StreamReader("E:\\temp\\allpos.txt");
 			string str;
 			string name;
 			int lvl;
@@ -141,8 +142,8 @@ namespace SharpBladeGroundStation
 				WayPointMarker wp = new WayPointMarker(orz, m, "0",strs[0]);
 				m.Shape = wp;
 				m.ZIndex = 99999;
-				gmap.Markers.Add(m);
-				CreateCircle(lat, lon, 150);
+				//gmap.Markers.Add(m);
+				CreateCircle(lat, lon, 50,Colors.BlueViolet,1);
 			}
 		}
 		void loadHospital()
@@ -182,6 +183,44 @@ namespace SharpBladeGroundStation
 			}
 			sw.Close();
 		}
+		void drawrefine()
+		{
+			StreamReader sr = new StreamReader("E:\\temp\\init.txt");
+			string str;
+			double lon, lat;
+			string name;
+			MapRouteData orz = new MapRouteData(gmap);
+			while (!sr.EndOfStream)
+			{
+				str = sr.ReadLine();
+				string[] strs = str.Split('\t');
+				name = strs[0];
+				lon = double.Parse(strs[4]);
+				lat = double.Parse(strs[3]);
+				GMapMarker m = new GMapMarker(new PointLatLng(lat, lon));
+				WayPointMarker wp = new WayPointMarker(orz, m, "0", name);
+				m.Shape = wp;
+				m.ZIndex = 99999;
+				//gmap.Markers.Add(m);
+				CreateCircle(lat, lon, 20, Colors.BlueViolet,1);
+			}
+		
+			sr = new StreamReader("E:\\temp\\refine.txt");
+			while (!sr.EndOfStream)
+			{
+				str = sr.ReadLine();
+				string[] strs = str.Split('\t');
+				name = strs[0];
+				lon = double.Parse(strs[4]);
+				lat = double.Parse(strs[3]);
+				GMapMarker m = new GMapMarker(new PointLatLng(lat, lon));
+				WayPointMarker wp = new WayPointMarker(orz, m, "0", name);
+				m.Shape = wp;
+				m.ZIndex = 99999;
+				//gmap.Markers.Add(m);
+				CreateCircle(lat, lon, 20, Colors.BlueViolet, 1);
+			}
+		}
 		void loadCity()
 		{
 			StreamReader sr = new StreamReader("E:\\temp\\hoscityres.txt");
@@ -206,12 +245,9 @@ namespace SharpBladeGroundStation
 					WayPointMarker wp = new WayPointMarker(orz, m, strs[2], name);
 					m.Shape = wp;
 					m.ZIndex = 99999;
-					gmap.Markers.Add(m);
-					if (name.Contains("西安"))
-					{
-						CreateCircle(lat, lon, 150);
-						CreateCircle(lat, lon, 400);
-					}
+					gmap.Markers.Add(m);					
+					CreateCircle(lat, lon, 150,Colors.Green,0.5);
+						
 				}
 			}
 		}
@@ -235,7 +271,7 @@ namespace SharpBladeGroundStation
 			gmap.Markers.Add(route);
 		}
 
-		private void CreateCircle(double lat, Double lon, double radius)
+		private void CreateCircle(double lat, Double lon, double radius,Color c,double o)
 		{
 			PointLatLng point = new PointLatLng(lat, lon);
 			int segments = 32;
@@ -250,7 +286,10 @@ namespace SharpBladeGroundStation
 			}
 
 			GMapPolygon gpol = new GMapPolygon(gpollist);
-			
+			gpol.RegenerateShape(gmap);
+			((System.Windows.Shapes.Path)gpol.Shape).StrokeThickness = 0;
+			((System.Windows.Shapes.Path)gpol.Shape).Opacity = o;
+			((System.Windows.Shapes.Path)gpol.Shape).Fill = new SolidColorBrush(c);
 			gmap.Markers.Add(gpol);
 		}
 

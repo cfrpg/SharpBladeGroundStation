@@ -32,7 +32,8 @@ namespace SharpBladeGroundStation
             //gmap.MapProvider = GMap.NET.MapProviders.BingHybridMapProvider.Instance;
 
             gmap.Position = new PointLatLng(34.242947, 108.916225);
-            gmap.Zoom = 18;
+			//gmap.Zoom = 18;
+			gmap.ShowCenter = false;
             System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
             try
             {
@@ -53,7 +54,7 @@ namespace SharpBladeGroundStation
             uavMarker.Shape = new UAVMarker();
             uavMarker.Offset = new Point(-15, -15);
             uavMarker.ZIndex = 100000;  
-            gmap.Markers.Add(uavMarker);
+            //gmap.Markers.Add(uavMarker);
 
             gmap.MouseLeftButtonDown += Gmap_MouseLeftButtonDown;
             gmap.MouseLeftButtonUp += Gmap_MouseLeftButtonUp;
