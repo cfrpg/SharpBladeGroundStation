@@ -21,7 +21,7 @@ namespace SharpBladeGroundStation
             UInt32 time = 0;
             UInt64 time64 = 0;
             UInt64 dt = (ulong)GCSconfig.PlotTimeInterval * 1000;
-            Action a1,a2;
+            System.Action a1,a2;
             int tint;
             float tfloat;
             switch ((MAVLINK_MSG_ID)package.Function)

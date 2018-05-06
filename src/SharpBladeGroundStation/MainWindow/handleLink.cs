@@ -26,7 +26,7 @@ namespace SharpBladeGroundStation
 		{
 			portscanner = new AdvancedPortScanner(GCSconfig.BaudRate, 1000, 3);
 			portscanner.OnFindPort += Portscanner_OnFindPort;
-			//portscanner.Start();
+			portscanner.Start();
 			linkStateText.Text = "Connecting";
 
 			linkListener = new Thread(linkListenerWorker);
@@ -120,6 +120,7 @@ namespace SharpBladeGroundStation
 			portscanner.Stop();
 			logCtrlBorder.Visibility = Visibility.Visible;
 			extendLogGrid();
+			linkStateText.Text = "Replay";
 		}
 
 		private void openLogBtn_Click(object sender, RoutedEventArgs e)

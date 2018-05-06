@@ -26,6 +26,7 @@ using Microsoft.Research.DynamicDataDisplay.DataSources;
 using SharpBladeGroundStation.CommunicationLink;
 using SharpBladeGroundStation.DataStructs;
 using SharpBladeGroundStation.Configuration;
+using AForge.Video.DirectShow;
 using System.MAVLink;
 
 namespace SharpBladeGroundStation
@@ -38,9 +39,7 @@ namespace SharpBladeGroundStation
         //SerialLink link;       
 
         Vehicle currentVehicle;
-		GCSConfiguration GCSconfig;
-
-		
+		GCSConfiguration GCSconfig;		
 		
 		ObservableDataSource<Point>[] accelGraphData = new ObservableDataSource<Point>[3];
 		ObservableDataSource<Point>[] gyroGraphData = new ObservableDataSource<Point>[3];
@@ -53,8 +52,10 @@ namespace SharpBladeGroundStation
 		GPSData gpsData;
 
 		HUDWindow hudWindow;
+		HUDVideoSource hudVideoSource;
+		FilterInfoCollection localWebCamsCollection;
 		//temps
-		
+
 
 
 		const string messageboxTitle = "SharpBladeGroundStation";
@@ -71,7 +72,13 @@ namespace SharpBladeGroundStation
             set { currentVehicle = value; }
         }
 
-        public MainWindow()
+		public HUDVideoSource HudVideoSource
+		{
+			get { return hudVideoSource; }
+			set { hudVideoSource = value; }
+		}
+
+		public MainWindow()
         {
             InitializeComponent();
 			initControls();
@@ -292,7 +299,46 @@ namespace SharpBladeGroundStation
 		{
 			hudWindow = new HUDWindow(this);
 			hudWindow.Mainwin = this;
-			hudWindow.Show();			
+			hudWindow.Show();
+			localWebCamsCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+			int id = -1;
+			cameraComboBox.ItemsSource = localWebCamsCollection;
+			cameraComboBox.DisplayMemberPath = "Name";
+			if(localWebCamsCollection.Count>0)
+			{
+				for(int i=0;i<localWebCamsCollection.Count;i++)
+				{					
+					if(GCSconfig.CameraName!=""&& localWebCamsCollection[i].Name==GCSconfig.CameraName)
+					{
+						cameraComboBox.SelectedValue = localWebCamsCollection[i];
+						id = i;
+					}
+				}
+			}
+			else
+			{
+
+			}
+			if(id>=0)
+			{
+				HudVideoSource = HUDVideoSource.Camera;
+				hudWindow.OpenCamera(localWebCamsCollection[id].MonikerString);
+			}
+			else
+			{
+				HudVideoSource = HUDVideoSource.NoVideo;
+			}
+			hudWindow.InitVideo();
+			cameraComboBox.SelectionChanged += CameraComboBox_SelectionChanged;
+				
+		}
+
+		private void CameraComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			string str = ((FilterInfo)(cameraComboBox.SelectedItem)).Name;
+			if (str == "")
+				return;
+			GCSconfig.CameraName = str;
 		}
 
 		private void logpathbtn_Click(object sender, RoutedEventArgs e)
@@ -334,6 +380,11 @@ namespace SharpBladeGroundStation
 			logCtrlBtn.Padding = new Thickness(0, -3, 0, 1);
 		}
 
-		
+	}
+	public enum HUDVideoSource
+	{
+		NoVideo,
+		Camera,
+		Replay
 	}
 }

@@ -301,9 +301,10 @@
                         </Grid.RowDefinitions>
                         <Button x:Name="button" Content="启动黑科技" HorizontalAlignment="Left" Height="38"  VerticalAlignment="Bottom" Width="97" Click="button_Click" Grid.Row="1" Margin="20,0,0,20"/>
                         <Button x:Name="button233" Content="我要做ppt!" HorizontalAlignment="Left" Height="38"  VerticalAlignment="Bottom" Width="97" Click="button_Click233" Grid.Row="1" Margin="131,0,0,20"/>
-                        <GroupBox x:Name="gcsCfgGroup" Header="地面站设置" HorizontalAlignment="Left" VerticalAlignment="Top" Height="229" Width="514" BorderBrush="Black">
+                        <GroupBox x:Name="gcsCfgGroup" Header="地面站设置" HorizontalAlignment="Left" VerticalAlignment="Top" Height="288" Width="514" BorderBrush="Black">
                             <Grid>
                                 <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
                                     <RowDefinition Height="1*"/>
                                     <RowDefinition Height="1*"/>
                                     <RowDefinition Height="1*"/>
@@ -341,19 +342,21 @@
                                 <TextBox x:Name="textBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="0" Grid.Row="3" TextWrapping="Wrap" Text="{Binding BaudRate}" VerticalAlignment="Center" Width="120"/>
                                 <TextBlock x:Name="textBlock" HorizontalAlignment="Center"  Grid.Row="3" TextWrapping="Wrap" Text="默认波特率" VerticalAlignment="Center" />
                                 <TextBlock HorizontalAlignment="Center"  Grid.Row="4" TextWrapping="Wrap" Text="日志路径" VerticalAlignment="Center" />
-                                <TextBox Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="0" Grid.Row="4" TextWrapping="Wrap" Text="{Binding LogPath}" VerticalAlignment="Center" Width="120"/>
+
                                 <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal">
-                                    <TextBox Grid.Column="1" Height="23" Margin="0,9,5,9" Grid.Row="4" TextWrapping="Wrap" Text="{Binding LogPath}" VerticalAlignment="Center" Width="268"/>
+                                    <TextBox Height="24" Margin="0,10,5,10" TextWrapping="Wrap" Text="{Binding LogPath}" VerticalAlignment="Center" Width="268"/>
                                     <Button x:Name="logpathbtn" Height="23" Width="50" Content="浏览" Margin="0,0,5,0" Click="logpathbtn_Click" />
                                 </StackPanel>
                                 <CheckBox x:Name="checkBox" Content="启用日志" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Center" IsChecked="{Binding AutoLog}"/>
-
+                                <TextBlock HorizontalAlignment="Center"  Grid.Row="5" TextWrapping="Wrap" Text="视频录制" VerticalAlignment="Center"  />
+                                <CheckBox  Content="录制视频" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="5" VerticalAlignment="Center" IsChecked="{Binding AutoRecord}"/>
+                                <ComboBox x:Name="cameraComboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="315" Grid.Row="5" Grid.Column="1" Margin="0,12"/>
 
                             </Grid>
 
                         </GroupBox>
 
-                        
+
                     </Grid>
                 </TabItem>
 
@@ -407,7 +410,7 @@
                     <TextBlock x:Name="hdopText" TextWrapping="Wrap" Text="{Binding Hdop}" FontSize="12" Margin="0,-0.5,0,0"/>
                 </StackPanel>
             </Grid>
-            <Border x:Name="logCtrlBorder" VerticalAlignment="Bottom" Grid.Column="2" Padding="5" Background="#FFE5E5E5" BorderBrush="Black" Margin="0,0,5,10" BorderThickness="1" >
+            <Border x:Name="logCtrlBorder" VerticalAlignment="Bottom" Grid.Column="2" Padding="5" Background="#FFE5E5E5" BorderBrush="Black" Margin="0,0,5,10" BorderThickness="1" Visibility="Hidden" >
                 <StackPanel>
                     <Grid x:Name="logCtrlGrid" Margin="0,0,0,2" Visibility="Visible">
                         <Grid.RowDefinitions>
@@ -428,11 +431,11 @@
                     <local:LogPlayerControl x:Name="logPlayerCtrl" Grid.Row="0" Margin="0" VerticalAlignment="Bottom"  Height="50" 
                                             CurrentTime="{Binding CurrentTime}" FullTime="{Binding FullTime}" ReplayState="{Binding ReplayState}" Speed="{Binding Speed,Mode=TwoWay}"/>
                 </StackPanel>
-                
+
             </Border>
-            
+
         </Grid>
         <Button x:Name="button3" Content="◀" Grid.Column="1" Height="200"  VerticalAlignment="Center" Click="button3_Click"/>
-        
+
     </Grid>
 </Window>

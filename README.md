@@ -83,12 +83,10 @@ RAM:8G
 
 ## 引用库
 
-FlightDisplay:https://github.com/cfrpg/FlightDisplay
+FlightDisplay(MIT):https://github.com/cfrpg/FlightDisplay
 
-WPF MediaKit:https://github.com/Sascha-L/WPF-MediaKit
+Dynamic Data Display(MIT):https://archive.codeplex.com/?p=dynamicdatadisplay
 
-Dynamic Data Display:https://archive.codeplex.com/?p=dynamicdatadisplay
+GMap.NET(MIT):https://archive.codeplex.com/?p=greatmaps
 
-DirectShow.Net:http://directshownet.sourceforge.net/
-
-GMap.NET:https://archive.codeplex.com/?p=greatmaps
+AForge.NET(LGPL,GPL):http://www.aforgenet.com/

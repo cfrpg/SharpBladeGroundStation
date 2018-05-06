@@ -19,6 +19,8 @@ namespace SharpBladeGroundStation.Configuration
 		int baudRate;
 		string logPath;
 		bool autoLog;
+		string cameraName;
+		bool autoRecord;
 
 		/// <summary>
 		/// 曲线最小采样间隔(ms)
@@ -93,6 +95,26 @@ namespace SharpBladeGroundStation.Configuration
 			}
 		}
 
+		public string CameraName
+		{
+			get { return cameraName; }
+			set
+			{
+				cameraName = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CameraName"));
+			}
+		}
+
+		public bool AutoRecord
+		{
+			get { return autoRecord; }
+			set
+			{
+				autoRecord = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AutoRecord"));
+			}
+		}
+
 		public static GCSConfiguration DefaultConfig()
 		{
 			return new GCSConfiguration
@@ -102,7 +124,9 @@ namespace SharpBladeGroundStation.Configuration
 				CourseTimeInterval = 500,
 				BaudRate = 115200,
 				LogPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SharpBladeGS",
-				autoLog = true
+				autoLog = true,
+				cameraName = "",
+				autoRecord = false
 			};
 		}
 	}

@@ -6,6 +6,8 @@ using SharpBladeGroundStation.DataStructs;
 using Microsoft.Xna.Framework;
 using Point = System.Windows.Point;
 
+
+
 namespace SharpBladeGroundStation
 {
     public partial class MainWindow : Window

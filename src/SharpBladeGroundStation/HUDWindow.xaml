@@ -5,16 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SharpBladeGroundStation"
         xmlns:fd="clr-namespace:FlightDisplay;assembly=FlightDisplay"
-        xmlns:wmkc="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=WPFMediaKit"
         xmlns:hud="clr-namespace:SharpBladeGroundStation.HUD"
         mc:Ignorable="d"
         Title="HUDWindow" Height="600" Width="800" Loaded="Window_Loaded" Closing="Window_Closing" Initialized="Window_Initialized">
     <Grid Background="Black">
         <Viewbox>
             <Canvas x:Name="mainCanvas" Width="720" Height="576" Background="CornflowerBlue">
-                <wmkc:VideoCaptureElement x:Name="cameraCaptureElement" EnableSampleGrabbing="False" Visibility="Visible" DeeperColor="True" Width="720" Height="576"/>
+                <Image x:Name="frameHolder" Stretch="UniformToFill" Width="720" Height="576"/>
                 <hud:NavHUDControl x:Name="navhud" Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556"/>
-
             </Canvas>
         </Viewbox>
     </Grid>
