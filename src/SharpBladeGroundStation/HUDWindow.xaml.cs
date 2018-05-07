@@ -15,10 +15,13 @@ using System.Threading;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Diagnostics;
 
 using AForge.Video;
 using AForge.Video.DirectShow;
 using Geb.Video.FFMPEG;
+
+
 
 
 namespace SharpBladeGroundStation
@@ -40,12 +43,21 @@ namespace SharpBladeGroundStation
 
 		bool videoLoggerEnabled;
 
+		bool frameLock;
+		Queue<Bitmap> frameQueue;
+		Thread background;
+
 		public HUDWindow(MainWindow mw)
 		{
 			InitializeComponent();
             mainwin = mw;
 			writer = new VideoFileWriter();
-			reader = new VideoFileReader();		
+			reader = new VideoFileReader();
+			frameLock = false;
+			frameQueue = new Queue<Bitmap>();
+			background = new Thread(backgroundWorker);
+			background.IsBackground = true;
+			background.Start();
         }
 
 		MainWindow mainwin;
@@ -88,6 +100,32 @@ namespace SharpBladeGroundStation
            
         }
 
+		void backgroundWorker()
+		{
+			while(true)
+			{
+				if(!writer.IsOpen)
+				{
+					Thread.Sleep(50);
+					continue;
+				}
+				Bitmap frame =null;
+				bool flag=false;
+
+				lock (frameQueue)
+				{
+					if(frameQueue.Count>0)
+					{
+						frame = frameQueue.Dequeue();
+						flag = true;
+					}
+				}
+				if(flag)
+					writer.WriteVideoFrame(new Geb.Image.ImageRgb24( frame));
+			}
+		}
+
+
 		public void InitVideo()
 		{
 			switch(mainwin.HudVideoSource)
@@ -114,6 +152,7 @@ namespace SharpBladeGroundStation
 			if (localWebCam == null || !localWebCam.IsRunning)
 				return false;
 			videoLoggerEnabled = true;
+			
 			return true;
 		}
 
@@ -132,25 +171,45 @@ namespace SharpBladeGroundStation
 
 		private void LocalWebCam_NewFrame(object sender, NewFrameEventArgs eventArgs)
 		{
+			if(frameLock)
+			{
+				Debug.WriteLine("FrameLock!");
+				return;
+			}
+			frameLock = true;
 			Bitmap b = (Bitmap)eventArgs.Frame.Clone();
-			BitmapImage bi = bitmap2BitmapImage(b);
+			BitmapImage bi = bitmap2BitmapImage((Bitmap)b.Clone());
 			Dispatcher.BeginInvoke(new ThreadStart(delegate
 			{
 				frameHolder.Source = bi;
 			}));
-			if(videoLoggerEnabled)
+			if (videoLoggerEnabled)
 			{
-				if(!writer.IsOpen)
+				Stopwatch sw = new Stopwatch();
+				sw.Start();
+				if (!writer.IsOpen)
 				{
-					writer.Open(videoPath, b.Width, b.Height);
+					writer.Open(videoPath, b.Width, b.Height, 25, VideoCodec.Default);
 				}
-				writer.WriteVideoFrame(new Geb.Image.ImageRgb24(b));
+				//writer.WriteVideoFrame(new Geb.Image.ImageRgb24(b));
+				lock(frameQueue)
+				{
+					frameQueue.Enqueue(b);
+				}
+				sw.Stop();
+				Debug.WriteLine("[VideoLogger]:" + sw.Elapsed.TotalMilliseconds.ToString());
 			}
+			frameLock = false;			
 		}
 
 		private void closeAllVideo()
 		{
-			if(writer!=null&&writer.IsOpen)
+			if (localWebCam != null && localWebCam.IsRunning)
+			{
+				localWebCam.Stop();
+				localWebCam.WaitForStop();
+			}
+			if (writer!=null&&writer.IsOpen)
 			{
 				writer.Close();
 			}
@@ -158,11 +217,7 @@ namespace SharpBladeGroundStation
 			{
 				reader.Close();
 			}
-			if(localWebCam!=null&& localWebCam.IsRunning)
-			{
-				localWebCam.Stop();
-				localWebCam.WaitForStop();
-			}
+			
 		}
 
 		private BitmapImage bitmap2BitmapImage(Bitmap b)
@@ -176,9 +231,12 @@ namespace SharpBladeGroundStation
 			bi.EndInit();
 			bi.Freeze();
 			return bi;
-		}
+		}		
 
-		
+		public bool IsCameraRunning()
+		{
+			return localWebCam != null && localWebCam.IsRunning;
+		}
     }
 
 	

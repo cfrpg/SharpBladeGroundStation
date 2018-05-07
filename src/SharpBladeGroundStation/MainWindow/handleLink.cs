@@ -87,6 +87,12 @@ namespace SharpBladeGroundStation
 
 			logger = new CommLogger(GCSconfig.LogPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".sblog", e.Link);
 			logger.Start(e.Link.ConnectTime);
+			if( hudWindow.IsCameraRunning())
+			{
+				string str = logger.Path.Substring(0, logger.Path.LastIndexOf(".")+1)+"mpg";
+				hudWindow.StartRecord(str);
+			}
+
 		}
 
 		private void Link_OnReceivePackage(CommLink sender, EventArgs e)
