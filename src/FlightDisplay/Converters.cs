@@ -86,5 +86,17 @@ namespace FlightDisplay
 			return (float)value / -3;
 		}
 	}
+
+	public class InvConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			return -(float)value;
+		}
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			return -(float)value;
+		}
+	}
 }
 

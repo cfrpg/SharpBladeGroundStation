@@ -68,6 +68,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\GMap.NET.WindowsPresentation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Expression.Controls, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Expression.Drawing, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System" />
@@ -115,6 +117,10 @@
     <Compile Include="HUDWindow.xaml.cs">
       <DependentUpon>HUDWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HUD\Converters.cs" />
+    <Compile Include="HUD\SovietHeadingIndicatorControl.xaml.cs">
+      <DependentUpon>SovietHeadingIndicatorControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HUD\HUDBase.cs" />
     <Compile Include="HUD\NavHUDControl.xaml.cs">
       <DependentUpon>NavHUDControl.xaml</DependentUpon>
@@ -149,6 +155,10 @@
     <Page Include="HUDWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HUD\SovietHeadingIndicatorControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="HUD\NavHUDControl.xaml">
       <SubType>Designer</SubType>

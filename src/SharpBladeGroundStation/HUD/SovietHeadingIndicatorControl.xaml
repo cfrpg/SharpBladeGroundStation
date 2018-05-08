@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="SharpBladeGroundStation.HUD.SovietHeadingIndicatorControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ec="http://schemas.microsoft.com/expression/2010/controls"
+             xmlns:local="clr-namespace:SharpBladeGroundStation.HUD"
+             mc:Ignorable="d" 
+             x:Name="hdgind"
+             d:DesignHeight="50" d:DesignWidth="240">
+    <UserControl.Resources>
+        <local:SovietHeadingConverter x:Key="conv"/>
+    </UserControl.Resources>
+    <Viewbox>
+        <Canvas Width="240" Height="50" ClipToBounds="True">
+            <Path x:Name="tickPath" Data="M-780,25,4620,25" StrokeThickness="0" Stroke="White" RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform X="{Binding ElementName=hdgind,Path=Heading,Converter={StaticResource ResourceKey=conv}}"/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+            <ec:PathListBox x:Name="lineTicks" IsHitTestVisible="False" ItemsSource="{Binding ElementName=hdgind,Path=Ticks}">
+                <ec:PathListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Line X1="0" Y1="0" X2="0" Y2="{Binding}" Stroke="LightGreen" StrokeThickness="3" RenderTransformOrigin="0.5,0.5"/>
+                    </DataTemplate>
+                </ec:PathListBox.ItemTemplate>
+                <ec:PathListBox.LayoutPaths>
+                    <ec:LayoutPath Distribution="Even" Orientation="OrientToPath" SourceElement="{Binding ElementName=tickPath}" />
+                </ec:PathListBox.LayoutPaths>
+            </ec:PathListBox>
+            <ec:PathListBox x:Name="textTicks" IsHitTestVisible="False" ItemsSource="{Binding ElementName=hdgind,Path=TextTicks}">
+                <ec:PathListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontSize="18" Foreground="LightGreen" RenderTransformOrigin="0.5,0.5">
+                            <TextBlock.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform X="0" Y="-14"/>
+                                </TransformGroup>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+                    </DataTemplate>
+                </ec:PathListBox.ItemTemplate>
+                <ec:PathListBox.LayoutPaths>
+                    <ec:LayoutPath Distribution="Even" Orientation="OrientToPath" SourceElement="{Binding ElementName=tickPath}" />
+                </ec:PathListBox.LayoutPaths>
+            </ec:PathListBox>
+            <Line X1="0" Y1="0" X2="240" Y2="0" Stroke="LightGreen" StrokeThickness="3" Canvas.Left="0" Canvas.Top="34"/>
+            <Polygon Canvas.Left="120" Canvas.Top="48" Points="0,0 10,0 0,-10 -10,0" Stroke="LightGreen" StrokeThickness="3"/>   
+        </Canvas>
+    </Viewbox>
+</UserControl>

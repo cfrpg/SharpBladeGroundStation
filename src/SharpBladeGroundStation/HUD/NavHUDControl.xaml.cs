@@ -21,27 +21,47 @@ namespace SharpBladeGroundStation.HUD
     /// </summary>
     public partial class NavHUDControl : HUDBase
     {
-        public NavHUDControl()
+
+		public static readonly DependencyProperty HorizonTranlationProperty =
+			DependencyProperty.Register("HorizonTranlation", typeof(float), typeof(NavHUDControl), new PropertyMetadata(0f, NavHUDControl.OnHorizonTranlationPropertyChanged));
+		public float HorizonTranlation
+		{
+			get { return (float)GetValue(HorizonTranlationProperty); }
+			set { SetValue(HorizonTranlationProperty, value); }
+		}
+		public static void OnHorizonTranlationPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+		{
+			NavHUDControl s = sender as NavHUDControl;
+			s.OnHorizonTranlationChanged(e);
+		}
+		public void OnHorizonTranlationChanged(DependencyPropertyChangedEventArgs e)
+		{
+
+
+		}
+
+		public NavHUDControl():base()
         {
-            InitializeComponent();
-            
-        }
+            InitializeComponent();			
+		}
 
         private void heading_Loaded(object sender, RoutedEventArgs e)
-        {
-            heading.DataContext = vehicle;
+        {	
 			if (DesignerProperties.GetIsInDesignMode(this))
 				return;
 			vehicle.PropertyChanged += Vehicle_PropertyChanged;
-			Canvas.SetTop(tgtind, 245);
-			Canvas.SetLeft(tgtind, 245);
+			
         }
 
 		private void Vehicle_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			switch(e.PropertyName)
 			{
+				case "FlightState":
 
+					Dispatcher.Invoke(() => { HorizonTranlation = vehicle.FlightState.Pitch * 6.2f; });
+					
+					break;
 
 				default:
 

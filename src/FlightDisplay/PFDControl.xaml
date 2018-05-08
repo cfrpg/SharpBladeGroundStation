@@ -12,7 +12,8 @@
     <UserControl.Resources>
         <local:HalfConverter x:Key="half"/>
         <local:TwiceConverter x:Key="twice"/>
-        <local:PitchTransConverter x:Key="pitTrans"/>        
+        <local:PitchTransConverter x:Key="pitTrans"/>
+        <local:InvConverter x:Key="Inv"/>
     </UserControl.Resources>
 
     <Viewbox>
@@ -23,7 +24,7 @@
                         <ScaleTransform ScaleX="4" ScaleY="1"/>
                         <SkewTransform/>
                         <TranslateTransform Y="{Binding ElementName=pfdControl,Path=FlightState.Pitch,Converter={StaticResource pitTrans}}"/>
-                        <RotateTransform Angle="{Binding ElementName=pfdControl,Path=FlightState.Roll}"/>
+                        <RotateTransform Angle="{Binding ElementName=pfdControl,Path=FlightState.ToolTip,Converter={StaticResource Inv}}"/>
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
@@ -33,7 +34,7 @@
                         <ScaleTransform ScaleX="4" ScaleY="4"/>
                         <SkewTransform/>
                         <TranslateTransform Y="{Binding ElementName=pfdControl,Path=FlightState.Pitch,Converter={StaticResource pitTrans}}"/>
-                        <RotateTransform Angle="{Binding ElementName=pfdControl,Path=FlightState.Roll}"/>
+                        <RotateTransform Angle="{Binding ElementName=pfdControl,Path=FlightState.Roll,Converter={StaticResource Inv}}"/>
                     </TransformGroup>
                 </Rectangle.RenderTransform>
                 <Rectangle.Fill>
@@ -65,7 +66,7 @@
                     <TransformGroup>
                         <ScaleTransform/>
                         <SkewTransform/>
-                        <RotateTransform Angle="{Binding ElementName=pfdControl,Path=FlightState.Roll}"/>
+                        <RotateTransform Angle="{Binding ElementName=pfdControl,Path=FlightState.Roll,Converter={StaticResource Inv}}"/>
                         <TranslateTransform/>
                     </TransformGroup>
                 </Canvas.RenderTransform>
@@ -162,7 +163,7 @@
                     <TransformGroup>
                         <ScaleTransform/>
                         <SkewTransform/>
-                        <RotateTransform Angle="{Binding ElementName=pfdControl,Path=FlightState.Roll}"/>
+                        <RotateTransform Angle="{Binding ElementName=pfdControl,Path=FlightState.Roll ,Converter={StaticResource Inv}}"/>
                         <TranslateTransform/>
                     </TransformGroup>
                 </ed:Arc.RenderTransform>

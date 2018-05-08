@@ -5,12 +5,169 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SharpBladeGroundStation.HUD"
              xmlns:fd="clr-namespace:FlightDisplay;assembly=FlightDisplay"
+             xmlns:ec="http://schemas.microsoft.com/expression/2010/controls"
+             xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+             xmlns:wpf="clr-namespace:WpfControlLib;assembly=WpfControlLib"
              mc:Ignorable="d" 
+             x:Name="hud"
              d:DesignHeight="500" d:DesignWidth="500">
     <Viewbox>
         <Canvas Width="500" Height="500">
-            <fd:HeadingIndicatorControl x:Name="heading" Width="280" Height="30" Canvas.Top="20" Canvas.Left="110" Heading="{Binding Heading}" Loaded="heading_Loaded"/>
-            <Ellipse x:Name="tgtind" Width="10" Height="10" Fill="#FF3DE000"/>
+            <local:SovietHeadingIndicatorControl x:Name="heading" Width="240" Height="50" Canvas.Top="20" Canvas.Left="130" Heading="{Binding Heading}" Loaded="heading_Loaded"/>
+
+            <wpf:OutlinedText x:Name="speedText" Text="{Binding GroundSpeed,StringFormat={}{0:0.0}}" FontSize="32" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Left="0" Canvas.Top="20" />
+            <wpf:OutlinedText x:Name="altText" Text="{Binding Altitude,StringFormat={}{0:0.0}}" FontSize="32" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Right="0" Canvas.Top="20" />
+
+            <Canvas Width="200" Height="200" Canvas.Left="150" Canvas.Top="150" RenderTransformOrigin="0.5,0.5">
+                <Canvas.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="{Binding FlightState.Roll}"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Canvas.RenderTransform>
+                <Line X1="0" Y1="0" X2="60" Y2="0" Canvas.Left="10" Canvas.Top="100" StrokeThickness="3" Stroke="LightGreen"/>
+                <Line X1="0" Y1="0" X2="60" Y2="0" Canvas.Right="10" Canvas.Top="100" StrokeThickness="3" Stroke="LightGreen"/>
+                <Line X1="0" Y1="0" X2="0" Y2="50" Canvas.Left="100" Canvas.Top="20" StrokeThickness="3" Stroke="LightGreen"/>
+                <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Left="50" Canvas.Top="100" StrokeThickness="3" Stroke="LightGreen"/>
+                <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Right="50" Canvas.Top="100" StrokeThickness="3" Stroke="LightGreen"/>
+            </Canvas>
+            <wpf:OutlinedText x:Name="pitText" Text="{Binding FlightState.Pitch,StringFormat={}{0:0}}" FontSize="20" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Left="370" Canvas.Top="255" />
+            <Line x:Name="horizonLine" X1="0" Y1="0" X2="200" Y2="0" Canvas.Left="150" Canvas.Top="250" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,0.5">
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform Y="{Binding ElementName=hud,Path=HorizonTranlation}"/>
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
+
+            <!--MDZZ section,don't touch.-->
+            
+            
+            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="75"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="60"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="30"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-75"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-60"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-30"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-10">
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="85"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-10">
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="80"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-10">
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-85"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
+            <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-10">
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-80"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
         </Canvas>
     </Viewbox>
 </local:HUDBase>

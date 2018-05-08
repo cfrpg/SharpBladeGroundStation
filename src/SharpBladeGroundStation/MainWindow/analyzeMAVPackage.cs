@@ -76,7 +76,7 @@ namespace SharpBladeGroundStation
                     break;
                 case MAVLINK_MSG_ID.ATTITUDE://#30
                     time = package.NextUInt32();
-                    float rx = -package.NextSingle();
+                    float rx = package.NextSingle();
                     float ry = package.NextSingle();
                     float rz = package.NextSingle();
                     //rad
