@@ -41,11 +41,11 @@
   <ItemGroup>
     <Reference Include="AForge.Video, Version=2.2.5.0, Culture=neutral, PublicKeyToken=cbfb6e07d173c401, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\AForge.NET\Framework\Release\AForge.Video.dll</HintPath>
+      <HintPath>..\..\lib\AForge.Video.dll</HintPath>
     </Reference>
     <Reference Include="AForge.Video.DirectShow, Version=2.2.5.0, Culture=neutral, PublicKeyToken=61ea4348d43881b7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\AForge.NET\Framework\Release\AForge.Video.DirectShow.dll</HintPath>
+      <HintPath>..\..\lib\AForge.Video.DirectShow.dll</HintPath>
     </Reference>
     <Reference Include="DynamicDataDisplay">
       <HintPath>..\DynamicDataDisplay.dll</HintPath>
@@ -101,8 +101,14 @@
     <Compile Include="CommunicationLink\LogLink.cs" />
     <Compile Include="Configuration\GCSConfiguration.cs" />
     <Compile Include="Configuration\VehicleConfiguration.cs" />
+    <Compile Include="Controls\CameraPlayer.xaml.cs">
+      <DependentUpon>CameraPlayer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\LogPlayerControl.xaml.cs">
       <DependentUpon>LogPlayerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\VideoLogPlayer.xaml.cs">
+      <DependentUpon>VideoLogPlayer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters.cs" />
     <Compile Include="DataStructs\BatteryData.cs" />
@@ -148,7 +154,15 @@
     <Compile Include="DataStructs\Mission\Waypoint.cs" />
     <Compile Include="DataStructs\Mission\WaypointAction.cs" />
     <Compile Include="DataStructs\Mission\WaypointBase.cs" />
+    <Page Include="Controls\CameraPlayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\LogPlayerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\VideoLogPlayer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -72,7 +72,7 @@ namespace SharpBladeGroundStation.HUD
 			}
 			for(int i=0;i<55;i++)
 			{
-				TextTicks.Add((((i - 9) * 10 + 360) % 360)/10);
+				TextTicks.Add(((((i - 9) * 10 + 360) % 360)/10).ToString("00"));
 			}
 			
 			//TextTicks.Add("W");

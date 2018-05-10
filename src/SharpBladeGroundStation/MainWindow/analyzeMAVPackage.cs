@@ -26,8 +26,11 @@ namespace SharpBladeGroundStation
             float tfloat;
             switch ((MAVLINK_MSG_ID)package.Function)
             {
-                case MAVLINK_MSG_ID.HEARTBEAT://#0
-
+                case MAVLINK_MSG_ID.HEARTBEAT://#0		
+					package.NextShort();			
+					byte mainmode = package.NextByte();
+					byte submode = package.NextByte();
+					currentVehicle.FlightModeText = getPX4FlightModeText(mainmode, submode);
                     break;
                 case MAVLINK_MSG_ID.SYS_STATUS://#1
                     
@@ -238,6 +241,68 @@ namespace SharpBladeGroundStation
                     break;
             }
 
-        }		
+        }
+
+		private string getPX4FlightModeText(byte mainmode, byte submode)
+		{
+			string res="NK";
+			switch(mainmode)
+			{
+				case 1:
+					res = "MAN";
+					break;
+				case 2:
+					res = "ALTC";
+					break;
+				case 3:
+					res = "POSC";
+					break;
+				case 4:
+					switch(submode)
+					{
+						case 1:
+							res += "RDY";
+							break;
+						case 2:
+							res += "TKOF";
+							break;
+						case 3:
+							res += "LOIT";
+							break;
+						case 4:
+							res += "MISS";
+							break;
+						case 5:
+							res += "RTL";
+							break;
+						case 6:
+							res += "LAND";
+							break;
+						case 7:
+							res += "RTGS";
+							break;
+						case 8:
+							res += "FOLW";
+							break;
+					}
+					break;
+				case 5:
+					res = "ACRO";
+					break;
+				case 6:
+					res = "OFBD";
+					break;
+				case 7:
+					res = "STAB";
+					break;
+				case 8:
+					res = "RATT";
+					break;
+				case 9:
+					res = "SIMP";
+					break;
+			}
+			return res;
+		}
 	}
 }

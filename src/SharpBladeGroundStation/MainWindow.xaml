@@ -425,7 +425,7 @@
                         <TextBlock x:Name="logPathText"  Grid.Column="1" Text="" VerticalAlignment="Center" Margin="4,0,0,0" TextTrimming="CharacterEllipsis" />
 
                         <Button x:Name="openVideoBtn" Height="25" Grid.Row="1" Margin="0,1" Content="打开视频" IsEnabled="False"/>
-                        <TextBlock Grid.Row="1" Grid.Column="1" Text="" VerticalAlignment="Center" Margin="4,0,0,0" TextTrimming="CharacterEllipsis" />
+                        <TextBlock x:Name="videoPathText" Grid.Row="1" Grid.Column="1" Text="" VerticalAlignment="Center" Margin="4,0,0,0" TextTrimming="CharacterEllipsis" />
                     </Grid>
                     <Button x:Name="logCtrlBtn" Height="10" Content="▲" FontSize="14" Padding="0,-3,0,1" Click="logCtrlBtn_Click"/>
                     <local:LogPlayerControl x:Name="logPlayerCtrl" Grid.Row="0" Margin="0" VerticalAlignment="Bottom"  Height="50" 

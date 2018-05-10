@@ -11,7 +11,8 @@
     <Grid Background="Black">
         <Viewbox>
             <Canvas x:Name="mainCanvas" Width="720" Height="576" Background="CornflowerBlue">
-                <Image x:Name="frameHolder" Stretch="UniformToFill" Width="720" Height="576"/>
+                <local:CameraPlayer x:Name="cameraPlayer" Width="720" Height="576"/>
+                <local:VideoLogPlayer x:Name="logPlayer" Width="720" Height="576" Visibility="Hidden"/>
                 <hud:NavHUDControl x:Name="navhud" Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556"/>
             </Canvas>
         </Viewbox>

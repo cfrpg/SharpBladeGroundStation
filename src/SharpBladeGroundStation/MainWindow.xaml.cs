@@ -194,28 +194,7 @@ namespace SharpBladeGroundStation
         //}	
 				
 
-		private string getFlightModeText(int id)
-		{
-			switch(id)
-			{
-				case 0:
-					return "未知";					
-				case 1:
-					return "姿态";					
-				case 2:
-					return "定高";					
-				case 3:
-					return "定点";					
-				case 11:
-					return "航线";					
-				case 20:
-					return "降落";					
-				case 21:
-					return "返航";					
-				default:
-					return "未知";					
-			}
-		}
+		
 
 		private void initControls()
 		{
@@ -322,14 +301,13 @@ namespace SharpBladeGroundStation
 			if(id>=0)
 			{
 				HudVideoSource = HUDVideoSource.Camera;
-				hudWindow.OpenCamera(localWebCamsCollection[id].MonikerString);
-				//hudWindow.StartRecord("E:\\temp\\test.mpg");
+				hudWindow.cameraPlayer.OpenCamera(localWebCamsCollection[id].MonikerString);
+				//hudWindow.StartRecord("D:\\temp\\test.mpg");
 			}
 			else
 			{
 				HudVideoSource = HUDVideoSource.NoVideo;
-			}
-			hudWindow.InitVideo();
+			}			
 			cameraComboBox.SelectionChanged += CameraComboBox_SelectionChanged;
 				
 		}

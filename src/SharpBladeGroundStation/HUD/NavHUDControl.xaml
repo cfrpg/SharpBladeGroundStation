@@ -13,9 +13,11 @@
              d:DesignHeight="500" d:DesignWidth="500">
     <Viewbox>
         <Canvas Width="500" Height="500">
-            <local:SovietHeadingIndicatorControl x:Name="heading" Width="240" Height="50" Canvas.Top="20" Canvas.Left="130" Heading="{Binding Heading}" Loaded="heading_Loaded"/>
+            <local:SovietHeadingIndicatorControl x:Name="heading" Width="240" Height="50" Canvas.Top="26" Canvas.Left="130" Heading="{Binding Heading}" Loaded="heading_Loaded"/>
 
             <wpf:OutlinedText x:Name="speedText" Text="{Binding GroundSpeed,StringFormat={}{0:0.0}}" FontSize="32" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Left="0" Canvas.Top="20" />
+            
+            
             <wpf:OutlinedText x:Name="altText" Text="{Binding Altitude,StringFormat={}{0:0.0}}" FontSize="32" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Right="0" Canvas.Top="20" />
 
             <Canvas Width="200" Height="200" Canvas.Left="150" Canvas.Top="150" RenderTransformOrigin="0.5,0.5">
@@ -44,10 +46,11 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
-
+            <TextBlock Text="{Binding FlightModeText}" FontFamily="TI-Nspire Sans" FontSize="24" Canvas.Left="84" Canvas.Top="379" Foreground="LightGreen"/>
             <!--MDZZ section,don't touch.-->
-            
-            
+            <Line X1="0" Y1="0" X2="60" Y2="0" Canvas.Left="0" Canvas.Top="60" Stroke="LightGreen" StrokeThickness="3" />
+            <Polygon Canvas.Left="30" Canvas.Top="70" Points="0,0 10,0 0,-10 -10,0" Stroke="LightGreen" StrokeThickness="3"/>
+            <Ellipse Width="30" Height="30" Stroke="LightGreen" StrokeThickness="3" Canvas.Left="150" Canvas.Top="204"/>
             <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
                 <Line.RenderTransform>
                     <TransformGroup>

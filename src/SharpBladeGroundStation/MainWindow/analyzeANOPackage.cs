@@ -27,7 +27,7 @@ namespace SharpBladeGroundStation
                     float rz = package.NextShort() / 100f;
                     currentVehicle.EulerAngle = new Vector3(MathHelper.ToRadians(rx), MathHelper.ToRadians(ry), MathHelper.ToRadians(rz));
                     currentVehicle.Altitude = package.NextInt32() / 100f;
-                    currentVehicle.FlightModeText = getFlightModeText(package.NextByte());
+                    currentVehicle.FlightModeText = getANOFlightModeText(package.NextByte());
                     currentVehicle.IsArmed = package.NextByte() == 1;
                     attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, rx));
                     attitudeGraphData[1].AppendAsync(this.Dispatcher, new Point(package.TimeStamp / 1000, ry));
@@ -121,5 +121,27 @@ namespace SharpBladeGroundStation
                     break;
             }
         }
-    }
+		private string getANOFlightModeText(int id)
+		{
+			switch (id)
+			{
+				case 0:
+					return "未知";
+				case 1:
+					return "姿态";
+				case 2:
+					return "定高";
+				case 3:
+					return "定点";
+				case 11:
+					return "航线";
+				case 20:
+					return "降落";
+				case 21:
+					return "返航";
+				default:
+					return "未知";
+			}
+		}
+	}
 }

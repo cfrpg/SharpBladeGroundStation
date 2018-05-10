@@ -4,6 +4,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using System.Threading;
 using System.Diagnostics;
+using System.IO;
 using GMap.NET;
 using SharpBladeGroundStation.CommunicationLink;
 using SharpBladeGroundStation.DataStructs;
@@ -21,6 +22,11 @@ namespace SharpBladeGroundStation
 		AdvancedPortScanner portscanner;
 		CommLogger logger;
 		LogLink logLink;
+
+		public LogLink LogLink
+		{
+			get { return logLink; }
+		}
 
 		void initLinkListener()
 		{
@@ -87,10 +93,10 @@ namespace SharpBladeGroundStation
 
 			logger = new CommLogger(GCSconfig.LogPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".sblog", e.Link);
 			logger.Start(e.Link.ConnectTime);
-			if( hudWindow.IsCameraRunning())
+			if( hudWindow.cameraPlayer.IsCameraRunning())
 			{
 				string str = logger.Path.Substring(0, logger.Path.LastIndexOf(".")+1)+"mpg";
-				hudWindow.StartRecord(str);
+				hudWindow.cameraPlayer.StartRecord(str);
 			}
 
 		}
@@ -127,6 +133,8 @@ namespace SharpBladeGroundStation
 			logCtrlBorder.Visibility = Visibility.Visible;
 			extendLogGrid();
 			linkStateText.Text = "Replay";
+			hudWindow.cameraPlayer.Visibility = Visibility.Hidden;
+			hudWindow.logPlayer.Visibility = Visibility.Visible;
 		}
 
 		private void openLogBtn_Click(object sender, RoutedEventArgs e)
@@ -137,11 +145,19 @@ namespace SharpBladeGroundStation
 			var res = ofd.ShowDialog();
 			if (res != System.Windows.Forms.DialogResult.Cancel)
 			{				
-				LoadFileResualt lfr = logLink.OpenFile(ofd.FileName);
+				LoadFileResualt lfr = LogLink.OpenFile(ofd.FileName);
 				if (lfr == LoadFileResualt.OK)
 				{
-					currentVehicle.Link = logLink;
+					currentVehicle.Link = LogLink;
 					logPathText.Text = ofd.SafeFileName;
+					string str = ofd.FileName.Substring(0, ofd.FileName.LastIndexOf(".") + 1) + "mpg";
+					FileInfo fi = new FileInfo(str);
+					if(fi.Exists)
+					{
+						hudWindow.logPlayer.SetLogLink(logLink);
+						hudWindow.logPlayer.OpenFile(str);
+						videoPathText.Text = fi.Name;
+					}
 				}
 				else
 				{
@@ -152,48 +168,50 @@ namespace SharpBladeGroundStation
 
 		private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			if (logLink.ReplayState==LogReplayState.TempPause)
+			if (LogLink.ReplayState==LogReplayState.TempPause)
 			{
 				if(e.NewValue<e.OldValue)
 				{
 					initGraph();
 				}
-				logLink.SetProgress(e.NewValue);
-				
+				LogLink.SetProgress(e.NewValue);
+				hudWindow.logPlayer.SetProgress();
 			}
 		}
 		private void Slider_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
-			if(logLink.ReplayState==LogReplayState.TempPause)
+			if(LogLink.ReplayState==LogReplayState.TempPause)
 			{
-				logLink.ReplayState = LogReplayState.Playing;
+				LogLink.ReplayState = LogReplayState.Playing;
 			}
 		}
 
 		private void Slider_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			if(logLink.ReplayState==LogReplayState.Playing)
+			if(LogLink.ReplayState==LogReplayState.Playing)
 			{
-				logLink.ReplayState = LogReplayState.TempPause;
+				LogLink.ReplayState = LogReplayState.TempPause;
 			}
 		}
 		private void StopBtn_Click(object sender, RoutedEventArgs e)
 		{
-			logLink.Stop();
+			LogLink.Stop();
+			hudWindow.logPlayer.Stop();
 		}
 
 		private void PauseBtn_Click(object sender, RoutedEventArgs e)
 		{
-			logLink.Pause();
+			LogLink.Pause();
 		}
 
 		private void PlayBtn_Click(object sender, RoutedEventArgs e)
 		{
-			if(logLink.ReplayState!=LogReplayState.Pause)
+			if(LogLink.ReplayState!=LogReplayState.Pause)
 			{
 				initGraph();
 			}
-			logLink.Play();
+			LogLink.Play();
+			hudWindow.logPlayer.Play();
 		}
 	}
 }
