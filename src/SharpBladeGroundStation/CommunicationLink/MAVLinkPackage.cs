@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.MAVLink;
+using System.Diagnostics;
 
 namespace SharpBladeGroundStation.CommunicationLink
 {
@@ -59,7 +60,7 @@ namespace SharpBladeGroundStation.CommunicationLink
             get { return buffer[4]; }
             set { buffer[4] = value; }
         }
-		public MAVLinkPackage() : base(512)
+		public MAVLinkPackage() : base(256)
 		{
 			function = 0;
 		}
@@ -117,7 +118,8 @@ namespace SharpBladeGroundStation.CommunicationLink
 		public override LinkPackage Clone()
 		{
 			MAVLinkPackage p = new MAVLinkPackage();
-			buffer.CopyTo(p.buffer, 0);
+			Array.Copy(buffer, p.buffer, dataSize + HeaderSize + 3);
+			//buffer.CopyTo(p.buffer, 0);
 			p.dataSize = dataSize;
 			p.function = function;
 			p.timeStamp = timeStamp;

@@ -62,7 +62,9 @@ namespace SharpBladeGroundStation
 					lock (currentVehicle.Link.ReceivedPackageQueue)
 					{
 						package = currentVehicle.Link.ReceivedPackageQueue.Dequeue();
+						
 					}
+					//Debug.WriteLine(currentVehicle.Link.ReceivedPackageQueue.Count);
 					switch (currentVehicle.Link.Protocol)
 					{
 						case LinkProtocol.MAVLink:
@@ -93,9 +95,9 @@ namespace SharpBladeGroundStation
 
 			logger = new CommLogger(GCSconfig.LogPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".sblog", e.Link);
 			logger.Start(e.Link.ConnectTime);
-			if( hudWindow.cameraPlayer.IsCameraRunning())
+			if (hudWindow.cameraPlayer.IsCameraRunning())
 			{
-				string str = logger.Path.Substring(0, logger.Path.LastIndexOf(".")+1)+"mpg";
+				string str = logger.Path.Substring(0, logger.Path.LastIndexOf(".") + 1) + "mpg";
 				hudWindow.cameraPlayer.StartRecord(str);
 			}
 

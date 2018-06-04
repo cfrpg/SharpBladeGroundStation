@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace SharpBladeGroundStation.CommunicationLink
 {
@@ -21,7 +22,10 @@ namespace SharpBladeGroundStation.CommunicationLink
 		DateTime lastPackageTime;
 		
 
-		Thread backgroundListener;		
+		Thread backgroundListener;
+
+		byte last=0;
+		Stopwatch sw;
 
 		public SerialPort Port
 		{
@@ -71,7 +75,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			port.BaudRate = br;
 			port.DataBits = 8;
 			port.StopBits = StopBits.One;
-			port.ReceivedBytesThreshold = 8;
+			port.ReceivedBytesThreshold = 16;
 			port.DataReceived += Port_DataReceived;
 			buffer = new byte[1048576];//1M
 			isUpdatingBuffer = false;
@@ -82,6 +86,8 @@ namespace SharpBladeGroundStation.CommunicationLink
 			backgroundListener.IsBackground = true;
 			backgroundListener.Start();
 			connectTime = DateTime.Now;
+			sw = new Stopwatch();
+			
 		}
 
 		private void backgroundWorker()
@@ -132,27 +138,33 @@ namespace SharpBladeGroundStation.CommunicationLink
 
 		private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
 		{
-			if (isParsingBuffer)
+			last++;
+			if (isUpdatingBuffer||isParsingBuffer)
+			{				
 				return;
+			}			
 			isUpdatingBuffer = true;
 			int len = port.BytesToRead;
 			port.Read(buffer, bufferSize, len);
 			dataReceived += len;
-			bufferSize += len;
-			isUpdatingBuffer = false;
+			bufferSize += len;		
 			parseBuffer();
+			isUpdatingBuffer = false;
+			last--;
 		}
 
 		private void parseBuffer()
 		{
-			if (isUpdatingBuffer)
-				return;
+			//if (isUpdatingBuffer)
+			//	return;
 			isParsingBuffer = true;
 			int offset = 0;
 			bool flag = false;
 			bool received = false;
+			LinkEventArgs lea = new LinkEventArgs();		
 			while (offset < bufferSize)
 			{
+				//sw.Restart();
 				PackageParseResult res = receivePackage.ReadFromBuffer(buffer, bufferSize, offset);
 				switch (res)
 				{
@@ -177,21 +189,29 @@ namespace SharpBladeGroundStation.CommunicationLink
 							receivedPackageQueue.Enqueue(receivePackage.Clone());
 						}
 						received = true;
+						lea.Package.Add(receivePackage.Clone());						
 						break;
-				}
+				}			
+				
 				if (flag)
 					break;
 			}
+			
 			for (int i = offset; i < bufferSize; i++)
 			{
 				buffer[i - offset] = buffer[i];
 			}
 			bufferSize -= offset;
 			isParsingBuffer = false;
+			
+			
 			if (received)
 			{
-				OnReceivePackageEvent(this, new LinkEventArgs(receivePackage.Clone()));
+				//Debug.WriteLine(lea.Package.Count);
+				OnReceivePackageEvent(this,lea);				
 			}
+			//sw.Stop();
+			//Debug.WriteLine(sw.Elapsed.TotalMilliseconds);
 		}
 
 		public void OpenPort()

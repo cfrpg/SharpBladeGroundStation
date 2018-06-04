@@ -157,11 +157,17 @@ namespace SharpBladeGroundStation.CommunicationLink
 
 	public class LinkEventArgs : EventArgs
 	{
-		public LinkPackage Package { get; set; }
+		public List<LinkPackage> Package { get; set; }
+
+		public LinkEventArgs()
+		{
+			Package = new List<LinkPackage>();
+		}
 
 		public LinkEventArgs(LinkPackage p)
 		{
-			Package = p;
+			Package = new List<LinkPackage>();
+			Package.Add(p);
 		}
 	}
 }

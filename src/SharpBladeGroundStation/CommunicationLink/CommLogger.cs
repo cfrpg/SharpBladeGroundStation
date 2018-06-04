@@ -63,12 +63,14 @@ namespace SharpBladeGroundStation.CommunicationLink
 
 		private void Link_OnSendPackage(CommLink sender, LinkEventArgs e)
 		{
-			LogPackage(e.Package, LinkPackageDirection.ToUAV);
+			foreach(var v in e.Package)
+				LogPackage(v, LinkPackageDirection.ToUAV);
 		}
 
 		private void Link_OnReceivePackage(CommLink sender, LinkEventArgs e)
 		{
-			LogPackage(e.Package, LinkPackageDirection.ToGCS);
+			foreach (var v in e.Package)
+				LogPackage(v, LinkPackageDirection.ToGCS);
 		}
 
 		/// <summary>
