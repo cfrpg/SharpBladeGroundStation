@@ -7,13 +7,14 @@
         xmlns:fd="clr-namespace:FlightDisplay;assembly=FlightDisplay"
         xmlns:hud="clr-namespace:SharpBladeGroundStation.HUD"
         mc:Ignorable="d"
-        Title="HUDWindow" Height="600" Width="800" Loaded="Window_Loaded" Closing="Window_Closing" Initialized="Window_Initialized">
+        Title="HUDWindow" Height="600" Width="800" Loaded="Window_Loaded" Closing="Window_Closing" Initialized="Window_Initialized" KeyDown="Window_KeyDown">
     <Grid Background="Black">
         <Viewbox>
             <Canvas x:Name="mainCanvas" Width="720" Height="576" Background="CornflowerBlue">
                 <local:CameraPlayer x:Name="cameraPlayer" Width="720" Height="576"/>
                 <local:VideoLogPlayer x:Name="logPlayer" Width="720" Height="576" Visibility="Hidden"/>
-                <hud:NavHUDControl x:Name="navhud" Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556"/>
+                <hud:NavHUDControl x:Name="navhud" Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556" Visibility="Hidden"/>
+                <hud:ShinkaiSeikanHUD x:Name="sshud"  Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556"/>
             </Canvas>
         </Viewbox>
     </Grid>

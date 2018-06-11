@@ -124,6 +124,9 @@
       <DependentUpon>HUDWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="HUD\Converters.cs" />
+    <Compile Include="HUD\ShinkaiSeikanHUD.xaml.cs">
+      <DependentUpon>ShinkaiSeikanHUD.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HUD\SovietHeadingIndicatorControl.xaml.cs">
       <DependentUpon>SovietHeadingIndicatorControl.xaml</DependentUpon>
     </Compile>
@@ -167,6 +170,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="HUDWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HUD\ShinkaiSeikanHUD.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

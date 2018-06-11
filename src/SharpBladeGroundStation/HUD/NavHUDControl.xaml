@@ -20,7 +20,7 @@
             
             <wpf:OutlinedText x:Name="altText" Text="{Binding Altitude,StringFormat={}{0:0.0}}" FontSize="32" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Right="0" Canvas.Top="20" />
 
-            <Canvas Width="200" Height="200" Canvas.Left="150" Canvas.Top="150" RenderTransformOrigin="0.5,0.5">
+            <Canvas Width="200" Height="200" Canvas.Left="150" Canvas.Top="149" RenderTransformOrigin="0.5,0.5">
                 <Canvas.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>

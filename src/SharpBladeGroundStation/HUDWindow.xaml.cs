@@ -20,6 +20,7 @@ using System.Diagnostics;
 using AForge.Video;
 using AForge.Video.DirectShow;
 using Geb.Video.FFMPEG;
+using SharpBladeGroundStation.HUD;
 
 
 
@@ -32,7 +33,8 @@ namespace SharpBladeGroundStation
 	public partial class HUDWindow : Window
 	{		
 		VideoFileReader reader;
-				
+
+		Dictionary<Key, HUDBase> hudCollection;
 
 		public HUDWindow(MainWindow mw)
 		{
@@ -52,7 +54,11 @@ namespace SharpBladeGroundStation
 				
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-            navhud.Vehicle = Mainwin.CurrentVehicle;			
+			hudCollection = new Dictionary<Key, HUDBase>();
+            navhud.Vehicle = Mainwin.CurrentVehicle;
+			sshud.Vehicle = Mainwin.CurrentVehicle;
+			hudCollection.Add(Key.D1, navhud);
+			hudCollection.Add(Key.D2, sshud);
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -72,16 +78,17 @@ namespace SharpBladeGroundStation
 			
 		}
 
-		
-
-		
-
-		
-
-		
-
-		
-    }
+		private void Window_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (!hudCollection.ContainsKey(e.Key))
+				return;
+			foreach(var v in hudCollection)
+			{
+				v.Value.Visibility = Visibility.Hidden;
+			}
+			hudCollection[e.Key].Visibility = Visibility.Visible;
+		}
+	}
 
 	
 }

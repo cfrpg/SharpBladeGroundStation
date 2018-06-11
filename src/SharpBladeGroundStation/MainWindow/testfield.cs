@@ -202,7 +202,7 @@ namespace SharpBladeGroundStation
 				m.Shape = wp;
 				m.ZIndex = 99999;
 				//gmap.Markers.Add(m);
-				CreateCircle(lat, lon, 20, Colors.BlueViolet,1);
+				CreateCircle(lat, lon, 150, Colors.BlueViolet,0.5);
 			}
 		
 			sr = new StreamReader("E:\\temp\\refine.txt");
@@ -218,7 +218,7 @@ namespace SharpBladeGroundStation
 				m.Shape = wp;
 				m.ZIndex = 99999;
 				//gmap.Markers.Add(m);
-				CreateCircle(lat, lon, 20, Colors.BlueViolet, 1);
+				CreateCircle(lat, lon, 150, Colors.BlueViolet, 0.5);
 			}
 		}
 		void loadCity()
