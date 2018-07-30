@@ -18,9 +18,11 @@ namespace SharpBladeGroundStation.Map.Markers
             this.MouseLeave += ClickableGMapMarker_MouseLeave;
             this.MouseMove += ClickableGMapMarker_MouseMove;
             this.MouseLeftButtonDown += ClickableGMapMarker_MouseLeftButtonDown;
-            this.MouseLeftButtonUp += ClickableGMapMarker_MouseLeftButtonUp;            
+            this.MouseLeftButtonUp += ClickableGMapMarker_MouseLeftButtonUp;			
         }
-        public ClickableGMapMarker(GMapMarker m):this()
+
+		
+		public ClickableGMapMarker(GMapMarker m):this()
         {
             marker = m;            
         }
@@ -70,8 +72,7 @@ namespace SharpBladeGroundStation.Map.Markers
                     marker.Position = this.Map.FromLocalToLatLng((int)(p.X), (int)(p.Y));
                 }
                 e.Handled = true;
-            }
-            
+            }            
         }
 
         private void ClickableGMapMarker_MouseLeave(object sender, MouseEventArgs e)
@@ -99,5 +100,6 @@ namespace SharpBladeGroundStation.Map.Markers
         {
             get { return new GMapControl(); }
         }
+				
     }
 }

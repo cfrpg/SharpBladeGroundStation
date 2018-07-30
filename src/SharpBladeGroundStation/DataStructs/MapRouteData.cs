@@ -17,7 +17,7 @@ namespace SharpBladeGroundStation.DataStructs
     public class MapRouteData
     {
         List<PointLatLng> points;
-        List<GMapElement> markers;
+        List<GMapElement> markers;		
         GMapControl map;
         GMapRoute route;
         bool wayPointMarkerEnabled;
@@ -30,11 +30,12 @@ namespace SharpBladeGroundStation.DataStructs
         public MouseButtonEventHandler LeftMouseButtonDown;
         public MouseButtonEventHandler RightMouseButtonUp;
         public MouseButtonEventHandler RightMouseButtonDown;
+		public MouseWheelEventHandler MouseWheel;
 
-        /// <summary>
-        /// 获取路径包含的点的集合
-        /// </summary>
-        public List<PointLatLng> Points
+		/// <summary>
+		/// 获取路径包含的点的集合
+		/// </summary>
+		public List<PointLatLng> Points
         {
             get { return points; }
             //set { points = value; }
@@ -116,7 +117,7 @@ namespace SharpBladeGroundStation.DataStructs
 				regeneRoute();
 			}
 		}
-
+		
 		/// <summary>
 		/// 构造函数
 		/// </summary>
@@ -129,7 +130,7 @@ namespace SharpBladeGroundStation.DataStructs
             map = m;
             wayPointMarkerEnabled = wpenabled;
             clickable = ca;
-            points = new List<PointLatLng>();
+            points = new List<PointLatLng>();			
             markers = new List<GMapElement>();
             zindex = z;
             route = new GMapRoute(points);
@@ -150,18 +151,23 @@ namespace SharpBladeGroundStation.DataStructs
         /// <param name="m">所在的地图控件</param>
         public MapRouteData(GMapControl m) : this(m, 10000) { }
 
-        public void AddWaypoint(GMapElement shape,GMapMarker m)
+		public void AddWaypoint(GMapElement shape, GMapMarker m, float alt)
+		{
+			InsertWaypoint(points.Count, shape, m, alt);
+		}
+
+		public void AddWaypoint(GMapElement shape,GMapMarker m)
         {
-            InsertWaypoint(points.Count,  shape,m);
+            InsertWaypoint(points.Count,  shape, m, 50f);
         }
 
         public void AddWaypoint(PointLatLng pos)
         {
             if (wayPointMarkerEnabled || clickable)
             {
-                throw new Exception("This method cannnot add waypoint marker,use AddWaypoint(PointLatLng,UIElement,string,string) instead.");
+                throw new Exception("This method cannnot add waypoint marker,use AddWaypoint(GMapElement,GMapMarker) instead.");
             }
-            points.Add(pos);
+            points.Add(pos);			
 			if (points.Count > maxPointNumber)
 			{
 				RemoveRange(0, points.Count - maxPointNumber);
@@ -170,7 +176,7 @@ namespace SharpBladeGroundStation.DataStructs
             
         }
 
-        public void InsertWaypoint(int id, GMapElement shape,GMapMarker m)
+        public void InsertWaypoint(int id, GMapElement shape,GMapMarker m,float alt)
         {
             if (WayPointMarkerEnabled)
             {
@@ -188,9 +194,11 @@ namespace SharpBladeGroundStation.DataStructs
                         shape.MouseRightButtonDown += RightMouseButtonDown;
                     if (RightMouseButtonUp != null)
                         shape.MouseRightButtonUp += RightMouseButtonUp;
+					if (MouseWheel != null)
+						shape.MouseWheel += MouseWheel;
                 }
             }
-            points.Insert(id,m.Position);
+            points.Insert(id,m.Position);			
 			if (points.Count > maxPointNumber)
 			{
 				RemoveRange(0, points.Count - maxPointNumber);
@@ -204,7 +212,7 @@ namespace SharpBladeGroundStation.DataStructs
 			{
 				if (wp == markers[i])
 				{
-					points.RemoveAt(i);
+					points.RemoveAt(i);					
 					markers.RemoveAt(i);					
 					break;
 				}
@@ -223,7 +231,7 @@ namespace SharpBladeGroundStation.DataStructs
 				}
 			}
 			markers.RemoveRange(id, num);
-			points.RemoveRange(id, num);
+			points.RemoveRange(id, num);			
 			regeneRoute();
 		}
 
@@ -233,7 +241,7 @@ namespace SharpBladeGroundStation.DataStructs
 			{
 				if(wp==markers[i])
 				{
-					points[i] = wp.Position;
+					points[i] = wp.Position;					
 					break;
 				}
 			}
@@ -246,7 +254,7 @@ namespace SharpBladeGroundStation.DataStructs
 			{
 				map.Markers.Remove(e.Marker);
 			}
-			markers.Clear();
+			markers.Clear();			
 			points.Clear();
 			regeneRoute();
 		}

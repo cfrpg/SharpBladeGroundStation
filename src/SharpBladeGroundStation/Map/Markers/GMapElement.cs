@@ -12,6 +12,7 @@ namespace SharpBladeGroundStation.Map.Markers
 	public class GMapElement : UserControl
 	{
 		protected GMapMarker marker;
+		protected float altitude;
 
 		public GMapMarker Marker
 		{
@@ -22,6 +23,12 @@ namespace SharpBladeGroundStation.Map.Markers
 		public PointLatLng Position
 		{
 			get { return marker.Position; }
+		}
+
+		public float Altitude
+		{
+			get { return altitude; }
+			set { altitude = value; }
 		}
 
 		public GMapElement() : base()

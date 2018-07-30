@@ -58,11 +58,12 @@ namespace SharpBladeGroundStation
 
             gmap.MouseLeftButtonDown += Gmap_MouseLeftButtonDown;
             gmap.MouseLeftButtonUp += Gmap_MouseLeftButtonUp;
-			gmap.OnMapZoomChanged += Gmap_OnMapZoomChanged;			
+			gmap.OnMapZoomChanged += Gmap_OnMapZoomChanged;	
 
 			newroute = new MapRouteData(gmap, 1000, true, true);
 			newroute.LeftMouseButtonUp += Wp_MouseLeftButtonUp;
 			newroute.RightMouseButtonDown += Wp_MouseRightButtonDown;
+			newroute.MouseWheel += Wp_MouseWheel;
 			flightRoute = new MapRouteData(gmap);
             Gmap_OnMapZoomChanged();
             DispatcherTimer waitMap = new DispatcherTimer();
@@ -101,7 +102,7 @@ namespace SharpBladeGroundStation
             {	              
 				Point p = e.GetPosition(gmap);
 				GMapMarker m = new GMapMarker(gmap.FromLocalToLatLng((int)(p.X), (int)(p.Y)));
-				WayPointMarker wp = new WayPointMarker(newroute, m, (newroute.Markers.Count + 1).ToString(), string.Format("Waypoint {0}\nLat {1}\nLon {2}\n", newroute.Markers.Count + 1, m.Position.Lat, m.Position.Lng));
+				WayPointMarker wp = new WayPointMarker(newroute, m, (newroute.Markers.Count + 1).ToString(), string.Format("Lat {0}\nLon {1}\nAlt {2} m",  m.Position.Lat, m.Position.Lng,50));
 				newroute.AddWaypoint(wp, m);
 
             }
@@ -123,7 +124,6 @@ namespace SharpBladeGroundStation
                         tp.Start(area, i, gmap.MapProvider, 100);
                     }
                     GMaps.Instance.Mode = m;
-
                 }
                 gmap.SelectedArea = new RectLatLng();
             }
@@ -138,7 +138,8 @@ namespace SharpBladeGroundStation
 		//move waypoint,almost ok
         private void Wp_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
-			WayPointMarker wp = sender as WayPointMarker;			
+			WayPointMarker wp = sender as WayPointMarker;
+			wp.LabelText = string.Format("Lat {0}\nLon {1}\nAlt {2} m", wp.Position.Lat, wp.Position.Lng,wp.Altitude);
 			newroute.RefreshWayPoint(wp);
 			e.Handled = true;
 		}
@@ -159,8 +160,21 @@ namespace SharpBladeGroundStation
 			e.Handled = true;
         }
        
+		private void Wp_MouseWheel(object sender, MouseWheelEventArgs e)
+		{
+			WayPointMarker wp = sender as WayPointMarker;
+			if (e.Delta > 0)
+				wp.Altitude += 0.5f;
+			else
+				wp.Altitude -= 0.5f;
+			wp.LabelText = string.Format("Lat {0}\nLon {1}\nAlt {2} m", wp.Position.Lat, wp.Position.Lng, wp.Altitude);
+			newroute.RefreshWayPoint(wp);
+			e.Handled = true;
+
+		}
+
 		//ok
-        private void updateFlightRoute(PointLatLng p)
+		private void updateFlightRoute(PointLatLng p)
         {			
 			flightRoute.AddWaypoint(p);
         }

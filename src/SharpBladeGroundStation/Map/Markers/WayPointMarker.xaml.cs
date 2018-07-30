@@ -26,7 +26,8 @@ namespace SharpBladeGroundStation.Map.Markers
 		string markerText;
 		Popup popup;
 		TextBlock labelText;
-		MapRouteData route;       
+		MapRouteData route;
+		
 		public WayPointMarker(MapRouteData r,GMapMarker m,string wptext, string labeltext)
 		{
 			InitializeComponent();
@@ -39,10 +40,13 @@ namespace SharpBladeGroundStation.Map.Markers
 			popup.Placement = PlacementMode.Mouse;
 			labelText.Background = Brushes.DarkGray;
 			labelText.Foreground = Brushes.White;
-			labelText.FontSize = 10;
+			labelText.FontSize = 14;
 			labelText.Text = labeltext;
 
 			popup.Child = labelText;
+		
+
+			altitude = 50;
 
 			this.Unloaded += WayPointMarker_Unloaded;
 			this.Loaded += WayPointMarker_Loaded;			
@@ -100,8 +104,9 @@ namespace SharpBladeGroundStation.Map.Markers
         {
             get { return route.Map; }
         }
+			
 
-        public override Point GetOffset(Size s)
+		public override Point GetOffset(Size s)
         {
             return base.GetOffset(s);
         }
