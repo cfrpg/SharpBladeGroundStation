@@ -23,6 +23,8 @@ namespace SharpBladeGroundStation
 		CommLogger logger;
 		LogLink logLink;
 
+		MissionSender missionSender;
+
 		public LogLink LogLink
 		{
 			get { return logLink; }
@@ -42,6 +44,8 @@ namespace SharpBladeGroundStation
 			logLink = new LogLink();
 			logPlayerCtrl.DataContext = logLink;
 			logLink.Initialize();
+
+			
 		}
 
 		void linkListenerWorker()
@@ -101,6 +105,15 @@ namespace SharpBladeGroundStation
 				hudWindow.cameraPlayer.StartRecord(str);
 			}
 
+			missionSender = new MissionSender(currentVehicle);
+			missionSender.OnFinished += MissionSender_OnFinished;
+
+		}
+
+		private void MissionSender_OnFinished()
+		{
+			this.Dispatcher.BeginInvoke(new ThreadStart(delegate { MessageBox.Show("上传成功！"); }));
+			missionSender.State = MissionSenderState.Idle;
 		}
 
 		private void Link_OnReceivePackage(CommLink sender, EventArgs e)
@@ -214,6 +227,44 @@ namespace SharpBladeGroundStation
 			}
 			LogLink.Play();
 			hudWindow.logPlayer.Play();
+		}
+
+		private void uploadBtn_Click(object sender, RoutedEventArgs e)
+		{
+			//MessageBox.Show("这是没有实装的上传航线", "orz");
+			if (missionSender != null && missionSender.State == MissionSenderState.Idle)
+			{
+				missionSender.StartSendMission(newroute);
+			}
+			else
+			{
+				MessageBox.Show("未与飞控连接或线路正忙", "orz");
+			}
+			//MAVLinkPackage package = new MAVLinkPackage();
+			//package.Sequence = 1;
+			//package.System = 0;
+			//package.Component = 0;
+			//package.Function = (byte)MAVLINK_MSG_ID.MISSION_COUNT;
+			//package.AddData((ushort)10);
+			//package.AddData((byte)1);
+			//package.AddData((byte)190);
+			
+			//package.SetVerify();
+			//currentVehicle.Link.SendPackageQueue.Enqueue(package);
+		}
+
+		private void downloadBtn_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("下载航线暂未实装", "orz");
+			//MAVLinkPackage package = new MAVLinkPackage();
+			//package.Sequence = 1;
+			//package.System = 255;
+			//package.Component = 190;
+			//package.Function = (byte)MAVLINK_MSG_ID.MISSION_REQUEST_LIST;
+			//package.AddData((byte)1);
+			//package.AddData((byte)190);
+			//package.SetVerify();
+			//currentVehicle.Link.SendPackageQueue.Enqueue(package);
 		}
 	}
 }

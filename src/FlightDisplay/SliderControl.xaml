@@ -90,7 +90,7 @@
 
             
             <Viewbox Height="40" Canvas.Top="131" Width="60">                
-                <TextBlock x:Name="textBlock" Text="{Binding ElementName=slider,Path=Value,StringFormat={}{0:0.0}}" Width="40" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" Margin="0"/>
+                <TextBlock x:Name="textBlock" Text="{Binding ElementName=slider,Path=Value,StringFormat={}{0:0.0}}" Width="40" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" Margin="3,0"/>
             </Viewbox>
         </Canvas>
     </Viewbox>

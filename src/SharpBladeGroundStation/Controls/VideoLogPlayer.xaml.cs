@@ -81,12 +81,15 @@ namespace SharpBladeGroundStation
 		public void Play()
 		{
 			if (state != State.Stop)
+			{
 				state = State.Play;
+				SetProgress();
+			}
 		}
 
 		public void Stop()
 		{
-			state = State.Stop;
+			state = State.Pause;
 		}
 
 		public void SetProgress()
@@ -113,12 +116,19 @@ namespace SharpBladeGroundStation
 				frameLock = true;
 				if(logLink.CurrentTime-frameTime>=(reader.CurrentVideoTime-1)*1000)
 				{
-					Bitmap b = reader.ReadVideoFrame().ToBitmap();
-					BitmapImage bi = bitmap2BitmapImage(b);
-					Dispatcher.BeginInvoke(new ThreadStart(delegate
+					try
 					{
-						frameHolder.Source = bi;
-					}));
+						Bitmap b = reader.ReadVideoFrame().ToBitmap();
+						BitmapImage bi = bitmap2BitmapImage(b);
+						Dispatcher.BeginInvoke(new ThreadStart(delegate
+						{
+							frameHolder.Source = bi;
+						}));
+					}
+					catch(Exception ex)
+					{
+						state = State.Pause;
+					}
 				}
 				frameLock = false;
 			}

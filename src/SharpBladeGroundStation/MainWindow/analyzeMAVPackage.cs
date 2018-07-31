@@ -8,6 +8,7 @@ using SharpBladeGroundStation.DataStructs;
 using SharpBladeGroundStation.Map;
 using System.MAVLink;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 using Point = System.Windows.Point;
 
 namespace SharpBladeGroundStation
@@ -18,6 +19,7 @@ namespace SharpBladeGroundStation
         {
             MAVLinkPackage package = (MAVLinkPackage)p;
             package.StartRead();
+			currentVehicle.ID = package.System;
             UInt32 time = 0;
             UInt64 time64 = 0;
             UInt64 dt = (ulong)GCSconfig.PlotTimeInterval * 1000;
@@ -236,9 +238,40 @@ namespace SharpBladeGroundStation
                 case MAVLINK_MSG_ID.COMMAND_ACK://#77
                     
                     break;
-                default:
+				case MAVLINK_MSG_ID.MISSION_REQUEST:
+					ushort s2 = package.NextUShort();
+					short s1=package.NextShort();					
+					Debug.WriteLine("[MAVLink]:Request mission item {0} {1}.",s2,s1);
+					missionSender.NextRequest = s2;
+					break;
+				case MAVLINK_MSG_ID.MISSION_ACK:
+					package.NextShort();
+					missionSender.NextRequest = 32769;
+					Debug.WriteLine("[MAVLink]:Finished.");
+					break;
+				case MAVLINK_MSG_ID.MISSION_CURRENT:
 
-                    break;
+					break;
+				case MAVLINK_MSG_ID.ATTITUDE_TARGET:
+
+					break;
+				case MAVLINK_MSG_ID.MISSION_COUNT:
+					Debug.WriteLine("[MAVLink]:Count {0}.",package.NextUShort());
+					MAVLinkPackage pkg = new MAVLinkPackage();
+					pkg.Sequence = 0;
+					pkg.System = 255;
+					pkg.Component = 190;
+					pkg.Function = (byte)MAVLINK_MSG_ID.MISSION_REQUEST;
+					pkg.AddData((ushort)0);
+					pkg.AddData(package.System);
+					pkg.AddData((byte)190);					
+					pkg.SetVerify();
+					currentVehicle.Link.SendPackageQueue.Enqueue(pkg);
+					break;
+				
+                default:
+					Debug.WriteLine("[MAVLink]:Unhandled package {0}.", package.Function);
+					break;
             }
 
         }

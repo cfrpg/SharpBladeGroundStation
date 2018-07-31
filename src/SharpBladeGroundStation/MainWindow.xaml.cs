@@ -232,15 +232,7 @@ namespace SharpBladeGroundStation
 			}
 		}
 
-		private void uploadBtn_Click(object sender, RoutedEventArgs e)
-		{
-			MessageBox.Show("这是没有实装的上传航线", "orz");
-		}
-
-		private void downloadBtn_Click(object sender, RoutedEventArgs e)
-		{
-			MessageBox.Show("这是没有实装的下载航线", "orz");
-		}
+		
 
 		private void pathPlanBtn_Click(object sender, RoutedEventArgs e)
 		{

@@ -24,7 +24,7 @@
                         <ScaleTransform ScaleX="4" ScaleY="1"/>
                         <SkewTransform/>
                         <TranslateTransform Y="{Binding ElementName=pfdControl,Path=FlightState.Pitch,Converter={StaticResource pitTrans}}"/>
-                        <RotateTransform Angle="{Binding ElementName=pfdControl,Path=FlightState.ToolTip,Converter={StaticResource Inv}}"/>
+                        <RotateTransform Angle="{Binding ElementName=pfdControl,Path=FlightState.Roll,Converter={StaticResource Inv}}"/>
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>

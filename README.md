@@ -28,13 +28,13 @@ RAM:32G
 
 ### 已测试的最低配置
 
-CPU:i5 6200U
+CPU:i5 4210M
 
-GPU:HD520
+GPU:GT840M
 
 RAM:8G
 
-分辨率:2736\*1824 200% (1368\*912)
+分辨率:1366\*768
 
 
 ## 预定功能
@@ -92,3 +92,9 @@ Dynamic Data Display(MIT):https://archive.codeplex.com/?p=dynamicdatadisplay
 GMap.NET(MIT):https://archive.codeplex.com/?p=greatmaps
 
 AForge.NET(LGPL,GPL):http://www.aforgenet.com/
+
+## 膜大佬区
+
+测试大佬：CCH
+
+测试大佬：Flanker-A

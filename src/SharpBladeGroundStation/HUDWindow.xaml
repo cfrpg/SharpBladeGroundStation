@@ -13,8 +13,9 @@
             <Canvas x:Name="mainCanvas" Width="720" Height="576" Background="CornflowerBlue">
                 <local:CameraPlayer x:Name="cameraPlayer" Width="720" Height="576"/>
                 <local:VideoLogPlayer x:Name="logPlayer" Width="720" Height="576" Visibility="Hidden"/>
-                <hud:NavHUDControl x:Name="navhud" Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556" Visibility="Hidden"/>
-                <hud:ShinkaiSeikanHUD x:Name="sshud"  Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556"/>
+                <hud:NavHUDControl x:Name="navhud" Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556"/>
+                <hud:ShinkaiSeikanHUD x:Name="sshud"  Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556"  Visibility="Hidden"/>
+                <hud:PFDHUD x:Name="pfdhud"  Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556"  Visibility="Hidden"/>
             </Canvas>
         </Viewbox>
     </Grid>

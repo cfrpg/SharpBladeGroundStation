@@ -1,0 +1,15 @@
+﻿<local:HUDBase x:Class="SharpBladeGroundStation.HUD.PFDHUD"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SharpBladeGroundStation.HUD"
+             xmlns:fd="clr-namespace:FlightDisplay;assembly=FlightDisplay"
+             mc:Ignorable="d" 
+              d:DesignHeight="500" d:DesignWidth="500">
+    <Viewbox>
+        <Canvas Width="500" Height="500">
+            <fd:PFDControl x:Name="pfd" Width="500" Height="500" Transparent="True" FlightState="{Binding FlightState}"/>
+        </Canvas>
+    </Viewbox>
+</local:HUDBase>
