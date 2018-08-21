@@ -33,7 +33,6 @@ namespace SharpBladeGroundStation
 		VideoCaptureDevice localWebCam;
 		VideoFileWriter writer;
 		string videoPath;
-		string cameraName;
 
 		bool videoLoggerEnabled;
 
@@ -53,7 +52,7 @@ namespace SharpBladeGroundStation
 			frameQueue = new Queue<Bitmap>();
 			background = new Thread(backgroundWorker);
 			background.IsBackground = true;
-			
+
 		}
 		void backgroundWorker()
 		{
@@ -92,7 +91,7 @@ namespace SharpBladeGroundStation
 			}
 			if (localWebCam == null || !localWebCam.IsRunning)
 				return false;
-			
+
 			background.Start();
 			videoLoggerEnabled = true;
 			return true;
@@ -108,20 +107,21 @@ namespace SharpBladeGroundStation
 			localWebCam = new VideoCaptureDevice(cam);
 			localWebCam.NewFrame += LocalWebCam_NewFrame;
 			localWebCam.Start();
+
 			return true;
 		}
-		
+
 		public void Close()
-		{			
+		{
 			if (localWebCam != null && localWebCam.IsRunning)
 			{
 				localWebCam.Stop();
 				localWebCam.WaitForStop();
 			}
 			int a = 1;
-			while(a!=0)
-			{				
-				lock(frameQueue)
+			while (a != 0)
+			{
+				lock (frameQueue)
 				{
 					a = frameQueue.Count;
 				}
@@ -130,7 +130,7 @@ namespace SharpBladeGroundStation
 			if (writer != null && writer.IsOpen)
 			{
 				writer.Close();
-			}					
+			}
 		}
 
 		public bool IsCameraRunning()
@@ -142,7 +142,6 @@ namespace SharpBladeGroundStation
 		{
 			if (frameLock)
 			{
-				Debug.WriteLine("FrameLock!");
 				return;
 			}
 			frameLock = true;
@@ -166,7 +165,7 @@ namespace SharpBladeGroundStation
 					frameQueue.Enqueue(b);
 				}
 				sw.Stop();
-				Debug.WriteLine("[VideoLogger]:" + sw.Elapsed.TotalMilliseconds.ToString());
+				//Debug.WriteLine("[VideoLogger]:" + sw.Elapsed.TotalMilliseconds.ToString());
 			}
 			frameLock = false;
 		}

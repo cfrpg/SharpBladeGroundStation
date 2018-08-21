@@ -12,19 +12,19 @@ namespace SharpBladeGroundStation.CommunicationLink
 {
 	public class SerialLink : CommLink
 	{
-		SerialPort port;		
+		SerialPort port;
 		byte[] buffer;
 		int bufferSize;
-		int receiveTimeOut;		
+		int receiveTimeOut;
 
 		bool isUpdatingBuffer;
 		bool isParsingBuffer;
 		DateTime lastPackageTime;
-		
+
 
 		Thread backgroundListener;
 
-		byte last=0;
+		byte last = 0;
 		Stopwatch sw;
 
 		public SerialPort Port
@@ -33,18 +33,18 @@ namespace SharpBladeGroundStation.CommunicationLink
 			set { port = value; }
 		}
 
-		
+
 
 		public int BufferSize
 		{
-			get { return bufferSize; }			
+			get { return bufferSize; }
 		}
 
 		public int ReceiveTimeOut
 		{
 			get { return receiveTimeOut; }
 			set { receiveTimeOut = value; }
-		}	
+		}
 
 		/// <summary>
 		/// 建立连接后经过的总毫秒数
@@ -69,7 +69,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 
 
 
-		public SerialLink(string portName,LinkProtocol p,int br):base(p)
+		public SerialLink(string portName, LinkProtocol p, int br) : base(p)
 		{
 			port = new SerialPort(portName);
 			port.BaudRate = br;
@@ -87,16 +87,16 @@ namespace SharpBladeGroundStation.CommunicationLink
 			backgroundListener.Start();
 			connectTime = DateTime.Now;
 			sw = new Stopwatch();
-			
+
 		}
 
 		private void backgroundWorker()
 		{
-			DateTime lasttime=DateTime.Now;
+			DateTime lasttime = DateTime.Now;
 			int lasttx = 0, lastrx = 0;
-			while(true)
+			while (true)
 			{
-				
+
 				if (!port.IsOpen)
 				{
 					Thread.Sleep(500);
@@ -121,11 +121,11 @@ namespace SharpBladeGroundStation.CommunicationLink
 				}
 				catch
 				{
-					
+
 				}
 				DateTime now = DateTime.Now;
 				double dt = now.Subtract(lasttime).TotalMilliseconds;
-				if(dt>500)
+				if (dt > 500)
 				{
 					TxRate = (int)((dataReceived - lastrx) / (dt / 1000));
 					RxRate = (int)((dataSent - lasttx) / (dt / 1000));
@@ -139,15 +139,15 @@ namespace SharpBladeGroundStation.CommunicationLink
 		private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
 		{
 			last++;
-			if (isUpdatingBuffer||isParsingBuffer)
-			{				
+			if (isUpdatingBuffer || isParsingBuffer)
+			{
 				return;
-			}			
+			}
 			isUpdatingBuffer = true;
 			int len = port.BytesToRead;
 			port.Read(buffer, bufferSize, len);
 			dataReceived += len;
-			bufferSize += len;		
+			bufferSize += len;
 			parseBuffer();
 			isUpdatingBuffer = false;
 			last--;
@@ -161,7 +161,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			int offset = 0;
 			bool flag = false;
 			bool received = false;
-			LinkEventArgs lea = new LinkEventArgs();		
+			LinkEventArgs lea = new LinkEventArgs();
 			while (offset < bufferSize)
 			{
 				//sw.Restart();
@@ -189,26 +189,26 @@ namespace SharpBladeGroundStation.CommunicationLink
 							receivedPackageQueue.Enqueue(receivePackage.Clone());
 						}
 						received = true;
-						lea.Package.Add(receivePackage.Clone());						
+						lea.Package.Add(receivePackage.Clone());
 						break;
-				}			
-				
+				}
+
 				if (flag)
 					break;
 			}
-			
+
 			for (int i = offset; i < bufferSize; i++)
 			{
 				buffer[i - offset] = buffer[i];
 			}
 			bufferSize -= offset;
 			isParsingBuffer = false;
-			
-			
+
+
 			if (received)
 			{
 				//Debug.WriteLine(lea.Package.Count);
-				OnReceivePackageEvent(this,lea);				
+				OnReceivePackageEvent(this, lea);
 			}
 			//sw.Stop();
 			//Debug.WriteLine(sw.Elapsed.TotalMilliseconds);
@@ -216,14 +216,14 @@ namespace SharpBladeGroundStation.CommunicationLink
 
 		public void OpenPort()
 		{
-			if(!port.IsOpen)
+			if (!port.IsOpen)
 				port.Open();
 			connectTime = DateTime.Now;
 		}
 
 		public void ClosePort()
 		{
-			if(port.IsOpen)
+			if (port.IsOpen)
 				port.Close();
 		}
 
@@ -240,7 +240,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		{
 			if (port.IsOpen)
 				port.Close();
-			while (port.IsOpen||isParsingBuffer||isUpdatingBuffer) ;
+			while (port.IsOpen || isParsingBuffer || isUpdatingBuffer) ;
 			bufferSize = 0;
 			dataReceived = 0;
 			dataSent = 0;
@@ -249,6 +249,6 @@ namespace SharpBladeGroundStation.CommunicationLink
 			receivedPackageQueue.Clear();
 		}
 
-		
+
 	}
 }

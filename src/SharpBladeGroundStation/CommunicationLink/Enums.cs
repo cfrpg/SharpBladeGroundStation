@@ -28,8 +28,8 @@ namespace SharpBladeGroundStation.CommunicationLink
 
 	public enum ANOFunction
 	{
-		VER=0,
-		STATUS=1
+		VER = 0,
+		STATUS = 1
 	}
 
 	public enum LinkState
@@ -52,7 +52,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		/// <summary>
 		/// MAVLink2.0协议
 		/// </summary>
-		MAVLink2 = 2,		
+		MAVLink2 = 2,
 		/// <summary>
 		/// 匿名飞控协议
 		/// </summary>
@@ -87,30 +87,30 @@ namespace SharpBladeGroundStation.CommunicationLink
 		/// 文件损坏
 		/// </summary>
 		Corrupted
-		
+
 	}
 
-    public enum LogReplayState
-    {
-        /// <summary>
-        /// 未载入文件
-        /// </summary>
-        NoFile,
-        /// <summary>
-        /// 暂停
-        /// </summary>
-        Pause,
-        /// <summary>
-        /// 播放
-        /// </summary>
-        Playing,
-        /// <summary>
-        /// 播放完毕，停止
-        /// </summary>
-        Stop,
+	public enum LogReplayState
+	{
+		/// <summary>
+		/// 未载入文件
+		/// </summary>
+		NoFile,
+		/// <summary>
+		/// 暂停
+		/// </summary>
+		Pause,
+		/// <summary>
+		/// 播放
+		/// </summary>
+		Playing,
+		/// <summary>
+		/// 播放完毕，停止
+		/// </summary>
+		Stop,
 		/// <summary>
 		/// 临时暂停
 		/// </summary>
 		TempPause
-    }
+	}
 }

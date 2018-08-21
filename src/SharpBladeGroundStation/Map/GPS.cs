@@ -24,7 +24,7 @@ namespace SharpBladeGroundStation.Map
 	{
 		private static double Offset = 0.00669342162296594323;
 		private static double Axis = 6378245.0;
-        
+
 		public static PointLatLng WGS84ToGCJ02(PointLatLng p)
 		{
 			if (IsOutOfChina(p))
@@ -89,7 +89,7 @@ namespace SharpBladeGroundStation.Map
 			return false;
 		}
 
-		public static double GetDistance(PointLatLng p1,PointLatLng p2)
+		public static double GetDistance(PointLatLng p1, PointLatLng p2)
 		{
 			double lat1 = (90 - p1.Lat) * Math.PI / 180;
 			double lat2 = (90 - p2.Lat) * Math.PI / 180;
@@ -97,7 +97,7 @@ namespace SharpBladeGroundStation.Map
 			double lon2 = p2.Lng * Math.PI / 180;
 			double c = Math.Sin(lat1) * Math.Sin(lat2) * Math.Cos(lon1 - lon2) + Math.Cos(lat1) * Math.Cos(lat2);
 			return Axis * Math.Acos(c);
-			
+
 		}
 		public static Tuple<double, double> WGS84ToMercator(double lat, double lon)
 		{

@@ -16,7 +16,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Diagnostics;
-
 using AForge.Video;
 using AForge.Video.DirectShow;
 using Geb.Video.FFMPEG;
@@ -31,7 +30,7 @@ namespace SharpBladeGroundStation
 	/// HUDWindow.xaml 的交互逻辑
 	/// </summary>
 	public partial class HUDWindow : Window
-	{		
+	{
 		VideoFileReader reader;
 
 		Dictionary<Key, HUDBase> hudCollection;
@@ -39,28 +38,28 @@ namespace SharpBladeGroundStation
 		public HUDWindow(MainWindow mw)
 		{
 			InitializeComponent();
-            mainwin = mw;			
+			mainwin = mw;
 			reader = new VideoFileReader();
-		
-        }
+
+		}
 
 		MainWindow mainwin;
 
-        public MainWindow Mainwin
-        {
-            get { return mainwin; }
-            set { mainwin = value; }
-        }
-				
+		public MainWindow Mainwin
+		{
+			get { return mainwin; }
+			set { mainwin = value; }
+		}
+
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
 			hudCollection = new Dictionary<Key, HUDBase>();
-            navhud.Vehicle = Mainwin.CurrentVehicle;
+			navhud.Vehicle = Mainwin.CurrentVehicle;
 			sshud.Vehicle = Mainwin.CurrentVehicle;
 			pfdhud.Vehicle = Mainwin.CurrentVehicle;
 			hudCollection.Add(Key.D1, navhud);
 			hudCollection.Add(Key.D2, pfdhud);
-			//hudCollection.Add(Key.D2, sshud);
+			hudCollection.Add(Key.D3, sshud);
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -69,22 +68,22 @@ namespace SharpBladeGroundStation
 			logPlayer.Close();
 		}
 
-        private void Window_Initialized(object sender, EventArgs e)
-        {
-           
-        }
+		private void Window_Initialized(object sender, EventArgs e)
+		{
 
-						
+		}
+
+
 		private void Timer_Elapsed_Replay(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			
+
 		}
 
 		private void Window_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (!hudCollection.ContainsKey(e.Key))
 				return;
-			foreach(var v in hudCollection)
+			foreach (var v in hudCollection)
 			{
 				v.Value.Visibility = Visibility.Hidden;
 			}
@@ -92,5 +91,5 @@ namespace SharpBladeGroundStation
 		}
 	}
 
-	
+
 }

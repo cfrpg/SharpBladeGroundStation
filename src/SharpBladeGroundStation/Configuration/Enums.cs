@@ -14,7 +14,7 @@ namespace SharpBladeGroundStation.Configuration
 		/// <summary>
 		/// 固定在老校区图书馆
 		/// </summary>
-		Library=0,
+		Library = 0,
 		/// <summary>
 		/// 跟随飞行器
 		/// </summary>

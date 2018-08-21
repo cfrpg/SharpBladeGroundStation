@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace SharpBladeGroundStation.DataStructs
 {
-	public class GPSData:INotifyPropertyChanged
+	public class GPSData : INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -81,7 +81,7 @@ namespace SharpBladeGroundStation.DataStructs
 		{
 			get
 			{
-				return satelliteCount.ToString()+"星 "+ Enum.GetName(typeof(GPSPositionState), state);				
+				return satelliteCount.ToString() + "星 " + Enum.GetName(typeof(GPSPositionState), state);
 			}
 		}
 
@@ -121,12 +121,12 @@ namespace SharpBladeGroundStation.DataStructs
 			latitude = 0;
 			homingAngle = 0;
 		}
-		
+
 	}
 
 	public enum GPSPositionState
 	{
-		NoGPS=0,
+		NoGPS = 0,
 		NoFix,
 		Fix2D,
 		Fix3D,
@@ -135,6 +135,6 @@ namespace SharpBladeGroundStation.DataStructs
 		RTK_FIXED,
 		STATIC,
 		PPP,
-		Undefined	//This one is real "Undefined"
+		Undefined   //This one is real "Undefined"
 	}
 }

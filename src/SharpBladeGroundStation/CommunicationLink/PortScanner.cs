@@ -16,7 +16,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		int timeout;
 		LinkProtocol protocol;
 		int baudRate;
-        bool isStarted;
+		bool isStarted;
 
 		System.Timers.Timer scantimer;
 		List<PortData> ports;
@@ -25,7 +25,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 
 		public event FindPortEvent OnFindPort;
 
-		public PortScanner(LinkProtocol p,int br, int md,int to)
+		public PortScanner(LinkProtocol p, int br, int md, int to)
 		{
 			maxDataSize = md;
 			protocol = p;
@@ -35,7 +35,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			scantimer = new System.Timers.Timer(500);
 			scantimer.Elapsed += Scantimer_Elapsed;
 			ports = new List<PortData>();
-            IsStarted = false;
+			IsStarted = false;
 
 		}
 
@@ -58,7 +58,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 				{//添加新出现的串口
 					PortData port = new PortData();
 					port.name = pn;
-					port.link = new SerialLink(pn, protocol,baudRate);
+					port.link = new SerialLink(pn, protocol, baudRate);
 					port.lastCheckTime = DateTime.Now;
 					port.state = PortScannerState.NewPort;
 					ports.Add(port);
@@ -114,7 +114,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 						break;
 				}
 			}
-		}		
+		}
 
 		public int MaxDataSize
 		{
@@ -140,22 +140,22 @@ namespace SharpBladeGroundStation.CommunicationLink
 			set { timeout = value; }
 		}
 
-        public bool IsStarted
-        {
-            get { return isStarted; }
-            set { isStarted = value; }
-        }
+		public bool IsStarted
+		{
+			get { return isStarted; }
+			set { isStarted = value; }
+		}
 
-        public void Start()
+		public void Start()
 		{
 			scantimer.Start();
-            IsStarted = true;
+			IsStarted = true;
 		}
 
 		public void Stop()
 		{
 			scantimer.Stop();
-            IsStarted = false;
+			IsStarted = false;
 		}
 
 		class PortData
@@ -171,7 +171,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		}
 	}
 
-	
+
 	public class PortScannerEventArgs : EventArgs
 	{
 		string portName;

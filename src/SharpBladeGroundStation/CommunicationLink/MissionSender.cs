@@ -22,7 +22,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 
 		public delegate void MissionSenderEvent();
 		public event MissionSenderEvent OnFinished;
-		
+
 
 		public MissionSenderState State
 		{
@@ -35,8 +35,8 @@ namespace SharpBladeGroundStation.CommunicationLink
 			{
 				state = value;
 			}
-		}		
-		
+		}
+
 
 		public List<MAVLinkPackage> Packages
 		{
@@ -87,12 +87,12 @@ namespace SharpBladeGroundStation.CommunicationLink
 			background.Start();
 		}
 
-		
+
 
 		void backgroundWorker()
 		{
 			bool flag = false;
-			while(!flag)
+			while (!flag)
 			{
 				switch (state)
 				{
@@ -105,7 +105,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 					case MissionSenderState.Sending:
 						break;
 					case MissionSenderState.Waiting:
-						if(nextRequest<32768)
+						if (nextRequest < 32768)
 						{
 							Debug.WriteLine("[Mission Sender]:Send {0} of {1}", nextRequest, packages.Count);
 							target.Link.SendPackageQueue.Enqueue(packages[nextRequest]);
@@ -131,24 +131,24 @@ namespace SharpBladeGroundStation.CommunicationLink
 		{
 			state = MissionSenderState.Configing;
 			packages.Clear();
-			for(int i=0;i<data.Markers.Count;i++)
+			for (int i = 0; i < data.Markers.Count; i++)
 			{
 				MAVLinkPackage p = new MAVLinkPackage();
-				p.AddData(0f);	//p1
+				p.AddData(0f);  //p1
 				p.AddData(0.5f);
 				p.AddData(0f);
 				p.AddData(float.NaN);
 				p.AddData((float)data.Markers[i].Position.Lat);
 				p.AddData((float)data.Markers[i].Position.Lng);
-				p.AddData((float)data.Markers[i].Altitude);	//p7
+				p.AddData((float)data.Markers[i].Altitude); //p7
 
 				p.AddData((ushort)i);//seq
 				p.AddData((ushort)16);//cmd
 				p.AddData((byte)target.ID);//sys
 				p.AddData((byte)190);//comp
-				
+
 				p.AddData((byte)3);//frame
-				if(i==0)
+				if (i == 0)
 					p.AddData((byte)1);//current
 				else
 					p.AddData((byte)0);//current
@@ -163,7 +163,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			p1.System = 255;
 			p1.Component = 0;
 			p1.Function = (byte)MAVLINK_MSG_ID.MISSION_COUNT;
-			p1.AddData((ushort)packages.Count);			
+			p1.AddData((ushort)packages.Count);
 			p1.AddData((byte)target.ID);
 			p1.AddData((byte)190);
 
@@ -173,7 +173,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			nextRequest = 32768;
 			target.Link.SendPackageQueue.Enqueue(p1);
 			state = MissionSenderState.Waiting;
-			
+
 		}
 	}
 
@@ -182,7 +182,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		/// <summary>
 		/// 空闲
 		/// </summary>
-		Idle=0,
+		Idle = 0,
 		/// <summary>
 		/// 先占坑，配置参数
 		/// </summary>

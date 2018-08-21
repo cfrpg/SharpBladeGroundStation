@@ -118,7 +118,6 @@
     <Compile Include="DataStructs\MapRouteData.cs" />
     <Compile Include="DataStructs\Mission\Mission.cs" />
     <Compile Include="DataStructs\Mission\MissionItem.cs" />
-    <Compile Include="DataStructs\Vector3Data.cs" />
     <Compile Include="Configuration\Enums.cs" />
     <Compile Include="DataStructs\Vehicle\Camera.cs" />
     <Compile Include="DataStructs\Vehicle\Vehicle.cs" />
@@ -139,7 +138,6 @@
     <Compile Include="HUD\NavHUDControl.xaml.cs">
       <DependentUpon>NavHUDControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow\camera.cs" />
     <Compile Include="MainWindow\handleLink.cs" />
     <Compile Include="MainWindow\mapOperation.cs" />
     <Compile Include="MainWindow\testfield.cs" />

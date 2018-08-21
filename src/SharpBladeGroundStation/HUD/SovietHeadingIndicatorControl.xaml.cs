@@ -51,7 +51,7 @@ namespace SharpBladeGroundStation.HUD
 		}
 		public void OnHeadingChanged(DependencyPropertyChangedEventArgs e)
 		{
-			
+
 		}
 
 		public SovietHeadingIndicatorControl()
@@ -66,15 +66,15 @@ namespace SharpBladeGroundStation.HUD
 			TextTicks = new List<Object>();
 			int longtickl = 12;
 			int shorttickl = 12;
-			for(int i=0;i<109;i++)
+			for (int i = 0; i < 109; i++)
 			{
-				Ticks.Add(i % 2 == 0 ? longtickl : shorttickl);				
+				Ticks.Add(i % 2 == 0 ? longtickl : shorttickl);
 			}
-			for(int i=0;i<55;i++)
+			for (int i = 0; i < 55; i++)
 			{
-				TextTicks.Add(((((i - 9) * 10 + 360) % 360)/10).ToString("00"));
+				TextTicks.Add(((((i - 9) * 10 + 360) % 360) / 10).ToString("00"));
 			}
-			
+
 			//TextTicks.Add("W");
 			//TextTicks.Add("NW");
 			//TextTicks.Add("N");

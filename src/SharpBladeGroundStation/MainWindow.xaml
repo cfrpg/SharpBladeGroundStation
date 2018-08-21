@@ -197,7 +197,7 @@
                                     <TextBlock>上传航线</TextBlock>
                                 </Button.ToolTip>
                             </Button>
-                            <Button x:Name="downloadBtn" Background="#CC646464" BorderBrush="White" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="4" Click="downloadBtn_Click" Visibility="Collapsed" >
+                            <Button x:Name="downloadBtn" Background="#CC646464" BorderBrush="White" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="4" Click="downloadBtn_Click">
                                 <Button.Content>
                                     <Image Source="Contents/upload.png" Margin="2" RenderTransformOrigin="0.5,0.5">
                                         <Image.RenderTransform>
@@ -303,7 +303,6 @@
                             <RowDefinition Height="321*"/>
                         </Grid.RowDefinitions>
                         <Button x:Name="button" Content="启动黑科技" HorizontalAlignment="Left" Height="38"  VerticalAlignment="Bottom" Width="97" Click="button_Click" Grid.Row="1" Margin="20,0,0,20"/>
-                        <Button x:Name="button233" Content="我要做ppt!" HorizontalAlignment="Left" Height="38"  VerticalAlignment="Bottom" Width="97" Click="button_Click233" Grid.Row="1" Margin="131,0,0,20"  Visibility="Hidden"/>
                         <GroupBox x:Name="gcsCfgGroup" Header="地面站设置" HorizontalAlignment="Left" VerticalAlignment="Top" Height="288" Width="514" BorderBrush="Black">
                             <Grid>
                                 <Grid.RowDefinitions>

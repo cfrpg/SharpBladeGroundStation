@@ -16,11 +16,11 @@ using SharpBladeGroundStation.CommunicationLink;
 
 namespace SharpBladeGroundStation
 {
-    /// <summary>
-    /// LogPlayerControl.xaml 的交互逻辑
-    /// </summary>
-    public partial class LogPlayerControl : UserControl
-    {
+	/// <summary>
+	/// LogPlayerControl.xaml 的交互逻辑
+	/// </summary>
+	public partial class LogPlayerControl : UserControl
+	{
 		public bool IsDragingSlider { get; set; }
 
 		public static readonly DependencyProperty FullTimeProperty =
@@ -102,7 +102,7 @@ namespace SharpBladeGroundStation
 		{
 			spdText.Text = Speed.ToString("0.0") + "x";
 		}
-		
+
 		public static void OnCurrentTimePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
 		{
 			LogPlayerControl s = sender as LogPlayerControl;
@@ -110,9 +110,9 @@ namespace SharpBladeGroundStation
 		}
 		public void OnCurrentTimeChanged(DependencyPropertyChangedEventArgs e)
 		{
-			
+
 		}
-		
+
 		public static void OnFullTimePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
 		{
 			LogPlayerControl s = sender as LogPlayerControl;
@@ -120,18 +120,18 @@ namespace SharpBladeGroundStation
 		}
 		public void OnFullTimeChanged(DependencyPropertyChangedEventArgs e)
 		{
-			
+
 		}
 
 		public LogPlayerControl()
-        {
-            InitializeComponent();
+		{
+			InitializeComponent();
 			IsDragingSlider = false;
-        }
+		}
 
 		private void incSpdBtn_Click(object sender, RoutedEventArgs e)
 		{
-			double spd = Speed+0.1;
+			double spd = Speed + 0.1;
 			if (spd > 3)
 				spd = 3;
 			Speed = spd;
@@ -139,12 +139,12 @@ namespace SharpBladeGroundStation
 
 		private void stopBtn_Click(object sender, RoutedEventArgs e)
 		{
-			
+
 		}
 
 		private void playBtn_Click(object sender, RoutedEventArgs e)
 		{
-			
+
 		}
 
 		private void pauseBtn_Click(object sender, RoutedEventArgs e)
@@ -167,22 +167,22 @@ namespace SharpBladeGroundStation
 
 		private void slider_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			
+
 		}
 
 		private void slider_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
-			
+
 		}
 
 		private void slider_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			
+
 		}
 
 		private void slider_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
-			
+
 		}
 	}
 }

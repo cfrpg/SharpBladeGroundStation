@@ -35,16 +35,16 @@ namespace SharpBladeGroundStation.CommunicationLink
 			set { function = value; }
 		}
 
-		public ANOLinkPackage():base(256)
+		public ANOLinkPackage() : base(256)
 		{
 			function = 0;
 			reverseBytes = true;
 		}
 
-		
-		public override PackageParseResult ReadFromBuffer(byte[] buff,int length,int offset)
-		{			
-			if (length-offset < HeaderSize)
+
+		public override PackageParseResult ReadFromBuffer(byte[] buff, int length, int offset)
+		{
+			if (length - offset < HeaderSize)
 				return PackageParseResult.NoEnoughData;
 			//Check STX
 			if (!(buff[offset + 0] == 0xAA && buff[offset + 1] == 0xAA))
@@ -61,7 +61,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			//Check checksum
 			if (sum != buff[offset + len + HeaderSize])
 				return PackageParseResult.BadCheckSum;
-			for(int i=0;i<=len+4;i++)
+			for (int i = 0; i <= len + 4; i++)
 			{
 				buffer[i] = buff[offset + i];
 			}
@@ -86,7 +86,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 				v += buffer[i];
 			}
 			buffer[i] = v;
-			
+
 		}
 		public override string ToString()
 		{

@@ -15,14 +15,14 @@ using System.Windows.Shapes;
 
 namespace SharpBladeGroundStation.Map.Markers
 {
-    /// <summary>
-    /// VertexMarker.xaml 的交互逻辑
-    /// </summary>
-    public partial class VertexMarker : ClickableGMapMarker
-    {
-        public VertexMarker()
-        {
-            InitializeComponent();
-        }
-    }
+	/// <summary>
+	/// VertexMarker.xaml 的交互逻辑
+	/// </summary>
+	public partial class VertexMarker : ClickableGMapMarker
+	{
+		public VertexMarker()
+		{
+			InitializeComponent();
+		}
+	}
 }

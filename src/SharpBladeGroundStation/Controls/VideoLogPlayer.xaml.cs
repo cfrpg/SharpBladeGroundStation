@@ -43,7 +43,7 @@ namespace SharpBladeGroundStation
 		State state;
 
 		double frameTime;
-		
+
 		public VideoLogPlayer()
 		{
 			InitializeComponent();
@@ -55,7 +55,7 @@ namespace SharpBladeGroundStation
 			background = new Thread(backgroundWorker);
 			background.IsBackground = true;
 			state = State.Stop;
-			
+
 		}
 
 		public void OpenFile(string path)
@@ -96,7 +96,7 @@ namespace SharpBladeGroundStation
 		{
 			state = State.Pause;
 			while (frameLock) ;
-			reader.Seek((logLink.CurrentTime - frameTime*2)/1000+1);
+			reader.Seek((logLink.CurrentTime - frameTime * 2) / 1000 + 1);
 			state = State.Play;
 		}
 
@@ -106,7 +106,7 @@ namespace SharpBladeGroundStation
 		}
 		private void backgroundWorker()
 		{
-			while(state!=State.Stop)
+			while (state != State.Stop)
 			{
 				if (state == State.Pause)
 				{
@@ -114,7 +114,7 @@ namespace SharpBladeGroundStation
 					continue;
 				}
 				frameLock = true;
-				if(logLink.CurrentTime-frameTime>=(reader.CurrentVideoTime-1)*1000)
+				if (logLink.CurrentTime - frameTime >= (reader.CurrentVideoTime - 1) * 1000)
 				{
 					try
 					{
@@ -125,7 +125,7 @@ namespace SharpBladeGroundStation
 							frameHolder.Source = bi;
 						}));
 					}
-					catch(Exception ex)
+					catch//(Exception ex)
 					{
 						state = State.Pause;
 					}

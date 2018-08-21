@@ -31,21 +31,21 @@ using System.MAVLink;
 
 namespace SharpBladeGroundStation
 {
-    /// <summary>
-    /// MainWindow.xaml 的交互逻辑
-    /// </summary>
-    public partial class MainWindow : Window
-    {
-        //SerialLink link;       
+	/// <summary>
+	/// MainWindow.xaml 的交互逻辑
+	/// </summary>
+	public partial class MainWindow : Window
+	{
+		//SerialLink link;       
 
-        Vehicle currentVehicle;
-		GCSConfiguration GCSconfig;		
-		
+		Vehicle currentVehicle;
+		GCSConfiguration GCSconfig;
+
 		ObservableDataSource<Point>[] accelGraphData = new ObservableDataSource<Point>[3];
 		ObservableDataSource<Point>[] gyroGraphData = new ObservableDataSource<Point>[3];
 		ObservableDataSource<Point>[] attitudeGraphData = new ObservableDataSource<Point>[3];
 		ObservableDataSource<Point> altitudeGraphData;
-		
+
 		Dictionary<int, UInt64> dataSkipCount;
 
 		//FlightState flightState;
@@ -66,11 +66,11 @@ namespace SharpBladeGroundStation
 			set { GCSconfig = value; }
 		}
 
-        public Vehicle CurrentVehicle
-        {
-            get { return currentVehicle; }
-            set { currentVehicle = value; }
-        }
+		public Vehicle CurrentVehicle
+		{
+			get { return currentVehicle; }
+			set { currentVehicle = value; }
+		}
 
 		public HUDVideoSource HudVideoSource
 		{
@@ -79,27 +79,27 @@ namespace SharpBladeGroundStation
 		}
 
 		public MainWindow()
-        {
-            InitializeComponent();
+		{
+			InitializeComponent();
 			initControls();
-			initConfig();			
+			initConfig();
 			initGmap();
 			initLinkListener();
-            currentVehicle = new Vehicle(0);
-            pfd.DataContext = currentVehicle.FlightState;
+			currentVehicle = new Vehicle(0);
+			pfd.DataContext = currentVehicle.FlightState;
 			gpsData = new GPSData();
 			vdopText.DataContext = gpsData;
 			hdopText.DataContext = gpsData;
 			gpsStateText.DataContext = gpsData;
-            battText.DataContext = currentVehicle.Battery;
+			battText.DataContext = currentVehicle.Battery;
 			//flightDataGrid.DataContext = currentVehicle.FlightState;
 
 			initGraph();
-			
-			
+
+
 
 			dataSkipCount = new Dictionary<int, ulong>();
-			for(int i=0;i<255;i++)
+			for (int i = 0; i < 255; i++)
 			{
 				dataSkipCount[i] = 0;
 			}
@@ -132,69 +132,69 @@ namespace SharpBladeGroundStation
 
 		private void initConfig()
 		{
-			string path = Environment.CurrentDirectory+"\\config";
-			
+			string path = Environment.CurrentDirectory + "\\config";
+
 			DirectoryInfo di = new DirectoryInfo(path);
 			if (!di.Exists)
 				di.Create();
 			//FileInfo fi = new FileInfo(path + "\\gcs.cfg");
 			XmlSerializer xs = new XmlSerializer(typeof(GCSConfiguration));
-			Stream s = new FileStream(path + "\\gcs.xml", FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.None);
+			Stream s = new FileStream(path + "\\gcs.xml", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
 			try
 			{
-				GCSconfig=(GCSConfiguration)xs.Deserialize(s);
+				GCSconfig = (GCSConfiguration)xs.Deserialize(s);
 				s.Close();
 			}
-			catch(Exception ex)
+			catch//(Exception ex)
 			{
 				//MessageBox.Show(ex.ToString());
 				s.Close();
-				s= new FileStream(path + "\\gcs.xml", FileMode.Create, FileAccess.Write, FileShare.None);
-				GCSconfig = GCSConfiguration.DefaultConfig();				
+				s = new FileStream(path + "\\gcs.xml", FileMode.Create, FileAccess.Write, FileShare.None);
+				GCSconfig = GCSConfiguration.DefaultConfig();
 				xs.Serialize(s, GCSConfig);
 				s.Close();
 			}
 			di = new DirectoryInfo(GCSconfig.LogPath);
-			if(!di.Exists)
+			if (!di.Exists)
 			{
 				di.Create();
 			}
-			gcsCfgGroup.DataContext = GCSconfig;			
+			gcsCfgGroup.DataContext = GCSconfig;
 
 		}
-		
 
-		
-		
-		
+
+
+
+
 
 		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
 		{
-			leftcol.MaxWidth = Math.Min(400, (e.NewSize.Height-30)/669*300);
+			leftcol.MaxWidth = Math.Min(400, (e.NewSize.Height - 30) / 669 * 300);
 		}
 
-        //private void setVector3Data(string name,double x,double y,double z,ObservableCollection<Vector3Data> list)
-        //{
-        //    bool flag = true;
-        //    for (int i = 0; i < list.Count; i++)
-        //    {
-        //        if (list[i].Name == name)
-        //        {
-        //            list[i].X = x;
-        //            list[i].Y = y;
-        //            list[i].Z = z;
-        //            flag = false;
-        //        }
-        //    }
-        //    if (flag)
-        //    {
-        //        Action a = () => { list.Add(new Vector3Data(name, x, y, z)); };
-        //        Dispatcher.BeginInvoke(a, DispatcherPriority.Background);                
-        //    }
-        //}	
-				
+		//private void setVector3Data(string name,double x,double y,double z,ObservableCollection<Vector3Data> list)
+		//{
+		//    bool flag = true;
+		//    for (int i = 0; i < list.Count; i++)
+		//    {
+		//        if (list[i].Name == name)
+		//        {
+		//            list[i].X = x;
+		//            list[i].Y = y;
+		//            list[i].Z = z;
+		//            flag = false;
+		//        }
+		//    }
+		//    if (flag)
+		//    {
+		//        Action a = () => { list.Add(new Vector3Data(name, x, y, z)); };
+		//        Dispatcher.BeginInvoke(a, DispatcherPriority.Background);                
+		//    }
+		//}	
 
-		
+
+
 
 		private void initControls()
 		{
@@ -206,7 +206,7 @@ namespace SharpBladeGroundStation
 			logPlayerCtrl.slider.PreviewMouseLeftButtonUp += Slider_PreviewMouseLeftButtonUp;
 		}
 
-		
+
 
 		private void button3_Click(object sender, RoutedEventArgs e)
 		{
@@ -226,13 +226,13 @@ namespace SharpBladeGroundStation
 
 		private void clearBtn_Click(object sender, RoutedEventArgs e)
 		{
-			if(MessageBox.Show("清空所有航线?",messageboxTitle,MessageBoxButton.YesNoCancel)==MessageBoxResult.Yes)
+			if (MessageBox.Show("清空所有航线?", messageboxTitle, MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes)
 			{
 				newroute.Clear();
 			}
 		}
 
-		
+
 
 		private void pathPlanBtn_Click(object sender, RoutedEventArgs e)
 		{
@@ -245,7 +245,7 @@ namespace SharpBladeGroundStation
 			{
 				mapCenterConfig = MapCenterPositionConfig.FollowUAV;
 				followBtn.Background = new SolidColorBrush(Color.FromArgb(204, 255, 20, 20));
-				
+
 			}
 			else
 			{
@@ -257,12 +257,12 @@ namespace SharpBladeGroundStation
 		private void mainwindow_Closing(object sender, CancelEventArgs e)
 		{
 			string path = Environment.CurrentDirectory + "\\config";
-			
+
 			XmlSerializer xs = new XmlSerializer(typeof(GCSConfiguration));
-			Stream s = new FileStream(path + "\\gcs.xml", FileMode.Create, FileAccess.Write, FileShare.None);	
+			Stream s = new FileStream(path + "\\gcs.xml", FileMode.Create, FileAccess.Write, FileShare.None);
 			xs.Serialize(s, GCSConfig);
 			s.Close();
-			hudWindow.Close();			
+			hudWindow.Close();
 			logger?.End();
 		}
 
@@ -275,11 +275,11 @@ namespace SharpBladeGroundStation
 			int id = -1;
 			cameraComboBox.ItemsSource = localWebCamsCollection;
 			cameraComboBox.DisplayMemberPath = "Name";
-			if(localWebCamsCollection.Count>0)
+			if (localWebCamsCollection.Count > 0)
 			{
-				for(int i=0;i<localWebCamsCollection.Count;i++)
-				{					
-					if(GCSconfig.CameraName!=""&& localWebCamsCollection[i].Name==GCSconfig.CameraName)
+				for (int i = 0; i < localWebCamsCollection.Count; i++)
+				{
+					if (GCSconfig.CameraName != "" && localWebCamsCollection[i].Name == GCSconfig.CameraName)
 					{
 						cameraComboBox.SelectedValue = localWebCamsCollection[i];
 						id = i;
@@ -290,7 +290,7 @@ namespace SharpBladeGroundStation
 			{
 
 			}
-			if(id>=0)
+			if (id >= 0)
 			{
 				HudVideoSource = HUDVideoSource.Camera;
 				hudWindow.cameraPlayer.OpenCamera(localWebCamsCollection[id].MonikerString);
@@ -299,9 +299,9 @@ namespace SharpBladeGroundStation
 			else
 			{
 				HudVideoSource = HUDVideoSource.NoVideo;
-			}			
+			}
 			cameraComboBox.SelectionChanged += CameraComboBox_SelectionChanged;
-				
+
 		}
 
 		private void CameraComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -315,8 +315,8 @@ namespace SharpBladeGroundStation
 		private void logpathbtn_Click(object sender, RoutedEventArgs e)
 		{
 			System.Windows.Forms.FolderBrowserDialog fbdig = new System.Windows.Forms.FolderBrowserDialog();
-			var dr= fbdig.ShowDialog();
-			if(dr!=System.Windows.Forms.DialogResult.Cancel)
+			var dr = fbdig.ShowDialog();
+			if (dr != System.Windows.Forms.DialogResult.Cancel)
 			{
 				GCSconfig.LogPath = fbdig.SelectedPath;
 			}
@@ -324,7 +324,7 @@ namespace SharpBladeGroundStation
 
 		private void logCtrlBtn_Click(object sender, RoutedEventArgs e)
 		{
-			if(logCtrlGrid.Visibility==Visibility.Visible)
+			if (logCtrlGrid.Visibility == Visibility.Visible)
 			{
 				retractLogGrid();
 			}
@@ -332,7 +332,7 @@ namespace SharpBladeGroundStation
 			{
 				extendLogGrid();
 			}
-			
+
 		}
 
 		private void extendLogGrid()

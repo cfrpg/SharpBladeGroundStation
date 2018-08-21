@@ -45,7 +45,7 @@ namespace SharpBladeGroundStation
 			logPlayerCtrl.DataContext = logLink;
 			logLink.Initialize();
 
-			
+
 		}
 
 		void linkListenerWorker()
@@ -66,7 +66,7 @@ namespace SharpBladeGroundStation
 					lock (currentVehicle.Link.ReceivedPackageQueue)
 					{
 						package = currentVehicle.Link.ReceivedPackageQueue.Dequeue();
-						
+
 					}
 					//Debug.WriteLine(currentVehicle.Link.ReceivedPackageQueue.Count);
 					switch (currentVehicle.Link.Protocol)
@@ -159,7 +159,7 @@ namespace SharpBladeGroundStation
 			ofd.Filter = "日志文件 (*.sblog)|*.sblog|All files (*.*)|*.*";
 			var res = ofd.ShowDialog();
 			if (res != System.Windows.Forms.DialogResult.Cancel)
-			{				
+			{
 				LoadFileResualt lfr = LogLink.OpenFile(ofd.FileName);
 				if (lfr == LoadFileResualt.OK)
 				{
@@ -167,7 +167,7 @@ namespace SharpBladeGroundStation
 					logPathText.Text = ofd.SafeFileName;
 					string str = ofd.FileName.Substring(0, ofd.FileName.LastIndexOf(".") + 1) + "mpg";
 					FileInfo fi = new FileInfo(str);
-					if(fi.Exists)
+					if (fi.Exists)
 					{
 						hudWindow.logPlayer.SetLogLink(logLink);
 						hudWindow.logPlayer.OpenFile(str);
@@ -183,9 +183,9 @@ namespace SharpBladeGroundStation
 
 		private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			if (LogLink.ReplayState==LogReplayState.TempPause)
+			if (LogLink.ReplayState == LogReplayState.TempPause)
 			{
-				if(e.NewValue<e.OldValue)
+				if (e.NewValue < e.OldValue)
 				{
 					initGraph();
 				}
@@ -195,7 +195,7 @@ namespace SharpBladeGroundStation
 		}
 		private void Slider_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
-			if(LogLink.ReplayState==LogReplayState.TempPause)
+			if (LogLink.ReplayState == LogReplayState.TempPause)
 			{
 				LogLink.ReplayState = LogReplayState.Playing;
 			}
@@ -203,7 +203,7 @@ namespace SharpBladeGroundStation
 
 		private void Slider_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			if(LogLink.ReplayState==LogReplayState.Playing)
+			if (LogLink.ReplayState == LogReplayState.Playing)
 			{
 				LogLink.ReplayState = LogReplayState.TempPause;
 			}
@@ -221,7 +221,7 @@ namespace SharpBladeGroundStation
 
 		private void PlayBtn_Click(object sender, RoutedEventArgs e)
 		{
-			if(LogLink.ReplayState!=LogReplayState.Pause)
+			if (LogLink.ReplayState != LogReplayState.Pause)
 			{
 				initGraph();
 			}
@@ -240,31 +240,11 @@ namespace SharpBladeGroundStation
 			{
 				MessageBox.Show("未与飞控连接或线路正忙", "orz");
 			}
-			//MAVLinkPackage package = new MAVLinkPackage();
-			//package.Sequence = 1;
-			//package.System = 0;
-			//package.Component = 0;
-			//package.Function = (byte)MAVLINK_MSG_ID.MISSION_COUNT;
-			//package.AddData((ushort)10);
-			//package.AddData((byte)1);
-			//package.AddData((byte)190);
-			
-			//package.SetVerify();
-			//currentVehicle.Link.SendPackageQueue.Enqueue(package);
 		}
 
 		private void downloadBtn_Click(object sender, RoutedEventArgs e)
 		{
 			MessageBox.Show("下载航线暂未实装", "orz");
-			//MAVLinkPackage package = new MAVLinkPackage();
-			//package.Sequence = 1;
-			//package.System = 255;
-			//package.Component = 190;
-			//package.Function = (byte)MAVLINK_MSG_ID.MISSION_REQUEST_LIST;
-			//package.AddData((byte)1);
-			//package.AddData((byte)190);
-			//package.SetVerify();
-			//currentVehicle.Link.SendPackageQueue.Enqueue(package);
 		}
 	}
 }

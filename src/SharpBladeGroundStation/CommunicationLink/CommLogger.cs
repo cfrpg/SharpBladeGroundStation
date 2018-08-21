@@ -15,7 +15,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		Queue<Tuple<LinkPackage, LinkPackageDirection>> packageQueue;
 		DateTime startTime;
 		CommLink link;
-		
+
 
 		Thread backgroundWorker;
 		bool isStarted;
@@ -24,7 +24,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		public string Path
 		{
 			get { return path; }
-		}	
+		}
 
 		public bool IsStarted
 		{
@@ -46,7 +46,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		/// </summary>
 		/// <param name="p">日志路径</param>
 		/// <param name="cl">需要记录的连接</param>
-		public CommLogger(string p,CommLink cl)
+		public CommLogger(string p, CommLink cl)
 		{
 			path = p;
 			packageQueue = new Queue<Tuple<LinkPackage, LinkPackageDirection>>();
@@ -63,7 +63,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 
 		private void Link_OnSendPackage(CommLink sender, LinkEventArgs e)
 		{
-			foreach(var v in e.Package)
+			foreach (var v in e.Package)
 				LogPackage(v, LinkPackageDirection.ToUAV);
 		}
 
@@ -81,16 +81,16 @@ namespace SharpBladeGroundStation.CommunicationLink
 		{
 			startTime = starttime;
 			FileInfo fi = new FileInfo(path);
-			if(fi.Exists)
+			if (fi.Exists)
 			{
 				string ext = fi.Extension;
-				string name=path.Substring(0,path.Length-ext.Length);
+				string name = path.Substring(0, path.Length - ext.Length);
 				int cnt = 1;
-				while(true)
+				while (true)
 				{
 					string p = name + "_" + cnt.ToString() + ext;
 					fi = new FileInfo(p);
-					if(!fi.Exists)
+					if (!fi.Exists)
 					{
 						path = p;
 						break;
@@ -108,7 +108,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		/// 停止记录
 		/// </summary>
 		public void End()
-		{			
+		{
 			isStarted = false;
 			isEnded = true;
 		}
@@ -118,7 +118,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		/// </summary>
 		/// <param name="p"></param>
 		/// <param name="f">发包方向，true为接收到包,false为发送出的包</param>
-		public void LogPackage(LinkPackage p,LinkPackageDirection d)
+		public void LogPackage(LinkPackage p, LinkPackageDirection d)
 		{
 			if (!isStarted)
 				return;
@@ -134,7 +134,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		{
 			int len;
 			bool flag;
-			Tuple<LinkPackage, LinkPackageDirection> p=new Tuple<LinkPackage, LinkPackageDirection>(null,LinkPackageDirection.ToGCS);
+			Tuple<LinkPackage, LinkPackageDirection> p = new Tuple<LinkPackage, LinkPackageDirection>(null, LinkPackageDirection.ToGCS);
 			while (true)
 			{
 				flag = false;
@@ -146,7 +146,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 						flag = true;
 					}
 				}
-				if(flag)
+				if (flag)
 				{
 					var b = getBytes(p.Item1, p.Item2, out len);
 					fileStream.Write(b, 0, len);
@@ -155,7 +155,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 				{
 					Thread.Sleep(50);
 				}
-				
+
 				if (isEnded && packageQueue.Count == 0)
 				{
 					fileStream.Flush();
@@ -169,7 +169,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		//timestamp		double	4-11
 		//direction		byte	12
 		//package		byte[]	13-n
-		private byte[] getBytes(LinkPackage p, LinkPackageDirection d,out int len)
+		private byte[] getBytes(LinkPackage p, LinkPackageDirection d, out int len)
 		{
 			len = p.PackageSize + PackageHeaderSize;
 			byte[] buff = new byte[len];

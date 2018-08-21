@@ -35,7 +35,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		/// </summary>
 		public virtual int DataSize
 		{
-			get { return dataSize; }			
+			get { return dataSize; }
 		}
 
 		/// <summary>
@@ -89,9 +89,9 @@ namespace SharpBladeGroundStation.CommunicationLink
 		{
 			if (data.Length + dataSize + HeaderSize > buffer.Length)
 				return false;
-			if(reverseBytes)
+			if (reverseBytes)
 			{
-				Array.Reverse(data);				
+				Array.Reverse(data);
 			}
 			data.CopyTo(buffer, dataSize + HeaderSize);
 			dataSize += data.Length;
@@ -138,7 +138,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		/// <param name="data"></param>
 		/// <returns></returns>
 		public bool AddData(ushort data)
-		{			
+		{
 			return AddData(BitConverter.GetBytes(data));
 		}
 		/// <summary>
@@ -175,7 +175,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		/// <returns></returns>
 		public bool AddData(double data)
 		{
-			return AddData(BitConverter.GetBytes(data));			
+			return AddData(BitConverter.GetBytes(data));
 		}
 		/// <summary>
 		/// Add UTF-16 char(2bytes)
@@ -186,28 +186,28 @@ namespace SharpBladeGroundStation.CommunicationLink
 		{
 			return AddData(BitConverter.GetBytes(data));
 		}
-		
+
 		public virtual bool StartRead()
 		{
 			cursor = 0;
 			return true;
 		}
-		
+
 		public sbyte NextSByte()
 		{
-			if(cursor+1<=dataSize)
+			if (cursor + 1 <= dataSize)
 			{
 				cursor += 1;
-                unchecked
-                {
-                    return (sbyte)buffer[cursor + HeaderSize - 1];
-                }
+				unchecked
+				{
+					return (sbyte)buffer[cursor + HeaderSize - 1];
+				}
 			}
 			else
 			{
 				throw new IndexOutOfRangeException("No enough data to read.");
 			}
-			
+
 		}
 		public byte NextByte()
 		{
@@ -220,19 +220,19 @@ namespace SharpBladeGroundStation.CommunicationLink
 			{
 				throw new IndexOutOfRangeException("No enough data to read.");
 			}
-			
+
 		}
 		public short NextShort()
 		{
 			if (cursor + 2 <= dataSize)
 			{
 				cursor += 2;
-				if(reverseBytes)
+				if (reverseBytes)
 				{
 					byte[] b = new byte[2];
 					Array.Copy(buffer, cursor + HeaderSize - 2, b, 0, 2);
 					Array.Reverse(b);
-					return BitConverter.ToInt16(b,0);
+					return BitConverter.ToInt16(b, 0);
 				}
 				return BitConverter.ToInt16(buffer, cursor + HeaderSize - 2);
 			}
@@ -240,7 +240,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			{
 				throw new IndexOutOfRangeException("No enough data to read.");
 			}
-			
+
 		}
 		public ushort NextUShort()
 		{
@@ -260,7 +260,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			{
 				throw new IndexOutOfRangeException("No enough data to read.");
 			}
-			
+
 		}
 		public int NextInt32()
 		{
@@ -280,7 +280,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			{
 				throw new IndexOutOfRangeException("No enough data to read.");
 			}
-			
+
 		}
 		public uint NextUInt32()
 		{
@@ -300,7 +300,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			{
 				throw new IndexOutOfRangeException("No enough data to read.");
 			}
-			
+
 		}
 		public float NextSingle()
 		{
@@ -320,7 +320,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			{
 				throw new IndexOutOfRangeException("No enough data to read.");
 			}
-			
+
 		}
 		public double NextDouble()
 		{
@@ -340,7 +340,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			{
 				throw new IndexOutOfRangeException("No enough data to read.");
 			}
-			
+
 		}
 
 		public UInt64 NextUInt64()
@@ -381,7 +381,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		/// <param name="buff">要读取的缓冲区</param>
 		/// <param name="length">缓冲区有效数据长度</param>
 		/// <returns></returns>
-		public virtual PackageParseResult ReadFromBuffer(byte[] buff,int length, int offset)
+		public virtual PackageParseResult ReadFromBuffer(byte[] buff, int length, int offset)
 		{
 			if (length - offset < 1)
 				return PackageParseResult.NoEnoughData;
@@ -391,12 +391,12 @@ namespace SharpBladeGroundStation.CommunicationLink
 		public virtual LinkPackage Clone()
 		{
 			LinkPackage p = new LinkPackage(buffer.Length);
-			buffer.CopyTo(p.buffer,0);
+			buffer.CopyTo(p.buffer, 0);
 			p.dataSize = dataSize;
 			p.reverseBytes = this.reverseBytes;
 			p.timeStamp = timeStamp;
 			return p;
 		}
-		
+
 	}
 }

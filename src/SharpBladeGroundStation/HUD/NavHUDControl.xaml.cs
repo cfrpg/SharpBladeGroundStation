@@ -16,11 +16,11 @@ using System.ComponentModel;
 
 namespace SharpBladeGroundStation.HUD
 {
-    /// <summary>
-    /// NavHUDControl.xaml 的交互逻辑
-    /// </summary>
-    public partial class NavHUDControl : HUDBase
-    {
+	/// <summary>
+	/// NavHUDControl.xaml 的交互逻辑
+	/// </summary>
+	public partial class NavHUDControl : HUDBase
+	{
 
 		public static readonly DependencyProperty HorizonTranlationProperty =
 			DependencyProperty.Register("HorizonTranlation", typeof(float), typeof(NavHUDControl), new PropertyMetadata(0f, NavHUDControl.OnHorizonTranlationPropertyChanged));
@@ -40,27 +40,27 @@ namespace SharpBladeGroundStation.HUD
 
 		}
 
-		public NavHUDControl():base()
-        {
-            InitializeComponent();			
+		public NavHUDControl() : base()
+		{
+			InitializeComponent();
 		}
 
-        private void heading_Loaded(object sender, RoutedEventArgs e)
-        {	
+		private void heading_Loaded(object sender, RoutedEventArgs e)
+		{
 			if (DesignerProperties.GetIsInDesignMode(this))
 				return;
 			vehicle.PropertyChanged += Vehicle_PropertyChanged;
-			
-        }
+
+		}
 
 		private void Vehicle_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			switch(e.PropertyName)
+			switch (e.PropertyName)
 			{
 				case "FlightState":
 
 					Dispatcher.Invoke(() => { HorizonTranlation = vehicle.FlightState.Pitch * 6.2f; });
-					
+
 					break;
 
 				default:

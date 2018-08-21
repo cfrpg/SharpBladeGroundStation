@@ -36,30 +36,30 @@ namespace SharpBladeGroundStation.CommunicationLink
 			get { return function; }
 			set { function = value; }
 		}
-        /// <summary>
-        /// 顺序号
-        /// </summary>
-        public byte Sequence
-        {
-            get { return buffer[2]; }
-            set { buffer[2] = value; }
-        }
-        /// <summary>
-        /// SystemID
-        /// </summary>
-        public byte System
-        {
-            get { return buffer[3]; }
-            set { buffer[3] = value; }
-        }
-        /// <summary>
-        /// ComponentID
-        /// </summary>
-        public byte Component
-        {
-            get { return buffer[4]; }
-            set { buffer[4] = value; }
-        }
+		/// <summary>
+		/// 顺序号
+		/// </summary>
+		public byte Sequence
+		{
+			get { return buffer[2]; }
+			set { buffer[2] = value; }
+		}
+		/// <summary>
+		/// SystemID
+		/// </summary>
+		public byte System
+		{
+			get { return buffer[3]; }
+			set { buffer[3] = value; }
+		}
+		/// <summary>
+		/// ComponentID
+		/// </summary>
+		public byte Component
+		{
+			get { return buffer[4]; }
+			set { buffer[4] = value; }
+		}
 		public MAVLinkPackage() : base(256)
 		{
 			function = 0;
@@ -73,24 +73,24 @@ namespace SharpBladeGroundStation.CommunicationLink
 				return PackageParseResult.NoSTX;
 			//Get LEN
 			int len = buff[offset + 1];
-			if (len + HeaderSize+2 + offset > length)
+			if (len + HeaderSize + 2 + offset > length)
 				return PackageParseResult.NoEnoughData;
 
-            //Check checksum
-            ushort crc = MavlinkCRC.Calculate(buff, len + HeaderSize, offset);
-            crc = MavlinkCRC.Accumulate(MAVLink.MAVLINK_MESSAGE_INFOS.GetMessageInfo(buff[offset + 5]).crc, crc);
-            if(buff[len+HeaderSize+offset]!=((byte)(crc&0xFF)))
-                return PackageParseResult.BadCheckSum;
-            if (buff[len + HeaderSize + offset + 1]!=((byte)(crc>>8)))
-                return PackageParseResult.BadCheckSum;
+			//Check checksum
+			ushort crc = MavlinkCRC.Calculate(buff, len + HeaderSize, offset);
+			crc = MavlinkCRC.Accumulate(MAVLink.MAVLINK_MESSAGE_INFOS.GetMessageInfo(buff[offset + 5]).crc, crc);
+			if (buff[len + HeaderSize + offset] != ((byte)(crc & 0xFF)))
+				return PackageParseResult.BadCheckSum;
+			if (buff[len + HeaderSize + offset + 1] != ((byte)(crc >> 8)))
+				return PackageParseResult.BadCheckSum;
 
-            //if (buff[len + HeaderSize + 2 + offset]!=0xFE)
-				//return PackageParseResult.BadCheckSum;
-			for(int i=0;i<buffer.Length;i++)
+			//if (buff[len + HeaderSize + 2 + offset]!=0xFE)
+			//return PackageParseResult.BadCheckSum;
+			for (int i = 0; i < buffer.Length; i++)
 			{
 				buffer[i] = 0;
 			}
-			for (int i = 0; i < len + HeaderSize+2; i++)
+			for (int i = 0; i < len + HeaderSize + 2; i++)
 			{
 				buffer[i] = buff[offset + i];
 			}
@@ -104,13 +104,13 @@ namespace SharpBladeGroundStation.CommunicationLink
 		}
 		public override void SetVerify()
 		{
-            buffer[0] = 0xFE;
-            buffer[1] = (byte)(dataSize&0xFF);
-            buffer[5] = function;
-			ushort crc= MavlinkCRC.Calculate(buffer,  dataSize+ HeaderSize);
-            crc = MavlinkCRC.Accumulate(MAVLink.MAVLINK_MESSAGE_INFOS.GetMessageInfo(function).crc, crc);
-            AddData(crc);
-        }
+			buffer[0] = 0xFE;
+			buffer[1] = (byte)(dataSize & 0xFF);
+			buffer[5] = function;
+			ushort crc = MavlinkCRC.Calculate(buffer, dataSize + HeaderSize);
+			crc = MavlinkCRC.Accumulate(MAVLink.MAVLINK_MESSAGE_INFOS.GetMessageInfo(function).crc, crc);
+			AddData(crc);
+		}
 		public override string ToString()
 		{
 			return string.Format("MAVLink package SIZE={2},FUN={0},LEN={1}", function, DataSize, PackageSize);

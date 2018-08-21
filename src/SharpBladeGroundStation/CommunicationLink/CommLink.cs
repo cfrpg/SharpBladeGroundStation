@@ -124,7 +124,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			}
 		}
 
-		public CommLink():this(LinkProtocol.NoLink)
+		public CommLink() : this(LinkProtocol.NoLink)
 		{
 
 		}
@@ -138,13 +138,13 @@ namespace SharpBladeGroundStation.CommunicationLink
 			OnSendPackage?.Invoke(this, e);
 		}
 
-        protected void PropertyChangedEvent(Object sender,string name)
-        {
-            this.PropertyChanged?.Invoke(sender, new PropertyChangedEventArgs(name));
-        }
+		protected void PropertyChangedEvent(Object sender, string name)
+		{
+			this.PropertyChanged?.Invoke(sender, new PropertyChangedEventArgs(name));
+		}
 
 
-        public virtual void OpenLink()
+		public virtual void OpenLink()
 		{
 
 		}

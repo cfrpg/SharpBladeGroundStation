@@ -73,14 +73,14 @@ namespace SharpBladeGroundStation.CommunicationLink
 				}
 				if (!flag)
 				{//添加新出现的串口
-					PortData port = new PortData(pn,baudRate,maxDataSize);			
-					
+					PortData port = new PortData(pn, baudRate, maxDataSize);
+
 					port.lastCheckTime = DateTime.Now;
-					
+
 					ports.Add(port);
 					Debug.WriteLine("[port scanner]find new port:" + pn);
 				}
-				
+
 			}
 
 			//更新各个串口状态
@@ -88,7 +88,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			{
 				switch (ports[i].state)
 				{
-					case PortScannerState.NewPort:						
+					case PortScannerState.NewPort:
 						try
 						{
 							//ports[i].port.BaudRate = baudRate;
@@ -104,7 +104,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 						}
 						break;
 					case PortScannerState.Scanning:
-						if(DateTime.Now.Subtract(ports[i].lastCheckTime).TotalSeconds > timeout)
+						if (DateTime.Now.Subtract(ports[i].lastCheckTime).TotalSeconds > timeout)
 						{
 							ports[i].port.Close();
 							//ports[i].port.DiscardInBuffer();
@@ -112,12 +112,12 @@ namespace SharpBladeGroundStation.CommunicationLink
 							ports[i].lastCheckTime = DateTime.Now;
 							Debug.WriteLine("[port scanner]unavilable port(timeout):" + ports[i].name);
 						}
-						
+
 						break;
 					case PortScannerState.Available:
 						ports[i].port.Close();
 						portFound = true;
-						SerialLink link = new SerialLink(ports[i].name, ports[i].protocol,baudRate);
+						SerialLink link = new SerialLink(ports[i].name, ports[i].protocol, baudRate);
 						Debug.WriteLine("[port scanner]find port:" + ports[i].name);
 						OnFindPort?.Invoke(this, new PortScannerEventArgs(link));
 						break;
@@ -140,8 +140,8 @@ namespace SharpBladeGroundStation.CommunicationLink
 			public SerialPort port;
 			public DateTime lastCheckTime;
 			public LinkProtocol protocol;
-			int buffersize;	
-			public PortData(string pn,int br,int md)
+			int buffersize;
+			public PortData(string pn, int br, int md)
 			{
 				name = pn;
 				port = new SerialPort(pn);
@@ -150,7 +150,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 				port.StopBits = System.IO.Ports.StopBits.One;
 				port.ReceivedBytesThreshold = md;
 				port.DataReceived += Port_DataReceived;
-				buffersize = md +64;
+				buffersize = md + 64;
 				protocol = LinkProtocol.NoLink;
 				state = PortScannerState.NewPort;
 			}
@@ -166,18 +166,18 @@ namespace SharpBladeGroundStation.CommunicationLink
 				port.Close();
 
 				offset = 0;
-				MAVLinkPackage mavp = new MAVLinkPackage();					
-				if(tryGetPackage(buff,len,0,mavp))
+				MAVLinkPackage mavp = new MAVLinkPackage();
+				if (tryGetPackage(buff, len, 0, mavp))
 				{
 					offset = mavp.PackageSize;
-					if (tryGetPackage(buff,len,offset,mavp))
+					if (tryGetPackage(buff, len, offset, mavp))
 					{
 						state = PortScannerState.Available;
 						protocol = LinkProtocol.MAVLink;
 						return;
 					}
 				}
-				
+
 
 				offset = 0;
 				ANOLinkPackage anop = new ANOLinkPackage();
@@ -192,7 +192,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 					}
 				}
 				string output = "";
-				for(int i=0;i<buff.Length;i++)
+				for (int i = 0; i < buff.Length; i++)
 				{
 					output += ((int)buff[i]).ToString();
 					output += " ";
@@ -201,11 +201,11 @@ namespace SharpBladeGroundStation.CommunicationLink
 				state = PortScannerState.Unavailable;
 			}
 
-			private bool tryGetPackage(byte[] buff,int len,int offset,LinkPackage package)
+			private bool tryGetPackage(byte[] buff, int len, int offset, LinkPackage package)
 			{
-				
+
 				bool flag = false;
-				while(offset<len&&(!flag))
+				while (offset < len && (!flag))
 				{
 					PackageParseResult res = package.ReadFromBuffer(buff, len, offset);
 					switch (res)
@@ -221,7 +221,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 							break;
 						case PackageParseResult.Yes:
 							return true;
-							
+
 					}
 				}
 				return false;
