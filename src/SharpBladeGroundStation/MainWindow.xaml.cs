@@ -92,7 +92,7 @@ namespace SharpBladeGroundStation
 			hdopText.DataContext = gpsData;
 			gpsStateText.DataContext = gpsData;
             battText.DataContext = currentVehicle.Battery;
-			flightDataGrid.DataContext = currentVehicle.FlightState;
+			//flightDataGrid.DataContext = currentVehicle.FlightState;
 
 			initGraph();
 			

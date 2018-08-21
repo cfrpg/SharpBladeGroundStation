@@ -86,6 +86,7 @@
             </Viewbox>
 
             <Viewbox>
+                <!--
                 <GroupBox x:Name="groupBox" Header="导航信息" Width="300" Height="120" BorderBrush="Black" FontSize="14">
                     <Grid x:Name="navDataGrid">
                         <Grid.RowDefinitions>
@@ -120,8 +121,10 @@
 
                     </Grid>
                 </GroupBox>
+                -->
             </Viewbox>
             <Viewbox>
+                <!--
                 <GroupBox x:Name="groupBox4" Header="飞行数据" Width="300" Height="240" BorderBrush="Black" FontSize="14">
                     <Grid x:Name="flightDataGrid">
                         <Grid.ColumnDefinitions>
@@ -164,7 +167,7 @@
 
                     </Grid>
                 </GroupBox>
-
+                -->
             </Viewbox>
         </StackPanel>
 
