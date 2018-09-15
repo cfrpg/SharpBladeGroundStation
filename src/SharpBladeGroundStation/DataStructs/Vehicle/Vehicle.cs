@@ -117,6 +117,10 @@ namespace SharpBladeGroundStation.DataStructs
 			set
 			{
 				heading = value;
+				while (heading < 0)
+					heading += 360;
+				while (heading > 360)
+					heading -= 360;
 				flightState.Heading = heading;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Heading"));
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FlightState"));

@@ -55,9 +55,7 @@ namespace SharpBladeGroundStation
 		HUDVideoSource hudVideoSource;
 		FilterInfoCollection localWebCamsCollection;
 		//temps
-
-
-
+		
 		const string messageboxTitle = "SharpBladeGroundStation";
 
 		public GCSConfiguration GCSConfig
@@ -92,11 +90,9 @@ namespace SharpBladeGroundStation
 			hdopText.DataContext = gpsData;
 			gpsStateText.DataContext = gpsData;
 			battText.DataContext = currentVehicle.Battery;
-			//flightDataGrid.DataContext = currentVehicle.FlightState;
+			flightDataGrid.DataContext = currentVehicle.FlightState;
 
 			initGraph();
-
-
 
 			dataSkipCount = new Dictionary<int, ulong>();
 			for (int i = 0; i < 255; i++)
@@ -160,13 +156,7 @@ namespace SharpBladeGroundStation
 				di.Create();
 			}
 			gcsCfgGroup.DataContext = GCSconfig;
-
 		}
-
-
-
-
-
 
 		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
 		{

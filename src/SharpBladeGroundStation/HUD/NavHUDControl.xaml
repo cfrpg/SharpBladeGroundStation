@@ -13,13 +13,12 @@
              d:DesignHeight="500" d:DesignWidth="500">
     <Viewbox>
         <Canvas Width="500" Height="500">
-            <local:SovietHeadingIndicatorControl x:Name="heading" Width="240" Height="50" Canvas.Top="26" Canvas.Left="130" Heading="{Binding Heading}" Loaded="heading_Loaded"/>
+            <local:SovietHeadingIndicatorControl x:Name="heading" Width="240" Height="50" Canvas.Top="36" Canvas.Left="130" Heading="{Binding Heading}" Loaded="heading_Loaded"/>
 
-            <wpf:OutlinedText x:Name="speedText" Text="{Binding GroundSpeed,StringFormat={}{0:0.0}}" FontSize="32" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Left="0" Canvas.Top="20" />
-
-
-            <wpf:OutlinedText x:Name="altText" Text="{Binding Altitude,StringFormat={}{0:0.0}}" FontSize="32" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Right="0" Canvas.Top="20" />
-
+            <wpf:OutlinedText x:Name="speedText" Text="{Binding GroundSpeed,StringFormat={}{0:0.0}}" FontSize="32" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Left="0" Canvas.Top="30" />
+            <wpf:OutlinedText x:Name="tgtSpeedText" Text="{Binding GroundSpeed,StringFormat={}{0:0.0}}" FontSize="26" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Left="0" Canvas.Top="0" />
+            <wpf:OutlinedText x:Name="altText" Text="{Binding Altitude,StringFormat={}{0:0.0}}" FontSize="32" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Right="0" Canvas.Top="30" />
+            <wpf:OutlinedText x:Name="tgtAltText" Text="{Binding Altitude,StringFormat={}{0:0.0}}" FontSize="26" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Right="0" Canvas.Top="00" />
             <Canvas Width="200" Height="200" Canvas.Left="150" Canvas.Top="149" RenderTransformOrigin="0.5,0.5">
                 <Canvas.RenderTransform>
                     <TransformGroup>
@@ -35,8 +34,17 @@
                 <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Left="50" Canvas.Top="100" StrokeThickness="3" Stroke="LightGreen"/>
                 <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Right="50" Canvas.Top="100" StrokeThickness="3" Stroke="LightGreen"/>
             </Canvas>
-            <wpf:OutlinedText x:Name="pitText" Text="{Binding FlightState.Pitch,StringFormat={}{0:0}}" FontSize="20" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Left="370" Canvas.Top="255" />
-            <Line x:Name="horizonLine" X1="0" Y1="0" X2="200" Y2="0" Canvas.Left="150" Canvas.Top="250" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,0.5">
+            <wpf:OutlinedText x:Name="pitText" Text="{Binding FlightState.Pitch,StringFormat={}{0:0}}" FontSize="20" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Left="370" Canvas.Top="220" RenderTransformOrigin="0.5,0.5" >
+                <wpf:OutlinedText.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform Y="{Binding ElementName=hud,Path=HorizonTranlation}"/>
+                    </TransformGroup>
+                </wpf:OutlinedText.RenderTransform>
+            </wpf:OutlinedText>
+            <Line x:Name="horizonLine" X1="0" Y1="0" X2="240" Y2="0" Canvas.Left="130" Canvas.Top="250" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,0.5">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -46,10 +54,34 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
-            <TextBlock Text="{Binding FlightModeText}" FontFamily="TI-Nspire Sans" FontSize="24" Canvas.Left="84" Canvas.Top="379" Foreground="LightGreen"/>
+            <TextBlock Text="{Binding FlightModeText}" FontFamily="TI-Nspire Sans" FontSize="24" Canvas.Left="84" Canvas.Top="379" Foreground="LightGreen" RenderTransformOrigin="0,0.5"/>
+            <Polygon Canvas.Right="67" Canvas.Top="250" Points="0,0 8,-8 8,-3 20,-3 20,3 8,3 8,8" Stroke="LightGreen" StrokeThickness="3" RenderTransformOrigin="0.5,0.5">
+                <Polygon.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform Y="{Binding ElementName=hud,Path=ClimbRateTranlation}"/>
+                    </TransformGroup>
+                </Polygon.RenderTransform>
+            </Polygon>
+            <wpf:OutlinedText x:Name="climbRateText" Text="{Binding FlightState.ClimbRate,StringFormat={}{0:0.0}}" FontSize="20" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Left="435" Canvas.Top="237" RenderTransformOrigin="0.5,0.5" >
+                <wpf:OutlinedText.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform Y="{Binding ElementName=hud,Path=ClimbRateTranlation}"/>
+                    </TransformGroup>
+                </wpf:OutlinedText.RenderTransform>
+            </wpf:OutlinedText>
             <!--MDZZ section,don't touch.-->
-            <Line X1="0" Y1="0" X2="60" Y2="0" Canvas.Left="0" Canvas.Top="60" Stroke="LightGreen" StrokeThickness="3" />
-            <Polygon Canvas.Left="30" Canvas.Top="70" Points="0,0 10,0 0,-10 -10,0" Stroke="LightGreen" StrokeThickness="3"/>
+            <Line X1="0" Y1="0" X2="60" Y2="0" Canvas.Left="0" Canvas.Top="70" Stroke="LightGreen" StrokeThickness="3" />
+            <Polygon Canvas.Left="30" Canvas.Top="80" Points="0,0 10,0 0,-10 -10,0" Stroke="LightGreen" StrokeThickness="3"/>
+            <Line X1="0" Y1="0" X2="0" Y2="240" Canvas.Right="90" Canvas.Top="130" Stroke="LightGreen" StrokeThickness="3"/>
+            <Line X1="0" Y1="0" X2="6" Y2="0" Canvas.Right="92" Canvas.Top="131" Stroke="LightGreen" StrokeThickness="2"/>
+            <Line X1="0" Y1="0" X2="6" Y2="0" Canvas.Right="92" Canvas.Top="250" Stroke="LightGreen" StrokeThickness="3"/>
+            <Line X1="0" Y1="0" X2="6" Y2="0" Canvas.Right="92" Canvas.Top="369" Stroke="LightGreen" StrokeThickness="2"/>
             <Ellipse Width="30" Height="30" Stroke="LightGreen" StrokeThickness="3" Canvas.Left="150" Canvas.Top="204"/>
             <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
                 <Line.RenderTransform>

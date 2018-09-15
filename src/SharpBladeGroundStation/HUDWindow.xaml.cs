@@ -88,6 +88,7 @@ namespace SharpBladeGroundStation
 				v.Value.Visibility = Visibility.Hidden;
 			}
 			hudCollection[e.Key].Visibility = Visibility.Visible;
+			
 		}
 	}
 

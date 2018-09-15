@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using Microsoft.Xna.Framework;
 
 namespace SharpBladeGroundStation.HUD
 {
@@ -29,6 +30,24 @@ namespace SharpBladeGroundStation.HUD
 			get { return (float)GetValue(HorizonTranlationProperty); }
 			set { SetValue(HorizonTranlationProperty, value); }
 		}
+
+		public static readonly DependencyProperty ClimbRateTranlationProperty =
+			DependencyProperty.Register("ClimbRateTranlation", typeof(float), typeof(NavHUDControl), new PropertyMetadata(0f, NavHUDControl.OnClimbRateTranlationPropertyChanged));
+		public float ClimbRateTranlation
+		{
+			get { return (float)GetValue(ClimbRateTranlationProperty); }
+			set { SetValue(ClimbRateTranlationProperty, value); }
+		}
+		public static void OnClimbRateTranlationPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+		{
+			NavHUDControl s = sender as NavHUDControl;
+			s.OnClimbRateTranlationChanged(e);
+		}
+		public void OnClimbRateTranlationChanged(DependencyPropertyChangedEventArgs e)
+		{
+
+
+		}
 		public static void OnHorizonTranlationPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
 		{
 			NavHUDControl s = sender as NavHUDControl;
@@ -36,8 +55,7 @@ namespace SharpBladeGroundStation.HUD
 		}
 		public void OnHorizonTranlationChanged(DependencyPropertyChangedEventArgs e)
 		{
-
-
+			
 		}
 
 		public NavHUDControl() : base()
@@ -58,8 +76,10 @@ namespace SharpBladeGroundStation.HUD
 			switch (e.PropertyName)
 			{
 				case "FlightState":
-
-					Dispatcher.Invoke(() => { HorizonTranlation = vehicle.FlightState.Pitch * 6.2f; });
+					Dispatcher.Invoke(() => {
+						HorizonTranlation = MathHelper.Clamp(vehicle.FlightState.Pitch * 6.2f, -120, 120);
+						ClimbRateTranlation = MathHelper.Clamp(vehicle.FlightState.ClimbRate * -120f/10f, -120, 120);
+					});
 
 					break;
 
