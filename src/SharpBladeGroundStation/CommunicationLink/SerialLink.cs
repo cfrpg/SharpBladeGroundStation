@@ -112,6 +112,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 							LinkPackage p = sendPackageQueue.Dequeue();
 							port.Write(p.Buffer, 0, p.PackageSize);
 							OnSendPackageEvent(this, new LinkEventArgs(p));
+							Debug.WriteLine("[Serial]Package sent.");
 						}
 					}
 					else
@@ -172,7 +173,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 						offset++;
 						break;
 					case PackageParseResult.NoEnoughData:
-						flag = true;
+						flag = true;						
 						break;
 					case PackageParseResult.BadCheckSum:
 						offset++;
@@ -180,6 +181,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 						//receivePackage.TimeStamp = this.ConnectedTime;
 						//receivedPackageQueue.Enqueue(receivePackage.Clone());
 						//received = true;
+						Debug.WriteLine("[Link]Bad checksum.");
 						break;
 					case PackageParseResult.Yes:
 						offset += receivePackage.PackageSize;

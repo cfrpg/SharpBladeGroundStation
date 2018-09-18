@@ -46,7 +46,36 @@ namespace SharpBladeGroundStation
 			//replayLog();
 			//triggerCamera();
 			// testCamera();
-			setScreen();
+			//setScreen();
+			caliLevel();
+		}
+
+		void caliLevel()
+		{
+			MAVLinkPackage package = new MAVLinkPackage();
+			package.Function = (byte)MAVLINK_MSG_ID.COMMAND_LONG;
+			package.System = 255;
+			package.Component = 1;
+			package.AddData(0f);
+			package.AddData(0f);
+			package.AddData(0f);
+			package.AddData(0f);
+			package.AddData(2f);
+			package.AddData(0f);
+			package.AddData(0f);
+
+			package.AddData((ushort)241);//MAV_CMD_PREFLIGHT_CALIBRATION
+			package.AddData((byte)currentVehicle.ID);
+			package.AddData((byte)0);			
+			package.AddData((byte)0);
+
+			
+
+			package.SetVerify();
+
+			currentVehicle.Link.SendPackageQueue.Enqueue(package);
+
+
 		}
 
 		void testCamera()
