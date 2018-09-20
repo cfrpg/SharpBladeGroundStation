@@ -109,7 +109,7 @@ namespace SharpBladeGroundStation
 					vy = package.NextSingle();
 					vz = package.NextSingle();
 					currentVehicle.Velocity = new Vector3(vx, vy, vz);
-					//currentVehicle.ClimbRate = -vz;
+					currentVehicle.ClimbRate = -vz;
 					break;
 				case MAVLINK_MSG_ID.SERVO_OUTPUT_RAW://#36
 
@@ -119,7 +119,7 @@ namespace SharpBladeGroundStation
 					currentVehicle.GroundSpeed = package.NextSingle();
 					currentVehicle.Altitude = package.NextSingle();
 
-					currentVehicle.ClimbRate = package.NextSingle();
+					//currentVehicle.ClimbRate = package.NextSingle();
 					currentVehicle.Heading = package.NextShort();
 					a1 = () => { uavMarker.Shape.RenderTransform = new RotateTransform(currentVehicle.Heading, 15, 15); };
 					Dispatcher.BeginInvoke(a1);
