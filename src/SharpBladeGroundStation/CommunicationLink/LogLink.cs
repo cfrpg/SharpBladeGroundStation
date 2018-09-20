@@ -340,7 +340,8 @@ namespace SharpBladeGroundStation.CommunicationLink
 			currPkgDir = (LinkPackageDirection)buffer[12];
 			len -= CommLogger.PackageHeaderSize;
 			stream.Read(buffer, 0, len);
-			PackageParseResult res = currentPackage.ReadFromBuffer(buffer, len, 0);
+			int dataused;
+			PackageParseResult res = currentPackage.ReadFromBuffer(buffer, len, 0,out dataused);
 			if (res != PackageParseResult.Yes)
 			{
 

@@ -23,7 +23,7 @@ namespace SharpBladeGroundStation
 			UInt32 time = 0;
 			UInt64 time64 = 0;
 			UInt64 dt = (ulong)GCSconfig.PlotTimeInterval * 1000;
-			System.Action a1, a2;
+			System.Action a1, a2,a3;
 			int tint;
 			//float tfloat;
 			switch ((MAVLINK_MSG_ID)package.Function)
@@ -62,7 +62,8 @@ namespace SharpBladeGroundStation
 
 					if (gpsData.State == GPSPositionState.NoGPS && gpss != GPSPositionState.NoGPS)
 					{
-						//flightRoute.Clear();
+						a3 = () => { flightRoute.Clear(); };
+						Dispatcher.BeginInvoke(a3);
 						dataSkipCount[package.Function] = 0;
 					}
 					gpsData.State = gpss;
@@ -122,7 +123,7 @@ namespace SharpBladeGroundStation
 					currentVehicle.Heading = package.NextShort();
 					a1 = () => { uavMarker.Shape.RenderTransform = new RotateTransform(currentVehicle.Heading, 15, 15); };
 					Dispatcher.BeginInvoke(a1);
-					//ushort thro = package.NextUShort();//unused
+					ushort thro = package.NextUShort();//unused
 					break;
 				case MAVLINK_MSG_ID.HIGHRES_IMU://#105
 					time64 = package.NextUInt64();

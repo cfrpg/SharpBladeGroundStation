@@ -42,8 +42,9 @@ namespace SharpBladeGroundStation.CommunicationLink
 		}
 
 
-		public override PackageParseResult ReadFromBuffer(byte[] buff, int length, int offset)
+		public override PackageParseResult ReadFromBuffer(byte[] buff, int length, int offset,out int dataUsed)
 		{
+			dataUsed = 0;
 			if (length - offset < HeaderSize)
 				return PackageParseResult.NoEnoughData;
 			//Check STX
@@ -67,6 +68,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			}
 			function = buff[offset + 2];
 			dataSize = len;
+			dataUsed = PackageSize;
 			return PackageParseResult.Yes;
 		}
 		public override bool StartRead()

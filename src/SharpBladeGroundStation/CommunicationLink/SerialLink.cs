@@ -163,10 +163,11 @@ namespace SharpBladeGroundStation.CommunicationLink
 			bool flag = false;
 			bool received = false;
 			LinkEventArgs lea = new LinkEventArgs();
+			int dataused;
 			while (offset < bufferSize)
 			{
 				//sw.Restart();
-				PackageParseResult res = receivePackage.ReadFromBuffer(buffer, bufferSize, offset);
+				PackageParseResult res = receivePackage.ReadFromBuffer(buffer, bufferSize, offset,out dataused);
 				switch (res)
 				{
 					case PackageParseResult.NoSTX:
@@ -184,7 +185,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 						Debug.WriteLine("[Link]Bad checksum.");
 						break;
 					case PackageParseResult.Yes:
-						offset += receivePackage.PackageSize;
+						offset += dataused;
 						receivePackage.TimeStamp = this.ConnectedTime;
 						lock (ReceivedPackageQueue)
 						{

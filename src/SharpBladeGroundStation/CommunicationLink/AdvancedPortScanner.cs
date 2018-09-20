@@ -173,7 +173,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 					if (tryGetPackage(buff, len, offset, mavp))
 					{
 						state = PortScannerState.Available;
-						protocol = LinkProtocol.MAVLink;
+						protocol = mavp.Version==1? LinkProtocol.MAVLink:LinkProtocol.MAVLink2;
 						return;
 					}
 				}
@@ -205,9 +205,10 @@ namespace SharpBladeGroundStation.CommunicationLink
 			{
 
 				bool flag = false;
+				int t;
 				while (offset < len && (!flag))
 				{
-					PackageParseResult res = package.ReadFromBuffer(buff, len, offset);
+					PackageParseResult res = package.ReadFromBuffer(buff, len, offset,out t);
 					switch (res)
 					{
 						case PackageParseResult.NoSTX:

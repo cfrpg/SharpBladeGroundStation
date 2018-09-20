@@ -129,10 +129,11 @@ namespace SharpBladeGroundStation.CommunicationLink
 				headerSize = 9;
 			signature = new byte[13];
 		}
-		public override PackageParseResult ReadFromBuffer(byte[] buff, int length, int offset)
+		public override PackageParseResult ReadFromBuffer(byte[] buff, int length, int offset, out int dataUsed)
 		{
 			int hs = 6;
 			int fun = 0;
+			dataUsed = 0;
 			if (length - offset < hs)
 				return PackageParseResult.NoEnoughData;
 			//Check STX
@@ -185,14 +186,29 @@ namespace SharpBladeGroundStation.CommunicationLink
 			}
 			function = fun;
 			dataSize = len;
-
+			dataUsed = PackageSize;
 			for (int i = 0; i < buffer.Length; i++)
 			{
 				buffer[i] = 0;
 			}
-			for (int i = 0; i < PackageSize; i++)
+			if (dataSize < MAVLink.MAVLINK_MESSAGE_INFOS.GetMessageInfo((uint)fun).length)
 			{
-				buffer[i] = buff[offset + i];
+				int off = (int)MAVLink.MAVLINK_MESSAGE_INFOS.GetMessageInfo((uint)fun).length- dataSize;
+				for (int i = 0; i < PackageSize; i++)
+				{
+					if (i >= headerSize + dataSize)
+						buffer[i + off] = buff[offset + i];
+					else
+						buffer[i] = buff[offset + i];
+				}
+				dataSize = (int)MAVLink.MAVLINK_MESSAGE_INFOS.GetMessageInfo((uint)fun).length;
+			}
+			else
+			{
+				for (int i = 0; i < PackageSize; i++)
+				{
+					buffer[i] = buff[offset + i];
+				}
 			}
 			if((incompatibility & MAVLink.MAVLINK_IFLAG_MASK) != 0)
 			{				

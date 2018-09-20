@@ -381,8 +381,9 @@ namespace SharpBladeGroundStation.CommunicationLink
 		/// <param name="buff">要读取的缓冲区</param>
 		/// <param name="length">缓冲区有效数据长度</param>
 		/// <returns></returns>
-		public virtual PackageParseResult ReadFromBuffer(byte[] buff, int length, int offset)
+		public virtual PackageParseResult ReadFromBuffer(byte[] buff, int length, int offset,out int dataUsed)
 		{
+			dataUsed = 0;
 			if (length - offset < 1)
 				return PackageParseResult.NoEnoughData;
 			return PackageParseResult.NoSTX;

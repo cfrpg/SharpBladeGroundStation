@@ -20,7 +20,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		protected int dataSent;
 		protected LinkState state;
 		protected LinkProtocol protocol;
-		protected DateTime connectTime;
+		protected DateTime connectTime;		
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -81,6 +81,8 @@ namespace SharpBladeGroundStation.CommunicationLink
 			set { protocol = value; }
 		}
 
+		
+
 		public LinkState State
 		{
 			get { return state; }
@@ -97,9 +99,10 @@ namespace SharpBladeGroundStation.CommunicationLink
 			get { return connectTime; }
 		}
 
+
 		public CommLink(LinkProtocol p)
 		{
-			protocol = p;
+			protocol = p;			
 			dataReceived = 0;
 			dataSent = 0;
 			TxRate = 0;
