@@ -77,6 +77,7 @@ namespace SharpBladeGroundStation
 				if (flag)
 				{
 					writer.WriteVideoFrame(new Geb.Image.ImageRgb24(frame));
+					frame.Dispose();
 				}
 				writerLock = false;
 			}

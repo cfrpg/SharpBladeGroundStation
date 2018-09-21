@@ -30,6 +30,7 @@ namespace SharpBladeGroundStation.DataStructs
 		float airSpeed;
 		float climbRate;
 		float altitude;
+		float relativeAltitude;
 
 		string flightModeText;
 		bool isArmed;
@@ -252,6 +253,19 @@ namespace SharpBladeGroundStation.DataStructs
 			{
 				battery = value;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Battery"));
+			}
+		}
+
+		/// <summary>
+		/// 相对高度
+		/// </summary>
+		public float RelativeAltitude
+		{
+			get { return relativeAltitude; }
+			set
+			{
+				relativeAltitude = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RelativeAltitude"));
 			}
 		}
 

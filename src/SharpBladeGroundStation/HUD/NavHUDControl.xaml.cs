@@ -55,7 +55,7 @@ namespace SharpBladeGroundStation.HUD
 		}
 		public void OnHorizonTranlationChanged(DependencyPropertyChangedEventArgs e)
 		{
-			
+
 		}
 
 		public NavHUDControl() : base()
@@ -78,7 +78,7 @@ namespace SharpBladeGroundStation.HUD
 				case "FlightState":
 					Dispatcher.Invoke(() => {
 						HorizonTranlation = MathHelper.Clamp(vehicle.FlightState.Pitch * 6.2f, -120, 120);
-						ClimbRateTranlation = MathHelper.Clamp(vehicle.FlightState.ClimbRate * -120f/10f, -120, 120);
+						ClimbRateTranlation = MathHelper.Clamp(vehicle.FlightState.ClimbRate * -120f / 10f, -120, 120);
 					});
 
 					break;
@@ -86,6 +86,24 @@ namespace SharpBladeGroundStation.HUD
 				default:
 
 					break;
+			}
+		}
+
+		private void hud_KeyDown(object sender, KeyEventArgs e)
+		{
+
+		}
+		public void SwitchAlt()
+		{
+			if (altText.Visibility == Visibility.Visible)
+			{
+				altText.Visibility = Visibility.Hidden;
+				relAltText.Visibility = Visibility.Visible;
+			}
+			else
+			{
+				altText.Visibility = Visibility.Visible;
+				relAltText.Visibility = Visibility.Hidden;
 			}
 		}
 	}

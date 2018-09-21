@@ -10,15 +10,19 @@
              xmlns:wpf="clr-namespace:WpfControlLib;assembly=WpfControlLib"
              mc:Ignorable="d" 
              x:Name="hud"
-             d:DesignHeight="500" d:DesignWidth="500">
+             d:DesignHeight="500" d:DesignWidth="500" KeyDown="hud_KeyDown">
     <Viewbox>
         <Canvas Width="500" Height="500">
             <local:SovietHeadingIndicatorControl x:Name="heading" Width="240" Height="50" Canvas.Top="36" Canvas.Left="130" Heading="{Binding Heading}" Loaded="heading_Loaded"/>
 
             <wpf:OutlinedText x:Name="speedText" Text="{Binding GroundSpeed,StringFormat={}{0:0.0}}" FontSize="32" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Left="0" Canvas.Top="30" />
+           
+            <wpf:OutlinedText x:Name="altText" Text="{Binding Altitude,StringFormat={}{0:0.0}}" FontSize="32" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Right="21" Canvas.Top="30" />
+            <wpf:OutlinedText x:Name="relAltText" Text="{Binding RelativeAltitude,StringFormat={}{0:0.0}R}" FontSize="32" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Right="0" Canvas.Top="30"  Visibility="Hidden"/>
+            <!--
             <wpf:OutlinedText x:Name="tgtSpeedText" Text="{Binding GroundSpeed,StringFormat={}{0:0.0}}" FontSize="26" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Left="0" Canvas.Top="0" />
-            <wpf:OutlinedText x:Name="altText" Text="{Binding Altitude,StringFormat={}{0:0.0}}" FontSize="32" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Right="0" Canvas.Top="30" />
             <wpf:OutlinedText x:Name="tgtAltText" Text="{Binding Altitude,StringFormat={}{0:0.0}}" FontSize="26" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Right="0" Canvas.Top="00" />
+            -->
             <Canvas Width="200" Height="200" Canvas.Left="150" Canvas.Top="149" RenderTransformOrigin="0.5,0.5">
                 <Canvas.RenderTransform>
                     <TransformGroup>
@@ -82,7 +86,7 @@
             <Line X1="0" Y1="0" X2="6" Y2="0" Canvas.Right="92" Canvas.Top="131" Stroke="LightGreen" StrokeThickness="2"/>
             <Line X1="0" Y1="0" X2="6" Y2="0" Canvas.Right="92" Canvas.Top="250" Stroke="LightGreen" StrokeThickness="3"/>
             <Line X1="0" Y1="0" X2="6" Y2="0" Canvas.Right="92" Canvas.Top="369" Stroke="LightGreen" StrokeThickness="2"/>
-            <Ellipse Width="30" Height="30" Stroke="LightGreen" StrokeThickness="3" Canvas.Left="150" Canvas.Top="204"/>
+            <Ellipse Width="30" Height="30" Stroke="LightGreen" StrokeThickness="3" Canvas.Left="150" Canvas.Top="204" Visibility="Hidden"/>
             <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
                 <Line.RenderTransform>
                     <TransformGroup>

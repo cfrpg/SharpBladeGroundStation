@@ -44,8 +44,10 @@ namespace SharpBladeGroundStation
 
 				case MAVLINK_MSG_ID.GPS_RAW_INT: //#24
 					time64 = package.NextUInt64();
-					gpsData.Latitude = package.NextInt32() * 1.0 / 1e7;
-					gpsData.Longitude = package.NextInt32() * 1.0 / 1e7;
+					//gpsData.Latitude = package.NextInt32() * 1.0 / 1e7;
+					//gpsData.Longitude = package.NextInt32() * 1.0 / 1e7;
+					tint = package.NextInt32();
+					tint = package.NextInt32();
 					int talt = package.NextInt32();
 					gpsData.Hdop = package.NextUShort();
 					if (gpsData.Hdop > 10000)
@@ -67,18 +69,18 @@ namespace SharpBladeGroundStation
 						dataSkipCount[package.Function] = 0;
 					}
 					gpsData.State = gpss;
-					PointLatLng pos = PositionHelper.WGS84ToGCJ02(new PointLatLng(gpsData.Latitude, gpsData.Longitude));
+					//PointLatLng pos = PositionHelper.WGS84ToGCJ02(new PointLatLng(gpsData.Latitude, gpsData.Longitude));
 
-					if (time64 - dataSkipCount[package.Function] > (ulong)GCSconfig.CourseTimeInterval * 1000)
-					{
-						a1 = () => { updateFlightRoute(pos); };
-						Dispatcher.BeginInvoke(a1);
-						dataSkipCount[package.Function] = time64;
+					//if (time64 - dataSkipCount[package.Function] > (ulong)GCSconfig.CourseTimeInterval * 1000)
+					//{
+					//	a1 = () => { updateFlightRoute(pos); };
+					//	Dispatcher.BeginInvoke(a1);
+					//	dataSkipCount[package.Function] = time64;
 
-					}
+					//}
 					gpsData.SatelliteCount = package.NextByte();
-					a2 = () => { uavMarker.Position = pos; };
-					Dispatcher.BeginInvoke(a2);
+					//a2 = () => { uavMarker.Position = pos; };
+					//Dispatcher.BeginInvoke(a2);
 					break;
 				case MAVLINK_MSG_ID.ATTITUDE://#30
 					time = package.NextUInt32();
@@ -111,6 +113,35 @@ namespace SharpBladeGroundStation
 					currentVehicle.Velocity = new Vector3(vx, vy, vz);
 					currentVehicle.ClimbRate = -vz;
 					break;
+				case MAVLINK_MSG_ID.GLOBAL_POSITION_INT://#33
+					time = package.NextUInt32();
+					time64 = (ulong)time * 1000;
+					gpsData.Latitude = package.NextInt32() * 1.0 / 1e7;
+					gpsData.Longitude = package.NextInt32() * 1.0 / 1e7;
+					tint = package.NextInt32();
+					currentVehicle.RelativeAltitude = package.NextInt32() / 1000f;
+
+					package.NextShort();//vx
+					package.NextShort();//vy
+					//currentVehicle.ClimbRate= package.NextShort()/100.0f;
+
+					PointLatLng pos = PositionHelper.WGS84ToGCJ02(new PointLatLng(gpsData.Latitude, gpsData.Longitude));
+
+					if (time64 - dataSkipCount[package.Function] > (ulong)GCSconfig.CourseTimeInterval * 1000)
+					{
+						a1 = () => { updateFlightRoute(pos); };
+						Dispatcher.BeginInvoke(a1);
+						dataSkipCount[package.Function] = time64;
+
+					}
+					gpsData.SatelliteCount = package.NextByte();
+					a2 = () => {
+						uavMarker.Position = pos;
+						if (mapCenterConfig == Configuration.MapCenterPositionConfig.FollowUAV)
+							gmap.Position = pos;
+					};
+					Dispatcher.BeginInvoke(a2);
+					break;
 				case MAVLINK_MSG_ID.SERVO_OUTPUT_RAW://#36
 
 					break;
@@ -120,6 +151,7 @@ namespace SharpBladeGroundStation
 					currentVehicle.Altitude = package.NextSingle();
 
 					//currentVehicle.ClimbRate = package.NextSingle();
+					package.NextSingle();
 					currentVehicle.Heading = package.NextShort();
 					a1 = () => { uavMarker.Shape.RenderTransform = new RotateTransform(currentVehicle.Heading, 15, 15); };
 					Dispatcher.BeginInvoke(a1);
@@ -172,8 +204,7 @@ namespace SharpBladeGroundStation
 						dataSkipCount[package.Function] = time64;
 					}
 					break;
-				case MAVLINK_MSG_ID.BATTERY_STATUS://#147
-												   //这里内容顺序跟文档和QGC里都不一样
+				case MAVLINK_MSG_ID.BATTERY_STATUS://#147												   
 					tint = package.NextInt32();
 					if (tint > 0)
 					{

@@ -81,14 +81,22 @@ namespace SharpBladeGroundStation
 
 		private void Window_KeyDown(object sender, KeyEventArgs e)
 		{
+
+			if (e.Key == Key.R)
+			{
+				navhud.SwitchAlt();
+			}
 			if (!hudCollection.ContainsKey(e.Key))
+			{
+				e.Handled = false;
 				return;
+			}
 			foreach (var v in hudCollection)
 			{
 				v.Value.Visibility = Visibility.Hidden;
 			}
 			hudCollection[e.Key].Visibility = Visibility.Visible;
-			
+
 		}
 	}
 
