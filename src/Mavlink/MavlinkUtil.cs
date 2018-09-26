@@ -12,19 +12,19 @@ namespace System.MAVLink
     /// </summary>
     public static class MavlinkUtil
     {
-        /// <summary>
-        /// Create a new mavlink packet object from a byte array as recieved over mavlink
-        /// Endianess will be detetected using packet inspection
-        /// </summary>
-        /// <typeparam name="TMavlinkPacket">The type of mavlink packet to create</typeparam>
-        /// <param name="bytearray">The bytes of the mavlink packet</param>
-        /// <param name="startoffset">The position in the byte array where the packet starts</param>
-        /// <returns>The newly created mavlink packet</returns>
-        public static TMavlinkPacket ByteArrayToStructure<TMavlinkPacket>(this byte[] bytearray, int startoffset = 6)
-            where TMavlinkPacket : struct
-        {
-            return ReadUsingPointer<TMavlinkPacket>(bytearray, startoffset);
-        }
+        ///// <summary>
+        ///// Create a new mavlink packet object from a byte array as recieved over mavlink
+        ///// Endianess will be detetected using packet inspection
+        ///// </summary>
+        ///// <typeparam name="TMavlinkPacket">The type of mavlink packet to create</typeparam>
+        ///// <param name="bytearray">The bytes of the mavlink packet</param>
+        ///// <param name="startoffset">The position in the byte array where the packet starts</param>
+        ///// <returns>The newly created mavlink packet</returns>
+        //public static TMavlinkPacket ByteArrayToStructure<TMavlinkPacket>(this byte[] bytearray, int startoffset = 6)
+        //    where TMavlinkPacket : struct
+        //{
+        //    return ReadUsingPointer<TMavlinkPacket>(bytearray, startoffset);
+        //}
 
         public static TMavlinkPacket ByteArrayToStructureBigEndian<TMavlinkPacket>(this byte[] bytearray,
             int startoffset = 6) where TMavlinkPacket : struct
@@ -94,16 +94,16 @@ namespace System.MAVLink
             return payload;
         }
 
-        public static T ReadUsingPointer<T>(byte[] data, int startoffset) where T : struct
-        {
-            unsafe
-            {
-                fixed (byte* p = &data[startoffset])
-                {
-                    return (T)Marshal.PtrToStructure(new IntPtr(p), typeof(T));
-                }
-            }
-        }
+        //public static T ReadUsingPointer<T>(byte[] data, int startoffset) where T : struct
+        //{
+        //    //unsafe
+        //    //{
+        //    //    fixed (byte* p = &data[startoffset])
+        //    //    {
+        //    //        return (T)Marshal.PtrToStructure(new IntPtr(p), typeof(T));
+        //    //    }
+        //    //}
+        //}
 
         public static T ByteArrayToStructureGC<T>(byte[] bytearray, int startoffset) where T : struct
         {

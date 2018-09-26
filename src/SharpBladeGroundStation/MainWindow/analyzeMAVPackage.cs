@@ -20,12 +20,12 @@ namespace SharpBladeGroundStation
 			MAVLinkPackage package = (MAVLinkPackage)p;
 			package.StartRead();
 			currentVehicle.ID = package.System;
-			UInt32 time = 0;
-			UInt64 time64 = 0;
-			UInt64 dt = (ulong)GCSconfig.PlotTimeInterval * 1000;
-			System.Action a1, a2,a3;
+			uint time = 0;
+			ulong time64 = 0;
+			ulong dt = (ulong)GCSconfig.PlotTimeInterval * 1000;
+			Action a1, a2,a3;
 			int tint;
-			//float tfloat;
+			float tfloat;
 			switch ((MAVLINK_MSG_ID)package.Function)
 			{
 				case MAVLINK_MSG_ID.HEARTBEAT://#0		
@@ -91,9 +91,9 @@ namespace SharpBladeGroundStation
 					currentVehicle.EulerAngle = new Vector3(rx, ry, rz);
 					if ((ulong)time * 1000 - dataSkipCount[package.Function] > dt)
 					{
-						attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(time / 1000.0, MathHelper.ToDegrees(rx)));
-						attitudeGraphData[1].AppendAsync(this.Dispatcher, new Point(time / 1000.0, MathHelper.ToDegrees(ry)));
-						attitudeGraphData[2].AppendAsync(this.Dispatcher, new Point(time / 1000.0, MathHelper.ToDegrees(rz)));
+						//attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(time / 1000.0, MathHelper.ToDegrees(rx)));
+						//attitudeGraphData[1].AppendAsync(this.Dispatcher, new Point(time / 1000.0, MathHelper.ToDegrees(ry)));
+						//attitudeGraphData[2].AppendAsync(this.Dispatcher, new Point(time / 1000.0, MathHelper.ToDegrees(rz)));
 
 						dataSkipCount[package.Function] = (ulong)time * 1000;
 					}
@@ -158,35 +158,35 @@ namespace SharpBladeGroundStation
 					ushort thro = package.NextUShort();//unused
 					break;
 				case MAVLINK_MSG_ID.HIGHRES_IMU://#105
-					time64 = package.NextUInt64();
-					float[] sd = { 0, 0, 0 };
-					sd[0] = package.NextSingle();
-					sd[1] = package.NextSingle();
-					sd[2] = package.NextSingle();
+					//time64 = package.NextUInt64();
+					//float[] sd = { 0, 0, 0 };
+					//sd[0] = package.NextSingle();
+					//sd[1] = package.NextSingle();
+					//sd[2] = package.NextSingle();
 
-					if (time64 - dataSkipCount[package.Function] > dt)
-					{
-						for (int i = 0; i < 3; i++)
-						{
-							accelGraphData[i].AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, sd[i]));
-						}
-					}
+					//if (time64 - dataSkipCount[package.Function] > dt)
+					//{
+					//	for (int i = 0; i < 3; i++)
+					//	{
+					//		accelGraphData[i].AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, sd[i]));
+					//	}
+					//}
 
-					sd[0] = package.NextSingle();
-					sd[1] = package.NextSingle();
-					sd[2] = package.NextSingle();
-					if (time64 - dataSkipCount[package.Function] > dt)
-					{
-						for (int i = 0; i < 3; i++)
-						{
-							gyroGraphData[i].AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, sd[i]));
-						}
-						dataSkipCount[package.Function] = time64;
-					}
+					//sd[0] = package.NextSingle();
+					//sd[1] = package.NextSingle();
+					//sd[2] = package.NextSingle();
+					//if (time64 - dataSkipCount[package.Function] > dt)
+					//{
+					//	for (int i = 0; i < 3; i++)
+					//	{
+					//		gyroGraphData[i].AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, sd[i]));
+					//	}
+					//	dataSkipCount[package.Function] = time64;
+					//}
 
-					sd[0] = package.NextSingle();
-					sd[1] = package.NextSingle();
-					sd[2] = package.NextSingle();
+					//sd[0] = package.NextSingle();
+					//sd[1] = package.NextSingle();
+					//sd[2] = package.NextSingle();
 					break;
 				case MAVLINK_MSG_ID.TIMESYNC://#111
 
@@ -200,7 +200,7 @@ namespace SharpBladeGroundStation
 
 					if (time64 - dataSkipCount[package.Function] > dt)
 					{
-						altitudeGraphData.AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, alt));
+						//altitudeGraphData.AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, alt));
 						dataSkipCount[package.Function] = time64;
 					}
 					break;

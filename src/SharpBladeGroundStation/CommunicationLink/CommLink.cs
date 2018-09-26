@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 {
 	public class CommLink : INotifyPropertyChanged
 	{
-		protected Queue<LinkPackage> receivedPackageQueue;
+		protected ConcurrentQueue<LinkPackage> receivedPackageQueue;
 		protected LinkPackage receivePackage;
 		protected Queue<LinkPackage> sendPackageQueue;
 		protected int txRate;
@@ -27,7 +28,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		public delegate void PackageEvent(CommLink sender, LinkEventArgs e);
 		public event PackageEvent OnReceivePackage;
 		public event PackageEvent OnSendPackage;
-		public Queue<LinkPackage> ReceivedPackageQueue
+		public ConcurrentQueue<LinkPackage> ReceivedPackageQueue
 		{
 			get { return receivedPackageQueue; }
 			set { receivedPackageQueue = value; }
@@ -108,7 +109,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			TxRate = 0;
 			RxRate = 0;
 			state = LinkState.Disconnected;
-			receivedPackageQueue = new Queue<LinkPackage>();
+			receivedPackageQueue = new ConcurrentQueue<LinkPackage>();
 			sendPackageQueue = new Queue<LinkPackage>();
 			switch (p)
 			{

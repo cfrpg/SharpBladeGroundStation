@@ -153,6 +153,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 				}
 				else
 				{
+
 					Thread.Sleep(50);
 				}
 
@@ -165,18 +166,19 @@ namespace SharpBladeGroundStation.CommunicationLink
 			}
 		}
 
-		//len			int32	0-3
-		//timestamp		double	4-11
-		//direction		byte	12
-		//package		byte[]	13-n
+		//function		byte	0
+		//len			int32	1-4
+		//timestamp		double	5-12
+		//direction		byte	13
+		//package		byte[]	14-n
 		private byte[] getBytes(LinkPackage p, LinkPackageDirection d, out int len)
 		{
 			len = p.PackageSize + PackageHeaderSize;
 			byte[] buff = new byte[len];
-			BitConverter.GetBytes(len).CopyTo(buff, 0);
-			BitConverter.GetBytes(p.TimeStamp).CopyTo(buff, 4);
+			BitConverter.GetBytes(len).CopyTo(buff, 1);
+			BitConverter.GetBytes(p.TimeStamp).CopyTo(buff, 5);
 			buff[12] = (byte)d;
-			Array.Copy(p.Buffer, 0, buff, 13, p.PackageSize);
+			Array.Copy(p.Buffer, 0, buff, 14, p.PackageSize);
 			return buff;
 		}
 
@@ -203,8 +205,10 @@ namespace SharpBladeGroundStation.CommunicationLink
 
 		public static int PackageHeaderSize
 		{
-			get { return 13; }
+			get { return 14; }
 		}
 
 	}
+
+
 }

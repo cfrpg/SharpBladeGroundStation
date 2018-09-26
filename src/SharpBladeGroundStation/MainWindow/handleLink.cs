@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -24,7 +25,7 @@ namespace SharpBladeGroundStation
 		LogLink logLink;
 
 		MissionSender missionSender;
-
+		bool linkAvilable;
 		public LogLink LogLink
 		{
 			get { return logLink; }
@@ -32,6 +33,7 @@ namespace SharpBladeGroundStation
 
 		void initLinkListener()
 		{
+			linkAvilable = false;
 			portscanner = new AdvancedPortScanner(GCSconfig.BaudRate, 1000, 3);
 			portscanner.OnFindPort += Portscanner_OnFindPort;
 			portscanner.Start();
@@ -39,36 +41,38 @@ namespace SharpBladeGroundStation
 
 			linkListener = new Thread(linkListenerWorker);
 			linkListener.IsBackground = true;
+			linkListener.Priority = ThreadPriority.AboveNormal;
 			linkListener.Start();
 
 			logLink = new LogLink();
 			logPlayerCtrl.DataContext = logLink;
 			logLink.Initialize();
-
-
 		}
 
 		void linkListenerWorker()
 		{
+			List<LinkPackage> pkgs = new List<LinkPackage>();
 			while (true)
 			{
-				if (currentVehicle == null || currentVehicle.Link == null)
-				{
-					continue;
-				}
-				if (currentVehicle.Link.ReceivedPackageQueue.Count == 0)
-				{
-					continue;
-				}
-				if (currentVehicle.Link.ReceivedPackageQueue.Count != 0)
+				//if (currentVehicle == null || currentVehicle.Link == null)
+				//{
+				//	continue;
+				//}	
+
+				if (linkAvilable && currentVehicle.Link.ReceivedPackageQueue.Count != 0)
 				{
 					LinkPackage package;
-					lock (currentVehicle.Link.ReceivedPackageQueue)
-					{
-						package = currentVehicle.Link.ReceivedPackageQueue.Dequeue();
+					pkgs.Clear();
 
-					}
-					//Debug.WriteLine(currentVehicle.Link.ReceivedPackageQueue.Count);
+					//Debug.WriteLine("[MAVLink]Package {0}.", currentVehicle.Link.ReceivedPackageQueue.Count);
+					//package = currentVehicle.Link.ReceivedPackageQueue.Dequeue();
+					//continue;
+
+					currentVehicle.Link.ReceivedPackageQueue.TryDequeue(out package);
+
+
+
+
 					switch (currentVehicle.Link.Protocol)
 					{
 						case LinkProtocol.MAVLink:
@@ -81,6 +85,9 @@ namespace SharpBladeGroundStation
 							analyzeMAVPackage(package);
 							break;
 					}
+
+
+
 				}
 			}
 		}
@@ -96,9 +103,10 @@ namespace SharpBladeGroundStation
 			currentVehicle.Link.OpenLink();
 			Action a = () => { linkStateText.Text = currentVehicle.Link.LinkName + Environment.NewLine + currentVehicle.Link.Protocol.ToString(); linkspd.DataContext = currentVehicle.Link; };
 			linkStateText.Dispatcher.Invoke(a);
+			linkAvilable = true;
 
-			logger = new CommLogger(GCSconfig.LogPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".sblog", e.Link);
-			logger.Start(e.Link.ConnectTime);
+			//logger = new CommLogger(GCSconfig.LogPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".sblog", e.Link);
+			//logger.Start(e.Link.ConnectTime);
 			if (GCSconfig.AutoRecord && hudWindow.cameraPlayer.IsCameraRunning())
 			{
 				string str = logger.Path.Substring(0, logger.Path.LastIndexOf(".") + 1) + "mpg";
@@ -118,22 +126,26 @@ namespace SharpBladeGroundStation
 
 		private void Link_OnReceivePackage(CommLink sender, EventArgs e)
 		{
-			while (currentVehicle.Link.ReceivedPackageQueue.Count != 0)
-			{
-				LinkPackage package = currentVehicle.Link.ReceivedPackageQueue.Dequeue();
-				switch (sender.Protocol)
-				{
-					case LinkProtocol.MAVLink:
-						analyzeMAVPackage(package);
-						break;
-					case LinkProtocol.ANOLink:
-						analyzeANOPackage(package);
-						break;
-					case LinkProtocol.MAVLink2:
-						analyzeMAVPackage(package);
-						break;
-				}
-			}
+			//while (currentVehicle.Link.ReceivedPackageQueue.Count != 0)
+			//{
+			//	LinkPackage package;
+			//	lock (currentVehicle.Link.ReceivedPackageQueue)
+			//	{
+			//		package = currentVehicle.Link.ReceivedPackageQueue.Dequeue();
+			//	}
+			//	switch (sender.Protocol)
+			//	{
+			//		case LinkProtocol.MAVLink:
+			//			analyzeMAVPackage(package);
+			//			break;
+			//		case LinkProtocol.ANOLink:
+			//			analyzeANOPackage(package);
+			//			break;
+			//		case LinkProtocol.MAVLink2:
+			//			analyzeMAVPackage(package);
+			//			break;
+			//	}
+			//}
 		}
 
 		private void portMenuItem_Click(object sender, RoutedEventArgs e)

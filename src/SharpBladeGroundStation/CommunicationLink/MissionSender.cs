@@ -84,7 +84,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			packages = new List<MAVLinkPackage>();
 			background = new Thread(backgroundWorker);
 			background.IsBackground = true;
-			background.Start();
+			//background.Start();
 		}
 
 

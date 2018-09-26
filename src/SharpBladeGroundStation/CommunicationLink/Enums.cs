@@ -69,6 +69,12 @@ namespace SharpBladeGroundStation.CommunicationLink
 		ToGCS = 1
 	}
 
+	public enum LogFunction : byte
+	{
+		Package = 0,
+		GCSCommand = 1
+	}
+
 	public enum LoadFileResualt
 	{
 		/// <summary>

@@ -112,7 +112,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 							LinkPackage p = sendPackageQueue.Dequeue();
 							port.Write(p.Buffer, 0, p.PackageSize);
 							OnSendPackageEvent(this, new LinkEventArgs(p));
-							Debug.WriteLine("[Serial]Package sent.");
+							//Debug.WriteLine("[Serial]Package sent.");
 						}
 					}
 					else
@@ -126,7 +126,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 				}
 				DateTime now = DateTime.Now;
 				double dt = now.Subtract(lasttime).TotalMilliseconds;
-				if (dt > 500)
+				if (dt > 1000)
 				{
 					TxRate = (int)((dataReceived - lastrx) / (dt / 1000));
 					RxRate = (int)((dataSent - lasttx) / (dt / 1000));
@@ -164,7 +164,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			bool received = false;
 			LinkEventArgs lea = new LinkEventArgs();
 			int dataused;
-			while (offset < bufferSize)
+			while (offset < bufferSize&&receivedPackageQueue.Count<6)
 			{
 				//sw.Restart();
 				PackageParseResult res = receivePackage.ReadFromBuffer(buffer, bufferSize, offset,out dataused);
@@ -187,7 +187,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 					case PackageParseResult.Yes:
 						offset += dataused;
 						receivePackage.TimeStamp = this.ConnectedTime;
-						lock (ReceivedPackageQueue)
+						//lock (ReceivedPackageQueue)
 						{
 							receivedPackageQueue.Enqueue(receivePackage.Clone());
 						}
@@ -195,7 +195,6 @@ namespace SharpBladeGroundStation.CommunicationLink
 						lea.Package.Add(receivePackage.Clone());
 						break;
 				}
-
 				if (flag)
 					break;
 			}
@@ -249,7 +248,8 @@ namespace SharpBladeGroundStation.CommunicationLink
 			dataSent = 0;
 			isParsingBuffer = false;
 			isUpdatingBuffer = false;
-			receivedPackageQueue.Clear();
+			LinkPackage p;
+			while (receivedPackageQueue.TryDequeue(out p)) ;
 		}
 
 

@@ -68,7 +68,6 @@ namespace SharpBladeGroundStation.HUD
 			if (DesignerProperties.GetIsInDesignMode(this))
 				return;
 			vehicle.PropertyChanged += Vehicle_PropertyChanged;
-
 		}
 
 		private void Vehicle_PropertyChanged(object sender, PropertyChangedEventArgs e)

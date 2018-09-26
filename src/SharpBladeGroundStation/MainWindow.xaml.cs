@@ -92,7 +92,7 @@ namespace SharpBladeGroundStation
 			battText.DataContext = currentVehicle.Battery;
 			flightDataGrid.DataContext = currentVehicle.FlightState;
 
-			initGraph();
+			//initGraph();
 
 			dataSkipCount = new Dictionary<int, ulong>();
 			for (int i = 0; i < 255; i++)
@@ -103,26 +103,26 @@ namespace SharpBladeGroundStation
 
 		private void initGraph()
 		{
-			string[] xyz = { "X", "Y", "Z" };
-			string[] ypr = { "Roll", "Pitch", "Yaw" };
-			accelPlotter.Children.RemoveAll(typeof(LineGraph));
-			gyroPlotter.Children.RemoveAll(typeof(LineGraph));
-			attPlotter.Children.RemoveAll(typeof(LineGraph));
-			altPlotter.Children.RemoveAll(typeof(LineGraph));
-			for (int i = 0; i < 3; i++)
-			{
-				accelGraphData[i] = new ObservableDataSource<Point>();
-				accelPlotter.AddLineGraph(accelGraphData[i], "Accel " + xyz[i]);
-				gyroGraphData[i] = new ObservableDataSource<Point>();
-				gyroPlotter.AddLineGraph(gyroGraphData[i], "Gyro " + xyz[i]);
-			}
-			for (int i = 0; i < 3; i++)
-			{
-				attitudeGraphData[i] = new ObservableDataSource<Point>();
-				attPlotter.AddLineGraph(attitudeGraphData[i], ypr[i]);
-			}
-			altitudeGraphData = new ObservableDataSource<Point>();
-			altPlotter.AddLineGraph(altitudeGraphData, "Altitude");
+			//string[] xyz = { "X", "Y", "Z" };
+			//string[] ypr = { "Roll", "Pitch", "Yaw" };
+			//accelPlotter.Children.RemoveAll(typeof(LineGraph));
+			//gyroPlotter.Children.RemoveAll(typeof(LineGraph));
+			//attPlotter.Children.RemoveAll(typeof(LineGraph));
+			//altPlotter.Children.RemoveAll(typeof(LineGraph));
+			//for (int i = 0; i < 3; i++)
+			//{
+			//	accelGraphData[i] = new ObservableDataSource<Point>();
+			//	accelPlotter.AddLineGraph(accelGraphData[i], "Accel " + xyz[i]);
+			//	gyroGraphData[i] = new ObservableDataSource<Point>();
+			//	gyroPlotter.AddLineGraph(gyroGraphData[i], "Gyro " + xyz[i]);
+			//}
+			//for (int i = 0; i < 3; i++)
+			//{
+			//	attitudeGraphData[i] = new ObservableDataSource<Point>();
+			//	attPlotter.AddLineGraph(attitudeGraphData[i], ypr[i]);
+			//}
+			//altitudeGraphData = new ObservableDataSource<Point>();
+			//altPlotter.AddLineGraph(altitudeGraphData, "Altitude");
 
 		}
 
@@ -162,29 +162,6 @@ namespace SharpBladeGroundStation
 		{
 			leftcol.MaxWidth = Math.Min(400, (e.NewSize.Height - 30) / 669 * 300);
 		}
-
-		//private void setVector3Data(string name,double x,double y,double z,ObservableCollection<Vector3Data> list)
-		//{
-		//    bool flag = true;
-		//    for (int i = 0; i < list.Count; i++)
-		//    {
-		//        if (list[i].Name == name)
-		//        {
-		//            list[i].X = x;
-		//            list[i].Y = y;
-		//            list[i].Z = z;
-		//            flag = false;
-		//        }
-		//    }
-		//    if (flag)
-		//    {
-		//        Action a = () => { list.Add(new Vector3Data(name, x, y, z)); };
-		//        Dispatcher.BeginInvoke(a, DispatcherPriority.Background);                
-		//    }
-		//}	
-
-
-
 
 		private void initControls()
 		{
@@ -258,9 +235,9 @@ namespace SharpBladeGroundStation
 
 		private void mainwindow_Loaded(object sender, RoutedEventArgs e)
 		{
-			hudWindow = new HUDWindow(this);
-			hudWindow.Mainwin = this;
-			hudWindow.Show();
+			//hudWindow = new HUDWindow(this);
+			//hudWindow.Mainwin = this;
+			//hudWindow.Show();
 			localWebCamsCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
 			int id = -1;
 			cameraComboBox.ItemsSource = localWebCamsCollection;
@@ -283,7 +260,7 @@ namespace SharpBladeGroundStation
 			if (id >= 0)
 			{
 				HudVideoSource = HUDVideoSource.Camera;
-				hudWindow.cameraPlayer.OpenCamera(localWebCamsCollection[id].MonikerString);
+				//hudWindow.cameraPlayer.OpenCamera(localWebCamsCollection[id].MonikerString);
 				//hudWindow.StartRecord("D:\\temp\\test.mpg");
 			}
 			else
@@ -341,6 +318,11 @@ namespace SharpBladeGroundStation
 			logCtrlBtn.Padding = new Thickness(0, -3, 0, 1);
 		}
 
+		private void pfd_Loaded(object sender, RoutedEventArgs e)
+		{
+
+			
+		}
 	}
 	public enum HUDVideoSource
 	{
