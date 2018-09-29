@@ -24,7 +24,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 
 		Thread backgroundListener;
 
-		byte last = 0;
+		
 		Stopwatch sw;
 
 		public SerialPort Port
@@ -84,7 +84,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			receiveTimeOut = 5000;
 			backgroundListener = new Thread(backgroundWorker);
 			backgroundListener.IsBackground = true;
-			backgroundListener.Start();
+			//backgroundListener.Start();
 			connectTime = DateTime.Now;
 			sw = new Stopwatch();
 
@@ -99,31 +99,32 @@ namespace SharpBladeGroundStation.CommunicationLink
 
 				if (!port.IsOpen)
 				{
-					Thread.Sleep(500);
-					lasttime = DateTime.Now;
+					//Thread.Sleep(500);
+					//lasttime = DateTime.Now;
 					continue;
 				}
-				try
-				{
-					if (port.BytesToWrite == 0)
-					{
-						if (sendPackageQueue.Count != 0)
-						{
-							LinkPackage p = sendPackageQueue.Dequeue();
-							port.Write(p.Buffer, 0, p.PackageSize);
-							OnSendPackageEvent(this, new LinkEventArgs(p));
-							//Debug.WriteLine("[Serial]Package sent.");
-						}
-					}
-					else
-					{
-						Thread.Sleep(50);
-					}
-				}
-				catch
-				{
+				//try
+				//{
+				//	//if (port.BytesToWrite == 0)
+				//	//{
+				//	//	if (sendPackageQueue.Count != 0)
+				//	//	{
+				//	//		LinkPackage p = sendPackageQueue.Dequeue();
+				//	//		port.Write(p.Buffer, 0, p.PackageSize);
+				//	//		OnSendPackageEvent(this, new LinkEventArgs(p));
+				//	//		//Debug.WriteLine("[Serial]Package sent.");
+				//	//	}
+				//	//}
+				//	//else
+				//	//{
+				//	//	Thread.Sleep(50);
+				//	//}
+				//}
+				//catch
+				//{
 
-				}
+				//}
+				Thread.Sleep(1000);
 				DateTime now = DateTime.Now;
 				double dt = now.Subtract(lasttime).TotalMilliseconds;
 				if (dt > 1000)
@@ -138,8 +139,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		}
 
 		private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-		{
-			last++;
+		{						
 			if (isUpdatingBuffer || isParsingBuffer)
 			{
 				return;
@@ -150,8 +150,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			dataReceived += len;
 			bufferSize += len;
 			parseBuffer();
-			isUpdatingBuffer = false;
-			last--;
+			isUpdatingBuffer = false;			
 		}
 
 		private void parseBuffer()
@@ -251,7 +250,5 @@ namespace SharpBladeGroundStation.CommunicationLink
 			LinkPackage p;
 			while (receivedPackageQueue.TryDequeue(out p)) ;
 		}
-
-
 	}
 }

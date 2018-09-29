@@ -175,6 +175,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		{
 			len = p.PackageSize + PackageHeaderSize;
 			byte[] buff = new byte[len];
+			buff[0] = 0;
 			BitConverter.GetBytes(len).CopyTo(buff, 1);
 			BitConverter.GetBytes(p.TimeStamp).CopyTo(buff, 5);
 			buff[12] = (byte)d;

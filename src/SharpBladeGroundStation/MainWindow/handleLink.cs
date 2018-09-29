@@ -52,27 +52,11 @@ namespace SharpBladeGroundStation
 		void linkListenerWorker()
 		{
 			List<LinkPackage> pkgs = new List<LinkPackage>();
+			LinkPackage package;
 			while (true)
 			{
-				//if (currentVehicle == null || currentVehicle.Link == null)
-				//{
-				//	continue;
-				//}	
-
-				if (linkAvilable && currentVehicle.Link.ReceivedPackageQueue.Count != 0)
+				while (linkAvilable && currentVehicle.Link.ReceivedPackageQueue.TryDequeue(out package))
 				{
-					LinkPackage package;
-					pkgs.Clear();
-
-					//Debug.WriteLine("[MAVLink]Package {0}.", currentVehicle.Link.ReceivedPackageQueue.Count);
-					//package = currentVehicle.Link.ReceivedPackageQueue.Dequeue();
-					//continue;
-
-					currentVehicle.Link.ReceivedPackageQueue.TryDequeue(out package);
-
-
-
-
 					switch (currentVehicle.Link.Protocol)
 					{
 						case LinkProtocol.MAVLink:
@@ -85,9 +69,29 @@ namespace SharpBladeGroundStation
 							analyzeMAVPackage(package);
 							break;
 					}
+					//if (linkAvilable && currentVehicle.Link.ReceivedPackageQueue.Count != 0)
+					//{
 
+					//	pkgs.Clear();
 
+					//	//Debug.WriteLine("[MAVLink]Package {0}.", currentVehicle.Link.ReceivedPackageQueue.Count);
+					//	//package = currentVehicle.Link.ReceivedPackageQueue.Dequeue();
+					//	//continue;
 
+					//	currentVehicle.Link.ReceivedPackageQueue.TryDequeue(out package);
+					//	switch (currentVehicle.Link.Protocol)
+					//	{
+					//		case LinkProtocol.MAVLink:
+					//			analyzeMAVPackage(package);
+					//			break;
+					//		case LinkProtocol.ANOLink:
+					//			analyzeANOPackage(package);
+					//			break;
+					//		case LinkProtocol.MAVLink2:
+					//			analyzeMAVPackage(package);
+					//			break;
+					//	}
+					//}
 				}
 			}
 		}
@@ -105,8 +109,8 @@ namespace SharpBladeGroundStation
 			linkStateText.Dispatcher.Invoke(a);
 			linkAvilable = true;
 
-			//logger = new CommLogger(GCSconfig.LogPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".sblog", e.Link);
-			//logger.Start(e.Link.ConnectTime);
+			logger = new CommLogger(GCSconfig.LogPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".sblog", e.Link);
+			logger.Start(e.Link.ConnectTime);
 			if (GCSconfig.AutoRecord && hudWindow.cameraPlayer.IsCameraRunning())
 			{
 				string str = logger.Path.Substring(0, logger.Path.LastIndexOf(".") + 1) + "mpg";

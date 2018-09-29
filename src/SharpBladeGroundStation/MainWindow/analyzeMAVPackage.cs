@@ -58,7 +58,7 @@ namespace SharpBladeGroundStation
 					gpsData.Vdop /= 100f;
 					gpsData.Hdop /= 100f;
 					currentVehicle.GroundSpeed = package.NextUShort() / 100.0f;
-
+					package.NextUShort();//cog
 					gpsData.SatelliteCount = package.NextUShort();
 					GPSPositionState gpss = (GPSPositionState)package.NextByte();//sb文档害我debug一天!
 
@@ -69,6 +69,7 @@ namespace SharpBladeGroundStation
 						dataSkipCount[package.Function] = 0;
 					}
 					gpsData.State = gpss;
+					gpsData.SatelliteCount = package.NextByte();
 					//PointLatLng pos = PositionHelper.WGS84ToGCJ02(new PointLatLng(gpsData.Latitude, gpsData.Longitude));
 
 					//if (time64 - dataSkipCount[package.Function] > (ulong)GCSconfig.CourseTimeInterval * 1000)
@@ -78,7 +79,7 @@ namespace SharpBladeGroundStation
 					//	dataSkipCount[package.Function] = time64;
 
 					//}
-					gpsData.SatelliteCount = package.NextByte();
+
 					//a2 = () => { uavMarker.Position = pos; };
 					//Dispatcher.BeginInvoke(a2);
 					break;
@@ -123,7 +124,7 @@ namespace SharpBladeGroundStation
 
 					package.NextShort();//vx
 					package.NextShort();//vy
-					//currentVehicle.ClimbRate= package.NextShort()/100.0f;
+					currentVehicle.ClimbRate= package.NextShort()/100.0f;
 
 					PointLatLng pos = PositionHelper.WGS84ToGCJ02(new PointLatLng(gpsData.Latitude, gpsData.Longitude));
 
@@ -134,7 +135,7 @@ namespace SharpBladeGroundStation
 						dataSkipCount[package.Function] = time64;
 
 					}
-					gpsData.SatelliteCount = package.NextByte();
+					
 					a2 = () => {
 						uavMarker.Position = pos;
 						if (mapCenterConfig == Configuration.MapCenterPositionConfig.FollowUAV)
@@ -269,6 +270,20 @@ namespace SharpBladeGroundStation
 					break;
 				case MAVLINK_MSG_ID.COMMAND_ACK://#77
 
+					break;
+				case MAVLINK_MSG_ID.DISTANCE_SENSOR://#132
+					time = package.NextUInt32();
+					package.NextUShort();//min
+					package.NextUShort();//max
+					tfloat = package.NextUShort() / 100f;//distance
+					if(Math.Abs(tfloat-currentVehicle.DistanceSensor)>0.2f)
+					{
+						currentVehicle.DistanceSensor = tfloat;
+					}
+					else
+					{
+						currentVehicle.DistanceSensor = currentVehicle.DistanceSensor * 0.8f + tfloat * 0.2f;
+					}
 					break;
 				case MAVLINK_MSG_ID.MISSION_REQUEST:
 					ushort s2 = package.NextUShort();

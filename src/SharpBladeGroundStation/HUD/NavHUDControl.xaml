@@ -23,6 +23,8 @@
             <wpf:OutlinedText x:Name="tgtSpeedText" Text="{Binding GroundSpeed,StringFormat={}{0:0.0}}" FontSize="26" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Left="0" Canvas.Top="0" />
             <wpf:OutlinedText x:Name="tgtAltText" Text="{Binding Altitude,StringFormat={}{0:0.0}}" FontSize="26" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Right="0" Canvas.Top="00" />
             -->
+
+            <TextBlock Text="{Binding DistanceSensor,StringFormat={}{0:0.0}}" FontSize="28"  Canvas.Left="220" Canvas.Bottom="80" Width="60" Foreground="LightGreen" TextAlignment="Center" />
             <Canvas Width="200" Height="200" Canvas.Left="150" Canvas.Top="149" RenderTransformOrigin="0.5,0.5">
                 <Canvas.RenderTransform>
                     <TransformGroup>

@@ -235,9 +235,9 @@ namespace SharpBladeGroundStation
 
 		private void mainwindow_Loaded(object sender, RoutedEventArgs e)
 		{
-			//hudWindow = new HUDWindow(this);
-			//hudWindow.Mainwin = this;
-			//hudWindow.Show();
+			hudWindow = new HUDWindow(this);
+			hudWindow.Mainwin = this;
+			hudWindow.Show();
 			localWebCamsCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
 			int id = -1;
 			cameraComboBox.ItemsSource = localWebCamsCollection;
