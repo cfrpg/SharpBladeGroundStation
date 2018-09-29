@@ -26,13 +26,17 @@ namespace SharpBladeGroundStation
 
 		MissionSender missionSender;
 		bool linkAvilable;
-		public LogLink LogLink
+
+		bool[] packageFlags;
+ 		public LogLink LogLink
 		{
 			get { return logLink; }
 		}
 
 		void initLinkListener()
 		{
+			packageFlags = new bool[255];
+			Array.Clear(packageFlags, 0, packageFlags.Length);
 			linkAvilable = false;
 			portscanner = new AdvancedPortScanner(GCSconfig.BaudRate, 1000, 3);
 			portscanner.OnFindPort += Portscanner_OnFindPort;
@@ -61,37 +65,11 @@ namespace SharpBladeGroundStation
 					{
 						case LinkProtocol.MAVLink:
 							analyzeMAVPackage(package);
-							break;
-						case LinkProtocol.ANOLink:
-							analyzeANOPackage(package);
-							break;
+							break;						
 						case LinkProtocol.MAVLink2:
 							analyzeMAVPackage(package);
 							break;
 					}
-					//if (linkAvilable && currentVehicle.Link.ReceivedPackageQueue.Count != 0)
-					//{
-
-					//	pkgs.Clear();
-
-					//	//Debug.WriteLine("[MAVLink]Package {0}.", currentVehicle.Link.ReceivedPackageQueue.Count);
-					//	//package = currentVehicle.Link.ReceivedPackageQueue.Dequeue();
-					//	//continue;
-
-					//	currentVehicle.Link.ReceivedPackageQueue.TryDequeue(out package);
-					//	switch (currentVehicle.Link.Protocol)
-					//	{
-					//		case LinkProtocol.MAVLink:
-					//			analyzeMAVPackage(package);
-					//			break;
-					//		case LinkProtocol.ANOLink:
-					//			analyzeANOPackage(package);
-					//			break;
-					//		case LinkProtocol.MAVLink2:
-					//			analyzeMAVPackage(package);
-					//			break;
-					//	}
-					//}
 				}
 			}
 		}

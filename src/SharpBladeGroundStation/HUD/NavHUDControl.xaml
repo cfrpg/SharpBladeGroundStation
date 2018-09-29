@@ -209,6 +209,9 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
+            <Ellipse Height="30" Width="30" Canvas.Left="235" Canvas.Bottom="0" Stroke="LightGreen" StrokeThickness="3" />
+            <Ellipse Height="6" Width="6" Canvas.Left="247" Canvas.Bottom="12" Stroke="LightGreen" StrokeThickness="5" />
+
         </Canvas>
     </Viewbox>
 </local:HUDBase>

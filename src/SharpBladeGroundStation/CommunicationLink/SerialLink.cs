@@ -84,7 +84,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			receiveTimeOut = 5000;
 			backgroundListener = new Thread(backgroundWorker);
 			backgroundListener.IsBackground = true;
-			//backgroundListener.Start();
+			backgroundListener.Start();
 			connectTime = DateTime.Now;
 			sw = new Stopwatch();
 
@@ -177,10 +177,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 						break;
 					case PackageParseResult.BadCheckSum:
 						offset++;
-						//offset += receivePackage.PackageSize;
-						//receivePackage.TimeStamp = this.ConnectedTime;
-						//receivedPackageQueue.Enqueue(receivePackage.Clone());
-						//received = true;
+						
 						Debug.WriteLine("[Link]Bad checksum.");
 						break;
 					case PackageParseResult.Yes:

@@ -26,6 +26,9 @@ namespace SharpBladeGroundStation
 			Action a1, a2,a3;
 			int tint;
 			float tfloat;
+			PointLatLng pos;
+
+			packageFlags[package.Function] = true;
 			switch ((MAVLINK_MSG_ID)package.Function)
 			{
 				case MAVLINK_MSG_ID.HEARTBEAT://#0		
@@ -44,10 +47,29 @@ namespace SharpBladeGroundStation
 
 				case MAVLINK_MSG_ID.GPS_RAW_INT: //#24
 					time64 = package.NextUInt64();
-					//gpsData.Latitude = package.NextInt32() * 1.0 / 1e7;
-					//gpsData.Longitude = package.NextInt32() * 1.0 / 1e7;
-					tint = package.NextInt32();
-					tint = package.NextInt32();
+					if (!packageFlags[33])
+					{
+						gpsData.Latitude = package.NextInt32() * 1.0 / 1e7;
+						gpsData.Longitude = package.NextInt32() * 1.0 / 1e7;
+						pos = PositionHelper.WGS84ToGCJ02(new PointLatLng(gpsData.Latitude, gpsData.Longitude));
+
+						if (time64 - dataSkipCount[package.Function] > (ulong)GCSconfig.CourseTimeInterval * 1000)
+						{
+							a1 = () => { updateFlightRoute(pos); };
+							Dispatcher.BeginInvoke(a1);
+							dataSkipCount[package.Function] = time64;
+
+						}
+
+						a2 = () => { uavMarker.Position = pos; };
+						Dispatcher.BeginInvoke(a2);
+					}
+					else
+					{
+						tint = package.NextInt32();
+						tint = package.NextInt32();
+						
+					}
 					int talt = package.NextInt32();
 					gpsData.Hdop = package.NextUShort();
 					if (gpsData.Hdop > 10000)
@@ -70,18 +92,7 @@ namespace SharpBladeGroundStation
 					}
 					gpsData.State = gpss;
 					gpsData.SatelliteCount = package.NextByte();
-					//PointLatLng pos = PositionHelper.WGS84ToGCJ02(new PointLatLng(gpsData.Latitude, gpsData.Longitude));
-
-					//if (time64 - dataSkipCount[package.Function] > (ulong)GCSconfig.CourseTimeInterval * 1000)
-					//{
-					//	a1 = () => { updateFlightRoute(pos); };
-					//	Dispatcher.BeginInvoke(a1);
-					//	dataSkipCount[package.Function] = time64;
-
-					//}
-
-					//a2 = () => { uavMarker.Position = pos; };
-					//Dispatcher.BeginInvoke(a2);
+					
 					break;
 				case MAVLINK_MSG_ID.ATTITUDE://#30
 					time = package.NextUInt32();
@@ -126,7 +137,7 @@ namespace SharpBladeGroundStation
 					package.NextShort();//vy
 					currentVehicle.ClimbRate= package.NextShort()/100.0f;
 
-					PointLatLng pos = PositionHelper.WGS84ToGCJ02(new PointLatLng(gpsData.Latitude, gpsData.Longitude));
+					pos = PositionHelper.WGS84ToGCJ02(new PointLatLng(gpsData.Latitude, gpsData.Longitude));
 
 					if (time64 - dataSkipCount[package.Function] > (ulong)GCSconfig.CourseTimeInterval * 1000)
 					{
@@ -150,9 +161,14 @@ namespace SharpBladeGroundStation
 					currentVehicle.AirSpeed = package.NextSingle();
 					currentVehicle.GroundSpeed = package.NextSingle();
 					currentVehicle.Altitude = package.NextSingle();
-
-					//currentVehicle.ClimbRate = package.NextSingle();
-					package.NextSingle();
+					if(!packageFlags[33])
+					{
+						currentVehicle.ClimbRate = package.NextSingle();
+					}
+					else
+					{
+						package.NextSingle();
+					}					
 					currentVehicle.Heading = package.NextShort();
 					a1 = () => { uavMarker.Shape.RenderTransform = new RotateTransform(currentVehicle.Heading, 15, 15); };
 					Dispatcher.BeginInvoke(a1);

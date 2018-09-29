@@ -179,24 +179,18 @@ namespace SharpBladeGroundStation.CommunicationLink
 				}
 
 
-				offset = 0;
-				ANOLinkPackage anop = new ANOLinkPackage();
-				if (tryGetPackage(buff, len, 0, anop))
-				{
-					offset = anop.PackageSize;
-					if (tryGetPackage(buff, len, offset, anop))
-					{
-						state = PortScannerState.Available;
-						protocol = LinkProtocol.ANOLink;
-						return;
-					}
-				}
-				string output = "";
-				for (int i = 0; i < buff.Length; i++)
-				{
-					output += ((int)buff[i]).ToString();
-					output += " ";
-				}
+				//offset = 0;
+				//ANOLinkPackage anop = new ANOLinkPackage();
+				//if (tryGetPackage(buff, len, 0, anop))
+				//{
+				//	offset = anop.PackageSize;
+				//	if (tryGetPackage(buff, len, offset, anop))
+				//	{
+				//		state = PortScannerState.Available;
+				//		protocol = LinkProtocol.ANOLink;
+				//		return;
+				//	}
+				//}				
 				Debug.WriteLine("[port scanner]unavilable port(no link):" + name);
 				state = PortScannerState.Unavailable;
 			}

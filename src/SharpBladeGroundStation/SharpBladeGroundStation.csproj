@@ -152,7 +152,6 @@
     <Compile Include="Map\Markers\WayPointMarker.xaml.cs">
       <DependentUpon>WayPointMarker.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow\analyzeANOPackage.cs" />
     <Compile Include="MainWindow\analyzeMAVPackage.cs" />
     <Compile Include="DataStructs\Mission\HomeWaypoint.cs" />
     <Compile Include="DataStructs\Mission\LandWaypoint.cs" />
