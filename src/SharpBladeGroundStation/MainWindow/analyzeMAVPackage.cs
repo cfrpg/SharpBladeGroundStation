@@ -45,7 +45,7 @@ namespace SharpBladeGroundStation
 					break;
 
 
-				case MAVLINK_MSG_ID.GPS_RAW_INT: //#24
+				case MAVLINK_MSG_ID.GPS_RAW_INT: //#24                    
 					time64 = package.NextUInt64();
 					if (!packageFlags[33])
 					{
@@ -58,19 +58,16 @@ namespace SharpBladeGroundStation
 							a1 = () => { updateFlightRoute(pos); };
 							Dispatcher.BeginInvoke(a1);
 							dataSkipCount[package.Function] = time64;
-
 						}
-
 						a2 = () => { uavMarker.Position = pos; };
 						Dispatcher.BeginInvoke(a2);
 					}
 					else
 					{
 						tint = package.NextInt32();
-						tint = package.NextInt32();
-						
+						tint = package.NextInt32();						
 					}
-					int talt = package.NextInt32();
+					int talt = package.NextInt32();                    
 					gpsData.Hdop = package.NextUShort();
 					if (gpsData.Hdop > 10000)
 						gpsData.Hdop = -1;
@@ -81,18 +78,22 @@ namespace SharpBladeGroundStation
 					gpsData.Hdop /= 100f;
 					currentVehicle.GroundSpeed = package.NextUShort() / 100.0f;
 					package.NextUShort();//cog
-					gpsData.SatelliteCount = package.NextUShort();
+					
 					GPSPositionState gpss = (GPSPositionState)package.NextByte();//sb文档害我debug一天!
-
-					if (gpsData.State == GPSPositionState.NoGPS && gpss != GPSPositionState.NoGPS)
+                    gpsData.SatelliteCount = package.NextByte();
+                    if (gpsData.State == GPSPositionState.NoGPS && gpss != GPSPositionState.NoGPS)
 					{
 						a3 = () => { flightRoute.Clear(); };
 						Dispatcher.BeginInvoke(a3);
 						dataSkipCount[package.Function] = 0;
 					}
 					gpsData.State = gpss;
-					gpsData.SatelliteCount = package.NextByte();
-					
+                    if(package.Version==2)
+                    {
+                        int altell = package.NextInt32();
+                        Debug.WriteLine(altell);
+                    }
+                   	
 					break;
 				case MAVLINK_MSG_ID.ATTITUDE://#30
 					time = package.NextUInt32();
@@ -114,7 +115,8 @@ namespace SharpBladeGroundStation
 
 					break;
 				case MAVLINK_MSG_ID.LOCAL_POSITION_NED: //#32
-					time = package.NextUInt32();
+                    
+                    time = package.NextUInt32();
 					float vx = package.NextSingle();
 					float vy = package.NextSingle();
 					float vz = package.NextSingle();
@@ -123,10 +125,13 @@ namespace SharpBladeGroundStation
 					vy = package.NextSingle();
 					vz = package.NextSingle();
 					currentVehicle.Velocity = new Vector3(vx, vy, vz);
-					currentVehicle.ClimbRate = -vz;
+                    if((!packageFlags[74])&&(!packageFlags[33]))
+                    {
+                        currentVehicle.ClimbRate = -vz;
+                    }					
 					break;
-				case MAVLINK_MSG_ID.GLOBAL_POSITION_INT://#33
-					time = package.NextUInt32();
+				case MAVLINK_MSG_ID.GLOBAL_POSITION_INT://#33                   
+                    time = package.NextUInt32();
 					time64 = (ulong)time * 1000;
 					gpsData.Latitude = package.NextInt32() * 1.0 / 1e7;
 					gpsData.Longitude = package.NextInt32() * 1.0 / 1e7;
