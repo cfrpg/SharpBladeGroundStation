@@ -105,8 +105,6 @@ namespace SharpBladeGroundStation.CommunicationLink
 			}
 		}
 
-
-
 		/// <summary>
 		/// 构造函数
 		/// </summary>
@@ -166,7 +164,6 @@ namespace SharpBladeGroundStation.CommunicationLink
 				timerRunning = false;
 				backgroundTimer.Stop();
 			}
-
 		}
 
 		private bool getPackages()
@@ -324,7 +321,6 @@ namespace SharpBladeGroundStation.CommunicationLink
 			lastUpdateTime = DateTime.MinValue;
 			return LoadFileResualt.OK;
 		}
-
 
 		private bool readPackage()
 		{

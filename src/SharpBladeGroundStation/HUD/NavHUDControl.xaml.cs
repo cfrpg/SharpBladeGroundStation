@@ -22,7 +22,6 @@ namespace SharpBladeGroundStation.HUD
 	/// </summary>
 	public partial class NavHUDControl : HUDBase
 	{
-
 		public static readonly DependencyProperty HorizonTranlationProperty =
 			DependencyProperty.Register("HorizonTranlation", typeof(float), typeof(NavHUDControl), new PropertyMetadata(0f, NavHUDControl.OnHorizonTranlationPropertyChanged));
 		public float HorizonTranlation
@@ -45,8 +44,7 @@ namespace SharpBladeGroundStation.HUD
 		}
 		public void OnClimbRateTranlationChanged(DependencyPropertyChangedEventArgs e)
 		{
-
-
+			
 		}
 		public static void OnHorizonTranlationPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
 		{

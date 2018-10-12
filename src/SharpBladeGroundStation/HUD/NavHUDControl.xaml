@@ -61,6 +61,7 @@
                 </Line.RenderTransform>
             </Line>
             <TextBlock Text="{Binding FlightModeText}" FontFamily="TI-Nspire Sans" FontSize="24" Canvas.Left="84" Canvas.Top="379" Foreground="LightGreen" RenderTransformOrigin="0,0.5"/>
+            <TextBlock Text="{Binding Battery.Remaining,StringFormat={}{0:0}%}" FontFamily="TI-Nspire Sans" FontSize="24" Canvas.Left="84" Canvas.Top="410" Foreground="LightGreen" RenderTransformOrigin="0,0.5"/>
             <Polygon Canvas.Right="67" Canvas.Top="250" Points="0,0 8,-8 8,-3 20,-3 20,3 8,3 8,8" Stroke="LightGreen" StrokeThickness="3" RenderTransformOrigin="0.5,0.5">
                 <Polygon.RenderTransform>
                     <TransformGroup>
