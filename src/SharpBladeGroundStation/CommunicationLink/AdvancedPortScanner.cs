@@ -35,7 +35,6 @@ namespace SharpBladeGroundStation.CommunicationLink
 			ports = new List<PortData>();
 			scantimer = new System.Timers.Timer(500);
 			scantimer.Elapsed += Scantimer_Elapsed;
-
 		}
 
 		public void Start()
@@ -177,20 +176,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 						return;
 					}
 				}
-
-
-				//offset = 0;
-				//ANOLinkPackage anop = new ANOLinkPackage();
-				//if (tryGetPackage(buff, len, 0, anop))
-				//{
-				//	offset = anop.PackageSize;
-				//	if (tryGetPackage(buff, len, offset, anop))
-				//	{
-				//		state = PortScannerState.Available;
-				//		protocol = LinkProtocol.ANOLink;
-				//		return;
-				//	}
-				//}				
+					
 				Debug.WriteLine("[port scanner]unavilable port(no link):" + name);
 				state = PortScannerState.Unavailable;
 			}
@@ -222,5 +208,41 @@ namespace SharpBladeGroundStation.CommunicationLink
 				return false;
 			}
 		}
+	}
+
+	public class PortScannerEventArgs : EventArgs
+	{
+		string portName;
+		SerialLink link;
+		public SerialLink Link
+		{
+			get { return link; }
+		}
+
+		public PortScannerEventArgs(SerialLink l)
+		{
+			link = l;
+			portName = l.Port.PortName;
+		}
+	}
+
+	public enum PortScannerState
+	{
+		/// <summary>
+		/// 尚未检查的端口
+		/// </summary>
+		NewPort,
+		/// <summary>
+		/// 正在检查的端口
+		/// </summary>
+		Scanning,
+		/// <summary>
+		/// 检查完毕，可用的端口
+		/// </summary>
+		Available,
+		/// <summary>
+		/// 检查完毕，不可用的端口
+		/// </summary>
+		Unavailable
 	}
 }

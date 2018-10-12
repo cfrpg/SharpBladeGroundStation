@@ -289,10 +289,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			path = p;
 			filename = fi.Name;
 			switch (protocol)
-			{
-				case LinkProtocol.ANOLink:
-					currentPackage = new ANOLinkPackage();
-					break;
+			{				
 				case LinkProtocol.MAVLink:
 					currentPackage = new MAVLinkPackage();
 					break;

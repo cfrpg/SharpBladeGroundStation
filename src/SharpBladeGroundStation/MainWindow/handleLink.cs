@@ -158,6 +158,7 @@ namespace SharpBladeGroundStation
 				if (lfr == LoadFileResualt.OK)
 				{
 					currentVehicle.Link = LogLink;
+					linkAvilable = true;
 					logPathText.Text = ofd.SafeFileName;
 					string str = ofd.FileName.Substring(0, ofd.FileName.LastIndexOf(".") + 1) + "mpg";
 					FileInfo fi = new FileInfo(str);

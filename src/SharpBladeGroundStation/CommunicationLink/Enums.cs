@@ -52,11 +52,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		/// <summary>
 		/// MAVLink2.0协议
 		/// </summary>
-		MAVLink2 = 2,
-		/// <summary>
-		/// 匿名飞控协议
-		/// </summary>
-		ANOLink = 3,
+		MAVLink2 = 2,		
 		/// <summary>
 		/// SharpBlade协议,敬请期待
 		/// </summary>

@@ -82,7 +82,7 @@ namespace SharpBladeGroundStation
 			initControls();
 			initConfig();
 			initGmap();
-			initLinkListener();
+			//initLinkListener();
 			currentVehicle = new Vehicle(0);
 			pfd.DataContext = currentVehicle.FlightState;
 			gpsData = new GPSData();
@@ -268,7 +268,7 @@ namespace SharpBladeGroundStation
 				HudVideoSource = HUDVideoSource.NoVideo;
 			}
 			cameraComboBox.SelectionChanged += CameraComboBox_SelectionChanged;
-
+			initLinkListener();
 		}
 
 		private void CameraComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

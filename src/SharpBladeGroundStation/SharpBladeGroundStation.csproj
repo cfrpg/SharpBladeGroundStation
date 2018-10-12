@@ -199,11 +199,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CommunicationLink\ANOLinkPackage.cs" />
     <Compile Include="CommunicationLink\Enums.cs" />
     <Compile Include="CommunicationLink\LinkPackage.cs" />
     <Compile Include="CommunicationLink\MAVLinkPackage.cs" />
-    <Compile Include="CommunicationLink\PortScanner.cs" />
     <Compile Include="CommunicationLink\SerialLink.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -112,10 +112,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			receivedPackageQueue = new ConcurrentQueue<LinkPackage>();
 			sendPackageQueue = new Queue<LinkPackage>();
 			switch (p)
-			{
-				case LinkProtocol.ANOLink:
-					receivePackage = new ANOLinkPackage();
-					break;
+			{				
 				case LinkProtocol.MAVLink:
 					receivePackage = new MAVLinkPackage();
 					break;
