@@ -260,7 +260,7 @@ namespace SharpBladeGroundStation
 			if (id >= 0)
 			{
 				HudVideoSource = HUDVideoSource.Camera;
-				//hudWindow.cameraPlayer.OpenCamera(localWebCamsCollection[id].MonikerString);
+				hudWindow.cameraPlayer.OpenCamera(localWebCamsCollection[id].MonikerString);
 				//hudWindow.StartRecord("D:\\temp\\test.mpg");
 			}
 			else

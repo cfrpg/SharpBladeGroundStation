@@ -332,12 +332,12 @@ namespace SharpBladeGroundStation.CommunicationLink
 			if (rem < CommLogger.PackageHeaderSize)
 				return false;
 			stream.Read(buffer, 0, CommLogger.PackageHeaderSize);
-			int len = BitConverter.ToInt32(buffer, 0);
+			int len = BitConverter.ToInt32(buffer, 1);
 			rem = stream.Length - stream.Position;
 			if (rem < len)
 				return false;
-			currentPackageTime = BitConverter.ToDouble(buffer, 4);
-			currPkgDir = (LinkPackageDirection)buffer[12];
+			currentPackageTime = BitConverter.ToDouble(buffer, 5);
+			currPkgDir = (LinkPackageDirection)buffer[13];
 			len -= CommLogger.PackageHeaderSize;
 			stream.Read(buffer, 0, len);
 			int dataused;
