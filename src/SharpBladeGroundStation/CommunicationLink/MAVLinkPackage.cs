@@ -115,6 +115,22 @@ namespace SharpBladeGroundStation.CommunicationLink
 		}
 
 		/// <summary>
+		/// 构造数据包，通过连接识别版本
+		/// </summary>
+		/// /// <param name="f">数据包内容</param>
+		/// <param name="link">使用数据包的连接</param>
+		public MAVLinkPackage(int f,CommLink link) : base(256)
+		{
+			function = f;
+			version = link.Protocol == LinkProtocol.MAVLink2 ? 2 : 1;
+			if (version <= 1)
+				headerSize = 6;
+			else
+				headerSize = 10;
+			signature = new byte[13];
+		}
+
+		/// <summary>
 		/// 构造数据包，指定功能和版本
 		/// </summary>
 		/// <param name="f">数据包内容</param>
@@ -126,7 +142,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			if (version <= 1)
 				headerSize = 6;
 			else
-				headerSize = 9;
+				headerSize = 10;
 			signature = new byte[13];
 		}
 		public override PackageParseResult ReadFromBuffer(byte[] buff, int length, int offset, out int dataUsed)
@@ -225,12 +241,35 @@ namespace SharpBladeGroundStation.CommunicationLink
 		}
 		public override void SetVerify()
 		{
-			buffer[0] = 0xFE;
-			buffer[1] = (byte)(dataSize & 0xFF);
-			buffer[5] = (byte)function;
-			ushort crc = MavlinkCRC.Calculate(buffer, dataSize + HeaderSize);
-			crc = MavlinkCRC.Accumulate(MAVLink.MAVLINK_MESSAGE_INFOS.GetMessageInfo((uint)function).crc, crc);
-			AddData(crc);
+			if(version==1)
+			{
+				buffer[0] = 0xFE;
+				buffer[1] = (byte)(dataSize & 0xFF);
+				buffer[2] = sequence;
+				buffer[3] = system;
+				buffer[4] = component;
+				buffer[5] = (byte)function;
+				ushort crc = MavlinkCRC.Calculate(buffer, dataSize + HeaderSize);
+				crc = MavlinkCRC.Accumulate(MAVLink.MAVLINK_MESSAGE_INFOS.GetMessageInfo((uint)function).crc, crc);
+				AddData(crc);
+			}
+			if(version==2)
+			{
+				buffer[0] = 0xFD;	//magic
+				buffer[1] = (byte)(dataSize & 0xFF);	//len
+				buffer[2] = incompatibility;    //incompatibility
+				buffer[3] = compatibility;
+				buffer[4] = sequence;
+				buffer[5] = system;
+				buffer[6] = component;
+				buffer[7] = (byte)(function & 0xFF);				
+				buffer[8] = (byte)((function >> 8) & 0xFF);
+				buffer[9] = (byte)((function >> 16) & 0xFF);
+				ushort crc = MavlinkCRC.Calculate(buffer, dataSize + HeaderSize);
+				crc = MavlinkCRC.Accumulate(MAVLink.MAVLINK_MESSAGE_INFOS.GetMessageInfo((uint)function).crc, crc);
+				AddData(crc);
+			}
+			
 		}
 		public override string ToString()
 		{

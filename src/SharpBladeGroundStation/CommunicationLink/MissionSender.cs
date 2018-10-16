@@ -23,58 +23,28 @@ namespace SharpBladeGroundStation.CommunicationLink
 		public delegate void MissionSenderEvent();
 		public event MissionSenderEvent OnFinished;
 
-
 		public MissionSenderState State
 		{
-			get
-			{
-				return state;
-			}
-
-			set
-			{
-				state = value;
-			}
+			get { return state; }
+			set { state = value; }
 		}
-
 
 		public List<MAVLinkPackage> Packages
 		{
-			get
-			{
-				return packages;
-			}
-
-			set
-			{
-				packages = value;
-			}
+			get { return packages; }
+			set { packages = value; }
 		}
 
 		public Vehicle Target
 		{
-			get
-			{
-				return target;
-			}
-
-			set
-			{
-				target = value;
-			}
+			get { return target; }
+			set { target = value; }
 		}
 
 		public ushort NextRequest
 		{
-			get
-			{
-				return nextRequest;
-			}
-
-			set
-			{
-				nextRequest = value;
-			}
+			get { return nextRequest; }
+			set { nextRequest = value; }
 		}
 
 		public MissionSender(Vehicle t)
@@ -86,8 +56,6 @@ namespace SharpBladeGroundStation.CommunicationLink
 			background.IsBackground = true;
 			//background.Start();
 		}
-
-
 
 		void backgroundWorker()
 		{
@@ -108,7 +76,8 @@ namespace SharpBladeGroundStation.CommunicationLink
 						if (nextRequest < 32768)
 						{
 							Debug.WriteLine("[Mission Sender]:Send {0} of {1}", nextRequest, packages.Count);
-							target.Link.SendPackageQueue.Enqueue(packages[nextRequest]);
+							//target.Link.SendPackageQueue.Enqueue(packages[nextRequest]);
+							target.Link.SendPackage(packages[nextRequest]);
 							nextRequest = 32768;
 						}
 						else
@@ -133,7 +102,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			packages.Clear();
 			for (int i = 0; i < data.Markers.Count; i++)
 			{
-				MAVLinkPackage p = new MAVLinkPackage();
+				MAVLinkPackage p = new MAVLinkPackage((byte)MAVLINK_MSG_ID.MISSION_ITEM, target.Link);
 				p.AddData(0f);  //p1
 				p.AddData(0.5f);
 				p.AddData(0f);
@@ -155,23 +124,19 @@ namespace SharpBladeGroundStation.CommunicationLink
 				p.AddData((byte)1);//auto			
 
 				p.Sequence = (byte)i;
-				p.Function = (byte)MAVLINK_MSG_ID.MISSION_ITEM;
 				p.SetVerify();
 				packages.Add(p);
 			}
-			MAVLinkPackage p1 = new MAVLinkPackage();
+			MAVLinkPackage p1 = new MAVLinkPackage((byte)MAVLINK_MSG_ID.MISSION_COUNT, target.Link);
 			p1.System = 255;
-			p1.Component = 0;
-			p1.Function = (byte)MAVLINK_MSG_ID.MISSION_COUNT;
+			p1.Component = 0;			
 			p1.AddData((ushort)packages.Count);
 			p1.AddData((byte)target.ID);
 			p1.AddData((byte)190);
-
-
 			p1.SetVerify();
 
 			nextRequest = 32768;
-			target.Link.SendPackageQueue.Enqueue(p1);
+			target.Link.SendPackage(p1);
 			state = MissionSenderState.Waiting;
 
 		}

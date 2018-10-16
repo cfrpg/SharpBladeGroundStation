@@ -44,16 +44,15 @@ namespace SharpBladeGroundStation
 			//ss.Speak("鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，启动失败。");
 			//MessageBox.Show("黑科技启动失败", "Orz");
 			//replayLog();
-			//triggerCamera();
+			triggerCamera();
 			// testCamera();
 			//setScreen();
-			caliLevel();
+			//caliLevel();
 		}
 
 		void caliLevel()
 		{
-			MAVLinkPackage package = new MAVLinkPackage();
-			package.Function = (byte)MAVLINK_MSG_ID.COMMAND_LONG;
+			MAVLinkPackage package = new MAVLinkPackage((byte)MAVLINK_MSG_ID.COMMAND_LONG,currentVehicle.Link);			
 			package.System = 255;
 			package.Component = 1;
 			package.AddData(0f);
@@ -63,17 +62,13 @@ namespace SharpBladeGroundStation
 			package.AddData(2f);
 			package.AddData(0f);
 			package.AddData(0f);
-
 			package.AddData((ushort)241);//MAV_CMD_PREFLIGHT_CALIBRATION
 			package.AddData((byte)currentVehicle.ID);
 			package.AddData((byte)0);			
 			package.AddData((byte)0);
-
-			
-
 			package.SetVerify();
 
-			currentVehicle.Link.SendPackageQueue.Enqueue(package);
+			currentVehicle.Link.SendPackage(package, true);
 
 
 		}
@@ -84,11 +79,11 @@ namespace SharpBladeGroundStation
 		}
 		void triggerCamera()
 		{
-			MAVLinkPackage package = new MAVLinkPackage();
+			MAVLinkPackage package = new MAVLinkPackage((byte)MAVLINK_MSG_ID.COMMAND_LONG,currentVehicle.Link);
 			package.Sequence = 1;
-			package.System = 0;
+			package.System = 255;
 			package.Component = 0;
-			package.Function = (byte)MAVLINK_MSG_ID.COMMAND_LONG;
+			//package.Function = (byte)MAVLINK_MSG_ID.COMMAND_LONG;
 			package.AddData((float)0);
 			package.AddData((float)0);
 			package.AddData((float)0);
@@ -101,7 +96,8 @@ namespace SharpBladeGroundStation
 			package.AddData((byte)0);//TGT_COMP            
 			package.AddData((byte)0);
 			package.SetVerify();
-			currentVehicle.Link.SendPackageQueue.Enqueue(package);
+			//currentVehicle.Link.SendPackageQueue.Enqueue(package);
+			currentVehicle.Link.SendPackage(package,true);
 		}
 
 		void setScreen()

@@ -21,13 +21,15 @@ namespace SharpBladeGroundStation.CommunicationLink
 		protected int dataSent;
 		protected LinkState state;
 		protected LinkProtocol protocol;
-		protected DateTime connectTime;		
+		protected DateTime connectTime;
+		protected bool isSending;	
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		public delegate void PackageEvent(CommLink sender, LinkEventArgs e);
 		public event PackageEvent OnReceivePackage;
 		public event PackageEvent OnSendPackage;
+
 		public ConcurrentQueue<LinkPackage> ReceivedPackageQueue
 		{
 			get { return receivedPackageQueue; }
@@ -82,8 +84,6 @@ namespace SharpBladeGroundStation.CommunicationLink
 			set { protocol = value; }
 		}
 
-		
-
 		public LinkState State
 		{
 			get { return state; }
@@ -100,7 +100,6 @@ namespace SharpBladeGroundStation.CommunicationLink
 			get { return connectTime; }
 		}
 
-
 		public CommLink(LinkProtocol p)
 		{
 			protocol = p;			
@@ -109,6 +108,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			TxRate = 0;
 			RxRate = 0;
 			state = LinkState.Disconnected;
+			isSending = false;
 			receivedPackageQueue = new ConcurrentQueue<LinkPackage>();
 			sendPackageQueue = new Queue<LinkPackage>();
 			switch (p)
@@ -129,6 +129,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		{
 
 		}
+
 		protected void OnReceivePackageEvent(CommLink sender, LinkEventArgs e)
 		{
 			OnReceivePackage?.Invoke(this, e);
@@ -144,7 +145,6 @@ namespace SharpBladeGroundStation.CommunicationLink
 			this.PropertyChanged?.Invoke(sender, new PropertyChangedEventArgs(name));
 		}
 
-
 		public virtual void OpenLink()
 		{
 
@@ -153,6 +153,34 @@ namespace SharpBladeGroundStation.CommunicationLink
 		public virtual void CloseLink()
 		{
 
+		}
+
+		/// <summary>
+		/// 直接发送一个数据包
+		/// </summary>
+		/// <param name="package">要发送的数据包</param>
+		/// <param name="wait">是否允许等待发送</param>
+		/// <returns></returns>
+		public virtual bool SendPackage(LinkPackage package,bool wait)
+		{
+			if(isSending)
+			{
+				if (wait)
+					while (isSending) ;
+				else
+					return false;
+			}
+			return true;
+		}
+
+		/// <summary>
+		/// 直接发送一个数据包
+		/// </summary>
+		/// <param name="package">要发送的数据包</param>
+		/// <returns></returns>
+		public virtual bool SendPackage(LinkPackage package)
+		{
+			return SendPackage(package, true);
 		}
 	}
 

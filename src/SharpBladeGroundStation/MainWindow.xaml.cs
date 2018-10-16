@@ -123,7 +123,6 @@ namespace SharpBladeGroundStation
 			//}
 			//altitudeGraphData = new ObservableDataSource<Point>();
 			//altPlotter.AddLineGraph(altitudeGraphData, "Altitude");
-
 		}
 
 		private void initConfig()
@@ -132,8 +131,7 @@ namespace SharpBladeGroundStation
 
 			DirectoryInfo di = new DirectoryInfo(path);
 			if (!di.Exists)
-				di.Create();
-			//FileInfo fi = new FileInfo(path + "\\gcs.cfg");
+				di.Create();			
 			XmlSerializer xs = new XmlSerializer(typeof(GCSConfiguration));
 			Stream s = new FileStream(path + "\\gcs.xml", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
 			try
@@ -141,9 +139,8 @@ namespace SharpBladeGroundStation
 				GCSconfig = (GCSConfiguration)xs.Deserialize(s);
 				s.Close();
 			}
-			catch//(Exception ex)
-			{
-				//MessageBox.Show(ex.ToString());
+			catch
+			{				
 				s.Close();
 				s = new FileStream(path + "\\gcs.xml", FileMode.Create, FileAccess.Write, FileShare.None);
 				GCSconfig = GCSConfiguration.DefaultConfig();
@@ -173,8 +170,6 @@ namespace SharpBladeGroundStation
 			logPlayerCtrl.slider.PreviewMouseLeftButtonUp += Slider_PreviewMouseLeftButtonUp;
 		}
 
-
-
 		private void button3_Click(object sender, RoutedEventArgs e)
 		{
 			if (leftcol.Width.Value != 0)
@@ -198,8 +193,6 @@ namespace SharpBladeGroundStation
 				newroute.Clear();
 			}
 		}
-
-
 
 		private void pathPlanBtn_Click(object sender, RoutedEventArgs e)
 		{

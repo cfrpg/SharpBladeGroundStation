@@ -21,10 +21,9 @@ namespace SharpBladeGroundStation.CommunicationLink
 		bool isParsingBuffer;
 		DateTime lastPackageTime;
 
-
 		Thread backgroundListener;
-
-		
+		delegate void EnqueuePackage(LinkPackage p);
+		EnqueuePackage enqueueHandler;
 		Stopwatch sw;
 
 		public SerialPort Port
@@ -32,8 +31,6 @@ namespace SharpBladeGroundStation.CommunicationLink
 			get { return port; }
 			set { port = value; }
 		}
-
-
 
 		public int BufferSize
 		{
@@ -67,8 +64,6 @@ namespace SharpBladeGroundStation.CommunicationLink
 			}
 		}
 
-
-
 		public SerialLink(string portName, LinkProtocol p, int br) : base(p)
 		{
 			port = new SerialPort(portName);
@@ -87,7 +82,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			backgroundListener.Start();
 			connectTime = DateTime.Now;
 			sw = new Stopwatch();
-
+			enqueueHandler = new EnqueuePackage(receivedPackageQueue.Enqueue);
 		}
 
 		private void backgroundWorker()
@@ -96,7 +91,6 @@ namespace SharpBladeGroundStation.CommunicationLink
 			int lasttx = 0, lastrx = 0;
 			while (true)
 			{
-
 				if (!port.IsOpen)
 				{
 					//Thread.Sleep(500);
@@ -105,20 +99,20 @@ namespace SharpBladeGroundStation.CommunicationLink
 				}
 				//try
 				//{
-				//	//if (port.BytesToWrite == 0)
-				//	//{
-				//	//	if (sendPackageQueue.Count != 0)
-				//	//	{
-				//	//		LinkPackage p = sendPackageQueue.Dequeue();
-				//	//		port.Write(p.Buffer, 0, p.PackageSize);
-				//	//		OnSendPackageEvent(this, new LinkEventArgs(p));
-				//	//		//Debug.WriteLine("[Serial]Package sent.");
-				//	//	}
-				//	//}
-				//	//else
-				//	//{
-				//	//	Thread.Sleep(50);
-				//	//}
+				//	if (port.BytesToWrite == 0)
+				//	{
+				//		if (sendPackageQueue.Count != 0)
+				//		{
+				//			LinkPackage p = sendPackageQueue.Dequeue();
+				//			port.Write(p.Buffer, 0, p.PackageSize);
+				//			OnSendPackageEvent(this, new LinkEventArgs(p));
+				//			Debug.WriteLine("[Serial]Package sent.");
+				//		}
+				//	}
+				//	else
+				//	{
+				//		Thread.Sleep(50);
+				//	}
 				//}
 				//catch
 				//{
@@ -154,18 +148,15 @@ namespace SharpBladeGroundStation.CommunicationLink
 		}
 
 		private void parseBuffer()
-		{
-			//if (isUpdatingBuffer)
-			//	return;
+		{			
 			isParsingBuffer = true;
 			int offset = 0;
 			bool flag = false;
 			bool received = false;
 			LinkEventArgs lea = new LinkEventArgs();
-			int dataused;
+			int dataused;			
 			while (offset < bufferSize&&receivedPackageQueue.Count<6)
-			{
-				//sw.Restart();
+			{				
 				PackageParseResult res = receivePackage.ReadFromBuffer(buffer, bufferSize, offset,out dataused);
 				switch (res)
 				{
@@ -176,8 +167,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 						flag = true;						
 						break;
 					case PackageParseResult.BadCheckSum:
-						offset++;
-						
+						offset++;						
 						Debug.WriteLine("[Link]Bad checksum.");
 						break;
 					case PackageParseResult.Yes:
@@ -185,7 +175,8 @@ namespace SharpBladeGroundStation.CommunicationLink
 						receivePackage.TimeStamp = this.ConnectedTime;
 						//lock (ReceivedPackageQueue)
 						{
-							receivedPackageQueue.Enqueue(receivePackage.Clone());
+							enqueueHandler.BeginInvoke(receivePackage.Clone(), null, null);
+							//receivedPackageQueue.Enqueue(receivePackage.Clone());
 						}
 						received = true;
 						lea.Package.Add(receivePackage.Clone());
@@ -201,15 +192,10 @@ namespace SharpBladeGroundStation.CommunicationLink
 			}
 			bufferSize -= offset;
 			isParsingBuffer = false;
-
-
 			if (received)
-			{
-				//Debug.WriteLine(lea.Package.Count);
+			{				
 				OnReceivePackageEvent(this, lea);
 			}
-			//sw.Stop();
-			//Debug.WriteLine(sw.Elapsed.TotalMilliseconds);
 		}
 
 		public void OpenPort()
@@ -234,6 +220,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		{
 			ClosePort();
 		}
+
 		public void ResetLink()
 		{
 			if (port.IsOpen)
@@ -246,6 +233,22 @@ namespace SharpBladeGroundStation.CommunicationLink
 			isUpdatingBuffer = false;
 			LinkPackage p;
 			while (receivedPackageQueue.TryDequeue(out p)) ;
+		}
+
+		public override bool SendPackage(LinkPackage package, bool wait)
+		{
+			if (isSending)
+			{
+				if (wait)
+					while (isSending) ;
+				else
+					return false;
+			}
+			isSending = true;
+			port.Write(package.Buffer, 0, package.PackageSize);
+			OnSendPackageEvent(this, new LinkEventArgs(package));
+			isSending = false;
+			return true;
 		}
 	}
 }

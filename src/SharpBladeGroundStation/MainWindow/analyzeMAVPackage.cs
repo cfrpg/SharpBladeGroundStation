@@ -43,8 +43,6 @@ namespace SharpBladeGroundStation
 				case MAVLINK_MSG_ID.SYSTEM_TIME://#2
 
 					break;
-
-
 				case MAVLINK_MSG_ID.GPS_RAW_INT: //#24                    
 					time64 = package.NextUInt64();
 					if (!packageFlags[33])
@@ -77,8 +75,7 @@ namespace SharpBladeGroundStation
 					gpsData.Vdop /= 100f;
 					gpsData.Hdop /= 100f;
 					currentVehicle.GroundSpeed = package.NextUShort() / 100.0f;
-					package.NextUShort();//cog
-					
+					package.NextUShort();//cog					
 					GPSPositionState gpss = (GPSPositionState)package.NextByte();//sb文档害我debug一天!
                     gpsData.SatelliteCount = package.NextByte();
                     if (gpsData.State == GPSPositionState.NoGPS && gpss != GPSPositionState.NoGPS)
@@ -92,8 +89,7 @@ namespace SharpBladeGroundStation
                     {
                         int altell = package.NextInt32();
                         Debug.WriteLine(altell);
-                    }
-                   	
+                    }                   	
 					break;
 				case MAVLINK_MSG_ID.ATTITUDE://#30
 					time = package.NextUInt32();
@@ -107,15 +103,13 @@ namespace SharpBladeGroundStation
 						//attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(time / 1000.0, MathHelper.ToDegrees(rx)));
 						//attitudeGraphData[1].AppendAsync(this.Dispatcher, new Point(time / 1000.0, MathHelper.ToDegrees(ry)));
 						//attitudeGraphData[2].AppendAsync(this.Dispatcher, new Point(time / 1000.0, MathHelper.ToDegrees(rz)));
-
 						dataSkipCount[package.Function] = (ulong)time * 1000;
 					}
 					break;
 				case MAVLINK_MSG_ID.ATTITUDE_QUATERNION://#31
 
 					break;
-				case MAVLINK_MSG_ID.LOCAL_POSITION_NED: //#32
-                    
+				case MAVLINK_MSG_ID.LOCAL_POSITION_NED: //#32                    
                     time = package.NextUInt32();
 					float vx = package.NextSingle();
 					float vy = package.NextSingle();
@@ -325,23 +319,20 @@ namespace SharpBladeGroundStation
 					break;
 				case MAVLINK_MSG_ID.MISSION_COUNT:
 					Debug.WriteLine("[MAVLink]:Count {0}.", package.NextUShort());
-					MAVLinkPackage pkg = new MAVLinkPackage();
+					MAVLinkPackage pkg = new MAVLinkPackage((byte)MAVLINK_MSG_ID.MISSION_REQUEST,currentVehicle.Link);
 					pkg.Sequence = 0;
 					pkg.System = 255;
-					pkg.Component = 190;
-					pkg.Function = (byte)MAVLINK_MSG_ID.MISSION_REQUEST;
+					pkg.Component = 190;					
 					pkg.AddData((ushort)0);
 					pkg.AddData(package.System);
 					pkg.AddData((byte)190);
 					pkg.SetVerify();
-					currentVehicle.Link.SendPackageQueue.Enqueue(pkg);
+					currentVehicle.Link.SendPackage(pkg);
 					break;
-
 				default:
 					Debug.WriteLine("[MAVLink]:Unhandled package {0}.", package.Function);
 					break;
 			}
-
 		}
 
 		private string getPX4FlightModeText(byte mainmode, byte submode)

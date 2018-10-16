@@ -236,7 +236,7 @@
                     </Grid>
                 </TabItem>
 
-
+                <!--
                 <TabItem Header="波形*" Height="30">
                     <Grid Background="#FFE5E5E5">
                         <Grid.ColumnDefinitions>
@@ -249,7 +249,7 @@
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
-                        <!--
+                        
 
                         <TextBlock Text="AccelState" FontSize="18" Padding="0" TextAlignment="Center" Height="23"/>
                         <d3:ChartPlotter x:Name="accelPlotter" Margin="5" Grid.Row="1" >
@@ -278,11 +278,12 @@
                                 <d3:VerticalAxis Margin="0"/>
                             </d3:ChartPlotter.VerticalAxis>
                         </d3:ChartPlotter>
-                        -->
+                       
 
 
                     </Grid>
                 </TabItem>
+                 -->
                 <TabItem Header="参数" Height="30">
                     <Grid Background="#FFE5E5E5"/>
                 </TabItem>

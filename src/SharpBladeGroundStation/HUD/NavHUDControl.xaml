@@ -60,7 +60,7 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
-            <TextBlock Text="{Binding FlightModeText}" FontFamily="TI-Nspire Sans" FontSize="24" Canvas.Left="84" Canvas.Top="379" Foreground="LightGreen" RenderTransformOrigin="0,0.5"/>
+            <TextBlock Text="{Binding FlightModeText}"  FontSize="24" Canvas.Left="84" Canvas.Top="379" Foreground="LightGreen" RenderTransformOrigin="0,0.5"/>
             <TextBlock Text="{Binding Battery.Remaining,StringFormat={}{0:0}%}" FontFamily="TI-Nspire Sans" FontSize="24" Canvas.Left="84" Canvas.Top="410" Foreground="LightGreen" RenderTransformOrigin="0,0.5"/>
             <Polygon Canvas.Right="67" Canvas.Top="250" Points="0,0 8,-8 8,-3 20,-3 20,3 8,3 8,8" Stroke="LightGreen" StrokeThickness="3" RenderTransformOrigin="0.5,0.5">
                 <Polygon.RenderTransform>
@@ -83,6 +83,7 @@
                 </wpf:OutlinedText.RenderTransform>
             </wpf:OutlinedText>
             <!--MDZZ section,don't touch.-->
+            <TextBlock Text="RMB 20"  FontSize="14" Canvas.Right="84" Canvas.Top="400" Foreground="LightGreen" RenderTransformOrigin="0,0.5"/>
             <Line X1="0" Y1="0" X2="60" Y2="0" Canvas.Left="0" Canvas.Top="70" Stroke="LightGreen" StrokeThickness="3" />
             <Polygon Canvas.Left="30" Canvas.Top="80" Points="0,0 10,0 0,-10 -10,0" Stroke="LightGreen" StrokeThickness="3"/>
             <Line X1="0" Y1="0" X2="0" Y2="240" Canvas.Right="90" Canvas.Top="130" Stroke="LightGreen" StrokeThickness="3"/>
