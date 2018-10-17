@@ -56,9 +56,9 @@ namespace SharpBladeGroundStation
 			hudCollection = new Dictionary<Key, HUDBase>();
 			navhud.Vehicle = Mainwin.CurrentVehicle;
 			//sshud.Vehicle = Mainwin.CurrentVehicle;
-			//pfdhud.Vehicle = Mainwin.CurrentVehicle;
+			pfdhud.Vehicle = Mainwin.CurrentVehicle;
 			hudCollection.Add(Key.D1, navhud);
-			//hudCollection.Add(Key.D2, pfdhud);
+			hudCollection.Add(Key.D2, pfdhud);
 			//hudCollection.Add(Key.D3, sshud);
 		}
 

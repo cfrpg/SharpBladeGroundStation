@@ -28,9 +28,9 @@ namespace SharpBladeGroundStation
 		private void initGmap()
 		{
 			//gmap.Zoom = 3;
-			gmap.MapProvider = AMapHybirdProvider.Instance;
+			//gmap.MapProvider = AMapHybirdProvider.Instance;
 			//gmap.MapProvider = GMap.NET.MapProviders.BingHybridMapProvider.Instance;
-
+			gmap.MapProvider = GMap.NET.MapProviders.GoogleChinaHybridMapProvider.Instance;
 			gmap.Position = new PointLatLng(34.242947, 108.916225);
 			gmap.Zoom = 17;
 			gmap.ShowCenter = false;

@@ -18,6 +18,7 @@
                 <hud:ShinkaiSeikanHUD x:Name="sshud"  Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556" Visibility="Hidden" />
                 <hud:PFDHUD x:Name="pfdhud"  Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556"  Visibility="Hidden"/>
                 -->
+                <hud:PFDHUD x:Name="pfdhud"  Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556"  Visibility="Hidden"/>
             </Canvas>
         </Viewbox>
     </Grid>

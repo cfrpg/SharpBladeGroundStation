@@ -114,7 +114,7 @@ namespace SharpBladeGroundStation
 					continue;
 				}
 				frameLock = true;
-				if (logLink.CurrentTime - frameTime >= (reader.CurrentVideoTime - 1) * 1000)
+				if (logLink.CurrentTime - frameTime >= (reader.CurrentVideoTime - 1) * 1000+150)
 				{
 					try
 					{
