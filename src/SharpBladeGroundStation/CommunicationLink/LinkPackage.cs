@@ -11,6 +11,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 	/// </summary>
 	public class LinkPackage
 	{
+		protected int function;
 		protected byte[] buffer;
 		protected int dataSize;
 		protected int cursor;
@@ -82,6 +83,12 @@ namespace SharpBladeGroundStation.CommunicationLink
 		public virtual LinkProtocol Protocol
 		{
 			get { return LinkProtocol.NoLink; }
+		}
+
+		public virtual int Function
+		{
+			get { return function; }
+			set { function = value; }
 		}
 
 		#region Read&Write

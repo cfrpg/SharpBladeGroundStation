@@ -9,8 +9,7 @@ using System.Diagnostics;
 namespace SharpBladeGroundStation.CommunicationLink
 {
 	public class MAVLinkPackage : LinkPackage
-	{
-		int function;
+	{		
 		int version;
 		int headerSize;
 
@@ -47,11 +46,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			get { return LinkProtocol.MAVLink; }
 		}
 
-		public int Function
-		{
-			get { return function; }
-			set { function = value; }
-		}
+		
 		/// <summary>
 		/// 顺序号
 		/// </summary>

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Threading;
+using System.Diagnostics;
 
 namespace SharpBladeGroundStation.CommunicationLink
 {
@@ -57,8 +58,6 @@ namespace SharpBladeGroundStation.CommunicationLink
 			link = cl;
 			link.OnReceivePackage += Link_OnReceivePackage;
 			link.OnSendPackage += Link_OnSendPackage;
-
-
 		}
 
 		private void Link_OnSendPackage(CommLink sender, LinkEventArgs e)
@@ -150,10 +149,12 @@ namespace SharpBladeGroundStation.CommunicationLink
 				{
 					var b = getBytes(p.Item1, p.Item2, out len);
 					fileStream.Write(b, 0, len);
+					if (p.Item1.Function == 24)
+						Debug.WriteLine("[Logger]Log #24");
+						
 				}
 				else
 				{
-
 					Thread.Sleep(50);
 				}
 
@@ -208,8 +209,5 @@ namespace SharpBladeGroundStation.CommunicationLink
 		{
 			get { return 14; }
 		}
-
 	}
-
-
 }

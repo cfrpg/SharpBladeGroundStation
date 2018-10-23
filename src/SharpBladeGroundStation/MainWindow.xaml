@@ -146,24 +146,24 @@
                         <TextBlock x:Name="armText" Margin="0" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Text="{Binding IsArmed, Converter={StaticResource arm2str}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
                         <TextBlock x:Name="textBlock14" HorizontalAlignment="Center" Margin="0" Grid.Row="0" Grid.Column="2" TextWrapping="Wrap" Text="相对高度(m)" VerticalAlignment="Center" FontSize="14"/>
                         <Viewbox  Grid.Row="1" Grid.Column="2" Height="33" VerticalAlignment="Top">
-                            <TextBlock x:Name="pramText1" Margin="0" Grid.Row="1" Grid.Column="2" TextWrapping="NoWrap" Text="{Binding Altitude, StringFormat=\{0:0.0\}}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="26" />
+                            <TextBlock x:Name="pramText1" Margin="0" Grid.Row="1" Grid.Column="2" TextWrapping="NoWrap" Text="{Binding Altitude, StringFormat={}{0:0.0}}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="26" />
 
                         </Viewbox>
 
                         <TextBlock x:Name="textBlock15" HorizontalAlignment="Center" Margin="0" Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Text="垂直速度(m/s)" VerticalAlignment="Center" FontSize="14"/>
-                        <TextBlock x:Name="pramText2" Margin="0" Grid.Row="3" Grid.Column="0" TextWrapping="NoWrap" Text="{Binding ClimbRate, StringFormat=\{0:0.0\}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
+                        <TextBlock x:Name="pramText2" Margin="0" Grid.Row="3" Grid.Column="0" TextWrapping="NoWrap" Text="{Binding ClimbRate, StringFormat={}{0:0.0}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
                         <TextBlock x:Name="textBlock16" HorizontalAlignment="Center" Margin="0" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" Text="水平速度(m/s)" VerticalAlignment="Center" FontSize="14"/>
-                        <TextBlock x:Name="pramText3" Margin="0" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" Text="{Binding GroundSpeed, StringFormat=\{0:0.0\}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
+                        <TextBlock x:Name="pramText3" Margin="0" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" Text="{Binding GroundSpeed, StringFormat={}{0:0.0}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
                         <TextBlock x:Name="textBlock17" HorizontalAlignment="Center" Margin="0" Grid.Row="2" Grid.Column="2" TextWrapping="Wrap" Text="空速(m/s)" VerticalAlignment="Center" FontSize="14"/>
-                        <TextBlock x:Name="pramText4" Margin="0" Grid.Row="3" Grid.Column="2" TextWrapping="Wrap" Text="{Binding AirSpeed, StringFormat=\{0:0.00\}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
+                        <TextBlock x:Name="pramText4" Margin="0" Grid.Row="3" Grid.Column="2" TextWrapping="Wrap" Text="{Binding AirSpeed, StringFormat={}{0:0.00}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
 
 
                         <TextBlock x:Name="textBlock9" HorizontalAlignment="Center" Margin="0" Grid.Row="4" TextWrapping="Wrap" Text="俯仰角(deg)" VerticalAlignment="Center" FontSize="14"/>
-                        <TextBlock x:Name="pitchText" Margin="0" Grid.Row="5" Grid.Column="0" TextWrapping="Wrap" Text="{Binding Pitch, StringFormat=\{0:0.00\}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
+                        <TextBlock x:Name="pitchText" Margin="0" Grid.Row="5" Grid.Column="0" TextWrapping="Wrap" Text="{Binding Pitch, StringFormat={}{0:0.00}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
                         <TextBlock x:Name="textBlock10" HorizontalAlignment="Center" Margin="0" Grid.Row="4" Grid.Column="1" TextWrapping="Wrap" Text="滚转角(deg)" VerticalAlignment="Center" FontSize="14"/>
-                        <TextBlock x:Name="rollText" Margin="0" Grid.Row="5" Grid.Column="1" TextWrapping="Wrap" Text="{Binding Roll, StringFormat=\{0:0.00\}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
+                        <TextBlock x:Name="rollText" Margin="0" Grid.Row="5" Grid.Column="1" TextWrapping="Wrap" Text="{Binding Roll, StringFormat={}{0:0.00}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
                         <TextBlock x:Name="textBlock11" HorizontalAlignment="Center" Margin="0" Grid.Row="4" Grid.Column="2" TextWrapping="Wrap" Text="航向角(deg)" VerticalAlignment="Center" FontSize="14"/>
-                        <TextBlock x:Name="yawText" Margin="0" Grid.Row="5" Grid.Column="2" TextWrapping="Wrap" Text="{Binding Heading, StringFormat=\{0:0.00\}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
+                        <TextBlock x:Name="yawText" Margin="0" Grid.Row="5" Grid.Column="2" TextWrapping="Wrap" Text="{Binding Heading, StringFormat={}{0:0.00}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
 
                     </Grid>
                 </GroupBox>
