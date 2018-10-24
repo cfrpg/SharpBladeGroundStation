@@ -44,10 +44,12 @@ namespace SharpBladeGroundStation
 			//ss.Speak("鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，启动失败。");
 			//MessageBox.Show("黑科技启动失败", "Orz");
 			//replayLog();
-			triggerCamera();
+			//triggerCamera();
 			// testCamera();
 			//setScreen();
 			//caliLevel();
+			currentVehicle.GpsState.ForceSetHome();
+			homeMarker.Position = PositionHelper.WGS84ToGCJ02(currentVehicle.GpsState.HomePosition);
 		}
 
 		void caliLevel()

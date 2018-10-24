@@ -49,7 +49,7 @@ namespace SharpBladeGroundStation
 		Dictionary<int, UInt64> dataSkipCount;
 
 		//FlightState flightState;
-		GPSData gpsData;
+		//GPSData gpsData;
 
 		HUDWindow hudWindow;
 		HUDVideoSource hudVideoSource;
@@ -85,10 +85,10 @@ namespace SharpBladeGroundStation
 			//initLinkListener();
 			currentVehicle = new Vehicle(0);
 			pfd.DataContext = currentVehicle.FlightState;
-			gpsData = new GPSData();
-			vdopText.DataContext = gpsData;
-			hdopText.DataContext = gpsData;
-			gpsStateText.DataContext = gpsData;
+			//gpsData = new GPSData();
+			vdopText.DataContext = currentVehicle.GpsState;
+			hdopText.DataContext = currentVehicle.GpsState;
+			gpsStateText.DataContext = currentVehicle.GpsState;
 			battText.DataContext = currentVehicle.Battery;
 			flightDataGrid.DataContext = currentVehicle.FlightState;
 

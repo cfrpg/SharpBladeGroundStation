@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GMap.NET;
 using System.ComponentModel;
 using SharpBladeGroundStation.CommunicationLink;
 using Microsoft.Xna.Framework;
 using FlightDisplay;
+
 using Matrix = Microsoft.Xna.Framework.Matrix;
 
 namespace SharpBladeGroundStation.DataStructs
@@ -41,7 +43,7 @@ namespace SharpBladeGroundStation.DataStructs
 		Camera camera;
 		BatteryData battery;
 
-		CommLink link;
+		CommLink link;		
 
 		/// <summary>
 		/// 位置(pn,pe,pd)

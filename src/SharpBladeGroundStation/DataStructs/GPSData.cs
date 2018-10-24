@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using GMap.NET;
+using SharpBladeGroundStation.Map;
 
 namespace SharpBladeGroundStation.DataStructs
 {
@@ -18,6 +20,11 @@ namespace SharpBladeGroundStation.DataStructs
 		float homingAngle;
 		float vdop;
 		float hdop;
+
+		PointLatLng homePosition;
+		float distanceToHome;
+
+		bool homed;
 
 		public int SatelliteCount
 		{
@@ -49,6 +56,11 @@ namespace SharpBladeGroundStation.DataStructs
 			{
 				longitude = value;
 				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Longitude"));
+				if (Math.Abs(homePosition.Lat) > 1)
+				{
+					DistanceToHome = (float)PositionHelper.GetDistance(new PointLatLng(latitude, longitude), homePosition);
+				}
+
 			}
 		}
 
@@ -113,6 +125,33 @@ namespace SharpBladeGroundStation.DataStructs
 			}
 		}
 
+		public PointLatLng HomePosition
+		{
+			get
+			{
+				return homePosition;
+			}
+
+			set
+			{
+				homePosition = value;
+			}
+		}
+
+		public float DistanceToHome
+		{
+			get
+			{
+				return distanceToHome;
+			}
+
+			set
+			{
+				distanceToHome = value;
+				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DistanceToHome"));
+			}
+		}
+
 		public GPSData()
 		{
 			satelliteCount = 0;
@@ -120,6 +159,25 @@ namespace SharpBladeGroundStation.DataStructs
 			longitude = 0;
 			latitude = 0;
 			homingAngle = 0;
+			homePosition = new PointLatLng(0, 0);
+			distanceToHome = 0;
+			homed = false;
+		}
+
+		public void SetHome()
+		{
+			if (homed)
+				return;
+			homePosition.Lat = latitude;
+			homePosition.Lng = longitude;
+			homed = true;
+		}
+
+		public void ForceSetHome()
+		{			
+			homePosition.Lat = latitude;
+			homePosition.Lng = longitude;
+			homed = true;
 		}
 
 	}

@@ -47,9 +47,9 @@ namespace SharpBladeGroundStation
 					time64 = package.NextUInt64();
 					if (!packageFlags[33])
 					{
-						gpsData.Latitude = package.NextInt32() * 1.0 / 1e7;
-						gpsData.Longitude = package.NextInt32() * 1.0 / 1e7;
-						pos = PositionHelper.WGS84ToGCJ02(new PointLatLng(gpsData.Latitude, gpsData.Longitude));
+						currentVehicle.GpsState.Latitude = package.NextInt32() * 1.0 / 1e7;
+						currentVehicle.GpsState.Longitude = package.NextInt32() * 1.0 / 1e7;
+						pos = PositionHelper.WGS84ToGCJ02(new PointLatLng(currentVehicle.GpsState.Latitude, currentVehicle.GpsState.Longitude));
 
 						if (time64 - dataSkipCount[package.Function] > (ulong)GCSconfig.CourseTimeInterval * 1000)
 						{
@@ -65,26 +65,27 @@ namespace SharpBladeGroundStation
 						tint = package.NextInt32();
 						tint = package.NextInt32();						
 					}
-					int talt = package.NextInt32();                    
-					gpsData.Hdop = package.NextUShort();
-					if (gpsData.Hdop > 10000)
-						gpsData.Hdop = -1;
-					gpsData.Vdop = package.NextUShort();
-					if (gpsData.Vdop > 10000)
-						gpsData.Vdop = -1;
-					gpsData.Vdop /= 100f;
-					gpsData.Hdop /= 100f;
+					int talt = package.NextInt32();
+					currentVehicle.GpsState.Hdop = package.NextUShort();
+					if (currentVehicle.GpsState.Hdop > 10000)
+						currentVehicle.GpsState.Hdop = -1;
+					currentVehicle.GpsState.Vdop = package.NextUShort();
+					if (currentVehicle.GpsState.Vdop > 10000)
+						currentVehicle.GpsState.Vdop = -1;
+					currentVehicle.GpsState.Vdop /= 100f;
+					currentVehicle.GpsState.Hdop /= 100f;
 					currentVehicle.GroundSpeed = package.NextUShort() / 100.0f;
 					package.NextUShort();//cog					
 					GPSPositionState gpss = (GPSPositionState)package.NextByte();//sb文档害我debug一天!
-                    gpsData.SatelliteCount = package.NextByte();
-                    if (gpsData.State == GPSPositionState.NoGPS && gpss != GPSPositionState.NoGPS)
+					currentVehicle.GpsState.SatelliteCount = package.NextByte();
+                    if (currentVehicle.GpsState.State == GPSPositionState.NoGPS && gpss != GPSPositionState.NoGPS)
 					{
-						a3 = () => { flightRoute.Clear(); };
+						currentVehicle.GpsState.SetHome();
+						a3 = () => { flightRoute.Clear(); homeMarker.Position = PositionHelper.WGS84ToGCJ02(currentVehicle.GpsState.HomePosition); };
 						Dispatcher.BeginInvoke(a3);
 						dataSkipCount[package.Function] = 0;
 					}
-					gpsData.State = gpss;
+					currentVehicle.GpsState.State = gpss;
                     if(package.Version==2)
                     {
                         int altell = package.NextInt32();
@@ -127,8 +128,8 @@ namespace SharpBladeGroundStation
 				case MAVLINK_MSG_ID.GLOBAL_POSITION_INT://#33                   
                     time = package.NextUInt32();
 					time64 = (ulong)time * 1000;
-					gpsData.Latitude = package.NextInt32() * 1.0 / 1e7;
-					gpsData.Longitude = package.NextInt32() * 1.0 / 1e7;
+					currentVehicle.GpsState.Latitude = package.NextInt32() * 1.0 / 1e7;
+					currentVehicle.GpsState.Longitude = package.NextInt32() * 1.0 / 1e7;
 					tint = package.NextInt32();
 					currentVehicle.RelativeAltitude = package.NextInt32() / 1000f;
 
@@ -136,14 +137,13 @@ namespace SharpBladeGroundStation
 					package.NextShort();//vy
 					currentVehicle.ClimbRate= package.NextShort()/100.0f;
 
-					pos = PositionHelper.WGS84ToGCJ02(new PointLatLng(gpsData.Latitude, gpsData.Longitude));
+					pos = PositionHelper.WGS84ToGCJ02(new PointLatLng(currentVehicle.GpsState.Latitude, currentVehicle.GpsState.Longitude));
 
 					if (time64 - dataSkipCount[package.Function] > (ulong)GCSconfig.CourseTimeInterval * 1000)
 					{
 						a1 = () => { updateFlightRoute(pos); };
 						Dispatcher.BeginInvoke(a1);
-						dataSkipCount[package.Function] = time64;
-
+						dataSkipCount[package.Function] = time64;						
 					}
 					
 					a2 = () => {

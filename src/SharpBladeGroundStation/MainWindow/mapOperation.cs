@@ -18,6 +18,7 @@ namespace SharpBladeGroundStation
 	{
 		//GMap
 		GMapMarker uavMarker;
+		GMapMarker homeMarker;
 		MapCenterPositionConfig mapCenterConfig = MapCenterPositionConfig.Free;
 
 		PointLatLng positionWhenTouch;
@@ -55,6 +56,12 @@ namespace SharpBladeGroundStation
 			uavMarker.Offset = new Point(-15, -15);
 			uavMarker.ZIndex = 100000;
 			gmap.Markers.Add(uavMarker);
+
+			homeMarker = new GMapMarker(new PointLatLng(0, 0));
+			homeMarker.Shape = new HomeMarker();
+			homeMarker.Offset = new Point(-10, -10);
+			homeMarker.ZIndex = 100000-1;
+			gmap.Markers.Add(homeMarker);
 
 			gmap.MouseLeftButtonDown += Gmap_MouseLeftButtonDown;
 			gmap.MouseLeftButtonUp += Gmap_MouseLeftButtonUp;

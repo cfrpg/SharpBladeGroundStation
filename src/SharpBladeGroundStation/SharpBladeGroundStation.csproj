@@ -143,6 +143,9 @@
     <Compile Include="MainWindow\testfield.cs" />
     <Compile Include="Map\Markers\ClickableGMapMarker.cs" />
     <Compile Include="Map\Markers\GMapElement.cs" />
+    <Compile Include="Map\Markers\HomeMarker.xaml.cs">
+      <DependentUpon>HomeMarker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Map\Markers\UAVMarker.xaml.cs">
       <DependentUpon>UAVMarker.xaml</DependentUpon>
     </Compile>
@@ -207,6 +210,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Map\Markers\HomeMarker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Map\Markers\UAVMarker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
