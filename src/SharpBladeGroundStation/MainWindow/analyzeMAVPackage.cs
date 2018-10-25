@@ -135,7 +135,7 @@ namespace SharpBladeGroundStation
 
 					package.NextShort();//vx
 					package.NextShort();//vy
-					currentVehicle.ClimbRate= package.NextShort()/100.0f;
+					currentVehicle.ClimbRate= -package.NextShort()/100.0f;
 
 					pos = PositionHelper.WGS84ToGCJ02(new PointLatLng(currentVehicle.GpsState.Latitude, currentVehicle.GpsState.Longitude));
 
