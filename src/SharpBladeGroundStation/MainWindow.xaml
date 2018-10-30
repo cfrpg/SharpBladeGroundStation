@@ -80,7 +80,7 @@
 
         <StackPanel  Margin="0" Orientation="Vertical" Background="#FFE5E5E5">
             <Viewbox>
-                <Canvas Width="300" Height="300" ClipToBounds="True">                    
+                <Canvas Width="300" Height="300" ClipToBounds="True">
                     <fd:PFDControl x:Name="pfd" Grid.Row="0" VerticalAlignment="Top" FlightState="{Binding}"/>
                 </Canvas>
             </Viewbox>
@@ -235,129 +235,89 @@
 
                     </Grid>
                 </TabItem>
-
-                <!--
-                <TabItem Header="波形*" Height="30">
-                    <Grid Background="#FFE5E5E5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="1*"/>
-                        </Grid.RowDefinitions>
-                        
-
-                        <TextBlock Text="AccelState" FontSize="18" Padding="0" TextAlignment="Center" Height="23"/>
-                        <d3:ChartPlotter x:Name="accelPlotter" Margin="5" Grid.Row="1" >
-                            <d3:ChartPlotter.VerticalAxis>
-                                <d3:VerticalAxis Margin="0"/>
-                            </d3:ChartPlotter.VerticalAxis>
-                        </d3:ChartPlotter>
-
-                        <TextBlock Text="GyroState" FontSize="18" Padding="0" TextAlignment="Center" Height="23" Grid.Column="1"/>
-                        <d3:ChartPlotter x:Name="gyroPlotter" Margin="5" Grid.Row="1" Grid.Column="1">
-                            <d3:ChartPlotter.VerticalAxis>
-                                <d3:VerticalAxis Margin="0"/>
-                            </d3:ChartPlotter.VerticalAxis>
-                        </d3:ChartPlotter>
-
-                        <TextBlock Text="Attitude" FontSize="18" Padding="0" TextAlignment="Center" Height="23" Grid.Row="2"/>
-                        <d3:ChartPlotter x:Name="attPlotter" Margin="5" Grid.Row="3">
-                            <d3:ChartPlotter.VerticalAxis>
-                                <d3:VerticalAxis Margin="0"/>
-                            </d3:ChartPlotter.VerticalAxis>
-                        </d3:ChartPlotter>
-
-                        <TextBlock Text="Altitude" FontSize="18" Padding="0" TextAlignment="Center" Height="23" Grid.Column="1" Grid.Row="2"/>
-                        <d3:ChartPlotter x:Name="altPlotter" Margin="5" Grid.Row="3" Grid.Column="1">
-                            <d3:ChartPlotter.VerticalAxis>
-                                <d3:VerticalAxis Margin="0"/>
-                            </d3:ChartPlotter.VerticalAxis>
-                        </d3:ChartPlotter>
-                       
-
-
-                    </Grid>
-                </TabItem>
-                 -->
                 <TabItem Header="参数" Height="30">
                     <Grid Background="#FFE5E5E5"/>
                 </TabItem>
                 <TabItem Header="设置" Height="30">
                     <Grid Background="#FFE5E5E5">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="310*"/>
-                            <RowDefinition Height="321*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="70"/>
                         </Grid.RowDefinitions>
                         <Button x:Name="button" Content="启动黑科技" HorizontalAlignment="Left" Height="38"  VerticalAlignment="Bottom" Width="97" Click="button_Click" Grid.Row="1" Margin="20,0,0,20"/>
-                        <GroupBox x:Name="gcsCfgGroup" Header="地面站设置" HorizontalAlignment="Left" VerticalAlignment="Top" Height="288" Width="514" BorderBrush="Black">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="90*"/>
-                                    <ColumnDefinition Width="293*"/>
-                                    <ColumnDefinition Width="69*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock  HorizontalAlignment="Right" TextWrapping="Wrap" Text="曲线采样间隔&#xA;(ms)" VerticalAlignment="Center" Margin="0,0,10,0" TextAlignment="Center">
-                                    <TextBlock.ToolTip>
-                                        <TextBlock Text="曲线图中两个采样点最小时间间隔&#xA;增大间隔可以提高性能"/>
-                                    </TextBlock.ToolTip>
+                        <TabControl x:Name="gcsCfgGroup" TabStripPlacement="Left" Background="#FFE5E5E5">
+                            <TabItem Header="地面站设置" Height="30" >
+                                <Grid Background="#FFE5E5E5" VerticalAlignment="Top">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="1*" MinHeight="40"/>
+                                        <RowDefinition Height="1*" MinHeight="40"/>
+                                        <RowDefinition Height="1*" MinHeight="40"/>
+                                        <RowDefinition Height="1*" MinHeight="40"/>
+                                        <RowDefinition Height="1*" MinHeight="40"/>
+                                        <RowDefinition Height="1*" MinHeight="40"/>
+                                        <RowDefinition Height="1*" MinHeight="40"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock  HorizontalAlignment="Right" TextWrapping="Wrap" Text="曲线采样间隔&#xA;(ms)" VerticalAlignment="Center" Margin="0,0,10,0" TextAlignment="Center">
+                                        <TextBlock.ToolTip>
+                                            <TextBlock Text="曲线图中两个采样点最小时间间隔&#xA;增大间隔可以提高性能"/>
+                                        </TextBlock.ToolTip>
                                 </TextBlock>
-                                <Slider VerticalAlignment="Center" Grid.Column="1" Maximum="2000" Minimum="100" LargeChange="100" SmallChange="100" TickFrequency="100" Value="{Binding PlotTimeInterval}" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
-                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding PlotTimeInterval}" VerticalAlignment="Center" Grid.Column="2" Margin="10,0,0,0"/>
+                                    <Slider VerticalAlignment="Center" Grid.Column="1" Maximum="2000" Minimum="100" LargeChange="100" SmallChange="100" TickFrequency="100" Value="{Binding PlotTimeInterval}" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding PlotTimeInterval}" VerticalAlignment="Center" Grid.Column="2" Margin="10,0,0,0"/>
 
-                                <TextBlock  HorizontalAlignment="Right" TextWrapping="Wrap" Text="航迹采样间隔&#xA;(ms)" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Row="1" TextAlignment="Center">
-                                    <TextBlock.ToolTip>
-                                        <TextBlock Text="航迹显示的采样间隔&#xA;增大间隔可以提高性能,减小间隔可以使航迹更加平滑"/>
-                                    </TextBlock.ToolTip>
+                                    <TextBlock  HorizontalAlignment="Right" TextWrapping="Wrap" Text="航迹采样间隔&#xA;(ms)" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Row="1" TextAlignment="Center">
+                                        <TextBlock.ToolTip>
+                                            <TextBlock Text="航迹显示的采样间隔&#xA;增大间隔可以提高性能,减小间隔可以使航迹更加平滑"/>
+                                        </TextBlock.ToolTip>
                                 </TextBlock>
-                                <Slider VerticalAlignment="Center" Grid.Column="1" Maximum="5000" Minimum="100" LargeChange="100" SmallChange="100" TickFrequency="100" Value="{Binding CourseTimeInterval}" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="1"/>
-                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding CourseTimeInterval}" VerticalAlignment="Center" Grid.Column="2" Margin="10,0,0,0" Grid.Row="1"/>
+                                    <Slider VerticalAlignment="Center" Grid.Column="1" Maximum="5000" Minimum="100" LargeChange="100" SmallChange="100" TickFrequency="100" Value="{Binding CourseTimeInterval}" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="1"/>
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding CourseTimeInterval}" VerticalAlignment="Center" Grid.Column="2" Margin="10,0,0,0" Grid.Row="1"/>
 
-                                <TextBlock  HorizontalAlignment="Right" TextWrapping="Wrap" Text="最大航迹点数" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Row="2" TextAlignment="Center">
-                                    <TextBlock.ToolTip>
-                                        <TextBlock Text="航迹中的最大点数&#xA;点数越多航迹保留的时间越长"/>
-                                    </TextBlock.ToolTip>
+                                    <TextBlock  HorizontalAlignment="Right" TextWrapping="Wrap" Text="最大航迹点数" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Row="2" TextAlignment="Center">
+                                        <TextBlock.ToolTip>
+                                            <TextBlock Text="航迹中的最大点数&#xA;点数越多航迹保留的时间越长"/>
+                                        </TextBlock.ToolTip>
                                 </TextBlock>
-                                <Slider VerticalAlignment="Center" Grid.Column="1" Maximum="10000" Minimum="500" LargeChange="500" SmallChange="500" TickFrequency="500" Value="{Binding MaxCoursePoint}" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="2"/>
-                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding MaxCoursePoint}" VerticalAlignment="Center" Grid.Column="2" Margin="10,0,0,0" Grid.Row="2"/>
-                                <TextBox x:Name="textBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="0" Grid.Row="3" TextWrapping="Wrap" Text="{Binding BaudRate}" VerticalAlignment="Center" Width="120"/>
-                                <TextBlock x:Name="textBlock" HorizontalAlignment="Right"  Grid.Row="3" TextWrapping="Wrap" Text="默认波特率" VerticalAlignment="Center" Margin="0,0,10,0" />
-                                <TextBlock HorizontalAlignment="Right"  Grid.Row="4" TextWrapping="Wrap" Text="日志路径" VerticalAlignment="Center" Margin="0,0,10,0" />
+                                    <Slider VerticalAlignment="Center" Grid.Column="1" Maximum="10000" Minimum="500" LargeChange="500" SmallChange="500" TickFrequency="500" Value="{Binding MaxCoursePoint}" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="2"/>
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding MaxCoursePoint}" VerticalAlignment="Center" Grid.Column="2" Margin="10,0,0,0" Grid.Row="2"/>
+                                    <TextBox x:Name="textBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="0" Grid.Row="3" TextWrapping="Wrap" Text="{Binding BaudRate}" VerticalAlignment="Center" Width="120"/>
+                                    <TextBlock x:Name="textBlock" HorizontalAlignment="Right"  Grid.Row="3" TextWrapping="Wrap" Text="默认波特率" VerticalAlignment="Center" Margin="0,0,10,0" />
+                                    <TextBlock HorizontalAlignment="Right"  Grid.Row="4" TextWrapping="Wrap" Text="日志路径" VerticalAlignment="Center" Margin="0,0,10,0" />
+                                    <Grid Grid.Column="1" Grid.Row="4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="60"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox  Height="24" Margin="0,0,5,0" TextWrapping="Wrap" Text="{Binding LogPath}" VerticalAlignment="Center"/>
+                                        <Button x:Name="logpathbtn" Height="23" Width="50" Content="浏览" Margin="0" Click="logpathbtn_Click" Grid.Column="1" VerticalAlignment="Center" />
 
-                                <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal">
-                                    <TextBox Height="24" Margin="0,0,5,0" TextWrapping="Wrap" Text="{Binding LogPath}" VerticalAlignment="Center" Width="268"/>
-                                    <Button x:Name="logpathbtn" Height="23" Width="50" Content="浏览" Margin="0,0,5,0" Click="logpathbtn_Click" />
-                                </StackPanel>
-                                <CheckBox x:Name="checkBox" Content="启用日志" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Center" IsChecked="{Binding AutoLog}"/>
-                                <TextBlock HorizontalAlignment="Right"  Grid.Row="5" TextWrapping="Wrap" Text="视频录制" VerticalAlignment="Center" Margin="0,0,10,0"  />
-                                <CheckBox  Content="录制视频" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="5" VerticalAlignment="Center" IsChecked="{Binding AutoRecord}"/>
-                                <ComboBox x:Name="cameraComboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="315" Grid.Row="5" Grid.Column="1"/>
-                                <TextBlock HorizontalAlignment="Right"  Grid.Row="6" TextWrapping="Wrap" Text="视频画质" VerticalAlignment="Center" Margin="0,0,10,0"  />
+                                    </Grid>
 
-                                <ComboBox HorizontalAlignment="Left" VerticalAlignment="Center" Width="100" Grid.Row="6" Grid.Column="1" >
-                                    <System:String>好</System:String>
-                                    <System:String>更好</System:String>
-                                    <System:String>极好</System:String>
-                                    <System:String>最好</System:String>
-                                </ComboBox>
-                            </Grid>
+                                    <CheckBox x:Name="checkBox" Content="启用日志" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Center" IsChecked="{Binding AutoLog}"/>
+                                    <TextBlock HorizontalAlignment="Right"  Grid.Row="5" TextWrapping="Wrap" Text="视频录制" VerticalAlignment="Center" Margin="0,0,10,0"  />
+                                    <CheckBox  Content="录制视频" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="5" VerticalAlignment="Center" IsChecked="{Binding AutoRecord}"/>
+                                    <ComboBox x:Name="cameraComboBox" VerticalAlignment="Center"  Grid.Row="5" Grid.Column="1" Margin="0,0,10,0"/>
+                                    <TextBlock HorizontalAlignment="Right"  Grid.Row="6" TextWrapping="Wrap" Text="视频画质" VerticalAlignment="Center" Margin="0,0,10,0"  />
 
-                        </GroupBox>
+                                    <ComboBox HorizontalAlignment="Left" VerticalAlignment="Center" Width="100" Grid.Row="6" Grid.Column="1" >
+                                        <System:String>好</System:String>
+                                        <System:String>更好</System:String>
+                                        <System:String>极好</System:String>
+                                        <System:String>最好</System:String>
+                                    </ComboBox>
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header="aaa" Height="30" >
+                                <Grid Background="#FFE5E5E5">
 
-
+                                </Grid>
+                            </TabItem>
+                        </TabControl>
                     </Grid>
                 </TabItem>
 

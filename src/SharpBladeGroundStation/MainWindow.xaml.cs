@@ -41,15 +41,7 @@ namespace SharpBladeGroundStation
 		Vehicle currentVehicle;
 		GCSConfiguration GCSconfig;
 
-		ObservableDataSource<Point>[] accelGraphData = new ObservableDataSource<Point>[3];
-		ObservableDataSource<Point>[] gyroGraphData = new ObservableDataSource<Point>[3];
-		ObservableDataSource<Point>[] attitudeGraphData = new ObservableDataSource<Point>[3];
-		ObservableDataSource<Point> altitudeGraphData;
-
-		Dictionary<int, UInt64> dataSkipCount;
-
-		//FlightState flightState;
-		//GPSData gpsData;
+		Dictionary<int, UInt64> dataSkipCount;	
 
 		HUDWindow hudWindow;
 		HUDVideoSource hudVideoSource;
@@ -90,39 +82,13 @@ namespace SharpBladeGroundStation
 			hdopText.DataContext = currentVehicle.GpsState;
 			gpsStateText.DataContext = currentVehicle.GpsState;
 			battText.DataContext = currentVehicle.Battery;
-			flightDataGrid.DataContext = currentVehicle.FlightState;
-
-			//initGraph();
+			flightDataGrid.DataContext = currentVehicle.FlightState;		
 
 			dataSkipCount = new Dictionary<int, ulong>();
 			for (int i = 0; i < 255; i++)
 			{
 				dataSkipCount[i] = 0;
 			}
-		}
-
-		private void initGraph()
-		{
-			//string[] xyz = { "X", "Y", "Z" };
-			//string[] ypr = { "Roll", "Pitch", "Yaw" };
-			//accelPlotter.Children.RemoveAll(typeof(LineGraph));
-			//gyroPlotter.Children.RemoveAll(typeof(LineGraph));
-			//attPlotter.Children.RemoveAll(typeof(LineGraph));
-			//altPlotter.Children.RemoveAll(typeof(LineGraph));
-			//for (int i = 0; i < 3; i++)
-			//{
-			//	accelGraphData[i] = new ObservableDataSource<Point>();
-			//	accelPlotter.AddLineGraph(accelGraphData[i], "Accel " + xyz[i]);
-			//	gyroGraphData[i] = new ObservableDataSource<Point>();
-			//	gyroPlotter.AddLineGraph(gyroGraphData[i], "Gyro " + xyz[i]);
-			//}
-			//for (int i = 0; i < 3; i++)
-			//{
-			//	attitudeGraphData[i] = new ObservableDataSource<Point>();
-			//	attPlotter.AddLineGraph(attitudeGraphData[i], ypr[i]);
-			//}
-			//altitudeGraphData = new ObservableDataSource<Point>();
-			//altPlotter.AddLineGraph(altitudeGraphData, "Altitude");
 		}
 
 		private void initConfig()
@@ -245,11 +211,7 @@ namespace SharpBladeGroundStation
 						id = i;
 					}
 				}
-			}
-			else
-			{
-
-			}
+			}			
 			if (id >= 0)
 			{
 				HudVideoSource = HUDVideoSource.Camera;

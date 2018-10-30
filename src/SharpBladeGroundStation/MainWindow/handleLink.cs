@@ -179,11 +179,7 @@ namespace SharpBladeGroundStation
 		private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
 			if (LogLink.ReplayState == LogReplayState.TempPause)
-			{
-				if (e.NewValue < e.OldValue)
-				{
-					initGraph();
-				}
+			{				
 				LogLink.SetProgress(e.NewValue);
 				hudWindow.logPlayer.SetProgress();
 			}
@@ -215,11 +211,7 @@ namespace SharpBladeGroundStation
 		}
 
 		private void PlayBtn_Click(object sender, RoutedEventArgs e)
-		{
-			if (LogLink.ReplayState != LogReplayState.Pause)
-			{
-				initGraph();
-			}
+		{			
 			LogLink.Play();
 			hudWindow.logPlayer.Play();
 		}

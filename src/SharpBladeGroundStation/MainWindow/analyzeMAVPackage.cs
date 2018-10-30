@@ -76,7 +76,7 @@ namespace SharpBladeGroundStation
 					currentVehicle.GpsState.Hdop /= 100f;
 					currentVehicle.GroundSpeed = package.NextUShort() / 100.0f;
 					package.NextUShort();//cog					
-					GPSPositionState gpss = (GPSPositionState)package.NextByte();//sb文档害我debug一天!
+					GPSPositionState gpss = (GPSPositionState)package.NextByte();
 					currentVehicle.GpsState.SatelliteCount = package.NextByte();
                     if (currentVehicle.GpsState.State == GPSPositionState.NoGPS && gpss != GPSPositionState.NoGPS)
 					{
@@ -98,14 +98,7 @@ namespace SharpBladeGroundStation
 					float ry = package.NextSingle();
 					float rz = package.NextSingle();
 					//rad
-					currentVehicle.EulerAngle = new Vector3(rx, ry, rz);
-					if ((ulong)time * 1000 - dataSkipCount[package.Function] > dt)
-					{
-						//attitudeGraphData[0].AppendAsync(this.Dispatcher, new Point(time / 1000.0, MathHelper.ToDegrees(rx)));
-						//attitudeGraphData[1].AppendAsync(this.Dispatcher, new Point(time / 1000.0, MathHelper.ToDegrees(ry)));
-						//attitudeGraphData[2].AppendAsync(this.Dispatcher, new Point(time / 1000.0, MathHelper.ToDegrees(rz)));
-						dataSkipCount[package.Function] = (ulong)time * 1000;
-					}
+					currentVehicle.EulerAngle = new Vector3(rx, ry, rz);					
 					break;
 				case MAVLINK_MSG_ID.ATTITUDE_QUATERNION://#31
 
@@ -212,13 +205,7 @@ namespace SharpBladeGroundStation
 					break;
 				case MAVLINK_MSG_ID.ALTITUDE: //#141
 					time64 = package.NextUInt64();
-					float alt = package.NextSingle();
-
-					if (time64 - dataSkipCount[package.Function] > dt)
-					{
-						//altitudeGraphData.AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, alt));
-						dataSkipCount[package.Function] = time64;
-					}
+					float alt = package.NextSingle();				
 					break;
 				case MAVLINK_MSG_ID.BATTERY_STATUS://#147												   
 					tint = package.NextInt32();
