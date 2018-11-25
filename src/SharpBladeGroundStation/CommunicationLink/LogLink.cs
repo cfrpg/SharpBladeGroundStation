@@ -337,8 +337,12 @@ namespace SharpBladeGroundStation.CommunicationLink
 			PackageParseResult res = currentPackage.ReadFromBuffer(buffer, len, 0,out dataused);
 			if (res != PackageParseResult.Yes)
 			{
-
-			}
+                Debug.WriteLine("[LogLink]Error "+res.ToString()+" "+buffer[5].ToString());
+            }
+            if(currentPackage.Function==24)
+            {
+                Debug.WriteLine("[LogLink]Find #24");
+            }
 			return true;
 		}
 

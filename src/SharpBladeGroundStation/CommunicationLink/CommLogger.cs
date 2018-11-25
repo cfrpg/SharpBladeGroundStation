@@ -123,7 +123,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 				return;
 			if (isEnded)
 				return;
-			lock (packageQueue)
+            lock (packageQueue)
 			{
 				packageQueue.Enqueue(new Tuple<LinkPackage, LinkPackageDirection>(p, d));
 			}
@@ -148,10 +148,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 				if (flag)
 				{
 					var b = getBytes(p.Item1, p.Item2, out len);
-					fileStream.Write(b, 0, len);
-					if (p.Item1.Function == 24)
-						Debug.WriteLine("[Logger]Log #24");
-						
+					fileStream.Write(b, 0, len);					
 				}
 				else
 				{
@@ -181,6 +178,13 @@ namespace SharpBladeGroundStation.CommunicationLink
 			BitConverter.GetBytes(p.TimeStamp).CopyTo(buff, 5);
 			buff[13] = (byte)d;
 			Array.Copy(p.Buffer, 0, buff, 14, p.PackageSize);
+            if(p.Function==24)
+            {
+                MAVLinkPackage tp = new MAVLinkPackage();
+                int ti;
+                var res=tp.ReadFromBuffer(p.Buffer, p.PackageSize, 0, out ti);
+                Debug.WriteLine("[Logger]Log #24" + res.ToString());
+            }
 			return buff;
 		}
 

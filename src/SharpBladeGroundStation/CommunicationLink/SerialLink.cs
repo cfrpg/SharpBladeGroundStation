@@ -173,6 +173,13 @@ namespace SharpBladeGroundStation.CommunicationLink
 					case PackageParseResult.Yes:
 						offset += dataused;
 						receivePackage.TimeStamp = this.ConnectedTime;
+                        
+                            MAVLinkPackage tp = new MAVLinkPackage();
+                            int ti;
+                            var res1 = tp.ReadFromBuffer(receivePackage.Buffer, receivePackage.PackageSize, 0, out ti);
+                        if(res1!=PackageParseResult.Yes)
+                          Debug.WriteLine("[SerialLink]{0} {1}",receivePackage.Function,res1);
+                        
 						//lock (ReceivedPackageQueue)
 						{
 							enqueueHandler.BeginInvoke(receivePackage.Clone(), null, null);

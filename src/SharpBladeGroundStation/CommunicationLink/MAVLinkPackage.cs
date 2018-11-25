@@ -273,8 +273,9 @@ namespace SharpBladeGroundStation.CommunicationLink
 		public override LinkPackage Clone()
 		{
 			MAVLinkPackage p = new MAVLinkPackage();
-			Array.Copy(buffer, p.buffer, dataSize + HeaderSize + 3);			
-			p.function = function;
+            //	Array.Copy(buffer, p.buffer, dataSize + HeaderSize + 3);
+            Array.Copy(buffer, p.buffer, PackageSize);
+            p.function = function;
 			p.version = version;
 			p.headerSize = headerSize;
 			p.incompatibility = incompatibility;
