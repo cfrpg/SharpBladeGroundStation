@@ -396,6 +396,19 @@ namespace SharpBladeGroundStation.CommunicationLink
 			return PackageParseResult.NoSTX;
 		}
 
+		public virtual PackageParseResult ReadFromBuffer(byte[] buff, int length, int offset)
+		{
+			int t;
+			return ReadFromBuffer(buff, length, offset, out t);
+		}
+
+		public virtual PackageParseResult ReadFromBufferWithoutCheck(byte[] buff, int length, int offset)
+		{
+			if (length - offset < 1)
+				return PackageParseResult.NoEnoughData;
+			return PackageParseResult.NoSTX;
+		}
+
 		public virtual LinkPackage Clone()
 		{
 			LinkPackage p = new LinkPackage(buffer.Length);

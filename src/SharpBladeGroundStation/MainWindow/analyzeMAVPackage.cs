@@ -85,12 +85,7 @@ namespace SharpBladeGroundStation
 						Dispatcher.BeginInvoke(a3);
 						dataSkipCount[package.Function] = 0;
 					}
-					currentVehicle.GpsState.State = gpss;
-                    if(package.Version==2)
-                    {
-                        int altell = package.NextInt32();
-                        Debug.WriteLine(altell);
-                    }                   	
+					currentVehicle.GpsState.State = gpss;                         	
 					break;
 				case MAVLINK_MSG_ID.ATTITUDE://#30
 					time = package.NextUInt32();

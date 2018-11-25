@@ -167,19 +167,11 @@ namespace SharpBladeGroundStation.CommunicationLink
 						flag = true;						
 						break;
 					case PackageParseResult.BadCheckSum:
-						offset++;						
-						Debug.WriteLine("[Link]Bad checksum.");
+						offset++;
 						break;
 					case PackageParseResult.Yes:
 						offset += dataused;
-						receivePackage.TimeStamp = this.ConnectedTime;
-                        
-                            MAVLinkPackage tp = new MAVLinkPackage();
-                            int ti;
-                            var res1 = tp.ReadFromBuffer(receivePackage.Buffer, receivePackage.PackageSize, 0, out ti);
-                        if(res1!=PackageParseResult.Yes)
-                          Debug.WriteLine("[SerialLink]{0} {1}",receivePackage.Function,res1);
-                        
+						receivePackage.TimeStamp = this.ConnectedTime;                        
 						//lock (ReceivedPackageQueue)
 						{
 							enqueueHandler.BeginInvoke(receivePackage.Clone(), null, null);

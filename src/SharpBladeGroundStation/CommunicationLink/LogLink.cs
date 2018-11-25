@@ -332,17 +332,13 @@ namespace SharpBladeGroundStation.CommunicationLink
 			currentPackageTime = BitConverter.ToDouble(buffer, 5);
 			currPkgDir = (LinkPackageDirection)buffer[13];
 			len -= CommLogger.PackageHeaderSize;
-			stream.Read(buffer, 0, len);
-			int dataused;
-			PackageParseResult res = currentPackage.ReadFromBuffer(buffer, len, 0,out dataused);
-			if (res != PackageParseResult.Yes)
-			{
-                Debug.WriteLine("[LogLink]Error "+res.ToString()+" "+buffer[5].ToString());
-            }
-            if(currentPackage.Function==24)
-            {
-                Debug.WriteLine("[LogLink]Find #24");
-            }
+			stream.Read(buffer, 0, len);			
+			PackageParseResult res = currentPackage.ReadFromBufferWithoutCheck(buffer, len, 0);
+			//if (res != PackageParseResult.Yes)
+			//{
+
+			//}
+           
 			return true;
 		}
 
