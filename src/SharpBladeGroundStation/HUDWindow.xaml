@@ -7,19 +7,58 @@
         xmlns:fd="clr-namespace:FlightDisplay;assembly=FlightDisplay"
         xmlns:hud="clr-namespace:SharpBladeGroundStation.HUD"
         mc:Ignorable="d"
-        Title="HUDWindow" Height="600" Width="800" Loaded="Window_Loaded" Closing="Window_Closing" Initialized="Window_Initialized" KeyDown="Window_KeyDown">
+        Title="HUDWindow" Height="600" Width="1000" Loaded="Window_Loaded" Closing="Window_Closing" Initialized="Window_Initialized" KeyDown="Window_KeyDown">
     <Grid Background="Black">
         <Viewbox>
-            <Canvas x:Name="mainCanvas" Width="720" Height="576" Background="CornflowerBlue">
-                <local:CameraPlayer x:Name="cameraPlayer" Width="720" Height="576" />
-                <local:VideoLogPlayer x:Name="logPlayer" Width="720" Height="576" Visibility="Hidden"/>
-                <hud:NavHUDControl x:Name="navhud" Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556"/>
-                <!--
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+
+
+                <Canvas x:Name="mainCanvas" Width="720" Height="576" Background="CornflowerBlue" Grid.ColumnSpan="1" Grid.Column="1" Grid.RowSpan="5">
+                    <local:CameraPlayer x:Name="cameraPlayer" Width="720" Height="576" />
+                    <local:VideoLogPlayer x:Name="logPlayer" Width="720" Height="576" Visibility="Hidden"/>
+                    <hud:NavHUDControl x:Name="navhud" Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556"/>
+                    <!--
                 <hud:ShinkaiSeikanHUD x:Name="sshud"  Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556" Visibility="Hidden" />
                 <hud:PFDHUD x:Name="pfdhud"  Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556"  Visibility="Hidden"/>
                 -->
-                <hud:PFDHUD x:Name="pfdhud"  Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556"  Visibility="Hidden"/>
-            </Canvas>
+                    <hud:PFDHUD x:Name="pfdhud"  Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556"  Visibility="Hidden"/>
+                </Canvas>
+                <Border BorderBrush="White" BorderThickness="2"/>
+                <Border BorderBrush="White" BorderThickness="2" Grid.Row="1"/>
+                <Border BorderBrush="White" BorderThickness="2" Grid.Row="2"/>
+                <Border BorderBrush="White" BorderThickness="2" Grid.Row="3"/>
+                <Border BorderBrush="White" BorderThickness="2" Grid.Row="4"/>
+                <Border BorderBrush="White" BorderThickness="2" Grid.Column="2"/>
+                <Border BorderBrush="White" BorderThickness="2" Grid.Row="1" Grid.Column="2"/>
+                <Border BorderBrush="White" BorderThickness="2" Grid.Row="2" Grid.Column="2"/>
+                <Border BorderBrush="White" BorderThickness="2" Grid.Row="3" Grid.Column="2"/>
+                <Border BorderBrush="White" BorderThickness="2" Grid.Row="4" Grid.Column="2"/>
+
+
+                <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="更新航线" VerticalAlignment="Center" FontSize="26" Foreground="White" Grid.Column="2" Margin="10,0"/>
+                <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="上一点" VerticalAlignment="Center" FontSize="26" Foreground="White" Grid.Row="1" Grid.Column="2"  Margin="10,0"/>
+                <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="下一点" VerticalAlignment="Center" FontSize="26" Foreground="White" Grid.Row="2" Grid.Column="2" Margin="10,0"/>
+                <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="返航" VerticalAlignment="Center" FontSize="26" Foreground="White" Grid.Row="3" Grid.Column="2" Margin="10,0"/>
+                <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="降落" VerticalAlignment="Center" FontSize="26" Foreground="White" Grid.Row="4" Grid.Column="2" Margin="10,0"/>
+
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="绝对高度" VerticalAlignment="Center" FontSize="26" Foreground="White" Margin="10,0"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="切换界面" VerticalAlignment="Center" FontSize="26" Foreground="White" Grid.Row="1" Margin="10,0"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Center" FontSize="26" Foreground="White" Grid.Row="2" Margin="10,0"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="测距" VerticalAlignment="Center" FontSize="26" Foreground="White" Grid.Row="3" Margin="10,0"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="红外" VerticalAlignment="Center" FontSize="26" Foreground="White" Grid.Row="4"  Margin="10,0"/>
+            </Grid>
         </Viewbox>
     </Grid>
 </Window>

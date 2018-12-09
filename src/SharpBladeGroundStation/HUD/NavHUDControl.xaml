@@ -11,6 +11,18 @@
              mc:Ignorable="d" 
              x:Name="hud"
              d:DesignHeight="500" d:DesignWidth="500" KeyDown="hud_KeyDown">
+    <UserControl.Resources>
+        <Style x:Key="HUDShapeStyle">
+            <Setter>
+                <Setter.Property>Shape.Stroke</Setter.Property>
+                <Setter.Value>LightGreen</Setter.Value>
+            </Setter>
+            <Setter>
+                <Setter.Property>Shape.StrokeThickness</Setter.Property>
+                <Setter.Value>3</Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <Viewbox>
         <Canvas Width="500" Height="500">
             <local:SovietHeadingIndicatorControl x:Name="heading" Width="240" Height="50" Canvas.Top="36" Canvas.Left="130" Heading="{Binding Heading}" Loaded="heading_Loaded"/>
@@ -34,11 +46,11 @@
                         <TranslateTransform/>
                     </TransformGroup>
                 </Canvas.RenderTransform>
-                <Line X1="0" Y1="0" X2="60" Y2="0" Canvas.Left="10" Canvas.Top="100" StrokeThickness="3" Stroke="LightGreen"/>
-                <Line X1="0" Y1="0" X2="60" Y2="0" Canvas.Right="10" Canvas.Top="100" StrokeThickness="3" Stroke="LightGreen"/>
-                <Line X1="0" Y1="0" X2="0" Y2="50" Canvas.Left="100" Canvas.Top="20" StrokeThickness="3" Stroke="LightGreen"/>
-                <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Left="50" Canvas.Top="100" StrokeThickness="3" Stroke="LightGreen"/>
-                <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Right="50" Canvas.Top="100" StrokeThickness="3" Stroke="LightGreen"/>
+                <Line X1="0" Y1="0" X2="60" Y2="0" Canvas.Left="10" Canvas.Top="100" Style="{StaticResource HUDShapeStyle}"/>
+                <Line X1="0" Y1="0" X2="60" Y2="0" Canvas.Right="10" Canvas.Top="100" Style="{StaticResource HUDShapeStyle}"/>
+                <Line X1="0" Y1="0" X2="0" Y2="50" Canvas.Left="100" Canvas.Top="20" Style="{StaticResource HUDShapeStyle}"/>
+                <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Left="50" Canvas.Top="100" Style="{StaticResource HUDShapeStyle}"/>
+                <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Right="50" Canvas.Top="100" Style="{StaticResource HUDShapeStyle}"/>
             </Canvas>
             <wpf:OutlinedText x:Name="pitText" Text="{Binding FlightState.Pitch,StringFormat={}{0:0}}" FontSize="20" Font="Microsoft YaHei UI" Fill="LightGreen" Stroke="Black" StrokeThickness="0" Canvas.Left="370" Canvas.Top="220" RenderTransformOrigin="0.5,0.5" >
                 <wpf:OutlinedText.RenderTransform>
@@ -50,7 +62,7 @@
                     </TransformGroup>
                 </wpf:OutlinedText.RenderTransform>
             </wpf:OutlinedText>
-            <Line x:Name="horizonLine" X1="0" Y1="0" X2="240" Y2="0" Canvas.Left="130" Canvas.Top="250" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,0.5">
+            <Line x:Name="horizonLine" X1="0" Y1="0" X2="240" Y2="0" Canvas.Left="130" Canvas.Top="250" Style="{StaticResource HUDShapeStyle}" RenderTransformOrigin="0.5,0.5">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -62,7 +74,7 @@
             </Line>
             <TextBlock Text="{Binding FlightModeText}"  FontSize="24" Canvas.Left="84" Canvas.Top="379" Foreground="LightGreen" RenderTransformOrigin="0,0.5"/>
             <TextBlock Text="{Binding Battery.Remaining,StringFormat={}{0:0}%}" FontFamily="TI-Nspire Sans" FontSize="24" Canvas.Left="84" Canvas.Top="410" Foreground="LightGreen" RenderTransformOrigin="0,0.5"/>
-            <Polygon Canvas.Right="67" Canvas.Top="250" Points="0,0 8,-8 8,-3 20,-3 20,3 8,3 8,8" Stroke="LightGreen" StrokeThickness="3" RenderTransformOrigin="0.5,0.5">
+            <Polygon Canvas.Right="67" Canvas.Top="250" Points="0,0 8,-8 8,-3 20,-3 20,3 8,3 8,8" Style="{StaticResource HUDShapeStyle}" RenderTransformOrigin="0.5,0.5">
                 <Polygon.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -84,14 +96,14 @@
             </wpf:OutlinedText>
             <!--MDZZ section,don't touch.-->
             <TextBlock Text="RMB 20"  FontSize="14" Canvas.Right="84" Canvas.Top="400" Foreground="LightGreen" RenderTransformOrigin="0,0.5"/>
-            <Line X1="0" Y1="0" X2="60" Y2="0" Canvas.Left="0" Canvas.Top="70" Stroke="LightGreen" StrokeThickness="3" />
-            <Polygon Canvas.Left="30" Canvas.Top="80" Points="0,0 10,0 0,-10 -10,0" Stroke="LightGreen" StrokeThickness="3"/>
-            <Line X1="0" Y1="0" X2="0" Y2="240" Canvas.Right="90" Canvas.Top="130" Stroke="LightGreen" StrokeThickness="3"/>
-            <Line X1="0" Y1="0" X2="6" Y2="0" Canvas.Right="92" Canvas.Top="131" Stroke="LightGreen" StrokeThickness="2"/>
-            <Line X1="0" Y1="0" X2="6" Y2="0" Canvas.Right="92" Canvas.Top="250" Stroke="LightGreen" StrokeThickness="3"/>
-            <Line X1="0" Y1="0" X2="6" Y2="0" Canvas.Right="92" Canvas.Top="369" Stroke="LightGreen" StrokeThickness="2"/>
-            <Ellipse Width="30" Height="30" Stroke="LightGreen" StrokeThickness="3" Canvas.Left="150" Canvas.Top="204" Visibility="Hidden"/>
-            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
+            <Line X1="0" Y1="0" X2="60" Y2="0" Canvas.Left="0" Canvas.Top="70" Style="{StaticResource HUDShapeStyle}" />
+            <Polygon Canvas.Left="30" Canvas.Top="80" Points="0,0 10,0 0,-10 -10,0" Style="{StaticResource HUDShapeStyle}"/>
+            <Line X1="0" Y1="0" X2="0" Y2="240" Canvas.Right="90" Canvas.Top="130" Style="{StaticResource HUDShapeStyle}"/>
+            <Line X1="0" Y1="0" X2="6" Y2="0" Canvas.Right="92" Canvas.Top="131" Style="{StaticResource HUDShapeStyle}"/>
+            <Line X1="0" Y1="0" X2="6" Y2="0" Canvas.Right="92" Canvas.Top="250" Style="{StaticResource HUDShapeStyle}"/>
+            <Line X1="0" Y1="0" X2="6" Y2="0" Canvas.Right="92" Canvas.Top="369" Style="{StaticResource HUDShapeStyle}"/>
+            <Ellipse Width="30" Height="30" Canvas.Left="150" Canvas.Top="204" Visibility="Hidden" Style="{StaticResource HUDShapeStyle}"/>
+            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" Style="{StaticResource HUDShapeStyle}" RenderTransformOrigin="0.5,-5">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -101,7 +113,7 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
-            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
+            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" Style="{StaticResource HUDShapeStyle}" RenderTransformOrigin="0.5,-5">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -111,7 +123,7 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
-            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
+            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" Style="{StaticResource HUDShapeStyle}" RenderTransformOrigin="0.5,-5">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -121,7 +133,7 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
-            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
+            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" Style="{StaticResource HUDShapeStyle}" RenderTransformOrigin="0.5,-5">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -131,7 +143,7 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
-            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
+            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" Style="{StaticResource HUDShapeStyle}" RenderTransformOrigin="0.5,-5">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -141,7 +153,7 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
-            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
+            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" Style="{StaticResource HUDShapeStyle}" RenderTransformOrigin="0.5,-5">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -151,7 +163,7 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
-            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
+            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" Style="{StaticResource HUDShapeStyle}" RenderTransformOrigin="0.5,-5">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -161,7 +173,7 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
-            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-5">
+            <Line X1="0" Y1="0" X2="0" Y2="20" Canvas.Left="250" Canvas.Top="350" Style="{StaticResource HUDShapeStyle}" RenderTransformOrigin="0.5,-5">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -171,7 +183,7 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
-            <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-10">
+            <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Left="250" Canvas.Top="350" Style="{StaticResource HUDShapeStyle}" RenderTransformOrigin="0.5,-10">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -181,7 +193,7 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
-            <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-10">
+            <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Left="250" Canvas.Top="350" Style="{StaticResource HUDShapeStyle}" RenderTransformOrigin="0.5,-10">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -191,7 +203,7 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
-            <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-10">
+            <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Left="250" Canvas.Top="350" Style="{StaticResource HUDShapeStyle}" RenderTransformOrigin="0.5,-10">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -201,7 +213,7 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
-            <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Left="250" Canvas.Top="350" StrokeThickness="3" Stroke="LightGreen" RenderTransformOrigin="0.5,-10">
+            <Line X1="0" Y1="0" X2="0" Y2="10" Canvas.Left="250" Canvas.Top="350" Style="{StaticResource HUDShapeStyle}" RenderTransformOrigin="0.5,-10">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -211,7 +223,7 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
-            <Ellipse Height="30" Width="30" Canvas.Left="235" Canvas.Bottom="0" Stroke="LightGreen" StrokeThickness="3" />
+            <Ellipse Height="30" Width="30" Canvas.Left="235" Canvas.Bottom="0" Style="{StaticResource HUDShapeStyle}" />
             <Ellipse Height="6" Width="6" Canvas.Left="247" Canvas.Bottom="12" Stroke="LightGreen" StrokeThickness="5" />
 
         </Canvas>

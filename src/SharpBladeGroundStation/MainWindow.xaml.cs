@@ -278,6 +278,22 @@ namespace SharpBladeGroundStation
 
 			
 		}
+
+		private void button1_Click(object sender, RoutedEventArgs e)
+		{
+			if (rightCol.Width.Value != 0)
+			{
+				rightCol.MinWidth = 0;
+				rightCol.Width = new GridLength(0, GridUnitType.Star);				
+				button1.Background = new SolidColorBrush(Color.FromArgb(204, 100, 100, 100));
+			}
+			else
+			{
+				rightCol.MinWidth = 150;
+				rightCol.Width = new GridLength(1, GridUnitType.Star);
+				button1.Background = new SolidColorBrush(Colors.Green);
+			}
+		}
 	}
 	public enum HUDVideoSource
 	{
@@ -285,4 +301,6 @@ namespace SharpBladeGroundStation
 		Camera,
 		Replay
 	}
+
+	
 }
