@@ -294,6 +294,8 @@ namespace SharpBladeGroundStation
 				button1.Background = new SolidColorBrush(Colors.Green);
 			}
 		}
+
+		
 	}
 	public enum HUDVideoSource
 	{
