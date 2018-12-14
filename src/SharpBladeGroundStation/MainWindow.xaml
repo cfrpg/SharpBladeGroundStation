@@ -386,6 +386,11 @@
                                 <Image Source="Contents/Log.png" HorizontalAlignment="Center" />
                             </MenuItem.Icon>
                         </MenuItem>
+                        <MenuItem x:Name="frimwareMenuItem" Header="固件更新">
+                            <MenuItem.Icon>
+                                <Image Source="Contents/ComPort.png" HorizontalAlignment="Center" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
                 </Menu>
 

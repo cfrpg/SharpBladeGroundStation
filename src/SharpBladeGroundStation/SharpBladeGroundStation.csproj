@@ -101,6 +101,7 @@
     <Compile Include="CommunicationLink\LogLink.cs" />
     <Compile Include="CommunicationLink\MissionReceiver.cs" />
     <Compile Include="CommunicationLink\MissionSender.cs" />
+    <Compile Include="CommunicationLink\BootLoader\Enums.cs" />
     <Compile Include="Configuration\GCSConfiguration.cs" />
     <Compile Include="Configuration\VehicleConfiguration.cs" />
     <Compile Include="Controls\CameraPlayer.xaml.cs">
