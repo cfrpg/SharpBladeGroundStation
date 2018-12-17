@@ -121,6 +121,7 @@
     <Compile Include="DataStructs\Mission\MissionItem.cs" />
     <Compile Include="Configuration\Enums.cs" />
     <Compile Include="DataStructs\Vehicle\Camera.cs" />
+    <Compile Include="DataStructs\Vehicle\FirmwareImage.cs" />
     <Compile Include="DataStructs\Vehicle\Vehicle.cs" />
     <Compile Include="HUDWindow.xaml.cs">
       <DependentUpon>HUDWindow.xaml</DependentUpon>
