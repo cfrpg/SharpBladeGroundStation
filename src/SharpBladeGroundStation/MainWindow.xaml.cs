@@ -188,12 +188,20 @@ namespace SharpBladeGroundStation
 			Stream s = new FileStream(path + "\\gcs.xml", FileMode.Create, FileAccess.Write, FileShare.None);
 			xs.Serialize(s, GCSConfig);
 			s.Close();
-			hudWindow.Close();
+			hudWindow?.Close();
 			logger?.End();
 		}
 
 		private void mainwindow_Loaded(object sender, RoutedEventArgs e)
 		{
+			string[] args = Environment.GetCommandLineArgs();
+			if(args.Contains("-nohud"))
+			{
+				initLinkListener();
+				cameraComboBox.IsEnabled = false;
+
+				return;
+			}
 			hudWindow = new HUDWindow(this);
 			hudWindow.Mainwin = this;
 			hudWindow.Show();
@@ -293,6 +301,7 @@ namespace SharpBladeGroundStation
 				rightCol.Width = new GridLength(1, GridUnitType.Star);
 				button1.Background = new SolidColorBrush(Colors.Green);
 			}
+			
 		}
 
 		

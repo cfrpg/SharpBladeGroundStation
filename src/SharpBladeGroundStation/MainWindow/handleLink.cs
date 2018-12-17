@@ -92,7 +92,7 @@ namespace SharpBladeGroundStation
 			if (GCSconfig.AutoRecord && hudWindow.cameraPlayer.IsCameraRunning())
 			{
 				string str = logger.Path.Substring(0, logger.Path.LastIndexOf(".") + 1) + "mpg";
-				hudWindow.cameraPlayer.StartRecord(str);
+				hudWindow?.cameraPlayer.StartRecord(str);
 			}
 
 			missionSender = new MissionSender(currentVehicle);

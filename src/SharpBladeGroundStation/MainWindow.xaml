@@ -362,10 +362,14 @@
                                         <RowDefinition Height="1*"/>                                        
                                     </Grid.RowDefinitions>
                                     <TextBlock x:Name="textBlock1" HorizontalAlignment="Center" TextWrapping="Wrap" Text="固件文件" VerticalAlignment="Center"/>
-                                    <TextBox x:Name="firmwarePathText" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Grid.Column="1" Margin="5,0"/>
+                                    <TextBox x:Name="firmwarePathText" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Grid.Column="1" Margin="5,0"/>
                                     <Button x:Name="button2" Content="浏览" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Grid.Column="2" Click="button2_Click"/>
+                                    <ScrollViewer Grid.Row="2" Grid.Column="1" Margin="5,10,0,0">
+                                        <ScrollViewer.Content>
+                                            <TextBlock x:Name="firmwareUpdateMsgText" TextWrapping="Wrap" Text="" />
+                                        </ScrollViewer.Content>                                        
+                                    </ScrollViewer>
                                     
-                                    <TextBlock x:Name="firmwareUpdateMsgText" HorizontalAlignment="Left" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1" Margin="5,10,0,0"/>
                                     <Button x:Name="updateFirmwareButton" Content="开始更新" HorizontalAlignment="Center" VerticalAlignment="Top" Width="75" Grid.Row="1" Grid.Column="2" Margin="0,10,0,0" Click="updateFirmwareButton_Click"/>
 
                                 </Grid>

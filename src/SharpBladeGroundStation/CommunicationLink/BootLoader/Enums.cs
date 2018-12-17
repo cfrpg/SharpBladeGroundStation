@@ -14,59 +14,59 @@ namespace SharpBladeGroundStation.CommunicationLink.BootLoader
 		/// <summary>
 		/// PX4 V1 board
 		/// </summary>
-		boardIDPX4FMUV1 = 5,
+		PX4FMUV1 = 5,
 		/// <summary>
 		/// PX4 V2 board
 		/// </summary>
-		boardIDPX4FMUV2 = 9,
+		PX4FMUV2 = 9,
 		/// <summary>
 		/// PX4 V4 board
 		/// </summary>
-		boardIDPX4FMUV4 = 11,
+		PX4FMUV4 = 11,
 		/// <summary>
 		/// PX4 V4PRO board
 		/// </summary>
-		boardIDPX4FMUV4PRO = 13,
+		PX4FMUV4PRO = 13,
 		/// <summary>
 		/// PX4 V5 board
 		/// </summary>
-		boardIDPX4FMUV5 = 50,
+		PX4FMUV5 = 50,
 		/// <summary>
 		/// PX4 Flow board
 		/// </summary>
-		boardIDPX4Flow = 6,
+		PX4Flow = 6,
 		/// <summary>
 		/// Gumstix AeroCore board
 		/// </summary>
-		boardIDAeroCore = 98,
+		AeroCore = 98,
 		/// <summary>
 		/// AUAV X2.1 board
 		/// </summary>
-		boardIDAUAVX2_1 = 33,
+		AUAVX2_1 = 33,
 		/// <summary>
 		/// 3DR Radio. This is an arbitrary value unrelated to the PID
 		/// </summary>
-		boardID3DRRadio = 78,
+		_3DRRadio = 78,
 		/// <summary>
 		/// MindPX V2 board
 		/// </summary>
-		boardIDMINDPXFMUV2 = 88,
+		MINDPXFMUV2 = 88,
 		/// <summary>
 		/// TAP V1 board
 		/// </summary>
-		boardIDTAPV1 = 64,
+		TAPV1 = 64,
 		/// <summary>
 		/// ASC V1 board
 		/// </summary>
-		boardIDASCV1 = 65,
+		ASCV1 = 65,
 		/// <summary>
 		///  Crazyflie 2.0 board
 		/// </summary>
-		boardIDCrazyflie2 = 12,
+		Crazyflie2 = 12,
 		/// <summary>
 		/// NXPHliteV3 board
 		/// </summary>
-		boardIDNXPHliteV3 = 28
+		NXPHliteV3 = 28
 	}
 
 
