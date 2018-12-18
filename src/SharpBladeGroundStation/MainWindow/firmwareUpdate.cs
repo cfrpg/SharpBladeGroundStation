@@ -55,7 +55,7 @@ namespace SharpBladeGroundStation
 				{
 					addUpdateMsg("载入固件成功！");
 					addUpdateMsg("硬件类型：" + firmwareImage.TargetBoard.ToString());
-					addUpdateMsg("Firmware size:" + firmwareImage.ImageSize);
+					addUpdateMsg("固件大小:" + firmwareImage.ImageSize);
 					updateFirmwareButton.IsEnabled = true;
 				}
 				else
@@ -70,6 +70,7 @@ namespace SharpBladeGroundStation
 			Thread updateThread = new Thread(new ThreadStart(bootloaderUpdateWorker));
 			updateFirmwareButton.IsEnabled = false;
 			//firmwareUpdateMsgText.Text = "";
+			firmwareUpdateProgbar.Value = 0;
 			updateThread.IsBackground = true;
 			updateThread.Start();
 		}
@@ -80,12 +81,13 @@ namespace SharpBladeGroundStation
 		}
 
 		private void bootloaderUpdateWorker()
-		{			
+		{
+			int progress = 0;
 			portscanner.Stop();
 			Thread.Sleep(1000);
 			string[] existedPort = SerialPort.GetPortNames();
-			addUpdateMsg(string.Format("Existed port {0}:", existedPort.Count()));
-
+			//addUpdateMsg(string.Format("Existed port {0}:", existedPort.Count()));
+			addUpdateMsg("等待飞控连接...");
 			byte[] buf = new byte[128];
 
 			string newPortName = "";
@@ -94,7 +96,7 @@ namespace SharpBladeGroundStation
 			{
 				Thread.Sleep(500);
 				string[] currPorts = SerialPort.GetPortNames();
-				addUpdateMsg(string.Format("Current port {0}:", currPorts.Count()));
+				//addUpdateMsg(string.Format("Current port {0}:", currPorts.Count()));
 				
 				foreach (var p in currPorts)
 				{
@@ -113,40 +115,49 @@ namespace SharpBladeGroundStation
 						break;
 				}
 			}
-			addUpdateMsg(string.Format("Find new port:{0}", newPortName));
+			addUpdateMsg(string.Format("已连接到飞控:{0}", newPortName));
 
 			SerialPort port = new SerialPort(newPortName, 115200);
 			port.Open();
 
 			//Read board info.
 			uint rev, bid, flashSize;			
-			addUpdateMsg(string.Format("Request BL REV"));
+			//addUpdateMsg(string.Format("Request BL REV"));
 			rev = getBoardInfo(port, BootloaderCmd.INFO_BL_REV);			
-			addUpdateMsg(string.Format("BL REV:{0}", rev));
+			addUpdateMsg(string.Format("引导版本:{0}", rev));
 			
-			addUpdateMsg(string.Format("Request BOARD ID"));
+			//addUpdateMsg(string.Format("Request BOARD ID"));
 			bid = getBoardInfo(port, BootloaderCmd.INFO_BOARD_ID);
 			
-			addUpdateMsg(string.Format("BOARD ID:{0}", ((BoardID)bid).ToString()));		
+			addUpdateMsg(string.Format("硬件类型:{0}", ((BoardID)bid).ToString()));		
 			
-			addUpdateMsg(string.Format("Request flash size"));
+			//addUpdateMsg(string.Format("Request flash size"));
 			flashSize = getBoardInfo(port, BootloaderCmd.INFO_FLASH_SIZE);
 			
-			addUpdateMsg(string.Format("Flash size:{0}", flashSize));
+			addUpdateMsg(string.Format("可用空间:{0}", flashSize));
 
 			//Check compatibility.
 			//TBD
 
 			//Earse board rom.
-			addUpdateMsg("Erase board...");
+			addUpdateMsg("擦除旧版固件...");
+
 			sendBLCmd(port, BootloaderCmd.PROTO_CHIP_ERASE);
-			while (port.BytesToRead < 2) ;
+			while (port.BytesToRead < 2||progress<200)
+			{
+				if(progress<200)
+				{
+					progress += 1;
+					setUpdateProgress(progress);
+					Thread.Sleep(40);
+				}				
+			}
 			port.Read(buf, 0, port.BytesToRead);
 			if(buf[0]==(byte)BootloaderCmd.PROTO_INSYNC&&buf[1]==(byte)BootloaderCmd.PROTO_OK)
 			{
-				addUpdateMsg("Erase complete.");
+				addUpdateMsg("擦除完成");
 			}
-
+			addUpdateMsg("烧写新固件...");
 			//Flash board.
 			int pos = 0;
 			while(pos<firmwareImage.ImageSize)
@@ -164,8 +175,9 @@ namespace SharpBladeGroundStation
 				port.Read(buf, 0, port.BytesToRead);
 				if (buf[0] == (byte)BootloaderCmd.PROTO_INSYNC && buf[1] == (byte)BootloaderCmd.PROTO_OK)
 				{
-
-					addUpdateMsg2(string.Format("Flashing:{0}/{1}",pos,firmwareImage.ImageSize));
+					progress = 200 + pos * 1000 / firmwareImage.ImageSize;
+					setUpdateProgress(progress);
+					//addUpdateMsg2(string.Format("Flashing:{0}/{1}",pos,firmwareImage.ImageSize));
 				}
 				else
 				{
@@ -173,9 +185,18 @@ namespace SharpBladeGroundStation
 					break;
 				}
 			}
-			addUpdateMsg("Flash complete.");
+			addUpdateMsg("烧写完成");
+			addUpdateMsg("启动飞控...");
+			sendBLCmd(port, BootloaderCmd.PROTO_BOOT);
+			while(progress<1300)
+			{
+				progress += 1;
+				setUpdateProgress(progress);
+				Thread.Sleep(10);
+			}		
 			
 			port.Close();
+			addUpdateMsg("固件更新完成");
 		}
 
 		private bool sendBLCmd(SerialPort port,BootloaderCmd cmd)
@@ -183,6 +204,7 @@ namespace SharpBladeGroundStation
 			byte[] buff = new byte[2];
 			buff[0] = (byte)cmd;
 			buff[1] = (byte)BootloaderCmd.PROTO_EOC;
+			port.DiscardInBuffer();
 			port.Write(buff, 0, 2);
 			return true;
 		}
@@ -194,6 +216,7 @@ namespace SharpBladeGroundStation
 			buf[0] = (byte)BootloaderCmd.PROTO_GET_DEVICE;
 			buf[1] = (byte)cmd;
 			buf[2] = (byte)BootloaderCmd.PROTO_EOC;
+			port.DiscardInBuffer();
 			port.Write(buf, 0, 3);
 			while (port.BytesToRead < 4) ;
 			port.Read(buf, 0, port.BytesToRead);
@@ -205,6 +228,7 @@ namespace SharpBladeGroundStation
 		{
 			Action a = () => { firmwareUpdateMsgText.Text += str + Environment.NewLine; };
 			Dispatcher.BeginInvoke(a);
+			
 		}
 
 		private void addUpdateMsg2(string str)
@@ -212,5 +236,17 @@ namespace SharpBladeGroundStation
 			Action a = () => { firmwareUpdateMsgText.Text = str + Environment.NewLine; };
 			Dispatcher.BeginInvoke(a);
 		}
+
+		//0-200:erase
+		//201-1200:flash
+		//1200-1300:verify
+		private void setUpdateProgress(int v)
+		{
+			Action a = () => { firmwareUpdateProgbar.Value = v; };
+			Dispatcher.BeginInvoke(a);
+		}
+
+		
+
 	}
 }
