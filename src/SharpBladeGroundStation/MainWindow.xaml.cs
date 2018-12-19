@@ -199,7 +199,7 @@ namespace SharpBladeGroundStation
 			{
 				initLinkListener();
 				cameraComboBox.IsEnabled = false;
-
+				initFirmwareUpdater();
 				return;
 			}
 			hudWindow = new HUDWindow(this);
@@ -232,7 +232,10 @@ namespace SharpBladeGroundStation
 			}
 			cameraComboBox.SelectionChanged += CameraComboBox_SelectionChanged;
 			initLinkListener();
+			initFirmwareUpdater();
 		}
+
+		
 
 		private void CameraComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{

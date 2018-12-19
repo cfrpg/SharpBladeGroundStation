@@ -366,10 +366,10 @@
                                     <TextBox x:Name="firmwarePathText" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Grid.Column="1" Margin="5,0"/>
                                     <Button x:Name="button2" Content="浏览" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Grid.Column="2" Click="button2_Click"/>
 
-                                    <TextBlock x:Name="firmwareUpdateMsgText" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1" Margin="5,10,0,0" />
+                                    <TextBlock x:Name="firmwareUpdateMsgText" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Path=Message}" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1" Margin="5,10,0,0" />
                                       
                                     <Button x:Name="updateFirmwareButton" Content="开始更新" HorizontalAlignment="Center" VerticalAlignment="Top" Width="75" Grid.Row="2" Grid.Column="2" Margin="0,10,0,0" Click="updateFirmwareButton_Click"/>
-                                    <ProgressBar x:Name="firmwareUpdateProgbar" Grid.Row="1" Grid.Column="1" Margin="5" Maximum="1300"/>
+                                    <ProgressBar x:Name="firmwareUpdateProgbar" Grid.Row="1" Grid.Column="1" Margin="5" Maximum="100" Value="{Binding Path=NormalizedProgress,Mode=OneWay}"/>
 
                                 </Grid>
                             </TabItem>
@@ -404,11 +404,7 @@
                                 <Image Source="Contents/Log.png" HorizontalAlignment="Center" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem x:Name="firmwareMenuItem" Header="固件更新" Click="firmwareMenuItem_Click">
-                            <MenuItem.Icon>
-                                <Image Source="Contents/ComPort.png" HorizontalAlignment="Center" />
-                            </MenuItem.Icon>
-                        </MenuItem>
+                        
                     </MenuItem>
                 </Menu>
 

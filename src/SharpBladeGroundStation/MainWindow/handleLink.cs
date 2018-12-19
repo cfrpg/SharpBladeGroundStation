@@ -27,6 +27,8 @@ namespace SharpBladeGroundStation
 		MissionSender missionSender;
 		bool linkAvilable;
 
+		bool isReplay;
+
 		bool[] packageFlags;
  		public LogLink LogLink
 		{
@@ -51,6 +53,7 @@ namespace SharpBladeGroundStation
 			logLink = new LogLink();
 			logPlayerCtrl.DataContext = logLink;
 			logLink.Initialize();
+			isReplay = false;
 		}
 
 		void linkListenerWorker()
@@ -133,12 +136,14 @@ namespace SharpBladeGroundStation
 		private void portMenuItem_Click(object sender, RoutedEventArgs e)
 		{
 			portscanner.Start();
+			isReplay = false;
 			logCtrlBorder.Visibility = Visibility.Hidden;
 		}
 
 		private void logMenuItem_Click(object sender, RoutedEventArgs e)
 		{
 			portscanner.Stop();
+			isReplay = true;
 			logCtrlBorder.Visibility = Visibility.Visible;
 			extendLogGrid();
 			linkStateText.Text = "Replay";

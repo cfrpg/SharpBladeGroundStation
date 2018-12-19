@@ -96,6 +96,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CommunicationLink\AdvancedPortScanner.cs" />
+    <Compile Include="CommunicationLink\BootLoader\FirmwareUpdater.cs" />
     <Compile Include="CommunicationLink\CommLink.cs" />
     <Compile Include="CommunicationLink\CommLogger.cs" />
     <Compile Include="CommunicationLink\LogLink.cs" />
