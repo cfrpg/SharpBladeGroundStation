@@ -80,27 +80,61 @@ namespace SharpBladeGroundStation
 		private void Portscanner_OnFindPort(AdvancedPortScanner sender, PortScannerEventArgs e)
 		{
 			Debug.WriteLine("[main] find port {0}", e.Link.Port.PortName);
+			//portscanner.Stop();
+			//if (currentVehicle.Link != null)
+			//	return;
+			//currentVehicle.Link = e.Link;
+			////currentVehicle.Link.OnReceivePackage += Link_OnReceivePackage;
+			//currentVehicle.Link.OpenLink();
+			//Action a = () => { linkStateText.Text = currentVehicle.Link.LinkName + Environment.NewLine + currentVehicle.Link.Protocol.ToString(); linkspd.DataContext = currentVehicle.Link; };
+			//linkStateText.Dispatcher.Invoke(a);
+			//linkAvilable = true;
+
+			//logger = new CommLogger(GCSconfig.LogPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".sblog", e.Link);
+			//logger.Start(e.Link.ConnectTime);
+			//if (GCSconfig.AutoRecord && hudWindow.cameraPlayer.IsCameraRunning())
+			//{
+			//	string str = logger.Path.Substring(0, logger.Path.LastIndexOf(".") + 1) + "mpg";
+			//	hudWindow?.cameraPlayer.StartRecord(str);
+			//}
+
+			connectVehicle(e.Link); 
+
+			missionSender = new MissionSender(currentVehicle);
+			missionSender.OnFinished += MissionSender_OnFinished;
+
+		}
+
+		private void connectVehicle(CommLink link)
+		{
+			bool firstConnect = false;
+			if(currentVehicle.Link==null||currentVehicle.Link is LogLink)
+			{
+				firstConnect = true;
+			}
 			portscanner.Stop();
-			if (currentVehicle.Link != null)
-				return;
-			currentVehicle.Link = e.Link;
-			//currentVehicle.Link.OnReceivePackage += Link_OnReceivePackage;
+			currentVehicle.Link = link;
 			currentVehicle.Link.OpenLink();
 			Action a = () => { linkStateText.Text = currentVehicle.Link.LinkName + Environment.NewLine + currentVehicle.Link.Protocol.ToString(); linkspd.DataContext = currentVehicle.Link; };
 			linkStateText.Dispatcher.Invoke(a);
 			linkAvilable = true;
 
-			logger = new CommLogger(GCSconfig.LogPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".sblog", e.Link);
-			logger.Start(e.Link.ConnectTime);
-			if (GCSconfig.AutoRecord && hudWindow.cameraPlayer.IsCameraRunning())
+			if(firstConnect)
 			{
-				string str = logger.Path.Substring(0, logger.Path.LastIndexOf(".") + 1) + "mpg";
-				hudWindow?.cameraPlayer.StartRecord(str);
+				logger = new CommLogger(GCSconfig.LogPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".sblog", link);
+				logger.Start(link.ConnectTime);
+				if (GCSconfig.AutoRecord && hudWindow.cameraPlayer.IsCameraRunning())
+				{
+					string str = logger.Path.Substring(0, logger.Path.LastIndexOf(".") + 1) + "mpg";
+					hudWindow?.cameraPlayer.StartRecord(str);
+				}
 			}
+		}
 
-			missionSender = new MissionSender(currentVehicle);
-			missionSender.OnFinished += MissionSender_OnFinished;
-
+		private void disconnectVehicle()
+		{
+			currentVehicle.Link.CloseLink();
+			linkAvilable = false;
 		}
 
 		private void MissionSender_OnFinished()
@@ -108,31 +142,7 @@ namespace SharpBladeGroundStation
 			this.Dispatcher.BeginInvoke(new ThreadStart(delegate { MessageBox.Show("上传成功！"); }));
 			missionSender.State = MissionSenderState.Idle;
 		}
-
-		private void Link_OnReceivePackage(CommLink sender, EventArgs e)
-		{
-			//while (currentVehicle.Link.ReceivedPackageQueue.Count != 0)
-			//{
-			//	LinkPackage package;
-			//	lock (currentVehicle.Link.ReceivedPackageQueue)
-			//	{
-			//		package = currentVehicle.Link.ReceivedPackageQueue.Dequeue();
-			//	}
-			//	switch (sender.Protocol)
-			//	{
-			//		case LinkProtocol.MAVLink:
-			//			analyzeMAVPackage(package);
-			//			break;
-			//		case LinkProtocol.ANOLink:
-			//			analyzeANOPackage(package);
-			//			break;
-			//		case LinkProtocol.MAVLink2:
-			//			analyzeMAVPackage(package);
-			//			break;
-			//	}
-			//}
-		}
-
+		
 		private void portMenuItem_Click(object sender, RoutedEventArgs e)
 		{
 			portscanner.Start();

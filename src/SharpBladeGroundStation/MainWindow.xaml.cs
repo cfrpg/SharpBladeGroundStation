@@ -36,8 +36,6 @@ namespace SharpBladeGroundStation
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		//SerialLink link;       
-
 		Vehicle currentVehicle;
 		GCSConfiguration GCSconfig;
 
@@ -196,41 +194,42 @@ namespace SharpBladeGroundStation
 		{
 			string[] args = Environment.GetCommandLineArgs();
 			if(args.Contains("-nohud"))
-			{
-				initLinkListener();
-				cameraComboBox.IsEnabled = false;
-				initFirmwareUpdater();
+			{				
+				cameraComboBox.IsEnabled = false;				
 				return;
-			}
-			hudWindow = new HUDWindow(this);
-			hudWindow.Mainwin = this;
-			hudWindow.Show();
-			localWebCamsCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
-			int id = -1;
-			cameraComboBox.ItemsSource = localWebCamsCollection;
-			cameraComboBox.DisplayMemberPath = "Name";
-			if (localWebCamsCollection.Count > 0)
-			{
-				for (int i = 0; i < localWebCamsCollection.Count; i++)
-				{
-					if (GCSconfig.CameraName != "" && localWebCamsCollection[i].Name == GCSconfig.CameraName)
-					{
-						cameraComboBox.SelectedValue = localWebCamsCollection[i];
-						id = i;
-					}
-				}
-			}			
-			if (id >= 0)
-			{
-				HudVideoSource = HUDVideoSource.Camera;
-				hudWindow.cameraPlayer.OpenCamera(localWebCamsCollection[id].MonikerString);
-				//hudWindow.StartRecord("D:\\temp\\test.mpg");
 			}
 			else
 			{
-				HudVideoSource = HUDVideoSource.NoVideo;
-			}
-			cameraComboBox.SelectionChanged += CameraComboBox_SelectionChanged;
+				hudWindow = new HUDWindow(this);
+				hudWindow.Mainwin = this;
+				hudWindow.Show();
+				localWebCamsCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+				int id = -1;
+				cameraComboBox.ItemsSource = localWebCamsCollection;
+				cameraComboBox.DisplayMemberPath = "Name";
+				if (localWebCamsCollection.Count > 0)
+				{
+					for (int i = 0; i < localWebCamsCollection.Count; i++)
+					{
+						if (GCSconfig.CameraName != "" && localWebCamsCollection[i].Name == GCSconfig.CameraName)
+						{
+							cameraComboBox.SelectedValue = localWebCamsCollection[i];
+							id = i;
+						}
+					}
+				}
+				if (id >= 0)
+				{
+					HudVideoSource = HUDVideoSource.Camera;
+					hudWindow.cameraPlayer.OpenCamera(localWebCamsCollection[id].MonikerString);
+					//hudWindow.StartRecord("D:\\temp\\test.mpg");
+				}
+				else
+				{
+					HudVideoSource = HUDVideoSource.NoVideo;
+				}
+				cameraComboBox.SelectionChanged += CameraComboBox_SelectionChanged;
+			}			
 			initLinkListener();
 			initFirmwareUpdater();
 		}
