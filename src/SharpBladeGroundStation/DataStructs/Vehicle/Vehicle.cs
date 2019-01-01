@@ -43,7 +43,7 @@ namespace SharpBladeGroundStation.DataStructs
 		Camera camera;
 		BatteryData battery;
 
-		CommLink link;		
+		CommLink link;
 
 		/// <summary>
 		/// 位置(pn,pe,pd)
