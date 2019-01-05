@@ -14,17 +14,26 @@ VS2015 Update3 + .Net 4.5.2
 
 ## 配置需求
 
-### 推荐配置
+### 推荐计算机配置
 
-CPU:i9 7900X
+CPU:i9 8900K
 
 GPU:GTX 2080Ti SLI
 
 RAM:64G
 
-分辨率:3840*2160
+分辨率:双屏，3840*2160
 
 高速低延迟数传
+
+高清低延迟图传
+
+### 推荐地面站硬件设备
+
+箱式地面站：
+[SBGS_Slim](https://github.com/cfrpg/SharpBladeGroundStation/tree/master/Hardware/SBGS_Slim)
+
+手持式地面站：暂无
 
 ### 已测试的最低配置
 
