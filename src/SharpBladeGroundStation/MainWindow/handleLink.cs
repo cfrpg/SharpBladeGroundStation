@@ -157,8 +157,12 @@ namespace SharpBladeGroundStation
 			logCtrlBorder.Visibility = Visibility.Visible;
 			extendLogGrid();
 			linkStateText.Text = "Replay";
-			hudWindow.cameraPlayer.Visibility = Visibility.Hidden;
-			hudWindow.logPlayer.Visibility = Visibility.Visible;
+			if(hudWindow!=null)
+			{
+				hudWindow.cameraPlayer.Visibility = Visibility.Hidden;
+				hudWindow.logPlayer.Visibility = Visibility.Visible;
+			}
+			
 		}
 
 		private void openLogBtn_Click(object sender, RoutedEventArgs e)
@@ -228,7 +232,7 @@ namespace SharpBladeGroundStation
 		private void PlayBtn_Click(object sender, RoutedEventArgs e)
 		{			
 			LogLink.Play();
-			hudWindow.logPlayer.Play();
+			hudWindow?.logPlayer.Play();
 		}
 
 		private void uploadBtn_Click(object sender, RoutedEventArgs e)

@@ -196,7 +196,7 @@ namespace SharpBladeGroundStation
 			if(args.Contains("-nohud"))
 			{				
 				cameraComboBox.IsEnabled = false;				
-				return;
+				
 			}
 			else
 			{
