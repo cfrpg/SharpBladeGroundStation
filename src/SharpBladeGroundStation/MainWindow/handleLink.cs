@@ -123,7 +123,7 @@ namespace SharpBladeGroundStation
 			{
 				logger = new CommLogger(GCSconfig.LogPath + "\\" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".sblog", link);
 				logger.Start(link.ConnectTime);
-				if (GCSconfig.AutoRecord && hudWindow.cameraPlayer.IsCameraRunning())
+				if (GCSconfig.AutoRecord && (hudWindow!=null && hudWindow.cameraPlayer.IsCameraRunning()))
 				{
 					string str = logger.Path.Substring(0, logger.Path.LastIndexOf(".") + 1) + "mpg";
 					hudWindow?.cameraPlayer.StartRecord(str);
@@ -183,8 +183,11 @@ namespace SharpBladeGroundStation
 					FileInfo fi = new FileInfo(str);
 					if (fi.Exists)
 					{
-						hudWindow.logPlayer.SetLogLink(logLink);
-						hudWindow.logPlayer.OpenFile(str);
+						if(hudWindow!=null)
+						{
+							hudWindow.logPlayer.SetLogLink(logLink);
+							hudWindow.logPlayer.OpenFile(str);
+						}						
 						videoPathText.Text = fi.Name;
 					}
 				}
@@ -199,8 +202,8 @@ namespace SharpBladeGroundStation
 		{
 			if (LogLink.ReplayState == LogReplayState.TempPause)
 			{				
-				LogLink.SetProgress(e.NewValue);
-				hudWindow.logPlayer.SetProgress();
+				LogLink.SetProgress(e.NewValue);				
+				hudWindow?.logPlayer.SetProgress();
 			}
 		}
 		private void Slider_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -221,7 +224,7 @@ namespace SharpBladeGroundStation
 		private void StopBtn_Click(object sender, RoutedEventArgs e)
 		{
 			LogLink.Stop();
-			hudWindow.logPlayer.Stop();
+			hudWindow?.logPlayer.Stop();
 		}
 
 		private void PauseBtn_Click(object sender, RoutedEventArgs e)

@@ -319,7 +319,7 @@ namespace SharpBladeGroundStation
 
 		private string getPX4FlightModeText(byte mainmode, byte submode)
 		{
-			string res = "NK";
+			string res = "";
 			switch (mainmode)
 			{
 				case 1:
@@ -374,6 +374,9 @@ namespace SharpBladeGroundStation
 					break;
 				case 9:
 					res = "SIMP";
+					break;
+				default:
+					res = "NK";
 					break;
 			}
 			return res;

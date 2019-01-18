@@ -60,7 +60,7 @@
             <ec:PathListBox x:Name="TextTick" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5">
                 <ec:PathListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" FontSize="14" Foreground="White" RenderTransformOrigin="0.5,0.5" >
+                        <TextBlock Text="{Binding}" FontSize="16" Foreground="White" RenderTransformOrigin="0.5,0.5" >
                             <TextBlock.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -90,7 +90,7 @@
 
             
             <Viewbox Height="40" Canvas.Top="131" Width="60">                
-                <TextBlock x:Name="textBlock" Text="{Binding ElementName=slider,Path=Value,StringFormat={}{0:0.0}}" Width="40" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" Margin="3,0"/>
+                <TextBlock x:Name="textBlock" Text="{Binding ElementName=slider,Path=Value,StringFormat={}{0:0.0}}" Width="40" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" Margin="3,0" FontSize="16"/>
             </Viewbox>
         </Canvas>
     </Viewbox>

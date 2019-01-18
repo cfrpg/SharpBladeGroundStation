@@ -21,8 +21,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		byte[] buffer;
 
 		LogReplayState replayState;
-
-
+		
 		LinkPackage currentPackage;
 		double currentPackageTime;
 		LinkPackageDirection currPkgDir;
@@ -263,10 +262,11 @@ namespace SharpBladeGroundStation.CommunicationLink
 			if (CurrentTime > time)
 			{
 				stream.Position = logMetadata[0].Item2;
-				currentPackageTime = -1;
+				//currentPackageTime = -1;
+				int id = findPackage(time);
+				currentPackageTime = logMetadata[id].Item1 - 1;
 			}
 			CurrentTime = time;
-
 		}
 
 		public LoadFileResualt OpenFile(string p)
@@ -333,12 +333,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			currPkgDir = (LinkPackageDirection)buffer[13];
 			len -= CommLogger.PackageHeaderSize;
 			stream.Read(buffer, 0, len);			
-			PackageParseResult res = currentPackage.ReadFromBufferWithoutCheck(buffer, len, 0);
-			//if (res != PackageParseResult.Yes)
-			//{
-
-			//}
-           
+			PackageParseResult res = currentPackage.ReadFromBufferWithoutCheck(buffer, len, 0);			
 			return true;
 		}
 
@@ -357,5 +352,4 @@ namespace SharpBladeGroundStation.CommunicationLink
 			return l;
 		}
 	}
-
 }
