@@ -35,16 +35,7 @@
                 -->
                     <hud:PFDHUD x:Name="pfdhud"  Width="500" Height="500" Canvas.Left="110" Canvas.Top="30" XScale="0.6944444" YScale="0.868055556"  Visibility="Hidden"/>
                 </Canvas>
-                <Border BorderBrush="White" BorderThickness="2"/>
-                <Border BorderBrush="White" BorderThickness="2" Grid.Row="1"/>
-                <Border BorderBrush="White" BorderThickness="2" Grid.Row="2"/>
-                <Border BorderBrush="White" BorderThickness="2" Grid.Row="3"/>
-                <Border BorderBrush="White" BorderThickness="2" Grid.Row="4"/>
-                <Border BorderBrush="White" BorderThickness="2" Grid.Column="2"/>
-                <Border BorderBrush="White" BorderThickness="2" Grid.Row="1" Grid.Column="2"/>
-                <Border BorderBrush="White" BorderThickness="2" Grid.Row="2" Grid.Column="2"/>
-                <Border BorderBrush="White" BorderThickness="2" Grid.Row="3" Grid.Column="2"/>
-                <Border BorderBrush="White" BorderThickness="2" Grid.Row="4" Grid.Column="2"/>
+              
 
 
                 <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="更新航线" VerticalAlignment="Center" FontSize="26" Foreground="White" Grid.Column="2" Margin="10,0"/>

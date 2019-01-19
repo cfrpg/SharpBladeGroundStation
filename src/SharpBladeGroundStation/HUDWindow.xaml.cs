@@ -20,6 +20,9 @@ using AForge.Video;
 using AForge.Video.DirectShow;
 using Geb.Video.FFMPEG;
 using SharpBladeGroundStation.HUD;
+using Microsoft.Xna.Framework.Input;
+
+using Keyboard = Microsoft.Xna.Framework.Input.Keyboard;
 
 
 
@@ -70,18 +73,18 @@ namespace SharpBladeGroundStation
 
 		private void Window_Initialized(object sender, EventArgs e)
 		{
-
+			
+			
 		}
-
-
-		private void Timer_Elapsed_Replay(object sender, System.Timers.ElapsedEventArgs e)
-		{
-
-		}
+			
 
 		private void Window_KeyDown(object sender, KeyEventArgs e)
 		{
+			KeyEvent(sender, e);
+		}
 
+		public void KeyEvent(object sender, KeyEventArgs e)
+		{
 			if (e.Key == Key.R)
 			{
 				navhud.SwitchAlt();
@@ -96,6 +99,10 @@ namespace SharpBladeGroundStation
 				v.Value.Visibility = Visibility.Hidden;
 			}
 			hudCollection[e.Key].Visibility = Visibility.Visible;
+		}
+
+		public void JoystickEvent(int id)
+		{
 
 		}
 	}

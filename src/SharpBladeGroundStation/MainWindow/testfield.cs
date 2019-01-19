@@ -34,7 +34,11 @@ using System.MAVLink;
 using System.IO.Ports;
 using System.Threading;
 using SharpBladeGroundStation.CommunicationLink.BootLoader;
+using SharpDX.DirectInput;
 
+using Keyboard = Microsoft.Xna.Framework.Input.Keyboard;
+using MessageBox = System.Windows.MessageBox;
+using Color = System.Windows.Media.Color;
 
 namespace SharpBladeGroundStation
 {
@@ -55,75 +59,19 @@ namespace SharpBladeGroundStation
 			//currentVehicle.GpsState.ForceSetHome();
 			//homeMarker.Position = PositionHelper.WGS84ToGCJ02(currentVehicle.GpsState.HomePosition);
 			//copyRouteData();
-			talkToBL();
+			//talkToBL();
+			testJoystick();
 		}
-
-		void talkToBL()
+		
+		void testJoystick()
 		{
-			portscanner.Stop();
-			Thread.Sleep(1000);
-			string[] existedPort = SerialPort.GetPortNames();
-			Debug.WriteLine("Existed port {0}:", existedPort.Count());
-
-			string newPortName="";
-			bool flag = false;
-			while(!flag)
-			{
-				Thread.Sleep(500);
-				string[] currPorts = SerialPort.GetPortNames();
-				Debug.WriteLine("Current port {0}:", currPorts.Count());
-				foreach(var p in currPorts)
-				{
-					flag = true;
-					newPortName = p;
-					foreach (var s in existedPort)
-					{
-						if(p==s)
-						{
-							flag = false;
-							newPortName = "";
-							break;
-						}
-					}
-					if (flag)
-						break;
-				}
-			}
-			Debug.WriteLine("Find new port:{0}", newPortName);
-
-			SerialPort port = new SerialPort(newPortName, 115200);
-			port.Open();
-			byte[] buf = new byte[1024];
-			uint val = 0;
-			buf[0] = (byte)BootloaderCmd.PROTO_GET_DEVICE;
-			buf[1] = (byte)BootloaderCmd.INFO_BL_REV;
-			buf[2] = (byte)BootloaderCmd.PROTO_EOC;
-			port.Write(buf, 0, 3);
-			Debug.WriteLine("Request BL REV");
-			while (port.BytesToRead < 4) ;
-			port.Read(buf, 0, port.BytesToRead);
-			val = BitConverter.ToUInt32(buf, 0);
-			Debug.WriteLine("BL REV:{0}", val);
-
-			buf[0] = (byte)BootloaderCmd.PROTO_GET_DEVICE;
-			buf[1] = (byte)BootloaderCmd.INFO_BOARD_ID;
-			buf[2] = (byte)BootloaderCmd.PROTO_EOC;
-			port.Write(buf, 0, 3);
-			Debug.WriteLine("Request BOARD ID");
-			while (port.BytesToRead < 4) ;
-			port.Read(buf, 0, port.BytesToRead);
-			val = BitConverter.ToUInt32(buf, 0);
-			Debug.WriteLine("BOARD ID:{0}", val);
-
-			buf[0] = (byte)BootloaderCmd.PROTO_GET_DEVICE;
-			buf[1] = (byte)BootloaderCmd.INFO_FLASH_SIZE;
-			buf[2] = (byte)BootloaderCmd.PROTO_EOC;
-			port.Write(buf, 0, 3);
-			Console.WriteLine("Request flash size");
-			while (port.BytesToRead < 4) ;
-			port.Read(buf, 0, port.BytesToRead);
-			val = BitConverter.ToUInt32(buf, 0);
-			Debug.WriteLine("Flash size:{0}", val);
+			DirectInput di = new DirectInput();
+			var all=di.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AttachedOnly);
+			Joystick js = new Joystick(di, all[0].InstanceGuid);
+			js.Acquire();
+			JoystickState jss = js.GetCurrentState();
+			MessageBox.Show(jss.ToString());
+			
 		}
 
 		ObservableCollection<WPData> datalist;

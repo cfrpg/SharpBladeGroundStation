@@ -21,6 +21,9 @@ namespace SharpBladeGroundStation.Configuration
 		bool autoLog;
 		string cameraName;
 		bool autoRecord;
+		string joystickName;
+
+		int[] joystickKeyMapping;
 
 		/// <summary>
 		/// 曲线最小采样间隔(ms)
@@ -115,8 +118,48 @@ namespace SharpBladeGroundStation.Configuration
 			}
 		}
 
+		/// <summary>
+		/// 手柄按键映射，[i]表示第i个按键对应的位置，-1表示未设置。
+		/// </summary>
+		public int[] JoystickKeyMapping
+		{
+			get { return joystickKeyMapping; }
+			set { joystickKeyMapping = value; }
+		}
+
+		/// <summary>
+		/// 使用的手柄名称
+		/// </summary>
+		public string JoystickName
+		{
+			get { return joystickName; }
+			set
+			{
+				joystickName = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JoystickName"));
+			}
+		}
+
 		public static GCSConfiguration DefaultConfig()
 		{
+			int[] jkm = new int[16];
+			//9 10 5 7 8
+			//2 4 3 1 6
+			for(int i=0;i<16;i++)
+			{
+				jkm[i] = -1;
+			}
+			jkm[8] = 0;
+			jkm[9] = 1;
+			jkm[4] = 2;
+			jkm[6] = 3;
+			jkm[7] = 4;
+
+			jkm[1] = 5;
+			jkm[3] = 6;
+			jkm[2] = 7;
+			jkm[0] = 8;
+			jkm[5] = 9;
 			return new GCSConfiguration
 			{
 				PlotTimeInterval = 100,
@@ -126,7 +169,9 @@ namespace SharpBladeGroundStation.Configuration
 				LogPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SharpBladeGS",
 				autoLog = true,
 				cameraName = "",
-				autoRecord = false
+				autoRecord = false,
+				joystickName = "",
+				JoystickKeyMapping = jkm
 			};
 		}
 	}

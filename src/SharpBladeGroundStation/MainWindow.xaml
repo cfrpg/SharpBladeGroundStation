@@ -12,7 +12,7 @@
         Title="SharpBladeGroundStation - cfrpg" Height="700" Width="1200" SizeChanged="Window_SizeChanged"
         x:Name="mainwindow"
         MinWidth="1200"
-        MinHeight="700" Closing="mainwindow_Closing" Loaded="mainwindow_Loaded">
+        MinHeight="700" Closing="mainwindow_Closing" Loaded="mainwindow_Loaded" KeyDown="mainwindow_KeyDown">
 
     <Window.Resources>
         <local:ArmConverter x:Key="arm2str"/>
@@ -294,6 +294,7 @@
                                         <RowDefinition Height="1*" MinHeight="40"/>
                                         <RowDefinition Height="1*" MinHeight="40"/>
                                         <RowDefinition Height="1*" MinHeight="40"/>
+                                        <RowDefinition Height="1*" MinHeight="40"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="100"/>
@@ -304,7 +305,7 @@
                                         <TextBlock.ToolTip>
                                             <TextBlock Text="曲线图中两个采样点最小时间间隔&#xA;增大间隔可以提高性能"/>
                                         </TextBlock.ToolTip>
-                                </TextBlock>
+                                    </TextBlock>
                                     <Slider VerticalAlignment="Center" Grid.Column="1" Maximum="2000" Minimum="100" LargeChange="100" SmallChange="100" TickFrequency="100" Value="{Binding PlotTimeInterval}" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
                                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding PlotTimeInterval}" VerticalAlignment="Center" Grid.Column="2" Margin="10,0,0,0"/>
 
@@ -312,7 +313,7 @@
                                         <TextBlock.ToolTip>
                                             <TextBlock Text="航迹显示的采样间隔&#xA;增大间隔可以提高性能,减小间隔可以使航迹更加平滑"/>
                                         </TextBlock.ToolTip>
-                                </TextBlock>
+                                    </TextBlock>
                                     <Slider VerticalAlignment="Center" Grid.Column="1" Maximum="5000" Minimum="100" LargeChange="100" SmallChange="100" TickFrequency="100" Value="{Binding CourseTimeInterval}" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="1"/>
                                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding CourseTimeInterval}" VerticalAlignment="Center" Grid.Column="2" Margin="10,0,0,0" Grid.Row="1"/>
 
@@ -320,7 +321,7 @@
                                         <TextBlock.ToolTip>
                                             <TextBlock Text="航迹中的最大点数&#xA;点数越多航迹保留的时间越长"/>
                                         </TextBlock.ToolTip>
-                                </TextBlock>
+                                    </TextBlock>
                                     <Slider VerticalAlignment="Center" Grid.Column="1" Maximum="10000" Minimum="500" LargeChange="500" SmallChange="500" TickFrequency="500" Value="{Binding MaxCoursePoint}" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Grid.Row="2"/>
                                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding MaxCoursePoint}" VerticalAlignment="Center" Grid.Column="2" Margin="10,0,0,0" Grid.Row="2"/>
                                     <TextBox x:Name="textBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="0" Grid.Row="3" TextWrapping="Wrap" Text="{Binding BaudRate}" VerticalAlignment="Center" Width="120"/>
@@ -348,6 +349,8 @@
                                         <System:String>极好</System:String>
                                         <System:String>最好</System:String>
                                     </ComboBox>
+                                    <TextBlock HorizontalAlignment="Right"  Grid.Row="7" TextWrapping="Wrap" Text="控制器" VerticalAlignment="Center" Margin="0,0,10,0"  />
+                                    <ComboBox x:Name="joystickComboBox" VerticalAlignment="Center"  Grid.Row="7" Grid.Column="1" Margin="0,0,10,0"/>
                                 </Grid>
                             </TabItem>
                             <TabItem Header="飞控更新" Height="30" >

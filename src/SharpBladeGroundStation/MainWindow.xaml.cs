@@ -28,6 +28,7 @@ using SharpBladeGroundStation.DataStructs;
 using SharpBladeGroundStation.Configuration;
 using AForge.Video.DirectShow;
 using System.MAVLink;
+using SharpDX.DirectInput;
 
 namespace SharpBladeGroundStation
 {
@@ -44,6 +45,8 @@ namespace SharpBladeGroundStation
 		HUDWindow hudWindow;
 		HUDVideoSource hudVideoSource;
 		FilterInfoCollection localWebCamsCollection;
+
+	
 		//temps
 		
 		const string messageboxTitle = "SharpBladeGroundStation";
@@ -193,10 +196,10 @@ namespace SharpBladeGroundStation
 		private void mainwindow_Loaded(object sender, RoutedEventArgs e)
 		{
 			string[] args = Environment.GetCommandLineArgs();
-			if(args.Contains("-nohud"))
+			int id;
+			if (args.Contains("-nohud"))
 			{				
-				cameraComboBox.IsEnabled = false;				
-				
+				cameraComboBox.IsEnabled = false;	
 			}
 			else
 			{
@@ -204,7 +207,7 @@ namespace SharpBladeGroundStation
 				hudWindow.Mainwin = this;
 				hudWindow.Show();
 				localWebCamsCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
-				int id = -1;
+				id = -1;
 				cameraComboBox.ItemsSource = localWebCamsCollection;
 				cameraComboBox.DisplayMemberPath = "Name";
 				if (localWebCamsCollection.Count > 0)
@@ -229,7 +232,8 @@ namespace SharpBladeGroundStation
 					HudVideoSource = HUDVideoSource.NoVideo;
 				}
 				cameraComboBox.SelectionChanged += CameraComboBox_SelectionChanged;
-			}			
+			}
+			initDxInput();
 			initLinkListener();
 			initFirmwareUpdater();
 		}
@@ -306,7 +310,10 @@ namespace SharpBladeGroundStation
 			
 		}
 
-		
+		private void mainwindow_KeyDown(object sender, KeyEventArgs e)
+		{
+			hudWindow?.KeyEvent(sender, e);
+		}
 	}
 	public enum HUDVideoSource
 	{

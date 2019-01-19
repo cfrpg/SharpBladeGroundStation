@@ -72,6 +72,14 @@
     <Reference Include="Microsoft.Expression.Drawing, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="PresentationFramework.Aero2" />
+    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpDX.DirectInput, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.DirectInput.4.2.0\lib\net45\SharpDX.DirectInput.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -141,9 +149,11 @@
     <Compile Include="HUD\NavHUDControl.xaml.cs">
       <DependentUpon>NavHUDControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MainWindow\dxInput.cs" />
     <Compile Include="MainWindow\firmwareUpdate.cs" />
     <Compile Include="MainWindow\handleLink.cs" />
     <Compile Include="MainWindow\mapOperation.cs" />
+    <Compile Include="MainWindow\MFDFunction.cs" />
     <Compile Include="MainWindow\testfield.cs" />
     <Compile Include="Map\Markers\ClickableGMapMarker.cs" />
     <Compile Include="Map\Markers\GMapElement.cs" />
@@ -252,6 +262,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="ClassDiagram1.cd" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
