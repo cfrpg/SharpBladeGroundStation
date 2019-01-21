@@ -176,6 +176,31 @@ namespace SharpBladeGroundStation.CommunicationLink
 			return p;
 		}
 
+		public static MAVLinkPackage GetCommandPackage(CommLink link, byte tgtSys, MAVLink.MAV_CMD cmd, float p1, float p2, float p3, float p4, float p5, float p6, float p7)
+		{
+			return GetCommandPackage(link, tgtSys, 0, 0, cmd, p1, p2, p3, p4, p5, p6, p7);
+		}
+
+		public static MAVLinkPackage GetCommandPackage(CommLink link,byte tgtSys,byte tgtComp,byte com, MAVLink.MAV_CMD cmd,float p1, float p2, float p3, float p4, float p5, float p6, float p7)
+		{
+			MAVLinkPackage package = new MAVLinkPackage((byte)MAVLINK_MSG_ID.COMMAND_LONG, link);
+			package.System = 255;
+			package.Component = 1;
+			package.AddData(p1);
+			package.AddData(p2);
+			package.AddData(p3);
+			package.AddData(p4);
+			package.AddData(p5);
+			package.AddData(p6);
+			package.AddData(p7);
+			package.AddData((ushort)cmd);
+			package.AddData(tgtSys);
+			package.AddData(tgtComp);
+			package.AddData(com);
+			package.SetVerify();
+			return package;
+		}
+
 		private PackageParseResult readBuffer(byte[] buff, int length, int offset, bool check,out int dataUsed)
 		{
 			int hs = 6;

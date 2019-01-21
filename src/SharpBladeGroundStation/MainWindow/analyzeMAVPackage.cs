@@ -162,35 +162,7 @@ namespace SharpBladeGroundStation
 					ushort thro = package.NextUShort();//unused
 					break;
 				case MAVLINK_MSG_ID.HIGHRES_IMU://#105
-					//time64 = package.NextUInt64();
-					//float[] sd = { 0, 0, 0 };
-					//sd[0] = package.NextSingle();
-					//sd[1] = package.NextSingle();
-					//sd[2] = package.NextSingle();
-
-					//if (time64 - dataSkipCount[package.Function] > dt)
-					//{
-					//	for (int i = 0; i < 3; i++)
-					//	{
-					//		accelGraphData[i].AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, sd[i]));
-					//	}
-					//}
-
-					//sd[0] = package.NextSingle();
-					//sd[1] = package.NextSingle();
-					//sd[2] = package.NextSingle();
-					//if (time64 - dataSkipCount[package.Function] > dt)
-					//{
-					//	for (int i = 0; i < 3; i++)
-					//	{
-					//		gyroGraphData[i].AppendAsync(this.Dispatcher, new Point(time64 / 1000000.0, sd[i]));
-					//	}
-					//	dataSkipCount[package.Function] = time64;
-					//}
-
-					//sd[0] = package.NextSingle();
-					//sd[1] = package.NextSingle();
-					//sd[2] = package.NextSingle();
+					
 					break;
 				case MAVLINK_MSG_ID.TIMESYNC://#111
 
@@ -253,21 +225,21 @@ namespace SharpBladeGroundStation
 					currentVehicle.Battery.Type = package.NextByte();
 					currentVehicle.Battery.Remaining = package.NextSByte();
 					break;
-				case MAVLINK_MSG_ID.ESTIMATOR_STATUS://#230
+				//case MAVLINK_MSG_ID.ESTIMATOR_STATUS://#230
 
-					break;
-				case MAVLINK_MSG_ID.WIND_COV://#231
+				//	break;
+				//case MAVLINK_MSG_ID.WIND_COV://#231
 
-					break;
-				case MAVLINK_MSG_ID.VIBRATION://#241
+				//	break;
+				//case MAVLINK_MSG_ID.VIBRATION://#241
 
-					break;
-				case MAVLINK_MSG_ID.EXTENDED_SYS_STATE://#245
+				//	break;
+				//case MAVLINK_MSG_ID.EXTENDED_SYS_STATE://#245
 
-					break;
-				case MAVLINK_MSG_ID.COMMAND_ACK://#77
+				//	break;
+				//case MAVLINK_MSG_ID.COMMAND_ACK://#77
 
-					break;
+				//	break;
 				case MAVLINK_MSG_ID.DISTANCE_SENSOR://#132
 					time = package.NextUInt32();
 					package.NextUShort();//min
@@ -286,19 +258,19 @@ namespace SharpBladeGroundStation
 					ushort s2 = package.NextUShort();
 					short s1 = package.NextShort();
 					Debug.WriteLine("[MAVLink]:Request mission item {0} {1}.", s2, s1);
-					missionSender.NextRequest = s2;
+					missionManager.HandleMissionRequest(s2);
 					break;
 				case MAVLINK_MSG_ID.MISSION_ACK:
 					package.NextShort();
-					missionSender.NextRequest = 32769;
+					missionManager.HandleMissionAck();
 					Debug.WriteLine("[MAVLink]:Finished.");
 					break;
-				case MAVLINK_MSG_ID.MISSION_CURRENT:
+				//case MAVLINK_MSG_ID.MISSION_CURRENT:
 
-					break;
-				case MAVLINK_MSG_ID.ATTITUDE_TARGET:
+				//	break;
+				//case MAVLINK_MSG_ID.ATTITUDE_TARGET:
 
-					break;
+				//	break;
 				case MAVLINK_MSG_ID.MISSION_COUNT:
 					Debug.WriteLine("[MAVLink]:Count {0}.", package.NextUShort());
 					MAVLinkPackage pkg = new MAVLinkPackage((byte)MAVLINK_MSG_ID.MISSION_REQUEST,currentVehicle.Link);

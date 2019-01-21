@@ -115,4 +115,10 @@ namespace SharpBladeGroundStation.CommunicationLink
 		/// </summary>
 		TempPause
 	}
+
+	public enum AckResult
+	{
+		OK,
+		Error
+	}
 }

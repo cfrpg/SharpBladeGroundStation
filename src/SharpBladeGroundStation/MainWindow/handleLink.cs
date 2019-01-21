@@ -24,7 +24,7 @@ namespace SharpBladeGroundStation
 		CommLogger logger;
 		LogLink logLink;
 
-		MissionSender missionSender;
+		//MissionSender missionSender;
 		bool linkAvilable;
 
 		bool isReplay;
@@ -100,8 +100,8 @@ namespace SharpBladeGroundStation
 
 			connectVehicle(e.Link); 
 
-			missionSender = new MissionSender(currentVehicle);
-			missionSender.OnFinished += MissionSender_OnFinished;
+			//missionSender = new MissionSender(currentVehicle);
+			//missionSender.OnFinished += MissionSender_OnFinished;
 
 		}
 
@@ -136,13 +136,7 @@ namespace SharpBladeGroundStation
 			currentVehicle.Link.CloseLink();
 			linkAvilable = false;
 		}
-
-		private void MissionSender_OnFinished()
-		{
-			this.Dispatcher.BeginInvoke(new ThreadStart(delegate { MessageBox.Show("上传成功！"); }));
-			missionSender.State = MissionSenderState.Idle;
-		}
-		
+			
 		private void portMenuItem_Click(object sender, RoutedEventArgs e)
 		{
 			portscanner.Start();
@@ -241,13 +235,9 @@ namespace SharpBladeGroundStation
 		private void uploadBtn_Click(object sender, RoutedEventArgs e)
 		{
 			//MessageBox.Show("这是没有实装的上传航线", "orz");
-			if (missionSender != null && missionSender.State == MissionSenderState.Idle)
+			if(!missionManager.StartSendMission())
 			{
-				missionSender.StartSendMission(newroute);
-			}
-			else
-			{
-				MessageBox.Show("未与飞控连接或线路正忙", "orz");
+				MessageBox.Show("未与飞控连接或串口正忙.");
 			}
 		}
 

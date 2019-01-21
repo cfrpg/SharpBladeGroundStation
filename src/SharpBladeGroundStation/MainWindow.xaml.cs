@@ -74,9 +74,10 @@ namespace SharpBladeGroundStation
 			InitializeComponent();
 			initControls();
 			initConfig();
+			currentVehicle = new Vehicle(0);
 			initGmap();
 			//initLinkListener();
-			currentVehicle = new Vehicle(0);
+			
 			pfd.DataContext = currentVehicle.FlightState;
 			//gpsData = new GPSData();
 			vdopText.DataContext = currentVehicle.GpsState;
@@ -157,7 +158,7 @@ namespace SharpBladeGroundStation
 		{
 			if (MessageBox.Show("清空所有航线?", messageboxTitle, MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes)
 			{
-				newroute.Clear();
+				missionManager.LocalMission.Clear();
 			}
 		}
 

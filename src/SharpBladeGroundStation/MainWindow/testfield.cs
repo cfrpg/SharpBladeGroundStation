@@ -79,7 +79,7 @@ namespace SharpBladeGroundStation
 		{
 			datalist = new ObservableCollection<WPData>();
 			int i = 0;
-			foreach(var m in newroute.Markers)
+			foreach(var m in missionManager.LocalMission.Markers)
 			{
 				datalist.Add(new WPData() { Name = "航点 " + i.ToString(), Lat = m.Position.Lat, Lon = m.Position.Lng, Alt = m.Altitude });
 				i++;

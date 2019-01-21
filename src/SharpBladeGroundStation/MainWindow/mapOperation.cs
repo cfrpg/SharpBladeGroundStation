@@ -10,6 +10,7 @@ using SharpBladeGroundStation.Map;
 using SharpBladeGroundStation.Map.Markers;
 using SharpBladeGroundStation.Configuration;
 using SharpBladeGroundStation.DataStructs;
+using SharpBladeGroundStation.CommunicationLink;
 using System.Threading;
 
 namespace SharpBladeGroundStation
@@ -23,8 +24,10 @@ namespace SharpBladeGroundStation
 
 		PointLatLng positionWhenTouch;
 
-		MapRouteData newroute;
+		
 		MapRouteData flightRoute;
+
+		MissionManager missionManager;
 
 		private void initGmap()
 		{
@@ -67,16 +70,26 @@ namespace SharpBladeGroundStation
 			gmap.MouseLeftButtonUp += Gmap_MouseLeftButtonUp;
 			gmap.OnMapZoomChanged += Gmap_OnMapZoomChanged;
 
+			MapRouteData newroute;
 			newroute = new MapRouteData(gmap, 1000, true, true);
 			newroute.LeftMouseButtonUp += Wp_MouseLeftButtonUp;
 			newroute.RightMouseButtonDown += Wp_MouseRightButtonDown;
 			newroute.MouseWheel += Wp_MouseWheel;
+			missionManager = new MissionManager(currentVehicle);
+			missionManager.LocalMission = newroute;
+			missionManager.OnFinished += MissionManager_OnFinished;
+
 			flightRoute = new MapRouteData(gmap);
 			Gmap_OnMapZoomChanged();
 			DispatcherTimer waitMap = new DispatcherTimer();
 			waitMap.Interval = new TimeSpan(0, 0, 0, 0, 500);
 			waitMap.Tick += WaitMap_Tick;
 			waitMap.Start();
+		}
+
+		private void MissionManager_OnFinished()
+		{
+			this.Dispatcher.BeginInvoke(new ThreadStart(delegate { MessageBox.Show("上传成功！"); }));
 		}
 
 		private void WaitMap_Tick(object sender, EventArgs e)
@@ -109,8 +122,8 @@ namespace SharpBladeGroundStation
 			{
 				Point p = e.GetPosition(gmap);
 				GMapMarker m = new GMapMarker(gmap.FromLocalToLatLng((int)(p.X), (int)(p.Y)));
-				WayPointMarker wp = new WayPointMarker(newroute, m, (newroute.Markers.Count + 1).ToString(), string.Format("Lat {0}\nLon {1}\nAlt {2} m", m.Position.Lat, m.Position.Lng, 50));
-				newroute.AddWaypoint(wp, m);
+				WayPointMarker wp = new WayPointMarker(missionManager.LocalMission, m, (missionManager.LocalMission.Markers.Count + 1).ToString(), string.Format("Lat {0}\nLon {1}\nAlt {2} m", m.Position.Lat, m.Position.Lng, 50));
+				missionManager.LocalMission.AddWaypoint(wp, m);
 
 			}
 			if (!area.IsEmpty)
@@ -147,7 +160,7 @@ namespace SharpBladeGroundStation
 		{
 			WayPointMarker wp = sender as WayPointMarker;
 			wp.LabelText = string.Format("Lat {0}\nLon {1}\nAlt {2} m", wp.Position.Lat, wp.Position.Lng, wp.Altitude);
-			newroute.RefreshWayPoint(wp);
+			missionManager.LocalMission.RefreshWayPoint(wp);
 			e.Handled = true;
 		}
 
@@ -156,14 +169,14 @@ namespace SharpBladeGroundStation
 		{
 			WayPointMarker wp = sender as WayPointMarker;
 			int cnt = 1;
-			foreach (GMapElement ge in newroute.Markers)
+			foreach (GMapElement ge in missionManager.LocalMission.Markers)
 			{
 				if (ge == wp)
 					continue;
 				((WayPointMarker)ge).MarkerText = cnt.ToString();
 				cnt++;
 			}
-			newroute.RemoveWayPoint(wp);
+			missionManager.LocalMission.RemoveWayPoint(wp);
 			e.Handled = true;
 		}
 
@@ -175,7 +188,7 @@ namespace SharpBladeGroundStation
 			else
 				wp.Altitude -= 0.5f;
 			wp.LabelText = string.Format("Lat {0}\nLon {1}\nAlt {2} m", wp.Position.Lat, wp.Position.Lng, wp.Altitude);
-			newroute.RefreshWayPoint(wp);
+			missionManager.LocalMission.RefreshWayPoint(wp);
 			e.Handled = true;
 
 		}
