@@ -123,6 +123,9 @@
     <Compile Include="Controls\VideoLogPlayer.xaml.cs">
       <DependentUpon>VideoLogPlayer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\WarningLight.xaml.cs">
+      <DependentUpon>WarningLight.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters.cs" />
     <Compile Include="DataStructs\BatteryData.cs" />
     <Compile Include="DataStructs\GPSData.cs" />
@@ -133,6 +136,7 @@
     <Compile Include="DataStructs\Vehicle\Camera.cs" />
     <Compile Include="DataStructs\Vehicle\FirmwareImage.cs" />
     <Compile Include="DataStructs\Vehicle\Vehicle.cs" />
+    <Compile Include="DataStructs\Vehicle\VehicleSystemStatus.cs" />
     <Compile Include="HUDWindow.xaml.cs">
       <DependentUpon>HUDWindow.xaml</DependentUpon>
     </Compile>
@@ -186,6 +190,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\VideoLogPlayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\WarningLight.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

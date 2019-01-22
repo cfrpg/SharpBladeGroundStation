@@ -6,6 +6,7 @@ using System.Windows.Threading;
 using System.Threading;
 using System.Diagnostics;
 using System.IO;
+using System.Timers;
 using GMap.NET;
 using SharpBladeGroundStation.CommunicationLink;
 using SharpBladeGroundStation.DataStructs;
@@ -14,6 +15,7 @@ using System.MAVLink;
 using System.Windows.Input;
 using Microsoft.Xna.Framework;
 using Point = System.Windows.Point;
+using Timer = System.Timers.Timer;
 
 namespace SharpBladeGroundStation
 {
@@ -29,6 +31,8 @@ namespace SharpBladeGroundStation
 
 		bool isReplay;
 
+		Timer heartbeatListener;
+
 		bool[] packageFlags;
  		public LogLink LogLink
 		{
@@ -37,6 +41,9 @@ namespace SharpBladeGroundStation
 
 		void initLinkListener()
 		{
+			heartbeatListener = new Timer(1000);
+			heartbeatListener.Elapsed += HeartbeatListener_Elapsed;
+			heartbeatListener.Start();
 			packageFlags = new bool[255];
 			Array.Clear(packageFlags, 0, packageFlags.Length);
 			linkAvilable = false;
@@ -54,6 +61,23 @@ namespace SharpBladeGroundStation
 			logPlayerCtrl.DataContext = logLink;
 			logLink.Initialize();
 			isReplay = false;
+		}
+
+		private void HeartbeatListener_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			if (!linkAvilable)
+				return;
+			MAVLinkPackage pkg = new MAVLinkPackage((int)MAVLINK_MSG_ID.HEARTBEAT, currentVehicle.Link);
+			pkg.System = 255;
+			pkg.Component = 1;
+			pkg.AddData((int)0);
+			pkg.AddData((byte)6);
+			pkg.AddData((byte)0);
+			pkg.AddData((byte)1);
+			pkg.AddData((byte)3);
+			pkg.AddData(currentVehicle.LinkVersion);
+			pkg.SetVerify();
+			currentVehicle.Link.SendPackage(pkg);
 		}
 
 		void linkListenerWorker()

@@ -29,6 +29,7 @@ using SharpBladeGroundStation.Configuration;
 using AForge.Video.DirectShow;
 using System.MAVLink;
 using SharpDX.DirectInput;
+using System.Speech.Synthesis;
 
 namespace SharpBladeGroundStation
 {
@@ -46,7 +47,7 @@ namespace SharpBladeGroundStation
 		HUDVideoSource hudVideoSource;
 		FilterInfoCollection localWebCamsCollection;
 
-	
+		SpeechSynthesizer mainSpeech;
 		//temps
 		
 		const string messageboxTitle = "SharpBladeGroundStation";
@@ -84,8 +85,11 @@ namespace SharpBladeGroundStation
 			hdopText.DataContext = currentVehicle.GpsState;
 			gpsStateText.DataContext = currentVehicle.GpsState;
 			battText.DataContext = currentVehicle.Battery;
-			flightDataGrid.DataContext = currentVehicle.FlightState;		
+			flightDataGrid.DataContext = currentVehicle.FlightState;
+			statusGrid.DataContext = currentVehicle.SubsystemStatus;
 
+			mainSpeech = new SpeechSynthesizer();
+			mainSpeech.Rate = 0;
 			dataSkipCount = new Dictionary<int, ulong>();
 			for (int i = 0; i < 255; i++)
 			{

@@ -51,6 +51,10 @@ namespace SharpBladeGroundStation.DataStructs
 
 		CommLink link;
 
+		VehicleSystemStatus subsystemStatus;
+
+		byte linkVersion;
+
 		/// <summary>
 		/// 位置(pn,pe,pd)
 		/// </summary>
@@ -262,7 +266,7 @@ namespace SharpBladeGroundStation.DataStructs
 			set
 			{
 				battery = value;
-				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Battery"));
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Battery"));				
 			}
 		}
 
@@ -319,7 +323,7 @@ namespace SharpBladeGroundStation.DataStructs
 			{
 				baseMode = value;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BaseMode"));
-				IsArmed = (baseMode & MAVLink.MAV_MODE_FLAG.MANUAL_INPUT_ENABLED) != 0;
+				IsArmed = (baseMode & MAVLink.MAV_MODE_FLAG.SAFETY_ARMED) != 0;
 			}
 		}
 
@@ -330,6 +334,29 @@ namespace SharpBladeGroundStation.DataStructs
 			{
 				systemStatus = value;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SystemStatus"));
+			}
+		}
+
+		public VehicleSystemStatus SubsystemStatus
+		{
+			get { return subsystemStatus; }
+			set
+			{
+				subsystemStatus = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SubsystemStatus"));
+			}
+		}
+
+		public byte LinkVersion
+		{
+			get
+			{
+				return linkVersion;
+			}
+
+			set
+			{
+				linkVersion = value;
 			}
 		}
 
@@ -353,6 +380,7 @@ namespace SharpBladeGroundStation.DataStructs
 			altitude = 0;
 			flightModeText = "";
 			isArmed = false;
+			subsystemStatus = new VehicleSystemStatus();
 
 			flightState = FlightState.Zero;
 			battery = new BatteryData();
@@ -368,6 +396,39 @@ namespace SharpBladeGroundStation.DataStructs
 			camera.P1 = 0.002723499733555f;
 			camera.P2 = 0.003389955079601f;
 			camera.ScreenSize = new Vector2(720, 576);
+		}
+
+		public void HandleMessage(int lv,string str)
+		{
+			if (lv <= 2)
+				lv = 4;
+			else if (lv <= 3)
+				lv = 3;
+			else if (lv == 4)
+				lv = 2;
+			else
+				lv = 1;
+			string upper = str.ToUpper();
+			if(upper.Contains("ACCEL"))
+			{
+				subsystemStatus.Accelerometer = lv;
+			}
+			if (upper.Contains("GYRO"))
+			{
+				subsystemStatus.Gyroscope = lv;
+			}
+			if (upper.Contains("MAG"))
+			{
+				subsystemStatus.Compass = lv;
+			}
+			if (upper.Contains("EKF"))
+			{
+				subsystemStatus.Ekf = lv;
+			}
+			if (upper.Contains("GPS"))
+			{
+				subsystemStatus.Gps = lv;
+			}
 		}
 	}
 }

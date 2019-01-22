@@ -46,7 +46,7 @@ namespace SharpBladeGroundStation
 	{
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
-			noMagic();
+			//noMagic();
 			//replayLog();
 			//triggerCamera();
 			// testCamera();
@@ -57,6 +57,7 @@ namespace SharpBladeGroundStation
 			//copyRouteData();
 			//talkToBL();
 			//testJoystick();
+			
 		}
 		
 		

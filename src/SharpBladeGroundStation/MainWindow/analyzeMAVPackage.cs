@@ -35,6 +35,11 @@ namespace SharpBladeGroundStation
 					package.NextShort();
 					byte mainmode = package.NextByte();
 					byte submode = package.NextByte();
+					currentVehicle.Type = (MAVLink.MAV_TYPE)package.NextByte();
+					currentVehicle.Autopilot=(MAVLink.MAV_AUTOPILOT)package.NextByte();
+					currentVehicle.BaseMode=(MAVLink.MAV_MODE_FLAG)package.NextByte();
+					currentVehicle.SystemStatus=(MAVLink.MAV_STATE)package.NextByte();
+					currentVehicle.LinkVersion = package.NextByte();
 					currentVehicle.FlightModeText = getPX4FlightModeText(mainmode, submode);
 					break;
 				case MAVLINK_MSG_ID.SYS_STATUS://#1
@@ -224,6 +229,14 @@ namespace SharpBladeGroundStation
 					currentVehicle.Battery.Function = package.NextByte();
 					currentVehicle.Battery.Type = package.NextByte();
 					currentVehicle.Battery.Remaining = package.NextSByte();
+					if (currentVehicle.Battery.Remaining < 20)
+						currentVehicle.SubsystemStatus.Battery = 2;
+					else if (currentVehicle.Battery.Remaining < 10)
+						currentVehicle.SubsystemStatus.Battery = 3;
+					else if (currentVehicle.Battery.Remaining < 5)
+						currentVehicle.SubsystemStatus.Battery = 4;
+					else
+						currentVehicle.SubsystemStatus.Battery = 0;
 					break;
 				case MAVLINK_MSG_ID.ESTIMATOR_STATUS://#230
 
@@ -244,6 +257,21 @@ namespace SharpBladeGroundStation
 					break;
 
 				case MAVLINK_MSG_ID.ATTITUDE_TARGET:
+					break;
+				case MAVLINK_MSG_ID.RADIO_STATUS:
+					package.NextInt32();
+					byte lrssi = package.NextByte();
+					byte rrssi = package.NextByte();
+					//Debug.WriteLine("[mavlink]:RSSI {0}", lrssi / 1.9 - 127);
+					if (lrssi < 20)
+						currentVehicle.SubsystemStatus.Telemetey = 4;
+					if (lrssi < 40)
+						currentVehicle.SubsystemStatus.Telemetey = 3;
+					if (lrssi < 60)
+						currentVehicle.SubsystemStatus.Telemetey = 2;
+					if (lrssi < 80)
+						currentVehicle.SubsystemStatus.Telemetey = 1;
+
 					break;
 				case MAVLINK_MSG_ID.DISTANCE_SENSOR://#132
 					time = package.NextUInt32();
@@ -269,13 +297,7 @@ namespace SharpBladeGroundStation
 					package.NextShort();
 					missionManager.HandleMissionAck();
 					Debug.WriteLine("[MAVLink]:Finished.");
-					break;
-				//case MAVLINK_MSG_ID.MISSION_CURRENT:
-
-				//	break;
-				//case MAVLINK_MSG_ID.ATTITUDE_TARGET:
-
-				//	break;
+					break;				
 				case MAVLINK_MSG_ID.MISSION_COUNT:
 					Debug.WriteLine("[MAVLink]:Count {0}.", package.NextUShort());
 					MAVLinkPackage pkg = new MAVLinkPackage((byte)MAVLINK_MSG_ID.MISSION_REQUEST,currentVehicle.Link);
@@ -289,7 +311,11 @@ namespace SharpBladeGroundStation
 					currentVehicle.Link.SendPackage(pkg);
 					break;
 				case MAVLINK_MSG_ID.STATUSTEXT:
-
+					byte sev = package.NextByte();
+					string str = package.NextASCIIString(50);
+					a1 = () => { currentVehicle.HandleMessage(sev,str); mainSpeech.SpeakAsync(str); };
+					Dispatcher.BeginInvoke(a1);
+					Debug.WriteLine("[MAVLink]:{0}.", str);
 					break;
 				default:
 					Debug.WriteLine("[MAVLink]:Unhandled package {0}.", package.Function);

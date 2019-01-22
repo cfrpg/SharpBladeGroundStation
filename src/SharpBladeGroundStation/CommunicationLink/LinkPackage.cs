@@ -369,6 +369,19 @@ namespace SharpBladeGroundStation.CommunicationLink
 				throw new IndexOutOfRangeException("No enough data to read.");
 			}
 		}
+
+		public string NextASCIIString(int n)
+		{
+			if (cursor + n <= DataSize)
+			{
+				cursor += n;
+				return Encoding.ASCII.GetString(buffer, cursor + HeaderSize - n, n);
+			}
+			else
+			{
+				throw new IndexOutOfRangeException("No enough data to read.");
+			}
+		}
 		#endregion
 
 		public virtual void SetVerify()

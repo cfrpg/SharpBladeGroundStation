@@ -124,8 +124,7 @@
                 -->
             </Viewbox>
             <Viewbox>
-
-                <GroupBox x:Name="groupBox4" Header="飞行数据" Width="300" Height="240" BorderBrush="Black" FontSize="14">
+                <GroupBox x:Name="groupBox4" Header="飞行数据" Width="300" Height="160" BorderBrush="Black" FontSize="14">
                     <Grid x:Name="flightDataGrid">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
@@ -136,9 +135,7 @@
                             <RowDefinition Height="0.5*"/>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="0.5*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="0.5*"/>
-                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>                           
                         </Grid.RowDefinitions>
                         <TextBlock x:Name="textBlock12" HorizontalAlignment="Center" Margin="0" Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="飞行模式" VerticalAlignment="Center" FontSize="14"/>
                         <TextBlock x:Name="flyModeText" Margin="0" Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="{Binding FlightModeText}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
@@ -156,22 +153,38 @@
                         <TextBlock x:Name="pramText3" Margin="0" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" Text="{Binding GroundSpeed, StringFormat={}{0:0.0}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
                         <TextBlock x:Name="textBlock17" HorizontalAlignment="Center" Margin="0" Grid.Row="2" Grid.Column="2" TextWrapping="Wrap" Text="空速(m/s)" VerticalAlignment="Center" FontSize="14"/>
                         <TextBlock x:Name="pramText4" Margin="0" Grid.Row="3" Grid.Column="2" TextWrapping="Wrap" Text="{Binding AirSpeed, StringFormat={}{0:0.00}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
-
-
-                        <TextBlock x:Name="textBlock9" HorizontalAlignment="Center" Margin="0" Grid.Row="4" TextWrapping="Wrap" Text="俯仰角(deg)" VerticalAlignment="Center" FontSize="14"/>
-                        <TextBlock x:Name="pitchText" Margin="0" Grid.Row="5" Grid.Column="0" TextWrapping="Wrap" Text="{Binding Pitch, StringFormat={}{0:0.00}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
-                        <TextBlock x:Name="textBlock10" HorizontalAlignment="Center" Margin="0" Grid.Row="4" Grid.Column="1" TextWrapping="Wrap" Text="滚转角(deg)" VerticalAlignment="Center" FontSize="14"/>
-                        <TextBlock x:Name="rollText" Margin="0" Grid.Row="5" Grid.Column="1" TextWrapping="Wrap" Text="{Binding Roll, StringFormat={}{0:0.00}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
-                        <TextBlock x:Name="textBlock11" HorizontalAlignment="Center" Margin="0" Grid.Row="4" Grid.Column="2" TextWrapping="Wrap" Text="航向角(deg)" VerticalAlignment="Center" FontSize="14"/>
-                        <TextBlock x:Name="yawText" Margin="0" Grid.Row="5" Grid.Column="2" TextWrapping="Wrap" Text="{Binding Heading, StringFormat={}{0:0.00}}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="26" />
-
+                       
                     </Grid>
                 </GroupBox>
-
             </Viewbox>
-            <Button x:Name="button" Content="启动黑科技" HorizontalAlignment="Left" Height="38"  VerticalAlignment="Bottom" Width="97" Click="button_Click" Margin="20,20,0,0"/>
+            <Viewbox Margin="2">
+                <Border Width="300" Height="200" BorderBrush="Black" BorderThickness="1" CornerRadius="3">
+                    <Grid x:Name="statusGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>                           
+                            <RowDefinition Height="1*"/>                           
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <local:WarningLight Text="加速度计" Level="{Binding Accelerometer}" Grid.Row="0" Grid.Column="0" Margin="2"/>
+                        <local:WarningLight Text="陀螺仪" Level="{Binding Gyroscope}" Grid.Row="0" Grid.Column="1" Margin="2"/>
+                        <local:WarningLight Text="磁罗盘" Level="{Binding Compass}" Grid.Row="0" Grid.Column="2" Margin="2"/>
+                        <local:WarningLight Text="数据链" Level="{Binding Telemetey}" Grid.Row="1" Grid.Column="0" Margin="2"/>
+                        <local:WarningLight Text="遥控" Level="{Binding Radio}" Grid.Row="1" Grid.Column="1" Margin="2"/>
+                        <local:WarningLight Text="GPS" Level="{Binding Gps}" Grid.Row="1" Grid.Column="2" Margin="2"/>
+                        <local:WarningLight Text="空速管" Level="{Binding Airspeed}" Grid.Row="2" Grid.Column="0" Margin="2"/>
+                        <local:WarningLight Text="电池" Level="{Binding Battery}" Grid.Row="2" Grid.Column="1" Margin="2"/>
+                        <local:WarningLight Text="控制器" Level="{Binding Ekf}" Grid.Row="2" Grid.Column="2" Margin="2"/>
+                    </Grid>
+
+                </Border>
+            </Viewbox>
         </StackPanel>
-        
+
         <Grid Grid.Column="2" Background="#FFB4B4B4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
@@ -375,6 +388,7 @@
                                 </Grid>
                             </TabItem>
                         </TabControl>
+                        <Button x:Name="button" Content="启动黑科技" HorizontalAlignment="Left" Height="38"  VerticalAlignment="Bottom" Width="97" Click="button_Click" Margin="85,0,0,22" Grid.Row="1"/>
                     </Grid>
                 </TabItem>
 
