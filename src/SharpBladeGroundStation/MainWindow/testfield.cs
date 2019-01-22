@@ -46,11 +46,7 @@ namespace SharpBladeGroundStation
 	{
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
-			//MessageBox.Show("Only for developers.", "Orz");
-			//SpeechSynthesizer ss = new SpeechSynthesizer();
-			//ss.Rate = 0;
-			//ss.Speak("鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，启动失败。");
-			//MessageBox.Show("黑科技启动失败", "Orz");
+			noMagic();
 			//replayLog();
 			//triggerCamera();
 			// testCamera();
@@ -60,8 +56,9 @@ namespace SharpBladeGroundStation
 			//homeMarker.Position = PositionHelper.WGS84ToGCJ02(currentVehicle.GpsState.HomePosition);
 			//copyRouteData();
 			//talkToBL();
-			testJoystick();
+			//testJoystick();
 		}
+		
 		
 		void testJoystick()
 		{
@@ -222,6 +219,15 @@ namespace SharpBladeGroundStation
 		{
 			const double radToDegFactor = 180 / Math.PI;
 			return radians * radToDegFactor;
+		}
+
+		void noMagic()
+		{
+			MessageBox.Show("Only for developers.", "Orz");
+			SpeechSynthesizer ss = new SpeechSynthesizer();
+			ss.Rate = 0;
+			ss.Speak("鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，启动失败。");
+			MessageBox.Show("黑科技启动失败", "Orz");
 		}
 	}
 

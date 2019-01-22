@@ -225,21 +225,26 @@ namespace SharpBladeGroundStation
 					currentVehicle.Battery.Type = package.NextByte();
 					currentVehicle.Battery.Remaining = package.NextSByte();
 					break;
-				//case MAVLINK_MSG_ID.ESTIMATOR_STATUS://#230
+				case MAVLINK_MSG_ID.ESTIMATOR_STATUS://#230
 
-				//	break;
-				//case MAVLINK_MSG_ID.WIND_COV://#231
+					break;
+				case MAVLINK_MSG_ID.WIND_COV://#231
 
-				//	break;
-				//case MAVLINK_MSG_ID.VIBRATION://#241
+					break;
+				case MAVLINK_MSG_ID.VIBRATION://#241
 
-				//	break;
-				//case MAVLINK_MSG_ID.EXTENDED_SYS_STATE://#245
+					break;
+				case MAVLINK_MSG_ID.EXTENDED_SYS_STATE://#245
 
-				//	break;
-				//case MAVLINK_MSG_ID.COMMAND_ACK://#77
+					break;
+				case MAVLINK_MSG_ID.COMMAND_ACK://#77
 
-				//	break;
+					break;
+				case MAVLINK_MSG_ID.MISSION_CURRENT:
+					break;
+
+				case MAVLINK_MSG_ID.ATTITUDE_TARGET:
+					break;
 				case MAVLINK_MSG_ID.DISTANCE_SENSOR://#132
 					time = package.NextUInt32();
 					package.NextUShort();//min
@@ -282,6 +287,9 @@ namespace SharpBladeGroundStation
 					pkg.AddData((byte)190);
 					pkg.SetVerify();
 					currentVehicle.Link.SendPackage(pkg);
+					break;
+				case MAVLINK_MSG_ID.STATUSTEXT:
+
 					break;
 				default:
 					Debug.WriteLine("[MAVLink]:Unhandled package {0}.", package.Function);

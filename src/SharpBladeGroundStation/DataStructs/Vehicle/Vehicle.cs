@@ -8,6 +8,7 @@ using System.ComponentModel;
 using SharpBladeGroundStation.CommunicationLink;
 using Microsoft.Xna.Framework;
 using FlightDisplay;
+using System.MAVLink;
 
 using Matrix = Microsoft.Xna.Framework.Matrix;
 
@@ -33,6 +34,11 @@ namespace SharpBladeGroundStation.DataStructs
 		float climbRate;
 		float altitude;
 		float relativeAltitude;
+
+		MAVLink.MAV_TYPE type;
+		MAVLink.MAV_AUTOPILOT autopilot;
+		MAVLink.MAV_MODE_FLAG baseMode;
+		MAVLink.MAV_STATE systemStatus;
 
 		float distanceSensor;
 
@@ -283,6 +289,47 @@ namespace SharpBladeGroundStation.DataStructs
 			{
 				distanceSensor = value;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DistanceSensor"));
+			}
+		}
+
+		public MAVLink.MAV_TYPE Type
+		{
+			get { return type; }
+			set
+			{
+				type = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Type"));
+			}
+		}
+
+		public MAVLink.MAV_AUTOPILOT Autopilot
+		{
+			get { return autopilot; }
+			set
+			{
+				autopilot = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Autopilot"));
+			}
+		}
+
+		public MAVLink.MAV_MODE_FLAG BaseMode
+		{
+			get { return baseMode; }
+			set
+			{
+				baseMode = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BaseMode"));
+				IsArmed = (baseMode & MAVLink.MAV_MODE_FLAG.MANUAL_INPUT_ENABLED) != 0;
+			}
+		}
+
+		public MAVLink.MAV_STATE SystemStatus
+		{
+			get { return systemStatus; }
+			set
+			{
+				systemStatus = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SystemStatus"));
 			}
 		}
 

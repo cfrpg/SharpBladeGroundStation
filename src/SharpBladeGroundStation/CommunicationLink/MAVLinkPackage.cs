@@ -292,5 +292,42 @@ namespace SharpBladeGroundStation.CommunicationLink
 			}
 			return PackageParseResult.Yes;
 		}
+
+		public override bool StartRead()
+		{
+			return base.StartRead();
+		}
+		public override void SetVerify()
+		{
+			if (version == 1)
+			{
+				buffer[0] = 0xFE;
+				buffer[1] = (byte)(dataSize & 0xFF);
+				buffer[2] = sequence;
+				buffer[3] = system;
+				buffer[4] = component;
+				buffer[5] = (byte)function;
+				ushort crc = MavlinkCRC.Calculate(buffer, dataSize + HeaderSize);
+				crc = MavlinkCRC.Accumulate(MAVLink.MAVLINK_MESSAGE_INFOS.GetMessageInfo((uint)function).crc, crc);
+				AddData(crc);
+			}
+			if (version == 2)
+			{
+				buffer[0] = 0xFD;   //magic
+				buffer[1] = (byte)(dataSize & 0xFF);    //len
+				buffer[2] = incompatibility;    //incompatibility
+				buffer[3] = compatibility;
+				buffer[4] = sequence;
+				buffer[5] = system;
+				buffer[6] = component;
+				buffer[7] = (byte)(function & 0xFF);
+				buffer[8] = (byte)((function >> 8) & 0xFF);
+				buffer[9] = (byte)((function >> 16) & 0xFF);
+				ushort crc = MavlinkCRC.Calculate(buffer, dataSize + HeaderSize);
+				crc = MavlinkCRC.Accumulate(MAVLink.MAVLINK_MESSAGE_INFOS.GetMessageInfo((uint)function).crc, crc);
+				AddData(crc);
+			}
+
+		}
 	}
 }
