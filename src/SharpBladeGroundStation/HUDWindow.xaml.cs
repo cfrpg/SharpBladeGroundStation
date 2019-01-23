@@ -103,8 +103,9 @@ namespace SharpBladeGroundStation
 
 		public void JoystickEvent(int id)
 		{
-
-		}
+            if(id==0)
+                navhud.SwitchAlt();
+        }
 	}
 
 

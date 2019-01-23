@@ -8,7 +8,7 @@ using System.ComponentModel;
 using SharpBladeGroundStation.DataStructs;
 using SharpBladeGroundStation.Map.Markers;
 using System.MAVLink;
-
+using SharpBladeGroundStation.Map;
 
 namespace SharpBladeGroundStation.CommunicationLink
 {
@@ -73,12 +73,14 @@ namespace SharpBladeGroundStation.CommunicationLink
 			for (int i = 0; i < localMission.Markers.Count; i++)
 			{
 				MAVLinkPackage p = new MAVLinkPackage((byte)MAVLINK_MSG_ID.MISSION_ITEM, target.Link);
+                
+                var wp= PositionHelper.GCJ02ToWGS84(localMission.Markers[i].Position);
 				p.AddData(0f);  //p1
 				p.AddData(0.5f);
 				p.AddData(0f);
 				p.AddData(float.NaN);
-				p.AddData((float)localMission.Markers[i].Position.Lat);
-				p.AddData((float)localMission.Markers[i].Position.Lng);
+				p.AddData((float)wp.Lat);
+				p.AddData((float)wp.Lng);
 				p.AddData((float)localMission.Markers[i].Altitude); //p7
 
 				p.AddData((ushort)i);//seq

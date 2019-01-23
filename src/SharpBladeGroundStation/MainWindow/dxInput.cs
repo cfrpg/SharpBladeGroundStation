@@ -94,7 +94,7 @@ namespace SharpBladeGroundStation
 
 		public void JoystickEvent(int id)
 		{
-			MessageBox.Show(id.ToString());
+			
 		}
 
 		private void JoystickComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
