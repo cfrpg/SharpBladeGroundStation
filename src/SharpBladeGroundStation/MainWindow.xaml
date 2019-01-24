@@ -286,7 +286,9 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="参数" Height="30">
-                    <Grid Background="#FFE5E5E5"/>
+                    <Grid Background="#FFE5E5E5">  
+                        
+                    </Grid>
                 </TabItem>
                 <TabItem Header="设置" Height="30">
                     <Grid Background="#FFE5E5E5">
