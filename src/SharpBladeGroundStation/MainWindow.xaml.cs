@@ -87,6 +87,7 @@ namespace SharpBladeGroundStation
 			battText.DataContext = currentVehicle.Battery;
 			flightDataGrid.DataContext = currentVehicle.FlightState;
 			statusGrid.DataContext = currentVehicle.SubsystemStatus;
+			telemText.DataContext = currentVehicle;
 
 			mainSpeech = new SpeechSynthesizer();
 			mainSpeech.Rate = 0;
@@ -177,7 +178,7 @@ namespace SharpBladeGroundStation
 			{
 				mapCenterConfig = MapCenterPositionConfig.FollowUAV;
 				followBtn.Background = new SolidColorBrush(Color.FromArgb(204, 255, 20, 20));
-
+				gmap.Position = uavMarker.Position;
 			}
 			else
 			{

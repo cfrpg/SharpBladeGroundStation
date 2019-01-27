@@ -34,6 +34,8 @@ namespace SharpBladeGroundStation.DataStructs
 		float climbRate;
 		float altitude;
 		float relativeAltitude;
+		float telemetryRSSI;
+		float telemetryPercentage;
 
 		MAVLink.MAV_TYPE type;
 		MAVLink.MAV_AUTOPILOT autopilot;
@@ -357,6 +359,26 @@ namespace SharpBladeGroundStation.DataStructs
 			set
 			{
 				linkVersion = value;
+			}
+		}
+
+		public float TelemetryRSSI
+		{
+			get { return telemetryRSSI; }
+			set
+			{
+				telemetryRSSI = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TelemetryRSSI"));
+			}
+		}
+
+		public float TelemetryPercentage
+		{
+			get { return telemetryPercentage; }
+			set
+			{
+				telemetryPercentage = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TelemetryPercentage"));
 			}
 		}
 

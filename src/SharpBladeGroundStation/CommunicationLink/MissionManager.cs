@@ -5,10 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Diagnostics;
 using SharpBladeGroundStation.DataStructs;
 using SharpBladeGroundStation.Map.Markers;
 using System.MAVLink;
 using SharpBladeGroundStation.Map;
+using GMap.NET.WindowsPresentation;
 
 namespace SharpBladeGroundStation.CommunicationLink
 {
@@ -19,10 +21,12 @@ namespace SharpBladeGroundStation.CommunicationLink
 		Vehicle target;
 		
 		List<MAVLinkPackage> sendPackages;
-		List<MAVLinkPackage> receivePackages;
+		List<LinkPackage> receivedPackage;
 
 		bool isBusy;
 		State state;
+		ushort waypointCount;
+		ushort currentWaypoint;
 
 		public delegate void MissionSenderEvent();
 		public event MissionSenderEvent OnFinished;
@@ -49,11 +53,24 @@ namespace SharpBladeGroundStation.CommunicationLink
 			set { target = value; }
 		}
 
+		public ushort WaypointCount
+		{
+			get
+			{
+				return waypointCount;
+			}
+
+			set
+			{
+				waypointCount = value;
+			}
+		}
+
 		public MissionManager(Vehicle v)
 		{
 			target = v;
 			sendPackages = new List<MAVLinkPackage>();
-			receivePackages = new List<MAVLinkPackage>();
+			receivedPackage = new List<LinkPackage>();
 
 			isBusy = false;
 			state = State.Idle;
@@ -111,6 +128,99 @@ namespace SharpBladeGroundStation.CommunicationLink
 			return true;
 		}
 
+		public bool StartReceiveMission()
+		{
+			if (isBusy)
+				return false;
+			if (target.Link == null)
+				return false;
+
+			//isBusy = true;
+			//state = State.Receiving;
+
+			WaypointCount = 0;
+			currentWaypoint = 0;
+			receivedPackage.Clear();
+
+			MAVLinkPackage p = new MAVLinkPackage((byte)MAVLINK_MSG_ID.MISSION_REQUEST_LIST, target.Link);
+			p.AddData((byte)target.ID);//sys
+			p.AddData((byte)190);//comp
+			p.SetVerify();
+			target.Link.SendPackage(p);	
+
+			return true;
+		}
+
+		public void SendMissionRequest()
+		{
+			if (currentWaypoint == WaypointCount)
+				return;
+			MAVLinkPackage p = new MAVLinkPackage((byte)MAVLINK_MSG_ID.MISSION_REQUEST, target.Link);
+			p.AddData(currentWaypoint);
+			p.AddData((byte)target.ID);//sys
+			p.AddData((byte)190);//comp			
+			p.SetVerify();
+			currentWaypoint++;
+			Debug.WriteLine("[Mavlink]Request {0} of {1} waypoint.", currentWaypoint, waypointCount);
+			target.Link.SendPackage(p);
+		}
+
+		public bool AddMissionItem(LinkPackage p1)
+		{
+			receivedPackage.Add(p1.Clone());
+			if (receivedPackage.Count==WaypointCount)
+			{
+				return true;
+				//MAVLinkPackage p = new MAVLinkPackage((byte)MAVLINK_MSG_ID.MISSION_ACK, target.Link);
+				//p.AddData((byte)target.ID);//sys
+				//p.AddData((byte)190);//comp
+				//p.AddData((byte)0);
+				//p.SetVerify();
+				//target.Link.SendPackage(p);
+				//OnFinished?.Invoke();
+				//isBusy = false;
+				//state = State.Idle;
+			}
+			else
+			{
+				SendMissionRequest();
+				return false;
+			}
+		}
+		public void UnpackMission()
+		{
+			MAVLinkPackage p = new MAVLinkPackage((byte)MAVLINK_MSG_ID.MISSION_ACK, target.Link);
+			p.AddData((byte)target.ID);//sys
+			p.AddData((byte)190);//comp
+			p.AddData((byte)0);
+			p.SetVerify();
+			target.Link.SendPackage(p);
+			localMission.Clear();
+			for(int i=0;i<waypointCount;i++)
+			{
+				float p1 = receivedPackage[i].NextSingle();
+				float p2 = receivedPackage[i].NextSingle();
+				float p3 = receivedPackage[i].NextSingle();
+				float p4 = receivedPackage[i].NextSingle();
+				float p5 = receivedPackage[i].NextSingle();
+				float p6 = receivedPackage[i].NextSingle();
+				float p7 = receivedPackage[i].NextSingle();
+				ushort seq = receivedPackage[i].NextUShort();
+				ushort cmd = receivedPackage[i].NextUShort();
+				if(cmd==16)
+				{				
+					GMapMarker m = new GMapMarker(PositionHelper.WGS84ToGCJ02(new GMap.NET.PointLatLng(p5,p6)));
+					WayPointMarker wp = new WayPointMarker(localMission, m, (localMission.Markers.Count + 1).ToString(), string.Format("Lat {0}\nLon {1}\nAlt {2} m", m.Position.Lat, m.Position.Lng, p7));
+					localMission.AddWaypoint(wp, m, p7);
+					
+				}
+			}
+
+
+			OnFinished?.Invoke();
+			isBusy = false;
+			state = State.Idle;
+		}
 		public void HandleMissionRequest(int seq)
 		{
 			if (state != State.Sending)

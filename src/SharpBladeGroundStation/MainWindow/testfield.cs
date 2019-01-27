@@ -46,7 +46,7 @@ namespace SharpBladeGroundStation
 	{
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
-			//noMagic();
+			noMagic();
 			//replayLog();
 			//triggerCamera();
 			// testCamera();
@@ -224,7 +224,7 @@ namespace SharpBladeGroundStation
 
 		void noMagic()
 		{
-			MessageBox.Show("Only for developers.", "Orz");
+			//MessageBox.Show("Only for developers.", "Orz");
 			SpeechSynthesizer ss = new SpeechSynthesizer();
 			ss.Rate = 0;
 			ss.Speak("鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，鹅鹅鹅鹅鹅鹅鹅鹅鹅嗯，启动失败。");

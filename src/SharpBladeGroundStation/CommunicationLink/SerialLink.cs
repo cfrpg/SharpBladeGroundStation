@@ -244,8 +244,15 @@ namespace SharpBladeGroundStation.CommunicationLink
 					return false;
 			}
 			isSending = true;
-			port.Write(package.Buffer, 0, package.PackageSize);
-			OnSendPackageEvent(this, new LinkEventArgs(package));
+			try
+			{
+				port.Write(package.Buffer, 0, package.PackageSize);
+				OnSendPackageEvent(this, new LinkEventArgs(package));
+			}
+			catch
+			{
+
+			}
 			isSending = false;
 			return true;
 		}

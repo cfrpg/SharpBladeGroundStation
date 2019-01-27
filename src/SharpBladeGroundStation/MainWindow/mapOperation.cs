@@ -72,6 +72,7 @@ namespace SharpBladeGroundStation
 
 			MapRouteData newroute;
 			newroute = new MapRouteData(gmap, 1000, true, true);
+			newroute.Color = Colors.White;
 			newroute.LeftMouseButtonUp += Wp_MouseLeftButtonUp;
 			newroute.RightMouseButtonDown += Wp_MouseRightButtonDown;
 			newroute.MouseWheel += Wp_MouseWheel;
@@ -89,7 +90,7 @@ namespace SharpBladeGroundStation
 
 		private void MissionManager_OnFinished()
 		{
-			this.Dispatcher.BeginInvoke(new ThreadStart(delegate { MessageBox.Show("上传成功！"); }));
+			this.Dispatcher.BeginInvoke(new ThreadStart(delegate { MessageBox.Show("操作成功！"); }));
 		}
 
 		private void WaitMap_Tick(object sender, EventArgs e)

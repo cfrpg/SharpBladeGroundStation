@@ -95,7 +95,6 @@
                 </wpf:OutlinedText.RenderTransform>
             </wpf:OutlinedText>
             <!--MDZZ section,don't touch.-->
-            <TextBlock Text="RMB 20"  FontSize="14" Canvas.Right="84" Canvas.Top="400" Foreground="LightGreen" RenderTransformOrigin="0,0.5"/>
             <Line X1="0" Y1="0" X2="60" Y2="0" Canvas.Left="0" Canvas.Top="70" Style="{StaticResource HUDShapeStyle}" />
             <Polygon Canvas.Left="30" Canvas.Top="80" Points="0,0 10,0 0,-10 -10,0" Style="{StaticResource HUDShapeStyle}"/>
             <Line X1="0" Y1="0" X2="0" Y2="240" Canvas.Right="90" Canvas.Top="130" Style="{StaticResource HUDShapeStyle}"/>

@@ -3,7 +3,7 @@
   <Class Name="SharpBladeGroundStation.App" Collapsed="true">
     <Position X="16.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>App.xaml.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -26,7 +26,7 @@
   <Class Name="SharpBladeGroundStation.HUDWindow" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="21.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAIAQAACAAAAAABAAAAgABAAAAAAAAACAAAAQAAA=</HashCode>
+      <HashCode>AAACAIAAAACAAAAAABAAAAgABAAAAAAAAACAAACwAAA=</HashCode>
       <FileName>HUDWindow.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -34,7 +34,7 @@
   <Class Name="SharpBladeGroundStation.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="16.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>qbUwOIQKAFBCIEGGCJCMIwqEAQ6FhHQoLBAJEIANgQQ=</HashCode>
+      <HashCode>ibVxPIQDCNliIFkGCJSkowqEKQ6lhFBgPHAJIIAvlQQ=</HashCode>
       <FileName>MainWindow\analyzeMAVPackage.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -64,7 +64,7 @@
   <Class Name="SharpBladeGroundStation.CommunicationLink.LinkPackage" Collapsed="true">
     <Position X="5.5" Y="10.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIgAAACwAYAAFYEJgRAAAABAAAAgCAQAAABAAAAAWBA=</HashCode>
+      <HashCode>IYgAAACwAYAAFYEJgxAAAAJAAAAgCAQAAABAAAAAWBA=</HashCode>
       <FileName>CommunicationLink\LinkPackage.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -78,7 +78,7 @@
   <Class Name="SharpBladeGroundStation.CommunicationLink.MAVLinkPackage" Collapsed="true">
     <Position X="5.5" Y="11.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAgAASAAAIgAEACNgwBAAAJQQAAAEAAAAQBAAAEAQBE=</HashCode>
+      <HashCode>IAgAASAAAIgAEACNgQBAAABQQAAAEAAAAQBAAAEAQBE=</HashCode>
       <FileName>CommunicationLink\MAVLinkPackage.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -99,7 +99,7 @@
   <Class Name="SharpBladeGroundStation.Configuration.GCSConfiguration" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="18.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAQAACEAAAAAIAAEAAQABwAAEIEABACAAAAAEAAg=</HashCode>
+      <HashCode>AAQAAQAACEAAAAAIAAEAAQAFwAAEJEABADAAAAAUAAg=</HashCode>
       <FileName>Configuration\GCSConfiguration.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -122,7 +122,7 @@
   <Class Name="SharpBladeGroundStation.DataStructs.GPSData" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="20" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAQEQAAEAEEQAAAAEIAAAAmEAAAAAEQAAABAAQAAA=</HashCode>
+      <HashCode>AAAAQEQAAEAEEQBAAAEIAAAAnEEAAAAEQAAABEAQAAA=</HashCode>
       <FileName>DataStructs\GPSData.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -204,7 +204,7 @@
   <Class Name="SharpBladeGroundStation.DataStructs.Vehicle" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="16.5" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>YQACCAEgAsCAwAigwEAAoAAAgsAABAICAAQAQiAECkg=</HashCode>
+      <HashCode>YQACCAVggsCEwoigwEIA4AAAguABBQIDAQQAQiAECkg=</HashCode>
       <FileName>DataStructs\Vehicle\Vehicle.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />

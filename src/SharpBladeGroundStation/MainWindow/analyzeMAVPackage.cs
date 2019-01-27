@@ -25,7 +25,7 @@ namespace SharpBladeGroundStation
 			ulong dt = (ulong)GCSconfig.PlotTimeInterval * 1000;
 			Action a1, a2,a3;
 			int tint;
-			float tfloat;
+			float tfloat,lat,lon,alt;
 			PointLatLng pos;
 
 			packageFlags[package.Function] = true;
@@ -41,6 +41,7 @@ namespace SharpBladeGroundStation
 					currentVehicle.SystemStatus=(MAVLink.MAV_STATE)package.NextByte();
 					currentVehicle.LinkVersion = package.NextByte();
 					currentVehicle.FlightModeText = getPX4FlightModeText(mainmode, submode);
+					heartbeatCounter = 0;
 					break;
 				case MAVLINK_MSG_ID.SYS_STATUS://#1
 
@@ -177,7 +178,7 @@ namespace SharpBladeGroundStation
 					break;
 				case MAVLINK_MSG_ID.ALTITUDE: //#141
 					time64 = package.NextUInt64();
-					float alt = package.NextSingle();				
+					alt = package.NextSingle();				
 					break;
 				case MAVLINK_MSG_ID.BATTERY_STATUS://#147												   
 					tint = package.NextInt32();
@@ -267,11 +268,15 @@ namespace SharpBladeGroundStation
 						currentVehicle.SubsystemStatus.Telemetey = 4;
 					if (lrssi < 40)
 						currentVehicle.SubsystemStatus.Telemetey = 3;
-					if (lrssi < 60)
+					if (lrssi < 60 && heartbeatCounter < 4)
 						currentVehicle.SubsystemStatus.Telemetey = 2;
-					if (lrssi < 80)
+					if (lrssi < 80 && heartbeatCounter < 4)
 						currentVehicle.SubsystemStatus.Telemetey = 1;
-
+					//lrssi=Math.Min(lrssi, rrssi);
+					currentVehicle.TelemetryRSSI = lrssi / 1.9f - 127;
+					currentVehicle.TelemetryPercentage = lrssi / 255f;
+					if (currentVehicle.TelemetryPercentage > 100)
+						currentVehicle.TelemetryPercentage = 100;
 					break;
 				case MAVLINK_MSG_ID.DISTANCE_SENSOR://#132
 					time = package.NextUInt32();
@@ -299,21 +304,22 @@ namespace SharpBladeGroundStation
 					Debug.WriteLine("[MAVLink]:Finished.");
 					break;				
 				case MAVLINK_MSG_ID.MISSION_COUNT:
-					Debug.WriteLine("[MAVLink]:Count {0}.", package.NextUShort());
-					MAVLinkPackage pkg = new MAVLinkPackage((byte)MAVLINK_MSG_ID.MISSION_REQUEST,currentVehicle.Link);
-					pkg.Sequence = 0;
-					pkg.System = 255;
-					pkg.Component = 190;					
-					pkg.AddData((ushort)0);
-					pkg.AddData(package.System);
-					pkg.AddData((byte)190);
-					pkg.SetVerify();
-					currentVehicle.Link.SendPackage(pkg);
+					missionManager.WaypointCount = package.NextUShort();
+					Debug.WriteLine("[MAVLink]:Receive {0} waypoint.", missionManager.WaypointCount);
+					missionManager.SendMissionRequest();
+					break;
+				case MAVLINK_MSG_ID.MISSION_ITEM:
+					if(missionManager.AddMissionItem(package))
+					{
+						a1 = () => { missionManager.UnpackMission(); };
+						Dispatcher.BeginInvoke(a1);
+					}
+					
 					break;
 				case MAVLINK_MSG_ID.STATUSTEXT:
 					byte sev = package.NextByte();
 					string str = package.NextASCIIString(50);
-					a1 = () => { currentVehicle.HandleMessage(sev,str); mainSpeech.SpeakAsync(str); };
+					a1 = () => { currentVehicle.HandleMessage(sev,str);if(sev<=4) mainSpeech.SpeakAsync(str); };
 					Dispatcher.BeginInvoke(a1);
 					Debug.WriteLine("[MAVLink]:{0}.", str);
 					break;

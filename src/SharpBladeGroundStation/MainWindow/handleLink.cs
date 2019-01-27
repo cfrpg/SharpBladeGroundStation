@@ -32,6 +32,7 @@ namespace SharpBladeGroundStation
 		bool isReplay;
 
 		Timer heartbeatListener;
+		int heartbeatCounter;
 
 		bool[] packageFlags;
  		public LogLink LogLink
@@ -61,6 +62,7 @@ namespace SharpBladeGroundStation
 			logPlayerCtrl.DataContext = logLink;
 			logLink.Initialize();
 			isReplay = false;
+			heartbeatCounter = 0;
 		}
 
 		private void HeartbeatListener_Elapsed(object sender, ElapsedEventArgs e)
@@ -78,6 +80,22 @@ namespace SharpBladeGroundStation
 			pkg.AddData(currentVehicle.LinkVersion);
 			pkg.SetVerify();
 			currentVehicle.Link.SendPackage(pkg);
+			heartbeatCounter += 1;
+			if(heartbeatCounter>5)
+			{
+				currentVehicle.SubsystemStatus.Telemetey = 4;
+			}
+			else if(heartbeatCounter>3)
+			{
+				if (currentVehicle.SubsystemStatus.Telemetey < 2)
+					currentVehicle.SubsystemStatus.Telemetey = 2;
+			}
+			else
+			{
+				if (currentVehicle.SubsystemStatus.Telemetey <= 2)
+					currentVehicle.SubsystemStatus.Telemetey = 0;
+			}
+			
 		}
 
 		void linkListenerWorker()
@@ -267,7 +285,11 @@ namespace SharpBladeGroundStation
 
 		private void downloadBtn_Click(object sender, RoutedEventArgs e)
 		{
-			MessageBox.Show("下载航线暂未实装", "orz");
+			//MessageBox.Show("下载航线暂未实装", "orz");
+			if (!missionManager.StartReceiveMission())
+			{
+				MessageBox.Show("未与飞控连接或串口正忙.");
+			}
 		}
 	}
 }

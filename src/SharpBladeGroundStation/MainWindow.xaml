@@ -196,10 +196,10 @@
             </Grid.ColumnDefinitions>
             <TabControl x:Name="tabControl" Margin="0" TabStripPlacement="Bottom" Grid.RowSpan="2" Grid.ColumnSpan="2">
                 <TabItem Header="导航" Height="30">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid Background="#CCE5E5E5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100*"/>
-                            <ColumnDefinition x:Name="rightCol" Width="1*" MaxWidth="200" MinWidth="150"/>
+                            <ColumnDefinition x:Name="rightCol" Width="0" MaxWidth="200" MinWidth="0"/>
                         </Grid.ColumnDefinitions>
                         <gmwpf:GMapControl x:Name="gmap"  Margin="0"  MaxZoom="18" Zoom="13"/>
                         <fd:MapScaleControl x:Name="mapscale" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="200" Margin="10,0,0,20" />
@@ -211,7 +211,7 @@
                                 </Button.ToolTip>
                                 <Image Source="Contents/upload.png" Margin="2"/>
                             </Button>
-                            <Button x:Name="downloadBtn" Background="#CC646464" BorderBrush="White" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="4" Click="downloadBtn_Click">
+                            <Button x:Name="downloadBtn" Background="#CC646464" BorderBrush="White" HorizontalAlignment="Right" VerticalAlignment="Center" BorderThickness="4" Click="downloadBtn_Click">
                                 <Button.ToolTip>
                                     <TextBlock><Run Text="下载航线"/></TextBlock>
                                 </Button.ToolTip>
@@ -225,13 +225,7 @@
                                         </TransformGroup>
                                     </Image.RenderTransform>
                                 </Image>
-                            </Button>
-                            <Button x:Name="pathPlanBtn" Background="#CC646464" BorderBrush="White" HorizontalAlignment="Left" VerticalAlignment="Center" BorderThickness="4" Click="pathPlanBtn_Click" >
-                                <Button.ToolTip>
-                                    <TextBlock><Run Text="航线规划航线"/></TextBlock>
-                                </Button.ToolTip>
-                                <Image Source="Contents/pathplan.png" Margin="2"/>
-                            </Button>
+                            </Button>                           
                             <Button x:Name="followBtn" Background="#CC646464" BorderBrush="White" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="4" Click="followBtn_Click"  >
                                 <Button.ToolTip>
                                     <TextBlock><Run Text="跟随无人机"/></TextBlock>
@@ -245,10 +239,10 @@
                                 <Image Source="Contents/trashbin.png" Margin="2"/>
                             </Button>
                         </StackPanel>
-                        <Button x:Name="button1" VerticalAlignment="Top" Background="Green" BorderBrush="White" BorderThickness="4" Grid.Column="0"  Click="button1_Click" HorizontalAlignment="Right" Width="40" Margin="0,5,5,0">
+                        <Button x:Name="button1" Visibility="Hidden" VerticalAlignment="Top" Background="#C3646464" BorderBrush="White" BorderThickness="4" Grid.Column="0"  Click="button1_Click" HorizontalAlignment="Right" Width="40" Margin="0,5,5,0">
                             <Button.ToolTip>
                                 <TextBlock><Run Text="航点列表"/></TextBlock>
-                            </Button.ToolTip>
+                            </Button.ToolTip>                          
                             <Image Source="Contents/pathDetail.png" Margin="2" />
                         </Button>
 
@@ -399,6 +393,8 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="60"/>                   
+                    <ColumnDefinition Width="30"/>
                     <ColumnDefinition Width="120"/>
                     <ColumnDefinition Width="45"/>
                     <ColumnDefinition Width="55"/>
@@ -407,9 +403,9 @@
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
-                <fd:LinkSpeedControl x:Name="linkspd" Grid.Column="8" TxSpeed="{Binding TxRate}" RxSpeed="{Binding RxRate}" MaxSpeed="20000"/>
-                <TextBlock x:Name="linkStateText" HorizontalAlignment="Right" TextWrapping="Wrap" Text="COM1"  Background="#FFB4B4AF" FontSize="10" VerticalAlignment="Center" Margin="0" Grid.Column="7" TextAlignment="Right" />
-                <Menu Grid.Column="7" Background="{x:Null}">
+                <fd:LinkSpeedControl x:Name="linkspd" Grid.Column="10" TxSpeed="{Binding TxRate}" RxSpeed="{Binding RxRate}" MaxSpeed="20000"/>
+                <TextBlock x:Name="linkStateText" HorizontalAlignment="Right" TextWrapping="Wrap" Text="COM1"  Background="#FFB4B4AF" FontSize="10" VerticalAlignment="Center" Margin="0" Grid.Column="9" TextAlignment="Right" />
+                <Menu Grid.Column="9" Background="{x:Null}">
                     <MenuItem Header="" Width="100" Height="30" Template="{DynamicResource MenuItemControlTemplate1}">
                         <MenuItem x:Name="portMenuItem" Header="串口连接" Click="portMenuItem_Click">
                             <MenuItem.Icon>
@@ -425,12 +421,13 @@
                     </MenuItem>
                 </Menu>
 
-
-                <TextBlock x:Name="battText" HorizontalAlignment="Left" TextWrapping="NoWrap" Text="{Binding SimpleBattText}" VerticalAlignment="Center" Grid.Column="6" FontSize="14" Margin="2,6,0,6"/>
-                <Image x:Name="image"  Grid.Column="5" Source="Contents/battery.png" Margin="2"/>
-                <TextBlock x:Name="gpsStateText" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding GPSStateText}" VerticalAlignment="Center" Grid.Column="2" FontSize="14" Margin="5,6,0,6" MinWidth="100"/>
-                <TextBlock x:Name="gpsDopText" HorizontalAlignment="Left" TextWrapping="Wrap" Text="VDOP: &#xA;HDOP:" VerticalAlignment="Center" Grid.Column="3" Margin="3,2,0,0" Height="31" Width="41" FontSize="11.5"/>
-                <Image x:Name="image1" HorizontalAlignment="Left"  VerticalAlignment="Top" Grid.Column="1" Source="Contents/satellite.png" Margin="2,2,0,0" RenderTransformOrigin="0.5,0.5" Height="28" Width="28">
+                <Image HorizontalAlignment="Left"  VerticalAlignment="Top" Grid.Column="1" Source="Contents/signal.png" Margin="2,2,0,0" RenderTransformOrigin="0.5,0.5" Height="28" Width="28"/>
+                <TextBlock x:Name="telemText" HorizontalAlignment="Left" TextWrapping="NoWrap" Text="{Binding TelemetryPercentage,StringFormat={}{0:0}%}" VerticalAlignment="Center" Grid.Column="2" FontSize="14" Margin="2,6,0,6"/>
+                <TextBlock x:Name="battText" HorizontalAlignment="Left" TextWrapping="NoWrap" Text="{Binding SimpleBattText}" VerticalAlignment="Center" Grid.Column="8" FontSize="14" Margin="2,6,0,6"/>
+                <Image x:Name="image"  Grid.Column="7" Source="Contents/battery.png" Margin="2"/>
+                <TextBlock x:Name="gpsStateText" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding GPSStateText}" VerticalAlignment="Center" Grid.Column="4" FontSize="14" Margin="5,6,0,6" MinWidth="100"/>
+                <TextBlock x:Name="gpsDopText" HorizontalAlignment="Left" TextWrapping="Wrap" Text="VDOP: &#xA;HDOP:" VerticalAlignment="Center" Grid.Column="5" Margin="3,2,0,0" Height="31" Width="41" FontSize="11.5"/>
+                <Image x:Name="image1" HorizontalAlignment="Left"  VerticalAlignment="Top" Grid.Column="3" Source="Contents/satellite.png" Margin="2,2,0,0" RenderTransformOrigin="0.5,0.5" Height="28" Width="28">
                     <Image.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleY="1" ScaleX="-1"/>
@@ -440,7 +437,7 @@
                         </TransformGroup>
                     </Image.RenderTransform>
                 </Image>
-                <StackPanel Grid.Column="4" Margin="0,0,0,0">
+                <StackPanel Grid.Column="6" Margin="0,0,0,0">
                     <TextBlock x:Name="vdopText" TextWrapping="Wrap" Text="{Binding Vdop}" FontSize="12"/>
                     <TextBlock x:Name="hdopText" TextWrapping="Wrap" Text="{Binding Hdop}" FontSize="12" Margin="0,-0.5,0,0"/>
                 </StackPanel>
