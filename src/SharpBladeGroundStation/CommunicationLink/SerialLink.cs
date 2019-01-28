@@ -247,6 +247,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			try
 			{
 				port.Write(package.Buffer, 0, package.PackageSize);
+				dataSent += package.PackageSize;
 				OnSendPackageEvent(this, new LinkEventArgs(package));
 			}
 			catch
