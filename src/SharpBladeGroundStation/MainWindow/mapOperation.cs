@@ -12,6 +12,7 @@ using SharpBladeGroundStation.Configuration;
 using SharpBladeGroundStation.DataStructs;
 using SharpBladeGroundStation.CommunicationLink;
 using System.Threading;
+using System.Windows.Controls;
 
 namespace SharpBladeGroundStation
 {
@@ -31,29 +32,20 @@ namespace SharpBladeGroundStation
 
 		private void initGmap()
 		{
-			//gmap.Zoom = 3;
-			//gmap.MapProvider = AMapHybirdProvider.Instance;
-			//gmap.MapProvider = GMap.NET.MapProviders.BingHybridMapProvider.Instance;
-			gmap.MapProvider = GMap.NET.MapProviders.GoogleChinaHybridMapProvider.Instance;
-			gmap.Position = new PointLatLng(34.242947, 108.916225);
+            for(int i=0;i<mapComboBox.Items.Count;i++)
+            {
+                if(GCSConfig.MapName==(string)mapComboBox.Items[i])
+                {
+                    mapComboBox.SelectedIndex = i;
+                    break;
+                }
+            }
+
+            setMapProvider(GCSConfig.MapName);
+            gmap.Position = new PointLatLng(34.242947, 108.916225);
 			gmap.Zoom = 17;
 			gmap.ShowCenter = false;
-			System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
-			try
-			{
-				if (ping.Send("www.autonavi.com").Status != System.Net.NetworkInformation.IPStatus.Success)
-				{
-					GMaps.Instance.Mode = AccessMode.CacheOnly;
-				}
-				else
-				{
-					GMaps.Instance.Mode = AccessMode.ServerAndCache;
-				}
-			}
-			catch
-			{
-				GMaps.Instance.Mode = AccessMode.CacheOnly;
-			}
+			
 			uavMarker = new GMapMarker(gmap.Position);
 			uavMarker.Shape = new UAVMarker();
 			uavMarker.Offset = new Point(-15, -15);
@@ -87,6 +79,50 @@ namespace SharpBladeGroundStation
 			waitMap.Tick += WaitMap_Tick;
 			waitMap.Start();
 		}
+
+        private void mapComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            GCSconfig.MapName = (string)mapComboBox.SelectedItem;
+            setMapProvider((string)mapComboBox.SelectedItem);
+        }
+
+        private void setMapProvider(string name)
+        {
+            string url = "";
+            switch(name)
+            {
+                case "高德地图":
+                    gmap.MapProvider = AMapHybirdProvider.Instance;
+                    url = "www.autonavi.com";
+                    break;
+                case "谷歌中国地图":
+                    gmap.MapProvider = GMap.NET.MapProviders.GoogleChinaHybridMapProvider.Instance;
+                    url = "ditu.google.cn";
+                    break;
+                default:
+                    GCSconfig.MapName = "谷歌中国地图";
+                    gmap.MapProvider = GMap.NET.MapProviders.GoogleChinaHybridMapProvider.Instance;
+                    url = "ditu.google.cn";
+                    break;
+            }
+            System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
+            try
+            {
+                if (ping.Send(url).Status != System.Net.NetworkInformation.IPStatus.Success)
+                {
+                    GMaps.Instance.Mode = AccessMode.CacheOnly;
+                }
+                else
+                {
+                    GMaps.Instance.Mode = AccessMode.ServerAndCache;
+                }
+            }
+            catch
+            {
+                GMaps.Instance.Mode = AccessMode.CacheOnly;
+            }
+
+        }
 
 		private void MissionManager_OnFinished()
 		{

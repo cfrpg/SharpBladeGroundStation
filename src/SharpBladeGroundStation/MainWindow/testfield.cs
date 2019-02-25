@@ -71,19 +71,7 @@ namespace SharpBladeGroundStation
 			MessageBox.Show(jss.ToString());
 			
 		}
-
-		ObservableCollection<WPData> datalist;
-		void copyRouteData()
-		{
-			datalist = new ObservableCollection<WPData>();
-			int i = 0;
-			foreach(var m in missionManager.LocalMission.Markers)
-			{
-				datalist.Add(new WPData() { Name = "航点 " + i.ToString(), Lat = m.Position.Lat, Lon = m.Position.Lng, Alt = m.Altitude });
-				i++;
-			}
-			missionListView.DataContext = datalist;
-		}
+        	
 
 		void caliLevel()
 		{
@@ -232,70 +220,5 @@ namespace SharpBladeGroundStation
 		}
 	}
 
-	public class WPData : INotifyPropertyChanged
-	{
-		public event PropertyChangedEventHandler PropertyChanged;
 
-		string name;
-		double lat;
-		double lon;
-		double alt;
-
-		public string Name
-		{
-			get
-			{
-				return name;
-			}
-
-			set
-			{
-				name = value;
-				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
-			}
-		}
-	
-
-		public double Lat
-		{
-			get
-			{
-				return lat;
-			}
-
-			set
-			{
-				lat = value;
-				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Lat"));
-			}
-		}
-
-		public double Lon
-		{
-			get
-			{
-				return lon;
-			}
-
-			set
-			{
-				lon = value;
-				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Lon"));
-			}
-		}
-
-		public double Alt
-		{
-			get
-			{
-				return alt;
-			}
-
-			set
-			{
-				alt = value;
-				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Alt"));
-			}
-		}		
-	}
 }

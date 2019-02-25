@@ -19,6 +19,8 @@ namespace SharpBladeGroundStation.CommunicationLink
 		MapRouteData localMission;
 		MapRouteData remoteMission;
 		Vehicle target;
+
+        ObservableCollection<MissionItem> missionList;
 		
 		List<MAVLinkPackage> sendPackages;
 		List<LinkPackage> receivedPackage;
@@ -53,20 +55,19 @@ namespace SharpBladeGroundStation.CommunicationLink
 			set { target = value; }
 		}
 
-		public ushort WaypointCount
-		{
-			get
-			{
-				return waypointCount;
-			}
+        public ushort WaypointCount
+        {
+            get { return waypointCount; }
+            set { waypointCount = value; }
+        }
 
-			set
-			{
-				waypointCount = value;
-			}
-		}
+        public ObservableCollection<MissionItem> MissionList
+        {
+            get { return missionList; }
+            set { missionList = value; }
+        }
 
-		public MissionManager(Vehicle v)
+        public MissionManager(Vehicle v)
 		{
 			target = v;
 			sendPackages = new List<MAVLinkPackage>();
@@ -211,8 +212,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 				{				
 					GMapMarker m = new GMapMarker(PositionHelper.WGS84ToGCJ02(new GMap.NET.PointLatLng(p5,p6)));
 					WayPointMarker wp = new WayPointMarker(localMission, m, (localMission.Markers.Count + 1).ToString(), string.Format("Lat {0}\nLon {1}\nAlt {2} m", m.Position.Lat, m.Position.Lng, p7));
-					localMission.AddWaypoint(wp, m, p7);
-					
+					localMission.AddWaypoint(wp, m, p7);					
 				}
 			}
 
