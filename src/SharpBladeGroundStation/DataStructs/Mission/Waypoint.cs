@@ -18,13 +18,20 @@ namespace SharpBladeGroundStation.DataStructs
         public float HoldTime
         {
             get { return holdTime; }
-            set { holdTime = value; }
+            set
+            {
+                holdTime = value;
+                NotifyPropertyChanged("HoldTime");
+            }
         }
 
         public float Radius
         {
             get { return radius; }
-            set { radius = value; }
+            set {
+                radius = value;
+                NotifyPropertyChanged("Radius");
+            }
         }
 
         public Waypoint(int i) : this(i,new PointLatLng(0, 0), 0) { }

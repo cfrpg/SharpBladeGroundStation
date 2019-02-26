@@ -8,6 +8,7 @@
         xmlns:gmwpf="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
         xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="SharpBladeGroundStation.MainWindow"
+        xmlns:ds="clr-namespace:SharpBladeGroundStation.DataStructs"
         mc:Ignorable="d"
         Title="SharpBladeGroundStation - cfrpg" Height="700" Width="1200" SizeChanged="Window_SizeChanged"
         x:Name="mainwindow"
@@ -84,9 +85,9 @@
                     <fd:PFDControl x:Name="pfd" Grid.Row="0" VerticalAlignment="Top" FlightState="{Binding}"/>
                 </Canvas>
             </Viewbox>
-
+            <!-- 导航信息
             <Viewbox>
-                <!--
+                
                 <GroupBox x:Name="groupBox" Header="导航信息" Width="300" Height="120" BorderBrush="Black" FontSize="14">
                     <Grid x:Name="navDataGrid">
                         <Grid.RowDefinitions>
@@ -121,8 +122,9 @@
 
                     </Grid>
                 </GroupBox>
-                -->
+                
             </Viewbox>
+            -->
             <Viewbox>
                 <GroupBox x:Name="groupBox4" Header="飞行数据" Width="300" Height="160" BorderBrush="Black" FontSize="14">
                     <Grid x:Name="flightDataGrid">
@@ -246,7 +248,13 @@
                             <Image Source="Contents/pathDetail.png" Margin="2" />
                         </Button>
                         <TreeView x:Name="missionTreeView" Grid.Column="1" HorizontalContentAlignment="Stretch" Background="#FFE5E5E5">
-                            
+                            <TreeView.Resources>
+                                <HierarchicalDataTemplate DataType="{x:Type ds:Mission}">
+                                    <Grid>
+                                        
+                                    </Grid>
+                                </HierarchicalDataTemplate>                               
+                            </TreeView.Resources>
                         </TreeView>                        
                     </Grid>
                 </TabItem>

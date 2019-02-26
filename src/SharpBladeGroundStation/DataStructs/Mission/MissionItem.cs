@@ -44,7 +44,6 @@ namespace SharpBladeGroundStation.DataStructs
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ChildItems"));
             }
         }
-
         /// <summary>
         /// 子项是否可见
         /// </summary>
@@ -68,11 +67,63 @@ namespace SharpBladeGroundStation.DataStructs
             childItems = new ObservableCollection<MissionItem>();
         }
 
+        public virtual void GenerateMissionItems()
+        {
+
+        }
+
+        /// <summary>
+        /// 在下一层第ID元素后插入元素
+        /// </summary>
+        /// <param name="item">要插入的元素</param>
+        /// <param name="pos">插入位置的前一个</param>
+        protected virtual void insertMissionItem(MissionItem item,int pos)
+        {
+            for (int i = childItems.Count; i >= 0; i--)
+            {
+                if (childItems[i].ID <= pos)
+                {
+                    childItems.Insert(i + 1, item);
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 移除指定的元素
+        /// </summary>
+        /// <param name="id">要移除的元素ID</param>
+        protected virtual void removeMissionItemAt(int pos)
+        {
+            for(int i=childItems.Count;i>=0;i--)
+            {
+                if(childItems[i].ID==pos)
+                {
+                    childItems.RemoveAt(i);
+                    break;
+                }
+                if(childItems[i].ID<pos)
+                {
+                    childItems[i].removeMissionItemAt(pos);
+                    break;
+                }
+            }
+        }
+
+        protected virtual int rebuildID(int pos)
+        {
+            ID = pos;
+            pos++;
+            for(int i=0;i<childItems.Count;i++)
+            {
+                pos = childItems[i].rebuildID(pos);
+            }
+            return pos;
+        }
+
         protected void NotifyPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
-
     }
 }

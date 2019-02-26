@@ -16,12 +16,11 @@ namespace SharpBladeGroundStation.DataStructs
         public string Name
         {
             get { return name; }
-            set { name = value; }
-        }
-
-        public virtual void GenerateMissionItems()
-        {
-            
-        }
+            set
+            {
+                name = value;
+                NotifyPropertyChanged("Name");
+            }
+        }        
     }
 }
