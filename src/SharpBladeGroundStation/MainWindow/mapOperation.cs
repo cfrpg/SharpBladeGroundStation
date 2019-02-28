@@ -32,7 +32,12 @@ namespace SharpBladeGroundStation
 
 		private void initGmap()
 		{
-            for(int i=0;i<mapComboBox.Items.Count;i++)
+            missionManager = new MissionManager(currentVehicle);
+            //missionManager.LocalMission = newroute;
+            missionManager.OnFinished += MissionManager_OnFinished;
+            missionTreeView.ItemsSource = missionManager.MissionList;
+
+            for (int i=0;i<mapComboBox.Items.Count;i++)
             {
                 if(GCSConfig.MapName==(string)mapComboBox.Items[i])
                 {
@@ -68,9 +73,8 @@ namespace SharpBladeGroundStation
 			newroute.LeftMouseButtonUp += Wp_MouseLeftButtonUp;
 			newroute.RightMouseButtonDown += Wp_MouseRightButtonDown;
 			newroute.MouseWheel += Wp_MouseWheel;
-			missionManager = new MissionManager(currentVehicle);
-			missionManager.LocalMission = newroute;
-			missionManager.OnFinished += MissionManager_OnFinished;
+			
+
 
 			flightRoute = new MapRouteData(gmap);
 			Gmap_OnMapZoomChanged();

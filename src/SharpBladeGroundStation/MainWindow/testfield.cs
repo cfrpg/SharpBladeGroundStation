@@ -46,20 +46,28 @@ namespace SharpBladeGroundStation
 	{
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
-			noMagic();
-			//replayLog();
-			//triggerCamera();
-			// testCamera();
-			//setScreen();
-			//caliLevel();
-			//currentVehicle.GpsState.ForceSetHome();
-			//homeMarker.Position = PositionHelper.WGS84ToGCJ02(currentVehicle.GpsState.HomePosition);
-			//copyRouteData();
-			//talkToBL();
-			//testJoystick();
-			
+            //noMagic();
+            //replayLog();
+            //triggerCamera();
+            // testCamera();
+            //setScreen();
+            //caliLevel();
+            //currentVehicle.GpsState.ForceSetHome();
+            //homeMarker.Position = PositionHelper.WGS84ToGCJ02(currentVehicle.GpsState.HomePosition);
+            //copyRouteData();
+            //talkToBL();
+            //testJoystick();
+            addMission();
 		}
 		
+        void addMission()
+        {
+            missionManager.MissionList.Add(new Mission() { ID = 0, Name = "Mission 1" });
+            missionManager.MissionList[0].ChildItems.Add(new Waypoint(1));
+            missionManager.MissionList[0].ChildItems.Add(new Waypoint(2));
+            missionManager.MissionList[0].ChildItems.Add(new Waypoint(4));
+            missionManager.MissionList[0].ChildItems[1].ChildItems.Add(new MissionAction() { ID = 3 });
+        }
 		
 		void testJoystick()
 		{

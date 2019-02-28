@@ -72,6 +72,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			target = v;
 			sendPackages = new List<MAVLinkPackage>();
 			receivedPackage = new List<LinkPackage>();
+            missionList = new ObservableCollection<MissionItem>();
 
 			isBusy = false;
 			state = State.Idle;

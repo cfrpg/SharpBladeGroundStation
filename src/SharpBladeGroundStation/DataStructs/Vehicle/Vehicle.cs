@@ -351,15 +351,12 @@ namespace SharpBladeGroundStation.DataStructs
 
 		public byte LinkVersion
 		{
-			get
-			{
-				return linkVersion;
-			}
-
+			get			{				return linkVersion;			}
 			set
 			{
 				linkVersion = value;
-			}
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LinkVersion"));
+            }
 		}
 
 		public float TelemetryRSSI

@@ -179,7 +179,7 @@
     <Compile Include="DataStructs\Mission\LandWaypoint.cs" />
     <Compile Include="DataStructs\Mission\TakeoffWaypoint.cs" />
     <Compile Include="DataStructs\Mission\Waypoint.cs" />
-    <Compile Include="DataStructs\Mission\WaypointAction.cs" />
+    <Compile Include="DataStructs\Mission\MissionAction.cs" />
     <Compile Include="DataStructs\Mission\WaypointBase.cs" />
     <Page Include="Controls\CameraPlayer.xaml">
       <SubType>Designer</SubType>
