@@ -309,7 +309,7 @@ namespace SharpBladeGroundStation
 			}
 			else
 			{
-				rightCol.MinWidth = 150;
+				rightCol.MinWidth = 200;
 				rightCol.Width = new GridLength(1, GridUnitType.Star);
 				button1.Background = new SolidColorBrush(Colors.Green);
 			}

@@ -35,10 +35,34 @@ namespace SharpBladeGroundStation.DataStructs
             {
                 position = value;
                 NotifyPropertyChanged("Position");
-            }
+				NotifyPropertyChanged("Latitude");
+				NotifyPropertyChanged("Longitude");
+			}
         }
 
-        public float Altitude
+		public double Longitude
+		{
+			get { return position.Lng; }
+			set
+			{
+				position.Lng = value;
+				NotifyPropertyChanged("Position");
+				NotifyPropertyChanged("Longitude");
+			}
+		}
+		public double Latitude
+		{
+			get { return position.Lat; }
+			set
+			{
+				position.Lng = value;
+				NotifyPropertyChanged("Position");
+				NotifyPropertyChanged("Latitude");
+			}
+		}
+
+
+		public float Altitude
         {
             get { return altitude; }
             set

@@ -66,7 +66,10 @@ namespace SharpBladeGroundStation
             missionManager.MissionList[0].ChildItems.Add(new Waypoint(1));
             missionManager.MissionList[0].ChildItems.Add(new Waypoint(2));
             missionManager.MissionList[0].ChildItems.Add(new Waypoint(4));
-            missionManager.MissionList[0].ChildItems[1].ChildItems.Add(new MissionAction() { ID = 3 });
+			missionManager.MissionList[0].ChildItems.Add(new Waypoint(5));
+			missionManager.MissionList[0].ChildItems.Add(new Waypoint(6));
+			missionManager.MissionList[0].ChildItems.Add(new Waypoint(7));
+			missionManager.MissionList[0].ChildItems[1].ChildItems.Add(new MissionAction() { ID = 3 });
         }
 		
 		void testJoystick()

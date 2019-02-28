@@ -17,184 +17,7 @@
 
     <Window.Resources>
         <local:ArmConverter x:Key="arm2str"/>
-        <ControlTemplate x:Key="MenuItemControlTemplate1" TargetType="{x:Type MenuItem}">
-            <Border x:Name="templateRoot" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                <Grid x:Name="Grid" VerticalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <ContentPresenter x:Name="Icon" Content="{TemplateBinding Icon}" ContentSource="Icon" HorizontalAlignment="Center" Height="16" Margin="3" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" Width="16"/>
-                    <Path x:Name="GlyphPanel" Data="F1M10,1.2L4.7,9.1 4.5,9.1 0,5.2 1.3,3.5 4.3,6.1 8.3,0 10,1.2z" Fill="{TemplateBinding Foreground}" FlowDirection="LeftToRight" Margin="3" Visibility="Collapsed" VerticalAlignment="Center"/>
-                    <ContentPresenter x:Name="ContentPresenter" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" Grid.Column="1" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                    <Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" Placement="Top">
-                        <Border x:Name="SubMenuBorder" BorderBrush="#FF999999" BorderThickness="1" Background="#FFF0F0F0" Padding="2">
-                            <ScrollViewer x:Name="SubMenuScrollViewer" Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
-                                <Grid x:Name="Grid1" RenderOptions.ClearTypeHint="Enabled">
-                                    <Canvas x:Name="Canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
-                                        <Rectangle x:Name="OpaqueRect" Fill="{Binding Background, ElementName=SubMenuBorder}" Height="{Binding ActualHeight, ElementName=SubMenuBorder}" Width="{Binding ActualWidth, ElementName=SubMenuBorder}"/>
-                                    </Canvas>
-                                    <Rectangle x:Name="Rectangle" Fill="#FFD7D7D7" HorizontalAlignment="Left" Margin="29,2,0,2" Width="1"/>
-                                    <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Cycle" Grid.IsSharedSizeScope="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" KeyboardNavigation.TabNavigation="Cycle"/>
-                                </Grid>
-                            </ScrollViewer>
-                        </Border>
-                    </Popup>
-                </Grid>
-            </Border>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsSuspendingPopupAnimation" Value="True">
-                    <Setter Property="PopupAnimation" TargetName="PART_Popup" Value="None"/>
-                </Trigger>
-                <Trigger Property="Icon" Value="{x:Null}">
-                    <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
-                </Trigger>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
-                    <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
-                </Trigger>
-                <Trigger Property="IsHighlighted" Value="True">
-                    <!--
-                    <Setter Property="Background" TargetName="templateRoot" Value="#3D26A0DA"/>
-                    <Setter Property="BorderBrush" TargetName="templateRoot" Value="#FF26A0DA"/>
-                    -->
-                    <Setter Property="Background" TargetName="templateRoot" Value="#00FFFFFF"/>
-                    <Setter Property="BorderBrush" TargetName="templateRoot" Value="#00FFFFFF"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="#FF707070"/>
-                    <Setter Property="Fill" TargetName="GlyphPanel" Value="#FF707070"/>
-                </Trigger>
-                <Trigger Property="CanContentScroll" SourceName="SubMenuScrollViewer" Value="False">
-                    <Setter Property="Canvas.Top" TargetName="OpaqueRect" Value="{Binding VerticalOffset, ElementName=SubMenuScrollViewer}"/>
-                    <Setter Property="Canvas.Left" TargetName="OpaqueRect" Value="{Binding HorizontalOffset, ElementName=SubMenuScrollViewer}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <SolidColorBrush x:Key="ListBorder" Color="#828790"/>
-        <Style x:Key="TreeViewItemFocusVisual">
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Rectangle/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <SolidColorBrush x:Key="TreeViewItem.TreeArrow.Static.Checked.Fill" Color="#FF595959"/>
-        <SolidColorBrush x:Key="TreeViewItem.TreeArrow.Static.Checked.Stroke" Color="#FF262626"/>
-        <SolidColorBrush x:Key="TreeViewItem.TreeArrow.MouseOver.Stroke" Color="#FF27C7F7"/>
-        <SolidColorBrush x:Key="TreeViewItem.TreeArrow.MouseOver.Fill" Color="#FFCCEEFB"/>
-        <SolidColorBrush x:Key="TreeViewItem.TreeArrow.MouseOver.Checked.Stroke" Color="#FF1CC4F7"/>
-        <SolidColorBrush x:Key="TreeViewItem.TreeArrow.MouseOver.Checked.Fill" Color="#FF82DFFB"/>
-        <PathGeometry x:Key="TreeArrow" Figures="M0,0 L0,6 L6,0 z"/>
-        <SolidColorBrush x:Key="TreeViewItem.TreeArrow.Static.Fill" Color="#FFFFFFFF"/>
-        <SolidColorBrush x:Key="TreeViewItem.TreeArrow.Static.Stroke" Color="#FF818181"/>
-        <Style x:Key="ExpandCollapseToggleStyle" TargetType="{x:Type ToggleButton}">
-            <Setter Property="Focusable" Value="False"/>
-            <Setter Property="Width" Value="16"/>
-            <Setter Property="Height" Value="16"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Border Background="Transparent" Height="16" Padding="5,5,5,5" Width="16">
-                            <Path x:Name="ExpandPath" Data="{StaticResource TreeArrow}" Fill="{StaticResource TreeViewItem.TreeArrow.Static.Fill}" Stroke="{StaticResource TreeViewItem.TreeArrow.Static.Stroke}">
-                                <Path.RenderTransform>
-                                    <RotateTransform Angle="135" CenterY="3" CenterX="3"/>
-                                </Path.RenderTransform>
-                            </Path>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter Property="RenderTransform" TargetName="ExpandPath">
-                                    <Setter.Value>
-                                        <RotateTransform Angle="180" CenterY="3" CenterX="3"/>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="Fill" TargetName="ExpandPath" Value="{StaticResource TreeViewItem.TreeArrow.Static.Checked.Fill}"/>
-                                <Setter Property="Stroke" TargetName="ExpandPath" Value="{StaticResource TreeViewItem.TreeArrow.Static.Checked.Stroke}"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Stroke" TargetName="ExpandPath" Value="{StaticResource TreeViewItem.TreeArrow.MouseOver.Stroke}"/>
-                                <Setter Property="Fill" TargetName="ExpandPath" Value="{StaticResource TreeViewItem.TreeArrow.MouseOver.Fill}"/>
-                            </Trigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsMouseOver" Value="True"/>
-                                    <Condition Property="IsChecked" Value="True"/>
-                                </MultiTrigger.Conditions>
-                                <Setter Property="Stroke" TargetName="ExpandPath" Value="{StaticResource TreeViewItem.TreeArrow.MouseOver.Checked.Stroke}"/>
-                                <Setter Property="Fill" TargetName="ExpandPath" Value="{StaticResource TreeViewItem.TreeArrow.MouseOver.Checked.Fill}"/>
-                            </MultiTrigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style TargetType="{x:Type TreeViewItem}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-            <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-            <Setter Property="Padding" Value="1,0,0,0"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TreeViewItem}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition MinWidth="19" Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <ToggleButton x:Name="Expander" ClickMode="Press" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ExpandCollapseToggleStyle}"/>
-                            <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="1" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true" Grid.ColumnSpan="2">
-                                <ContentPresenter x:Name="PART_Header" ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                            </Border>
-                            <ItemsPresenter x:Name="ItemsHost" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="1" Margin="-19,0,0,0"/>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsExpanded" Value="false">
-                                <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
-                            </Trigger>
-                            <Trigger Property="HasItems" Value="false">
-                                <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="true">
-                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-                            </Trigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsSelected" Value="true"/>
-                                    <Condition Property="IsSelectionActive" Value="false"/>
-                                </MultiTrigger.Conditions>
-                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
-                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
-                            </MultiTrigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="VirtualizingPanel.IsVirtualizing" Value="true">
-                    <Setter Property="ItemsPanel">
-                        <Setter.Value>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel/>
-                            </ItemsPanelTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+       
     </Window.Resources>
     <Grid Background="#FF8D8D8D">
         <Grid.ColumnDefinitions>
@@ -374,15 +197,72 @@
                         </Button>
                         <TreeView x:Name="missionTreeView" Grid.Column="1" HorizontalContentAlignment="Stretch" Background="#FFE5E5E5" >                            
                             <TreeView.Resources>
-                                <HierarchicalDataTemplate DataType="{x:Type ds:Mission}">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="1*"/>
-                                            <RowDefinition Height="1*"/>
-                                        </Grid.RowDefinitions>
-                                    </Grid>
-                                </HierarchicalDataTemplate>                               
-                            </TreeView.Resources>                            
+                                <HierarchicalDataTemplate ItemsSource="{Binding ChildItems}" DataType="{x:Type ds:Mission}">
+                                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="3" Margin="2">
+                                        <Grid VerticalAlignment="Top" Background="#FFD6D6D6">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="1*" MinHeight="20"/>
+                                                <RowDefinition Height="1*" MinHeight="20"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="20"/>
+                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="20"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                            <Button x:Name="btn" Grid.Column="0" Margin="3" Style="{StaticResource colorButtonStyle}" />
+
+                                            <TextBlock Text="航线" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                            <Button Grid.Column="2" Margin="3" FontSize="10" Background="#FF707070">
+                                                <Image Height="11" Width="11" Source="Contents/plus.png"/>
+                                            </Button>
+                                            <TextBox Text="航线1" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" />
+                                        </Grid>
+                                    </Border>
+                                </HierarchicalDataTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding ChildItems}" DataType="{x:Type ds:Waypoint}">
+                                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="3" Margin="2">
+                                        <Grid VerticalAlignment="Top" Background="#FFD6D6D6">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="1*" MinHeight="20"/>
+                                                <RowDefinition Height="1*" MinHeight="20"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="20"/>
+                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="20" MaxWidth="20"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding ID}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <TextBlock Text="导航点1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                            <Button Grid.Column="2" Margin="3" FontSize="10" Background="#FF707070">
+                                                <Image Height="11" Width="11" Source="Contents/plus.png"/>
+                                            </Button>
+                                            <Grid Grid.Row="1" Grid.ColumnSpan="3">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="40"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="1*" MinHeight="20"/>
+                                                    <RowDefinition Height="1*" MinHeight="20"/>
+                                                    <RowDefinition Height="1*" MinHeight="20"/>
+                                                    <RowDefinition Height="1*" MinHeight="20"/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="经度：" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                                <TextBox Text="{Binding Longitude}" Grid.Row="0" Grid.Column="2" Margin="5" />
+                                                <TextBlock Text="纬度：" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                                <TextBox Text="{Binding Latitude}" Grid.Row="1" Grid.Column="2" Margin="5" />
+                                                <TextBlock Text="高度：" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                                <TextBox Text="{Binding Altitude}" Grid.Row="2" Grid.Column="2" Margin="5" />
+                                                <CheckBox x:Name="checkBox" IsChecked="{Binding UseRelativeAlt}" Content="相对高度" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" Margin="5,0,0,0"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
+                                    
+                                </HierarchicalDataTemplate>
+                               
+                            </TreeView.Resources>
                             <!--<TreeView.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding ChildItems}">
                                     <TextBlock Text="{Binding ID}"/>
