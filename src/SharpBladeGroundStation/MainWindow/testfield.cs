@@ -46,31 +46,47 @@ namespace SharpBladeGroundStation
 	{
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
-            //noMagic();
-            //replayLog();
-            //triggerCamera();
-            // testCamera();
-            //setScreen();
-            //caliLevel();
-            //currentVehicle.GpsState.ForceSetHome();
-            //homeMarker.Position = PositionHelper.WGS84ToGCJ02(currentVehicle.GpsState.HomePosition);
-            //copyRouteData();
-            //talkToBL();
-            //testJoystick();
-            addMission();
+			//noMagic();
+			//replayLog();
+			//triggerCamera();
+			// testCamera();
+			//setScreen();
+			//caliLevel();
+			//currentVehicle.GpsState.ForceSetHome();
+			//homeMarker.Position = PositionHelper.WGS84ToGCJ02(currentVehicle.GpsState.HomePosition);
+			//copyRouteData();
+			//talkToBL();
+			//testJoystick();
+			addMission();
+			//getCRC();
+		}
+
+		void getCRC()
+		{
+			StreamWriter sw = new StreamWriter("d:\\crc.txt");
+			for (uint i = 0; i < 256; i++)
+			{
+				sw.Write(MAVLink.MAVLINK_MESSAGE_INFOS.GetMessageInfo(i).crc);
+				if (i % 16 == 0)
+					sw.WriteLine(",");
+				else
+					sw.Write(",");
+			}
+			sw.Close();
 		}
 		
         void addMission()
         {
-            missionManager.MissionList.Add(new Mission() { ID = 0, Name = "Mission 1" });
-            missionManager.MissionList[0].ChildItems.Add(new Waypoint(1));
-            missionManager.MissionList[0].ChildItems.Add(new Waypoint(2));
-            missionManager.MissionList[0].ChildItems.Add(new Waypoint(4));
-			missionManager.MissionList[0].ChildItems.Add(new Waypoint(5));
-			missionManager.MissionList[0].ChildItems.Add(new Waypoint(6));
-			missionManager.MissionList[0].ChildItems.Add(new Waypoint(7));
+            missionManager.MissionList.Add(new Mission() { ID = 0, Name = "航线1" });
+			missionManager.MissionList[0].ChildItems.Add(new Waypoint(1, new PointLatLng(34.242947, 108.916225), 50));
+            missionManager.MissionList[0].ChildItems.Add(new Waypoint(2, new PointLatLng(34.242947, 108.916225), 50));
+            missionManager.MissionList[0].ChildItems.Add(new Waypoint(4, new PointLatLng(34.242947, 108.916225), 50));
+			missionManager.MissionList[0].ChildItems.Add(new Waypoint(5, new PointLatLng(34.242947, 108.916225), 50));
+			missionManager.MissionList[0].ChildItems.Add(new Waypoint(6, new PointLatLng(34.242947, 108.916225), 50));
+			missionManager.MissionList[0].ChildItems.Add(new Waypoint(7, new PointLatLng(34.242947, 108.916225), 50));
 			missionManager.MissionList[0].ChildItems[1].ChildItems.Add(new MissionAction() { ID = 3 });
-        }
+			missionManager.MissionList.Add(new Mission() { ID = 0, Name = "航线2" });
+		}
 		
 		void testJoystick()
 		{

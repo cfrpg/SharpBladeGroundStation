@@ -195,7 +195,7 @@
                             </Button.ToolTip>
                             <Image Source="Contents/pathDetail.png" Margin="2" />
                         </Button>
-                        <TreeView x:Name="missionTreeView" Grid.Column="1" HorizontalContentAlignment="Stretch" Background="#FFE5E5E5" >                            
+                        <TreeView x:Name="missionTreeView" Grid.Column="1" HorizontalContentAlignment="Stretch" Background="#FFE5E5E5" ScrollViewer.VerticalScrollBarVisibility="Visible">                            
                             <TreeView.Resources>
                                 <HierarchicalDataTemplate ItemsSource="{Binding ChildItems}" DataType="{x:Type ds:Mission}">
                                     <Border BorderBrush="Black" BorderThickness="1" CornerRadius="3" Margin="2">
@@ -211,13 +211,13 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Text="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-                                            <Button x:Name="btn" Grid.Column="0" Margin="3" Style="{StaticResource colorButtonStyle}" />
+                                            <Button x:Name="btn" Grid.Column="0" Margin="3" Style="{StaticResource colorButtonStyle}" Background="Red" />
 
                                             <TextBlock Text="航线" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
                                             <Button Grid.Column="2" Margin="3" FontSize="10" Background="#FF707070">
                                                 <Image Height="11" Width="11" Source="Contents/plus.png"/>
                                             </Button>
-                                            <TextBox Text="航线1" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" />
+                                            <TextBox Text="{Binding Name}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" />
                                         </Grid>
                                     </Border>
                                 </HierarchicalDataTemplate>
@@ -234,7 +234,7 @@
                                                 <ColumnDefinition Width="20" MaxWidth="20"/>
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Text="{Binding ID}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            <TextBlock Text="导航点1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                            <TextBlock Text="导航点" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
                                             <Button Grid.Column="2" Margin="3" FontSize="10" Background="#FF707070">
                                                 <Image Height="11" Width="11" Source="Contents/plus.png"/>
                                             </Button>
