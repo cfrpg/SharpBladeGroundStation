@@ -33,7 +33,7 @@ namespace SharpBladeGroundStation
 		private void initGmap()
 		{
             missionManager = new MissionManager(currentVehicle);
-            //missionManager.LocalMission = newroute;
+            
             missionManager.OnFinished += MissionManager_OnFinished;
             missionTreeView.ItemsSource = missionManager.MissionList;
 
@@ -73,8 +73,8 @@ namespace SharpBladeGroundStation
 			newroute.LeftMouseButtonUp += Wp_MouseLeftButtonUp;
 			newroute.RightMouseButtonDown += Wp_MouseRightButtonDown;
 			newroute.MouseWheel += Wp_MouseWheel;
-			
-
+			missionManager.LocalMission = newroute;
+			missionManager.MissionList.Add(new Mission() { ID = 0, Name = "航线1" ,Color=Colors.Red});
 
 			flightRoute = new MapRouteData(gmap);
 			Gmap_OnMapZoomChanged();
@@ -165,7 +165,7 @@ namespace SharpBladeGroundStation
 				GMapMarker m = new GMapMarker(gmap.FromLocalToLatLng((int)(p.X), (int)(p.Y)));
 				WayPointMarker wp = new WayPointMarker(missionManager.LocalMission, m, (missionManager.LocalMission.Markers.Count + 1).ToString(), string.Format("Lat {0}\nLon {1}\nAlt {2} m", m.Position.Lat, m.Position.Lng, 50));
 				missionManager.LocalMission.AddWaypoint(wp, m);
-
+				
 			}
 			if (!area.IsEmpty)
 			{
@@ -238,6 +238,17 @@ namespace SharpBladeGroundStation
 		private void updateFlightRoute(PointLatLng p)
 		{
 			flightRoute.AddWaypoint(p);
+		}
+
+		private void colorbtn_Click(object sender, RoutedEventArgs e)
+		{
+			System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
+			if(cd.ShowDialog()==System.Windows.Forms.DialogResult.OK)
+			{
+				System.Drawing.Color c = cd.Color;
+				object o= missionTreeView.SelectedItem;
+			}
+			e.Handled = false;
 		}
 	}
 }

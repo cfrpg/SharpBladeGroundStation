@@ -43,4 +43,18 @@ namespace SharpBladeGroundStation
 			return 0.0;
 		}
 	}
+
+	public class ColorBrushConvert:IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			System.Windows.Media.Color c = (System.Windows.Media.Color)value;
+			return new System.Windows.Media.SolidColorBrush(c);
+		}
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			var b = (System.Windows.Media.SolidColorBrush)value;
+			return b.Color;
+		}
+	}
 }

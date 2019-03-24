@@ -321,9 +321,9 @@ namespace SharpBladeGroundStation
 			hudWindow?.KeyEvent(sender, e);
 		}
 
-        
-    }
-    public enum HUDVideoSource
+		
+	}
+	public enum HUDVideoSource
 	{
 		NoVideo,
 		Camera,

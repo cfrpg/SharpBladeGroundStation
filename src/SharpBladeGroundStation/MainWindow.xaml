@@ -17,7 +17,7 @@
 
     <Window.Resources>
         <local:ArmConverter x:Key="arm2str"/>
-       
+        <local:ColorBrushConvert x:Key="color2brush"/>
     </Window.Resources>
     <Grid Background="#FF8D8D8D">
         <Grid.ColumnDefinitions>
@@ -199,7 +199,7 @@
                             <TreeView.Resources>
                                 <HierarchicalDataTemplate ItemsSource="{Binding ChildItems}" DataType="{x:Type ds:Mission}">
                                     <Border BorderBrush="Black" BorderThickness="1" CornerRadius="3" Margin="2">
-                                        <Grid VerticalAlignment="Top" Background="#FFD6D6D6">
+                                        <Grid VerticalAlignment="Top" Background="#FFD6D6D6" IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=TreeViewItem},Path=IsSelected}">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="1*" MinHeight="20"/>
                                                 <RowDefinition Height="1*" MinHeight="20"/>
@@ -211,9 +211,9 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Text="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-                                            <Button x:Name="btn" Grid.Column="0" Margin="3" Style="{StaticResource colorButtonStyle}" Background="Red" />
+                                            <Button x:Name="colorbtn" Grid.Column="0" Margin="3" Style="{StaticResource colorButtonStyle}" Background="{Binding Color,Converter={StaticResource color2brush}}" Click="colorbtn_Click" />
 
-                                            <TextBlock Text="航线" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                            <TextBlock Text="航线" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" />
                                             <Button Grid.Column="2" Margin="3" FontSize="10" Background="#FF707070">
                                                 <Image Height="11" Width="11" Source="Contents/plus.png"/>
                                             </Button>
