@@ -73,17 +73,22 @@ namespace SharpBladeGroundStation.DataStructs
         }
 
         /// <summary>
-        /// 在下一层第ID元素后插入元素
+        /// 在下一层第ID元素处插入元素
         /// </summary>
         /// <param name="item">要插入的元素</param>
-        /// <param name="pos">插入位置的前一个</param>
+        /// <param name="pos">插入位置</param>
         protected virtual void insertMissionItem(MissionItem item,int pos)
         {
+			if(pos==childItems.Count)
+			{
+				childItems.Add(item);
+				return;
+			}
             for (int i = childItems.Count; i >= 0; i--)
             {
                 if (childItems[i].ID <= pos)
                 {
-                    childItems.Insert(i + 1, item);
+                    childItems.Insert(i, item);
                     break;
                 }
             }

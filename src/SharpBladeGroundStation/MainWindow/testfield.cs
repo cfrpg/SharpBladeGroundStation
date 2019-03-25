@@ -46,7 +46,7 @@ namespace SharpBladeGroundStation
 	{
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
-			//noMagic();
+			noMagic();
 			//replayLog();
 			//triggerCamera();
 			// testCamera();
@@ -57,7 +57,7 @@ namespace SharpBladeGroundStation
 			//copyRouteData();
 			//talkToBL();
 			//testJoystick();
-			addMission();
+			//addMission();
 			//getCRC();
 		}
 
@@ -77,7 +77,7 @@ namespace SharpBladeGroundStation
 		
         void addMission()
         {
-            missionManager.MissionList.Add(new Mission() { ID = 0, Name = "航线1" });
+            //missionManager.MissionList.Add(new Mission() { ID = 0, Name = "航线1" });
 			missionManager.MissionList[0].ChildItems.Add(new Waypoint(1, new PointLatLng(34.242947, 108.916225), 50));
             missionManager.MissionList[0].ChildItems.Add(new Waypoint(2, new PointLatLng(34.242947, 108.916225), 50));
             missionManager.MissionList[0].ChildItems.Add(new Waypoint(4, new PointLatLng(34.242947, 108.916225), 50));
@@ -85,7 +85,7 @@ namespace SharpBladeGroundStation
 			missionManager.MissionList[0].ChildItems.Add(new Waypoint(6, new PointLatLng(34.242947, 108.916225), 50));
 			missionManager.MissionList[0].ChildItems.Add(new Waypoint(7, new PointLatLng(34.242947, 108.916225), 50));
 			missionManager.MissionList[0].ChildItems[1].ChildItems.Add(new MissionAction() { ID = 3 });
-			missionManager.MissionList.Add(new Mission() { ID = 0, Name = "航线2" });
+			//missionManager.MissionList.Add(new Mission() { ID = 0, Name = "航线2" });
 		}
 		
 		void testJoystick()

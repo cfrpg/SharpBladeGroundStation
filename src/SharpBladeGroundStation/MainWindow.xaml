@@ -214,16 +214,26 @@
                                             <Button x:Name="colorbtn" Grid.Column="0" Margin="3" Style="{StaticResource colorButtonStyle}" Background="{Binding Color,Converter={StaticResource color2brush}}" Click="colorbtn_Click" />
 
                                             <TextBlock Text="航线" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" />
-                                            <Button Grid.Column="2" Margin="3" FontSize="10" Background="#FF707070">
+                                            <!--<Button Grid.Column="2" Margin="3" FontSize="10" Background="#FF707070">
+                                                
+                                            </Button>-->
+                                            <Border  Grid.Column="2" Margin="3" Height="14" Width="14" Background="#FF707070">
                                                 <Image Height="11" Width="11" Source="Contents/plus.png"/>
-                                            </Button>
+                                            </Border>
+                                            <Menu Grid.Column="2" Margin="3" Height="14" Width="14" Background="{x:Null}">                                                
+                                                <MenuItem Width="14" Height="14">
+                                                    <MenuItem Header="上传航线"/>
+                                                    <MenuItem Header="清空航线"/>
+                                                </MenuItem>
+                                            </Menu>
+                                            
                                             <TextBox Text="{Binding Name}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" />
                                         </Grid>
                                     </Border>
                                 </HierarchicalDataTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding ChildItems}" DataType="{x:Type ds:Waypoint}">
                                     <Border BorderBrush="Black" BorderThickness="1" CornerRadius="3" Margin="2">
-                                        <Grid VerticalAlignment="Top" Background="#FFD6D6D6">
+                                        <Grid VerticalAlignment="Top" Background="#FFD6D6D6" IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=TreeViewItem},Path=IsSelected}">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="1*" MinHeight="20"/>
                                                 <RowDefinition Height="1*" MinHeight="20"/>
@@ -235,9 +245,15 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Text="{Binding ID}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                             <TextBlock Text="导航点" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
-                                            <Button Grid.Column="2" Margin="3" FontSize="10" Background="#FF707070">
+                                            <Border  Grid.Column="2" Margin="3" Height="14" Width="14" Background="#FF707070">
                                                 <Image Height="11" Width="11" Source="Contents/plus.png"/>
-                                            </Button>
+                                            </Border>
+                                            <Menu Grid.Column="2" Margin="3" Height="14" Width="14" Background="{x:Null}">
+                                                <MenuItem Width="14" Height="14">
+                                                    <MenuItem Header="插入航点"/>
+                                                    <MenuItem Header="删除航点"/>                                                    
+                                                </MenuItem>
+                                            </Menu>
                                             <Grid Grid.Row="1" Grid.ColumnSpan="3">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="40"/>
@@ -258,8 +274,7 @@
                                                 <CheckBox x:Name="checkBox" IsChecked="{Binding UseRelativeAlt}" Content="相对高度" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" Margin="5,0,0,0"/>
                                             </Grid>
                                         </Grid>
-                                    </Border>
-                                    
+                                    </Border>                                    
                                 </HierarchicalDataTemplate>
                                
                             </TreeView.Resources>

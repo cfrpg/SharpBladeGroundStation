@@ -24,52 +24,31 @@ namespace SharpBladeGroundStation.Map.Markers
 	public partial class WayPointMarker : ClickableGMapMarker
 	{
 		string markerText;
-		Popup popup;
-		TextBlock labelText;
+		
 		MapRouteData route;
 
-		public WayPointMarker(MapRouteData r, GMapMarker m, string wptext, string labeltext)
+		public WayPointMarker(MapRouteData r, GMapMarker m, string wptext)
 		{
 			InitializeComponent();
 			route = r;
 			marker = m;
 			MarkerText = wptext;
-
-			popup = new Popup();
-			labelText = new TextBlock();
-			popup.Placement = PlacementMode.Mouse;
-			labelText.Background = Brushes.DarkGray;
-			labelText.Foreground = Brushes.White;
-			labelText.FontSize = 14;
-			labelText.Text = labeltext;
-
-			popup.Child = labelText;
-
-
 			altitude = 50;
-
 			this.Unloaded += WayPointMarker_Unloaded;
 			this.Loaded += WayPointMarker_Loaded;
 			this.MouseEnter += WayPointMarker_MouseEnter;
 			this.MouseLeave += WayPointMarker_MouseLeave;
 
 		}
-
-		public WayPointMarker(WaypointBase wp)
-		{
-
-		}
-
+		
 		private void WayPointMarker_MouseLeave(object sender, MouseEventArgs e)
 		{
-			if (popup != null)
-				popup.IsOpen = false;
+			
 		}
 
 		private void WayPointMarker_MouseEnter(object sender, MouseEventArgs e)
 		{
-			if (popup != null)
-				popup.IsOpen = true;
+			
 		}
 
 		private void WayPointMarker_Loaded(object sender, RoutedEventArgs e)
@@ -79,9 +58,7 @@ namespace SharpBladeGroundStation.Map.Markers
 
 		private void WayPointMarker_Unloaded(object sender, RoutedEventArgs e)
 		{
-			popup.IsOpen = false;
-			popup = null;
-			labelText = null;
+			
 		}
 
 		public string MarkerText
@@ -94,12 +71,7 @@ namespace SharpBladeGroundStation.Map.Markers
 			}
 		}
 
-		public string LabelText
-		{
-			get { return labelText.Text; }
-			set { labelText.Text = value; }
-		}
-
+		
 		public override GMapControl Map
 		{
 			get { return route.Map; }
