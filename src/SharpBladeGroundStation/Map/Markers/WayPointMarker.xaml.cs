@@ -19,44 +19,44 @@ using SharpBladeGroundStation.DataStructs;
 namespace SharpBladeGroundStation.Map.Markers
 {
 	/// <summary>
-	/// WayPointMarker.xaml 的交互逻辑
+	/// WaypointMarker.xaml 的交互逻辑
 	/// </summary>
-	public partial class WayPointMarker : ClickableGMapMarker
+	public partial class WaypointMarker : ClickableGMapMarker
 	{
 		string markerText;
 		
 		MapRouteData route;
 
-		public WayPointMarker(MapRouteData r, GMapMarker m, string wptext)
+		public WaypointMarker(MapRouteData r, GMapMarker m, string wptext)
 		{
 			InitializeComponent();
 			route = r;
 			marker = m;
 			MarkerText = wptext;
 			altitude = 50;
-			this.Unloaded += WayPointMarker_Unloaded;
-			this.Loaded += WayPointMarker_Loaded;
-			this.MouseEnter += WayPointMarker_MouseEnter;
-			this.MouseLeave += WayPointMarker_MouseLeave;
+			this.Unloaded += WaypointMarker_Unloaded;
+			this.Loaded += WaypointMarker_Loaded;
+			this.MouseEnter += WaypointMarker_MouseEnter;
+			this.MouseLeave += WaypointMarker_MouseLeave;
 
 		}
 		
-		private void WayPointMarker_MouseLeave(object sender, MouseEventArgs e)
+		private void WaypointMarker_MouseLeave(object sender, MouseEventArgs e)
 		{
 			
 		}
 
-		private void WayPointMarker_MouseEnter(object sender, MouseEventArgs e)
+		private void WaypointMarker_MouseEnter(object sender, MouseEventArgs e)
 		{
 			
 		}
 
-		private void WayPointMarker_Loaded(object sender, RoutedEventArgs e)
+		private void WaypointMarker_Loaded(object sender, RoutedEventArgs e)
 		{
 
 		}
 
-		private void WayPointMarker_Unloaded(object sender, RoutedEventArgs e)
+		private void WaypointMarker_Unloaded(object sender, RoutedEventArgs e)
 		{
 			
 		}
@@ -74,9 +74,13 @@ namespace SharpBladeGroundStation.Map.Markers
 		
 		public override GMapControl Map
 		{
-			get { return route.Map; }
+			get { return Route.Map; }
 		}
 
+		public MapRouteData Route
+		{
+			get { return route; }
+		}
 
 		public override Point GetOffset(Size s)
 		{

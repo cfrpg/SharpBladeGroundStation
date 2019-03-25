@@ -16,7 +16,7 @@ namespace SharpBladeGroundStation.DataStructs
     {
         protected int id;
         protected ObservableCollection<MissionItem> childItems;
-        List<GMapMarker> markers;
+        //List<GMapMarker> markers;
 
         public event PropertyChangedEventHandler PropertyChanged;
         /// <summary>
@@ -41,7 +41,7 @@ namespace SharpBladeGroundStation.DataStructs
             set
             {
                 id = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ChildItems"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ID"));
             }
         }
         /// <summary>
@@ -55,11 +55,11 @@ namespace SharpBladeGroundStation.DataStructs
         /// <summary>
         /// 显示在地图上的标识
         /// </summary>
-        public List<GMapMarker> Markers
-        {
-            get { return markers; }
-            set { markers = value; }
-        }
+        //public List<GMapMarker> Markers
+        //{
+        //    get { return markers; }
+        //    set { markers = value; }
+        //}
 
         public MissionItem()
         {
@@ -79,12 +79,12 @@ namespace SharpBladeGroundStation.DataStructs
         /// <param name="pos">插入位置</param>
         protected virtual void insertMissionItem(MissionItem item,int pos)
         {
-			if(pos==childItems.Count)
+			if(pos>=childItems.Count)
 			{
 				childItems.Add(item);
 				return;
 			}
-            for (int i = childItems.Count; i >= 0; i--)
+            for (int i = childItems.Count-1; i >= 0; i--)
             {
                 if (childItems[i].ID <= pos)
                 {
@@ -100,19 +100,19 @@ namespace SharpBladeGroundStation.DataStructs
         /// <param name="id">要移除的元素ID</param>
         protected virtual void removeMissionItemAt(int pos)
         {
-            for(int i=childItems.Count;i>=0;i--)
-            {
-                if(childItems[i].ID==pos)
-                {
-                    childItems.RemoveAt(i);
-                    break;
-                }
-                if(childItems[i].ID<pos)
-                {
-                    childItems[i].removeMissionItemAt(pos);
-                    break;
-                }
-            }
+			for (int i = childItems.Count - 1; i >= 0; i--)
+			{
+				if (childItems[i].ID == pos)
+				{
+					childItems.RemoveAt(i);
+					break;
+				}
+				if (childItems[i].ID < pos)
+				{
+					childItems[i].removeMissionItemAt(pos);
+					break;
+				}
+			}
         }
 
         protected virtual int rebuildID(int pos)

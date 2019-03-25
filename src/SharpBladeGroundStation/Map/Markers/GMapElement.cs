@@ -23,6 +23,7 @@ namespace SharpBladeGroundStation.Map.Markers
 		public PointLatLng Position
 		{
 			get { return marker.Position; }
+			set { marker.Position = value; }
 		}
 
 		public float Altitude

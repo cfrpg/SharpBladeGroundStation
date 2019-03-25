@@ -1,4 +1,4 @@
-﻿<local:ClickableGMapMarker x:Class="SharpBladeGroundStation.Map.Markers.WayPointMarker"             
+﻿<local:ClickableGMapMarker x:Class="SharpBladeGroundStation.Map.Markers.WaypointMarker"             
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

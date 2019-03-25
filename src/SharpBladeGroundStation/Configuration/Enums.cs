@@ -22,11 +22,11 @@ namespace SharpBladeGroundStation.Configuration
 		/// <summary>
 		/// 上一个航点
 		/// </summary>
-		LastWayPoint,
+		LastWaypoint,
 		/// <summary>
 		/// 下一个航点
 		/// </summary>
-		NextWayPoint,
+		NextWaypoint,
 		/// <summary>
 		/// 可以随便拖拽
 		/// </summary>

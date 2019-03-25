@@ -57,12 +57,29 @@ namespace SharpBladeGroundStation.DataStructs
 		public void AddWaypoint(WaypointBase wp)
 		{
 			GMapMarker m = new GMapMarker(wp.Position);
-			WayPointMarker wpm = new WayPointMarker(route, m, (childItems.Count + 1).ToString());
+			WaypointMarker wpm = new WaypointMarker(route, m, "");
 			route.AddWaypoint(wpm, m);
-			AddWaypoint(childItems.Count, wp);
+			wp.Marker = wpm;
+			AddWaypoint(99999, wp);
 		}
 
+		/// <summary>
+		/// 在指定节点前分裂出一个紧挨的节点
+		/// </summary>
+		/// <param name="wp"></param>
+		public void SplitWaypoint(WaypointBase wp)
+		{
+			GMapMarker m = new GMapMarker(new GMap.NET.PointLatLng(wp.Position.Lat - 0.0001, wp.Position.Lng - 0.0001));
+			WaypointMarker wpm = new WaypointMarker(route, m, "");
+			Waypoint newwp = new Waypoint(0, m.Position, wp.Altitude);
+			route.AddWaypoint(wp.Marker, wpm, m, wp.Altitude);
+			newwp.Marker = wpm;
 
+			AddWaypoint(wp.ID, newwp);
+			return;
+
+
+		}
 
 		/// <summary>
 		/// 在指定位置插入航点
@@ -72,6 +89,66 @@ namespace SharpBladeGroundStation.DataStructs
 		public void AddWaypoint(int id,WaypointBase wp)
 		{
 			insertMissionItem(wp, id);
+			rebuildID(0);
+		}
+
+		/// <summary>
+		/// 更新航点的坐标
+		/// </summary>
+		/// <param name="wpm">要更新的航点对应的Marker</param>
+		public void UpdateWaypointPosition(WaypointMarker wpm)
+		{
+			for(int i=0;i<childItems.Count;i++)
+			{
+				if(childItems[i] is WaypointBase)
+				{
+					if (((WaypointBase)childItems[i]).Marker==wpm)
+					{
+						((WaypointBase)childItems[i]).Position = wpm.Position;
+						break;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// 更新航点的高度
+		/// </summary>
+		/// <param name="wpm">要更新的航点对应的Marker</param>
+		public void UpdateWaypointAltitude(WaypointMarker wpm)
+		{
+			for (int i = 0; i < childItems.Count; i++)
+			{
+				if (childItems[i] is WaypointBase)
+				{
+					if (((WaypointBase)childItems[i]).Marker == wpm)
+					{
+						((WaypointBase)childItems[i]).Altitude = wpm.Altitude;
+						break;
+					}
+				}
+			}
+		}
+
+		public void RemoveWaypoint(WaypointMarker wpm)
+		{
+			for (int i = 0; i < childItems.Count; i++)
+			{
+				if (childItems[i] is WaypointBase)
+				{
+					if (((WaypointBase)childItems[i]).Marker == wpm)
+					{
+						RemoveWaypointAt(childItems[i].ID);
+						break;
+					}
+				}
+			}
+			route.RemoveWaypoint(wpm);
+		}
+
+		public void RemoveWaypointAt(int id)
+		{
+			removeMissionItemAt(id);
 			rebuildID(0);
 		}
 	}

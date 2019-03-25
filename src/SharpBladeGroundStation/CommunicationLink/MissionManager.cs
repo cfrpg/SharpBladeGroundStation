@@ -212,7 +212,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 				if(cmd==16)
 				{				
 					GMapMarker m = new GMapMarker(PositionHelper.WGS84ToGCJ02(new GMap.NET.PointLatLng(p5,p6)));
-					WayPointMarker wp = new WayPointMarker(localMission, m, (localMission.Markers.Count + 1).ToString());
+					WaypointMarker wp = new WaypointMarker(localMission, m, (localMission.Markers.Count + 1).ToString());
 					localMission.AddWaypoint(wp, m, p7);					
 				}
 			}

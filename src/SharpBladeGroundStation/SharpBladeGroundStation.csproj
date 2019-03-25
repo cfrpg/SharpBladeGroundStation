@@ -171,8 +171,8 @@
     <Compile Include="Map\Markers\VertexMarker.xaml.cs">
       <DependentUpon>VertexMarker.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Map\Markers\WayPointMarker.xaml.cs">
-      <DependentUpon>WayPointMarker.xaml</DependentUpon>
+    <Compile Include="Map\Markers\WaypointMarker.xaml.cs">
+      <DependentUpon>WaypointMarker.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow\analyzeMAVPackage.cs" />
     <Compile Include="DataStructs\Mission\HomeWaypoint.cs" />
@@ -249,7 +249,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Map\Markers\WayPointMarker.xaml">
+    <Page Include="Map\Markers\WaypointMarker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

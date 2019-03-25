@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GMap.NET;
+using GMap.NET.WindowsPresentation;
+using SharpBladeGroundStation.Map.Markers;
 
 namespace SharpBladeGroundStation.DataStructs
 {
@@ -13,7 +15,7 @@ namespace SharpBladeGroundStation.DataStructs
     public class Waypoint:WaypointBase
     {
         float holdTime;
-        float radius;
+        float radius;		
 
         public float HoldTime
         {
@@ -32,9 +34,9 @@ namespace SharpBladeGroundStation.DataStructs
                 radius = value;
                 NotifyPropertyChanged("Radius");
             }
-        }
+        }		
 
-        public Waypoint(int i) : this(i,new PointLatLng(0, 0), 0) { }
+		public Waypoint(int i) : this(i,new PointLatLng(0, 0), 0) { }
        
         public Waypoint(int i,PointLatLng pos,float alt):base(i,pos,alt)
         {
@@ -42,6 +44,13 @@ namespace SharpBladeGroundStation.DataStructs
             heading = float.NaN;
             radius = 0;
         }
-    }
+
+		protected override int rebuildID(int pos)
+		{
+			marker.MarkerText = pos.ToString();
+			return base.rebuildID(pos);
+		}
+
+	}
 }
     

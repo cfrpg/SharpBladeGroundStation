@@ -149,7 +149,7 @@
                     <Grid Background="#CCE5E5E5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100*"/>
-                            <ColumnDefinition x:Name="rightCol" Width="200" MaxWidth="200" MinWidth="0"/>
+                            <ColumnDefinition x:Name="rightCol" Width="0" MaxWidth="200" MinWidth="0"/>
                         </Grid.ColumnDefinitions>
                         <gmwpf:GMapControl x:Name="gmap"  Margin="0"  MaxZoom="18" Zoom="13"/>
                         <fd:MapScaleControl x:Name="mapscale" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="200" Margin="10,0,0,20" />
@@ -195,7 +195,8 @@
                             </Button.ToolTip>
                             <Image Source="Contents/pathDetail.png" Margin="2" />
                         </Button>
-                        <TreeView x:Name="missionTreeView" Grid.Column="1" HorizontalContentAlignment="Stretch" Background="#FFE5E5E5" ScrollViewer.VerticalScrollBarVisibility="Visible">                            
+                        <TreeView x:Name="missionTreeView" Grid.Column="1" HorizontalContentAlignment="Stretch" Background="#FFE5E5E5" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                           
                             <TreeView.Resources>
                                 <HierarchicalDataTemplate ItemsSource="{Binding ChildItems}" DataType="{x:Type ds:Mission}">
                                     <Border BorderBrush="Black" BorderThickness="1" CornerRadius="3" Margin="2">
@@ -250,8 +251,8 @@
                                             </Border>
                                             <Menu Grid.Column="2" Margin="3" Height="14" Width="14" Background="{x:Null}">
                                                 <MenuItem Width="14" Height="14">
-                                                    <MenuItem Header="插入航点"/>
-                                                    <MenuItem Header="删除航点"/>                                                    
+                                                    <MenuItem x:Name="insWpItem" Header="插入航点" Click="insWpItem_Click"/>
+                                                    <MenuItem x:Name="delWpItem" Header="删除航点"/>                                                    
                                                 </MenuItem>
                                             </Menu>
                                             <Grid Grid.Row="1" Grid.ColumnSpan="3">
@@ -277,12 +278,7 @@
                                     </Border>                                    
                                 </HierarchicalDataTemplate>
                                
-                            </TreeView.Resources>
-                            <!--<TreeView.ItemTemplate>
-                                <HierarchicalDataTemplate ItemsSource="{Binding ChildItems}">
-                                    <TextBlock Text="{Binding ID}"/>
-                                </HierarchicalDataTemplate>
-                            </TreeView.ItemTemplate>-->
+                            </TreeView.Resources>                           
                         </TreeView>
                     </Grid>
                 </TabItem>

@@ -49,7 +49,7 @@ namespace SharpBladeGroundStation
 			noMagic();
 			//replayLog();
 			//triggerCamera();
-			// testCamera();
+			//testCamera();
 			//setScreen();
 			//caliLevel();
 			//currentVehicle.GpsState.ForceSetHome();

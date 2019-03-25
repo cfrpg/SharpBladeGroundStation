@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GMap.NET;
 using GMap.NET.WindowsPresentation;
+using SharpBladeGroundStation.Map.Markers;
 
 namespace SharpBladeGroundStation.DataStructs
 {
@@ -18,7 +19,9 @@ namespace SharpBladeGroundStation.DataStructs
         protected float heading;
         protected bool useRelativeAlt;
 
-        public WaypointBase(int i) : this(i, new PointLatLng(0, 0), 0) { }
+		protected WaypointMarker marker;
+
+		public WaypointBase(int i) : this(i, new PointLatLng(0, 0), 0) { }
 
         public WaypointBase(int i, PointLatLng pos, float alt) : base()
         {
@@ -34,6 +37,7 @@ namespace SharpBladeGroundStation.DataStructs
             set
             {
                 position = value;
+				setMarkerPos();
                 NotifyPropertyChanged("Position");
 				NotifyPropertyChanged("Latitude");
 				NotifyPropertyChanged("Longitude");
@@ -46,6 +50,7 @@ namespace SharpBladeGroundStation.DataStructs
 			set
 			{
 				position.Lng = value;
+				setMarkerPos();
 				NotifyPropertyChanged("Position");
 				NotifyPropertyChanged("Longitude");
 			}
@@ -56,6 +61,7 @@ namespace SharpBladeGroundStation.DataStructs
 			set
 			{
 				position.Lng = value;
+				setMarkerPos();
 				NotifyPropertyChanged("Position");
 				NotifyPropertyChanged("Latitude");
 			}
@@ -68,6 +74,8 @@ namespace SharpBladeGroundStation.DataStructs
             set
             {
                 altitude = value;
+				if(marker!=null)
+					marker.Altitude = value;
                 NotifyPropertyChanged("Altitude");
             }
         }
@@ -91,5 +99,21 @@ namespace SharpBladeGroundStation.DataStructs
                 NotifyPropertyChanged("Heading");
             }
         }
-    }
+
+		public WaypointMarker Marker
+		{
+			get { return marker; }
+			set { marker = value; }
+		}			
+
+		private void setMarkerPos()
+		{
+			if(marker!=null)
+			{
+				marker.Position = position;
+				marker.Route.RefreshWaypoint(marker);
+			}
+		}
+	
+	}
 }

@@ -164,8 +164,8 @@ namespace SharpBladeGroundStation
 			{
 				Point p = e.GetPosition(gmap);
 				//GMapMarker m = new GMapMarker(gmap.FromLocalToLatLng((int)(p.X), (int)(p.Y)));
-				//WayPointMarker wp = new WayPointMarker(missionManager.LocalMission, m, (missionManager.LocalMission.Markers.Count + 1).ToString());
-				//missionManager.LocalMission.AddWaypoint(wp, m);
+				//WaypointMarker wp = new WaypointMarker(missionManager.LocalMission, m, (missionManager.LocalMission.Markers.Count + 1).ToString());
+				//missionManager.LocalMission.AddWaypoint(wp, m);				
 				((Mission)missionManager.MissionList[0]).AddWaypoint(
 					new Waypoint(0) { Position = gmap.FromLocalToLatLng((int)(p.X), (int)(p.Y)), Altitude = 50,UseRelativeAlt=true});
 				
@@ -198,39 +198,42 @@ namespace SharpBladeGroundStation
 			positionWhenTouch = gmap.Position;
 		}
 
-		//move waypoint
+		//move waypoint,ok
 		private void Wp_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
-			WayPointMarker wp = sender as WayPointMarker;			
-			missionManager.LocalMission.RefreshWayPoint(wp);
+			WaypointMarker wp = sender as WaypointMarker;
+			//missionManager.LocalMission.RefreshWaypoint(wp);
+			((Mission)missionManager.MissionList[0]).UpdateWaypointPosition(wp);
 			e.Handled = true;
 		}
 
-		//remove wp
+		//remove wp,ok
 		private void Wp_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			WayPointMarker wp = sender as WayPointMarker;
-			int cnt = 1;
-			foreach (GMapElement ge in missionManager.LocalMission.Markers)
-			{
-				if (ge == wp)
-					continue;
-				((WayPointMarker)ge).MarkerText = cnt.ToString();
-				cnt++;
-			}
-			missionManager.LocalMission.RemoveWayPoint(wp);
+			WaypointMarker wp = sender as WaypointMarker;
+			//int cnt = 1;
+			//foreach (GMapElement ge in missionManager.LocalMission.Markers)
+			//{
+			//	if (ge == wp)
+			//		continue;
+			//	((WaypointMarker)ge).MarkerText = cnt.ToString();
+			//	cnt++;
+			//}
+			//missionManager.LocalMission.RemoveWaypoint(wp);
+			((Mission)missionManager.MissionList[0]).RemoveWaypoint(wp);
 			e.Handled = true;
 		}
 
-		//update wp
+		//update wp,ok
 		private void Wp_MouseWheel(object sender, MouseWheelEventArgs e)
 		{
-			WayPointMarker wp = sender as WayPointMarker;
+			WaypointMarker wp = sender as WaypointMarker;
 			if (e.Delta > 0)
 				wp.Altitude += 0.5f;
 			else
-				wp.Altitude -= 0.5f;			
-			missionManager.LocalMission.RefreshWayPoint(wp);
+				wp.Altitude -= 0.5f;
+			//missionManager.LocalMission.RefreshWaypoint(wp);
+			((Mission)missionManager.MissionList[0]).UpdateWaypointAltitude(wp);
 			e.Handled = true;
 		}
 
@@ -250,6 +253,11 @@ namespace SharpBladeGroundStation
 				m.Color = Color.FromArgb(c.A, c.R, c.G, c.B);
 			}
 			e.Handled = false;
+		}
+
+		private void insWpItem_Click(object sender, RoutedEventArgs e)
+		{
+			((Mission)missionManager.MissionList[0]).SplitWaypoint((WaypointBase)missionTreeView.SelectedItem);
 		}
 	}
 }

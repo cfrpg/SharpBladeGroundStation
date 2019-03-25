@@ -20,7 +20,7 @@ namespace SharpBladeGroundStation.DataStructs
 		List<GMapElement> markers;
 		GMapControl map;
 		GMapRoute route;
-		bool wayPointMarkerEnabled;
+		bool waypointMarkerEnabled;
 		bool clickable;
 		int zindex;
 		int maxPointNumber;
@@ -71,10 +71,10 @@ namespace SharpBladeGroundStation.DataStructs
 		/// <summary>
 		/// 获取或设置是否显示路径点的标记
 		/// </summary>
-		public bool WayPointMarkerEnabled
+		public bool WaypointMarkerEnabled
 		{
-			get { return wayPointMarkerEnabled; }
-			set { wayPointMarkerEnabled = value; }
+			get { return waypointMarkerEnabled; }
+			set { waypointMarkerEnabled = value; }
 		}
 
 		/// <summary>
@@ -128,7 +128,7 @@ namespace SharpBladeGroundStation.DataStructs
 		public MapRouteData(GMapControl m, int z, bool wpenabled, bool ca)
 		{
 			map = m;
-			wayPointMarkerEnabled = wpenabled;
+			waypointMarkerEnabled = wpenabled;
 			clickable = ca;
 			points = new List<PointLatLng>();
 			markers = new List<GMapElement>();
@@ -163,7 +163,7 @@ namespace SharpBladeGroundStation.DataStructs
 
 		public void AddWaypoint(PointLatLng pos)
 		{
-			if (wayPointMarkerEnabled || clickable)
+			if (waypointMarkerEnabled || clickable)
 			{
 				throw new Exception("This method cannnot add waypoint marker,use AddWaypoint(GMapElement,GMapMarker) instead.");
 			}
@@ -176,9 +176,21 @@ namespace SharpBladeGroundStation.DataStructs
 
 		}
 
+		public void AddWaypoint(GMapElement wp,GMapElement shape,GMapMarker m,float alt)
+		{
+			for (int i = 0; i < markers.Count; i++)
+			{
+				if (wp == markers[i])
+				{
+					InsertWaypoint(i, shape, m, alt);
+					break;
+				}
+			}
+		}
+
 		public void InsertWaypoint(int id, GMapElement shape, GMapMarker m, float alt)
 		{
-			if (WayPointMarkerEnabled)
+			if (WaypointMarkerEnabled)
 			{
 				m.Shape = shape;
 				m.ZIndex = zindex + 1;
@@ -206,7 +218,7 @@ namespace SharpBladeGroundStation.DataStructs
 			regeneRoute();
 		}
 
-		public void RemoveWayPoint(GMapElement wp)
+		public void RemoveWaypoint(GMapElement wp)
 		{
 			for (int i = 0; i < markers.Count; i++)
 			{
@@ -223,7 +235,7 @@ namespace SharpBladeGroundStation.DataStructs
 
 		public void RemoveRange(int id, int num)
 		{
-			if (wayPointMarkerEnabled)
+			if (waypointMarkerEnabled)
 			{
 				for (int i = 0; i < num; i++)
 				{
@@ -235,7 +247,7 @@ namespace SharpBladeGroundStation.DataStructs
 			regeneRoute();
 		}
 
-		public void RefreshWayPoint(GMapElement wp)
+		public void RefreshWaypoint(GMapElement wp)
 		{
 			for (int i = 0; i < markers.Count; i++)
 			{
