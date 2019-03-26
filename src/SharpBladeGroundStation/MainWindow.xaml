@@ -284,7 +284,15 @@
                 </TabItem>
                 <TabItem Header="参数" Height="30">
                     <Grid Background="#FFE5E5E5">
-
+                        <ListView x:Name="paramListView" ItemsSource="{Binding}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="参数" Width="300" DisplayMemberBinding="{Binding Key}"/>
+                                    <GridViewColumn Header="值" Width="300" DisplayMemberBinding="{Binding Value}"/>
+                                    <GridViewColumn Header="类型" Width="300" DisplayMemberBinding="{Binding Type}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
                     </Grid>
                 </TabItem>
                 <TabItem Header="设置" Height="30">

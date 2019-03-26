@@ -88,7 +88,7 @@ namespace SharpBladeGroundStation
 			flightDataGrid.DataContext = currentVehicle.FlightState;
 			statusGrid.DataContext = currentVehicle.SubsystemStatus;
 			telemText.DataContext = currentVehicle;
-
+			paramListView.DataContext = currentVehicle.ParameterList;
 			mainSpeech = new SpeechSynthesizer();
 			mainSpeech.Rate = 0;
 			dataSkipCount = new Dictionary<int, ulong>();

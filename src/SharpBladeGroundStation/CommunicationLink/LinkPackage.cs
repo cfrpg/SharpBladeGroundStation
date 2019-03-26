@@ -375,7 +375,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			if (cursor + n <= DataSize)
 			{
 				cursor += n;
-				return Encoding.ASCII.GetString(buffer, cursor + HeaderSize - n, n);
+				return Encoding.ASCII.GetString(buffer, cursor + HeaderSize - n, n).TrimEnd('\0');
 			}
 			else
 			{

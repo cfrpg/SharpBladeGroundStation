@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,6 +55,7 @@ namespace SharpBladeGroundStation.DataStructs
 		CommLink link;
 
 		VehicleSystemStatus subsystemStatus;
+		ObservableCollection<Parameter> parameterList;
 
 		byte linkVersion;
 
@@ -268,7 +270,7 @@ namespace SharpBladeGroundStation.DataStructs
 			set
 			{
 				battery = value;
-				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Battery"));				
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Battery"));
 			}
 		}
 
@@ -351,12 +353,12 @@ namespace SharpBladeGroundStation.DataStructs
 
 		public byte LinkVersion
 		{
-			get			{				return linkVersion;			}
+			get { return linkVersion; }
 			set
 			{
 				linkVersion = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LinkVersion"));
-            }
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LinkVersion"));
+			}
 		}
 
 		public float TelemetryRSSI
@@ -377,6 +379,12 @@ namespace SharpBladeGroundStation.DataStructs
 				telemetryPercentage = value;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TelemetryPercentage"));
 			}
+		}
+
+		public ObservableCollection<Parameter> ParameterList
+		{
+			get { return parameterList; }
+			set { parameterList = value; }
 		}
 
 		/// <summary>
@@ -403,6 +411,8 @@ namespace SharpBladeGroundStation.DataStructs
 
 			flightState = FlightState.Zero;
 			battery = new BatteryData();
+			parameterList = new ObservableCollection<Parameter>();
+
 			camera = new Camera();
 			camera.CameraTransfrom = new Matrix(
 				new Vector4(496.9788f, 0f, 0f, 0f),
@@ -417,7 +427,7 @@ namespace SharpBladeGroundStation.DataStructs
 			camera.ScreenSize = new Vector2(720, 576);
 		}
 
-		public void HandleMessage(int lv,string str)
+		public void HandleMessage(int lv, string str)
 		{
 			if (lv <= 2)
 				lv = 4;
@@ -428,7 +438,7 @@ namespace SharpBladeGroundStation.DataStructs
 			else
 				lv = 1;
 			string upper = str.ToUpper();
-			if(upper.Contains("ACCEL"))
+			if (upper.Contains("ACCEL"))
 			{
 				subsystemStatus.Accelerometer = lv;
 			}

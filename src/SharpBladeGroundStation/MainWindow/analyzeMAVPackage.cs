@@ -27,6 +27,7 @@ namespace SharpBladeGroundStation
 			int tint;
 			float tfloat,lat,lon,alt;
 			PointLatLng pos;
+			bool flag;
 
 			packageFlags[package.Function] = true;
 			switch ((MAVLINK_MSG_ID)package.Function)
@@ -322,6 +323,33 @@ namespace SharpBladeGroundStation
 					a1 = () => { currentVehicle.HandleMessage(sev,str);if(sev<=4) mainSpeech.SpeakAsync(str); };
 					Dispatcher.BeginInvoke(a1);
 					Debug.WriteLine("[MAVLink]:{0}.", str);
+					break;
+				case MAVLINK_MSG_ID.PARAM_VALUE:					
+					float pval = package.NextSingle();
+					int pcnt = package.NextUShort();
+					int pnum = package.NextUShort();
+					string pid = package.NextASCIIString(16);
+					byte ptype = package.NextByte();
+					flag = false;
+					foreach(var v in currentVehicle.ParameterList)
+					{
+						if(v.Key==pid)
+						{
+							flag = true;
+							v.SetAsFloat(pval);
+							v.Unsave = false;
+							break;
+						}
+					}
+					if(!flag)
+					{
+						a1 = () =>
+						{
+							currentVehicle.ParameterList.Add(new Parameter(pid, (MAVLink.MAV_PARAM_TYPE)ptype,pval));
+						};
+						Dispatcher.Invoke(a1);
+					}
+					Debug.WriteLine("[Mavlink]:Reveive parameter {0} of {1}:{2} {3}", pnum, pcnt, pid, pval);
 					break;
 				default:
 					Debug.WriteLine("[MAVLink]:Unhandled package {0}.", package.Function);
