@@ -75,7 +75,7 @@ namespace SharpBladeGroundStation
 			InitializeComponent();
 			initControls();
 			initConfig();
-			currentVehicle = new Vehicle(0);
+			currentVehicle = new Vehicle(-1);
 			initGmap();
 			//initLinkListener();
 			
@@ -242,6 +242,7 @@ namespace SharpBladeGroundStation
 			initDxInput();
 			initLinkListener();
 			initFirmwareUpdater();
+			initVehicleConfig();
 		}
 
 		
@@ -319,6 +320,11 @@ namespace SharpBladeGroundStation
 		private void mainwindow_KeyDown(object sender, KeyEventArgs e)
 		{
 			hudWindow?.KeyEvent(sender, e);
+		}
+
+		private MessageBoxResult showMessageBox(string msg)
+		{
+			return MessageBox.Show(msg, "SBGS");
 		}
 
 		

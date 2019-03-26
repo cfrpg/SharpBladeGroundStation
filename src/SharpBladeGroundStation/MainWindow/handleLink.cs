@@ -79,7 +79,7 @@ namespace SharpBladeGroundStation
 			pkg.AddData((byte)3);
 			pkg.AddData(currentVehicle.LinkVersion);
 			pkg.SetVerify();
-			currentVehicle.Link.SendPackage(pkg);
+			//currentVehicle.Link.SendPackage(pkg);
 			heartbeatCounter += 1;
 			if(heartbeatCounter>5)
 			{
@@ -170,6 +170,7 @@ namespace SharpBladeGroundStation
 					string str = logger.Path.Substring(0, logger.Path.LastIndexOf(".") + 1) + "mpg";
 					hudWindow?.cameraPlayer.StartRecord(str);
 				}
+				requestParam();
 			}
 		}
 

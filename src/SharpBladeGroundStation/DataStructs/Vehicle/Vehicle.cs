@@ -56,6 +56,7 @@ namespace SharpBladeGroundStation.DataStructs
 
 		VehicleSystemStatus subsystemStatus;
 		ObservableCollection<Parameter> parameterList;
+		Dictionary<string, Parameter> parameterDictionary;
 
 		byte linkVersion;
 
@@ -387,6 +388,12 @@ namespace SharpBladeGroundStation.DataStructs
 			set { parameterList = value; }
 		}
 
+		public Dictionary<string, Parameter> ParameterDictionary
+		{
+			get { return parameterDictionary; }
+			set { parameterDictionary = value; }
+		}
+
 		/// <summary>
 		/// 构造函数
 		/// </summary>
@@ -412,6 +419,7 @@ namespace SharpBladeGroundStation.DataStructs
 			flightState = FlightState.Zero;
 			battery = new BatteryData();
 			parameterList = new ObservableCollection<Parameter>();
+			parameterDictionary = new Dictionary<string, Parameter>();
 
 			camera = new Camera();
 			camera.CameraTransfrom = new Matrix(

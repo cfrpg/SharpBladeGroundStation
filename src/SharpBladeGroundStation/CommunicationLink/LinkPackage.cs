@@ -56,6 +56,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		public LinkPackage(int buffsize)
 		{
 			buffer = new byte[buffsize];
+			Array.Clear(buffer, 0, buffsize);
 			dataSize = 0;
 			reverseBytes = false;
 			timeStamp = 0;
@@ -194,6 +195,17 @@ namespace SharpBladeGroundStation.CommunicationLink
 			return AddData(BitConverter.GetBytes(data));
 		}
 
+		public bool AddASCIIString(string str,int len)
+		{
+			if (len + dataSize + HeaderSize > buffer.Length)
+				return false;
+			if (len < str.Length)
+				return false;
+			byte[] b = Encoding.ASCII.GetBytes(str);
+			b.CopyTo(buffer, HeaderSize + dataSize);
+			dataSize += len;
+			return true;
+		}
 		public virtual bool StartRead()
 		{
 			cursor = 0;

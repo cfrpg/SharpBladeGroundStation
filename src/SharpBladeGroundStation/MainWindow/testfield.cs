@@ -47,7 +47,7 @@ namespace SharpBladeGroundStation
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
 			//noMagic();
-			requestParam();
+			requestParamList();
 			//replayLog();
 			//triggerCamera();
 			//testCamera();
@@ -62,7 +62,7 @@ namespace SharpBladeGroundStation
 			//getCRC();
 		}
 
-		void requestParam()
+		void requestParamList()
 		{
 			MAVLinkPackage p = new MAVLinkPackage((int)MAVLINK_MSG_ID.PARAM_REQUEST_LIST, currentVehicle.Link);
 			p.System = 255;

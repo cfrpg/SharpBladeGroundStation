@@ -331,25 +331,30 @@ namespace SharpBladeGroundStation
 					string pid = package.NextASCIIString(16);
 					byte ptype = package.NextByte();
 					flag = false;
-					foreach(var v in currentVehicle.ParameterList)
+					Parameter param;
+					if (currentVehicle.ParameterDictionary.ContainsKey(pid))
 					{
-						if(v.Key==pid)
+						lock (currentVehicle.ParameterDictionary)
 						{
-							flag = true;
-							v.SetAsFloat(pval);
-							v.Unsave = false;
-							break;
+							param = currentVehicle.ParameterDictionary[pid];
+							param.SetAsFloat(pval);
+							param.Unsave = false;
 						}
 					}
-					if(!flag)
+					else
 					{
+						param = new Parameter(pid, (MAVLink.MAV_PARAM_TYPE)ptype, pval);
+						lock (currentVehicle.ParameterDictionary)
+						{
+							currentVehicle.ParameterDictionary.Add(pid, param);
+						}
 						a1 = () =>
 						{
-							currentVehicle.ParameterList.Add(new Parameter(pid, (MAVLink.MAV_PARAM_TYPE)ptype,pval));
+							currentVehicle.ParameterList.Add(new Parameter(pid, (MAVLink.MAV_PARAM_TYPE)ptype, pval));
 						};
 						Dispatcher.Invoke(a1);
-					}
-					Debug.WriteLine("[Mavlink]:Reveive parameter {0} of {1}:{2} {3}", pnum, pcnt, pid, pval);
+					}				
+					Debug.WriteLine("[Mavlink]:Rev eive parameter {0} of {1}:{2} {3}", pnum, pcnt, pid, pval);
 					break;
 				default:
 					Debug.WriteLine("[MAVLink]:Unhandled package {0}.", package.Function);
