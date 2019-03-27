@@ -323,9 +323,9 @@
                                     <ProgressBar Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="20" Margin="10,0"/>
                                 </Grid>
                             </TabItem>
-                            <TabItem Header="遥控校准" Height="30">
+                            <!--<TabItem Header="遥控校准" Height="30">
 
-                            </TabItem>
+                            </TabItem>-->
                             <TabItem Header="参数列表*" Height="30" >
                                 <ListView x:Name="paramListView" ItemsSource="{Binding}">
                                     <ListView.View>
