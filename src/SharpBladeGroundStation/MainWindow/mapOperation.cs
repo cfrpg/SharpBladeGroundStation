@@ -73,7 +73,7 @@ namespace SharpBladeGroundStation
 			newroute.LeftMouseButtonUp += Wp_MouseLeftButtonUp;
 			newroute.RightMouseButtonDown += Wp_MouseRightButtonDown;
 			newroute.MouseWheel += Wp_MouseWheel;
-			missionManager.LocalMission = newroute;
+			//missionManager.LocalMission = newroute;
 			missionManager.MissionList.Add(new Mission(newroute) { ID = 0, Name = "航线1" ,Color=Colors.White});
 
 			flightRoute = new MapRouteData(gmap);

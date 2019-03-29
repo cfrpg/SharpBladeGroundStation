@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using GMap.NET.WindowsPresentation;
+using SharpBladeGroundStation.CommunicationLink;
 
 namespace SharpBladeGroundStation.DataStructs
 {
@@ -67,7 +68,7 @@ namespace SharpBladeGroundStation.DataStructs
             childItems = new ObservableCollection<MissionItem>();
         }
 
-        public virtual void GenerateMissionItems()
+        public virtual void GenerateMissionItems(Vehicle v, List<LinkPackage> packageList)
         {
 
         }

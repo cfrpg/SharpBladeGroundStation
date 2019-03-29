@@ -163,7 +163,8 @@ namespace SharpBladeGroundStation
 		{
 			if (MessageBox.Show("清空所有航线?", messageboxTitle, MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes)
 			{
-				missionManager.LocalMission.Clear();
+				//missionManager.LocalMission.Clear();
+				((Mission)missionManager.MissionList[0]).Clear();
 			}
 		}
 

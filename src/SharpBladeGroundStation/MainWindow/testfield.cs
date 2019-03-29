@@ -47,12 +47,12 @@ namespace SharpBladeGroundStation
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
 			//noMagic();
-			requestParamList();
+			//requestParamList();
 			//replayLog();
 			//triggerCamera();
 			//testCamera();
 			//setScreen();
-			//caliLevel();
+			caliLevel();
 			//currentVehicle.GpsState.ForceSetHome();
 			//homeMarker.Position = PositionHelper.WGS84ToGCJ02(currentVehicle.GpsState.HomePosition);
 			//copyRouteData();
@@ -132,8 +132,6 @@ namespace SharpBladeGroundStation
 			package.SetVerify();
 
 			currentVehicle.Link.SendPackage(package, true);
-
-
 		}
 
 		void testCamera()

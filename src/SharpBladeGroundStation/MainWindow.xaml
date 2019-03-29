@@ -273,14 +273,20 @@
                                                     <RowDefinition Height="1*" MinHeight="20"/>
                                                     <RowDefinition Height="1*" MinHeight="20"/>
                                                     <RowDefinition Height="1*" MinHeight="20"/>
+                                                    <RowDefinition Height="1*" MinHeight="20"/>
+                                                    <RowDefinition Height="1*" MinHeight="20"/>
                                                 </Grid.RowDefinitions>
                                                 <TextBlock Text="经度：" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                                <TextBox Text="{Binding Longitude}" Grid.Row="0" Grid.Column="2" Margin="5" />
+                                                <TextBox Text="{Binding Longitude}" Grid.Row="0" Grid.Column="1" Margin="5" />
                                                 <TextBlock Text="纬度：" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                                <TextBox Text="{Binding Latitude}" Grid.Row="1" Grid.Column="2" Margin="5" />
+                                                <TextBox Text="{Binding Latitude}" Grid.Row="1" Grid.Column="1" Margin="5" />
                                                 <TextBlock Text="高度：" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                                <TextBox Text="{Binding Altitude}" Grid.Row="2" Grid.Column="2" Margin="5" />
+                                                <TextBox Text="{Binding Altitude}" Grid.Row="2" Grid.Column="1" Margin="5" />
                                                 <CheckBox x:Name="checkBox" IsChecked="{Binding UseRelativeAlt}" Content="相对高度" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" Margin="5,0,0,0"/>
+                                                <TextBlock Text="速度：" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                                <TextBox Text="{Binding Speed}" Grid.Row="4" Grid.Column="1" Margin="5" />
+                                                <CheckBox IsChecked="{Binding ChangeSpeed}" Content="设置速度" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="5" Grid.Column="1" Margin="5,0,0,0"/>
+                                                
                                             </Grid>
                                         </Grid>
                                     </Border>
@@ -305,11 +311,11 @@
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0">
-                                        <Button Content="磁罗盘" Height="25" Width="60" Margin="0,0,7,0"/>
-                                        <Button Content="陀螺仪" Height="25" Width="60" Margin="7,0"/>
-                                        <Button Content="加速度计" Height="25" Width="60" Margin="7,0"/>
-                                        <Button Content="空速" Height="25" Width="60" Margin="7,0"/>
-                                        <Button Content="水平" Height="25" Width="60" Margin="7,0"/>
+                                        <Button x:Name="caliMagButton"  Content="磁罗盘" Height="25" Width="60" Margin="0,0,7,0" Click="caliMagButton_Click"/>
+                                        <Button x:Name="caliGyroButton" Content="陀螺仪" Height="25" Width="60" Margin="7,0" Click="caliGyroButton_Click"/>
+                                        <Button x:Name="caliAccButton" Content="加速度计" Height="25" Width="60" Margin="7,0" Click="caliAccButton_Click"/>
+                                        <Button x:Name="caliAirButton" Content="空速" Height="25" Width="60" Margin="7,0" Click="caliAirButton_Click"/>
+                                        <Button x:Name="caliLevelButton" Content="水平" Height="25" Width="60" Margin="7,0" Click="caliLevelButton_Click"/>
                                     </StackPanel>
                                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0">
                                         <TextBlock Text="俯仰：" VerticalAlignment="Center"/>
@@ -320,7 +326,8 @@
                                         <ComboBox x:Name="orntYawBox" Width="60" VerticalAlignment="Center" IsEnabled="False"/>
                                         <Button x:Name="orntButton" Content="设置" Margin="20,0,0,0" Width="60" Height="25" Click="orntButton_Click"/>
                                     </StackPanel>
-                                    <ProgressBar Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="20" Margin="10,0"/>
+                                    <ProgressBar x:Name="caliProgressBar" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="20" Margin="10,0"/>
+                                    <TextBlock x:Name="caliText" Text="" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"/>
                                 </Grid>
                             </TabItem>
                             <!--<TabItem Header="遥控校准" Height="30">

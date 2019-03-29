@@ -16,13 +16,11 @@ namespace SharpBladeGroundStation.CommunicationLink
 {
 	public class MissionManager
 	{
-		MapRouteData localMission;
-		MapRouteData remoteMission;
 		Vehicle target;
 
         ObservableCollection<MissionItem> missionList;
 		
-		List<MAVLinkPackage> sendPackages;
+		List<LinkPackage> sendPackages;
 		List<LinkPackage> receivedPackage;
 
 		bool isBusy;
@@ -31,18 +29,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 		ushort currentWaypoint;
 
 		public delegate void MissionSenderEvent();
-		public event MissionSenderEvent OnFinished;
-		public MapRouteData LocalMission
-		{
-			get { return localMission; }
-			set { localMission = value; }
-		}
-
-		public MapRouteData RemoteMission
-		{
-			get { return remoteMission; }
-			set { remoteMission = value; }
-		}
+		public event MissionSenderEvent OnFinished;	
 
 		public bool IsBusy
 		{
@@ -70,7 +57,7 @@ namespace SharpBladeGroundStation.CommunicationLink
         public MissionManager(Vehicle v)
 		{
 			target = v;
-			sendPackages = new List<MAVLinkPackage>();
+			sendPackages = new List<LinkPackage>();
 			receivedPackage = new List<LinkPackage>();
             missionList = new ObservableCollection<MissionItem>();
 
@@ -88,36 +75,10 @@ namespace SharpBladeGroundStation.CommunicationLink
 			isBusy = true;
 			state = State.Sending;
 
-			sendPackages.Clear();
-			for (int i = 0; i < localMission.Markers.Count; i++)
-			{
-				MAVLinkPackage p = new MAVLinkPackage((byte)MAVLINK_MSG_ID.MISSION_ITEM, target.Link);
-                
-                var wp= PositionHelper.GCJ02ToWGS84(localMission.Markers[i].Position);
-				p.AddData(0f);  //p1
-				p.AddData(0.5f);
-				p.AddData(0f);
-				p.AddData(float.NaN);
-				p.AddData((float)wp.Lat);
-				p.AddData((float)wp.Lng);
-				p.AddData((float)localMission.Markers[i].Altitude); //p7
+			sendPackages.Clear();	
 
-				p.AddData((ushort)i);//seq
-				p.AddData((ushort)16);//cmd
-				p.AddData((byte)target.ID);//sys
-				p.AddData((byte)190);//comp
+			missionList[0].GenerateMissionItems(target, sendPackages);
 
-				p.AddData((byte)3);//frame
-				if (i == 0)
-					p.AddData((byte)1);//current
-				else
-					p.AddData((byte)0);//current
-				p.AddData((byte)1);//auto			
-
-				p.Sequence = (byte)i;
-				p.SetVerify();
-				sendPackages.Add(p);
-			}
 			MAVLinkPackage p1 = new MAVLinkPackage((byte)MAVLINK_MSG_ID.MISSION_COUNT, target.Link);
 			p1.System = 255;
 			p1.Component = 0;
@@ -172,16 +133,7 @@ namespace SharpBladeGroundStation.CommunicationLink
 			receivedPackage.Add(p1.Clone());
 			if (receivedPackage.Count==WaypointCount)
 			{
-				return true;
-				//MAVLinkPackage p = new MAVLinkPackage((byte)MAVLINK_MSG_ID.MISSION_ACK, target.Link);
-				//p.AddData((byte)target.ID);//sys
-				//p.AddData((byte)190);//comp
-				//p.AddData((byte)0);
-				//p.SetVerify();
-				//target.Link.SendPackage(p);
-				//OnFinished?.Invoke();
-				//isBusy = false;
-				//state = State.Idle;
+				return true;				
 			}
 			else
 			{
@@ -191,14 +143,15 @@ namespace SharpBladeGroundStation.CommunicationLink
 		}
 		public void UnpackMission()
 		{
+			Waypoint currwp = null;
 			MAVLinkPackage p = new MAVLinkPackage((byte)MAVLINK_MSG_ID.MISSION_ACK, target.Link);
 			p.AddData((byte)target.ID);//sys
 			p.AddData((byte)190);//comp
 			p.AddData((byte)0);
 			p.SetVerify();
 			target.Link.SendPackage(p);
-			localMission.Clear();
-			for(int i=0;i<waypointCount;i++)
+			((Mission)missionList[0]).Clear();
+			for (int i = 0; i < waypointCount; i++)
 			{
 				float p1 = receivedPackage[i].NextSingle();
 				float p2 = receivedPackage[i].NextSingle();
@@ -209,14 +162,29 @@ namespace SharpBladeGroundStation.CommunicationLink
 				float p7 = receivedPackage[i].NextSingle();
 				ushort seq = receivedPackage[i].NextUShort();
 				ushort cmd = receivedPackage[i].NextUShort();
-				if(cmd==16)
-				{				
-					GMapMarker m = new GMapMarker(PositionHelper.WGS84ToGCJ02(new GMap.NET.PointLatLng(p5,p6)));
-					WaypointMarker wp = new WaypointMarker(localMission, m, (localMission.Markers.Count + 1).ToString());
-					localMission.AddWaypoint(wp, m, p7);					
+				receivedPackage[i].NextShort();//skip tgt_sys & tgt_comp
+				MAVLink.MAV_FRAME frame = (MAVLink.MAV_FRAME)receivedPackage[i].NextByte();
+
+				if (cmd == 16)
+				{
+					currwp = new Waypoint(0);
+					currwp.Position = PositionHelper.WGS84ToGCJ02(new GMap.NET.PointLatLng(p5, p6));
+					currwp.Altitude = p7;
+					if (frame == MAVLink.MAV_FRAME.GLOBAL_RELATIVE_ALT)
+						currwp.UseRelativeAlt = true;
+					else
+						currwp.UseRelativeAlt = false;
+					((Mission)missionList[0]).AddWaypoint(currwp);					
+				}
+				if(cmd==178)
+				{
+					if(currwp!=null)
+					{
+						currwp.ChangeSpeed = true;
+						currwp.Speed = p2;
+					}
 				}
 			}
-
 
 			OnFinished?.Invoke();
 			isBusy = false;
@@ -233,9 +201,23 @@ namespace SharpBladeGroundStation.CommunicationLink
 
 		public void HandleMissionAck()
 		{
+			if (state == State.Sending)
+				SetCurrentWaypoint(0);
 			isBusy = false;
 			state = State.Idle;
 			OnFinished?.Invoke();
+		}
+
+		public void SetCurrentWaypoint(int id)
+		{
+			MAVLinkPackage p = new MAVLinkPackage((byte)MAVLINK_MSG_ID.MISSION_SET_CURRENT, target.Link);
+			p.System = 255;
+			p.Component = 0;
+			p.AddData((ushort)id);
+			p.AddData(target.ID);
+			p.AddData((byte)0);
+			p.SetVerify();
+			target.Link.SendPackage(p);
 		}
 		
 		enum State

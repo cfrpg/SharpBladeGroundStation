@@ -138,7 +138,7 @@ namespace SharpBladeGroundStation
 		}
 
 		private void requestParam()
-		{
+		{			
 			essentialParamList = new List<string>();
 			essentialParamList.Add("SENS_BOARD_ROT");
 			Thread getParamThread = new Thread(getParamWorker);
@@ -247,6 +247,99 @@ namespace SharpBladeGroundStation
 			};
 			Dispatcher.BeginInvoke(a);
 
+		}
+
+		private void caliMagButton_Click(object sender, RoutedEventArgs e)
+		{
+			startCalibration(CaliSensor.Magnetometer);
+		}
+
+		private void caliGyroButton_Click(object sender, RoutedEventArgs e)
+		{
+			startCalibration(CaliSensor.Gyroscope);
+		}
+
+		private void caliAccButton_Click(object sender, RoutedEventArgs e)
+		{
+			startCalibration(CaliSensor.Accelerometer);
+		}
+
+		private void caliAirButton_Click(object sender, RoutedEventArgs e)
+		{
+			startCalibration(CaliSensor.Airspeed);
+		}
+
+		private void caliLevelButton_Click(object sender, RoutedEventArgs e)
+		{
+			startCalibration(CaliSensor.Level);
+		}
+
+		private void startCalibration(CaliSensor sensor)
+		{
+			float p1=0, p2 = 0, p3 = 0, p4 = 0, p5 = 0, p6 = 0, p7 = 0;
+			caliText.Text = "";
+			caliProgressBar.Value = 0;
+			switch (sensor)
+			{
+				case CaliSensor.Magnetometer:
+					p2 = 1;
+					break;
+				case CaliSensor.Gyroscope:
+					p1 = 1;
+					break;
+				case CaliSensor.Accelerometer:
+					p5 = 5;
+					break;
+				case CaliSensor.Airspeed:
+					p6 = 1;
+					break;
+				case CaliSensor.Level:
+					p5 = 2;
+					break;
+				default:
+					break;
+			}
+			MAVLinkPackage package = new MAVLinkPackage((byte)MAVLINK_MSG_ID.COMMAND_LONG, currentVehicle.Link);
+			package.System = 255;
+			package.Component = 1;
+			package.AddData(p1);
+			package.AddData(p2);
+			package.AddData(p3);
+			package.AddData(p4);
+			package.AddData(p5);
+			package.AddData(p6);
+			package.AddData(p7);
+			package.AddData((ushort)241);//MAV_CMD_PREFLIGHT_CALIBRATION
+			package.AddData((byte)currentVehicle.ID);
+			package.AddData((byte)0);
+			package.AddData((byte)0);
+			package.SetVerify();
+
+			currentVehicle.Link.SendPackage(package, true);
+		}
+
+		private void handleCaliMsg(string str)
+		{
+			if(str.Contains("progress"))
+			{
+				int l = str.IndexOf("<");
+				int r = str.IndexOf(">");
+				int p = int.Parse(str.Substring(l + 1, r - l - 1));
+				caliProgressBar.Value = p;
+			}
+			else
+			{
+				caliText.Text += str + Environment.NewLine;
+			}
+		}
+
+		enum CaliSensor
+		{
+			Magnetometer,
+			Gyroscope,
+			Accelerometer,
+			Airspeed,
+			Level
 		}
 
 		struct orntData

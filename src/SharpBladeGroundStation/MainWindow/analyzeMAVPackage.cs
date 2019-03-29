@@ -320,7 +320,7 @@ namespace SharpBladeGroundStation
 				case MAVLINK_MSG_ID.STATUSTEXT:
 					byte sev = package.NextByte();
 					string str = package.NextASCIIString(50);
-					a1 = () => { currentVehicle.HandleMessage(sev,str);if(sev<=4) mainSpeech.SpeakAsync(str); };
+					a1 = () => { handleStateMassage(sev,str); };
 					Dispatcher.BeginInvoke(a1);
 					Debug.WriteLine("[MAVLink]:{0}.", str);
 					break;
@@ -357,8 +357,18 @@ namespace SharpBladeGroundStation
 					Debug.WriteLine("[Mavlink]:Rev eive parameter {0} of {1}:{2} {3}", pnum, pcnt, pid, pval);
 					break;
 				default:
-					Debug.WriteLine("[MAVLink]:Unhandled package {0}.", package.Function);
+					//Debug.WriteLine("[MAVLink]:Unhandled package {0}.", package.Function);
 					break;
+			}
+		}
+
+		private void handleStateMassage(int sev,string str)
+		{
+			currentVehicle.HandleMessage(sev, str);
+			if (sev <= 4) mainSpeech.SpeakAsync(str);
+			if(str.Contains("[cal]"))
+			{
+				handleCaliMsg(str);
 			}
 		}
 

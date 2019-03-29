@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using GMap.NET.WindowsPresentation;
+using SharpBladeGroundStation.CommunicationLink;
 using SharpBladeGroundStation.Map.Markers;
 
 namespace SharpBladeGroundStation.DataStructs
@@ -150,6 +151,20 @@ namespace SharpBladeGroundStation.DataStructs
 		{
 			removeMissionItemAt(id);
 			rebuildID(0);
+		}
+
+		public void Clear()
+		{
+			route.Clear();
+			childItems.Clear();
+		}
+
+		public override void GenerateMissionItems(Vehicle v, List<LinkPackage> packageList)
+		{
+			for(int i=0;i<childItems.Count;i++)
+			{
+				childItems[i].GenerateMissionItems(v, packageList);
+			}
 		}
 	}
 }
