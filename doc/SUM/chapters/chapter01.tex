@@ -1,0 +1,56 @@
+
+\section{概述}
+\subsection{软件概述}
+
+\csciname 是\cscidem 无人机系统配套的控制与指挥中心，用于完成无人机的飞前检查，飞行状态监控与飞行导引，以及飞行数据回放与分析等任务。地面站系统的所有指令均由地面站软件完成。
+地面站软件通过标准的通信指令协议与无人机飞控系统进行交互，实现对无人机系统的控制。
+
+\csciname 使用CC BY-ND 4.0协议发布。
+
+\subsection{软件环境}
+\subsubsection{计算机硬件环境需求}
+运行地面站软件的计算机硬件需求配置如表\ref{t3req}所示。
+
+\begin{table}[ht]
+\centering
+\caption{计算机硬件需求}
+\label{t3req}
+\begin{tabular}{|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{ } & \multicolumn{1}{c|}{最低需求} & \multicolumn{1}{c|}{推荐配置} \\ \hline
+处理器                      & Intel Core i5 6200U     & Intel Core i5 8550U       \\ \hline
+内存                       & 4G 双通道              &8G 双通道         \\ \hline
+图形                       & Intel HD530        &Intel UHD620       \\ \hline
+储存空间                     & 1G               &1G SSD     \\ \hline
+显示                       & 1366*768 &双显示器，1920*1080       \\ \hline
+\multirow{2}{*}{其他}      & \multicolumn{2}{l|}{至少一个串口接口}                 \\ \cline{2-3} 
+                         & \multicolumn{2}{l|}{支持DirectShow的视频采集卡}        \\ \hline
+\end{tabular}
+\end{table}
+
+其中储存空间需求为保证地面站正常运行和记录日志的最低要求，不包含储存飞行视频的空间需求。
+
+\subsubsection{计算机软件环境需求}
+\begin{itemize}[topsep=0pt]
+\setlength{\itemsep}{-2pt}
+\item Windows 7及以上的Windows操作系统
+\item Microsoft .NET Framework 4.5
+\item Microsoft .NET Framework 4.0
+\item Microsoft DirectX 9.0c 及以上
+\item 用于连接数传电台和飞控的串口驱动程序
+\item 视频采集相关驱动程序
+\end{itemize}
+
+\subsection{帮助和报告问题}
+在软件使用过程中如有任何疑问、意见和建议，或报告软件运行异常，请联系 cfrpg@mail.nwpu.edu.com。
+
+\clearpage
+\endinput
+
+
+
+
+
+
+
+

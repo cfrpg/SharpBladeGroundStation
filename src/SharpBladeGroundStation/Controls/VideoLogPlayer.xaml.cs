@@ -94,6 +94,8 @@ namespace SharpBladeGroundStation
 
 		public void SetProgress()
 		{
+			if (logLink == null)
+				return;
 			state = State.Pause;
 			while (frameLock) ;
 			reader.Seek((logLink.CurrentTime - frameTime * 2) / 1000 + 1);

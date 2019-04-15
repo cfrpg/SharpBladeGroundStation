@@ -52,10 +52,10 @@
 
             </Rectangle>
             <local:HeadingIndicatorControl x:Name="hdgInd" Width="280"  Canvas.Left="10" Canvas.Top="5" Heading="{Binding ElementName=pfdControl,Path=FlightState.Heading}"/>           
-            <Border Width="36" Height="180" Canvas.Left="5" Canvas.Top="60" BorderBrush="White" BorderThickness="1"/>
+            <Border Width="40" Height="180" Canvas.Left="5" Canvas.Top="60" BorderBrush="White" BorderThickness="1"/>
             <local:SliderControl x:Name="spd" Height="180" Canvas.Left="5" Canvas.Top="60"
                                  Value="{Binding ElementName=pfdControl,Path=FlightState.GroundSpeed}" TickNumber="7"/>
-            <Border Width="36" Height="180" Canvas.Right="5" Canvas.Top="60" BorderBrush="White" BorderThickness="1"/>
+            <Border Width="40" Height="180" Canvas.Right="5" Canvas.Top="60" BorderBrush="White" BorderThickness="1"/>
             <local:SliderControl x:Name="alt" Height="180" Canvas.Right="5" Canvas.Top="60" ReverseTick="-1"
                                  Value="{Binding ElementName=pfdControl,Path=FlightState.Altitude}" TickNumber="7" TickSize="10"/>
 

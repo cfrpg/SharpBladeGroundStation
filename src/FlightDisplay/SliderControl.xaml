@@ -8,11 +8,11 @@
              xmlns:local="clr-namespace:FlightDisplay"
              mc:Ignorable="d" 
              Name="slider"
-             d:DesignHeight="300" d:DesignWidth="60">
+             d:DesignHeight="300" d:DesignWidth="65">
 
     <Viewbox>
-        <Canvas Height="300" Width="60" ClipToBounds="True" Background="#33000000">
-            <Path x:Name="path" Data="M60,-150 60,450"  StrokeThickness="0" RenderTransformOrigin="0.5,0.5" >
+        <Canvas Height="300" Width="65" ClipToBounds="True" Background="#33000000">
+            <Path x:Name="path" Data="M65,-150 65,450"  StrokeThickness="0" RenderTransformOrigin="0.5,0.5" >
                 <Path.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="1" ScaleX="{Binding ElementName=slider,Path=ReverseTick}"/>
@@ -77,7 +77,7 @@
                        SourceElement="{Binding ElementName=textpath}" />
                 </ec:PathListBox.LayoutPaths>
             </ec:PathListBox>
-            <Polygon Points="0,130 50,130 50,140 55,150 50,160 50,170 0,170 " Stroke="#FFDADADA" Fill="Black" StrokeThickness="2" RenderTransformOrigin="0.545454,0.5">
+            <Polygon Points="0,130 55,130 55,140 60,150 55,160 55,170 0,170 " Stroke="#FFDADADA" Fill="Black" StrokeThickness="2" RenderTransformOrigin="0.545454,0.5">
                 <Polygon.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="1" ScaleX="{Binding ElementName=slider,Path=ReverseTick}"/>
@@ -89,8 +89,8 @@
             </Polygon>
 
             
-            <Viewbox Height="40" Canvas.Top="131" Width="60">                
-                <TextBlock x:Name="textBlock" Text="{Binding ElementName=slider,Path=Value,StringFormat={}{0:0.0}}" Width="40" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" Margin="3,0" FontSize="16"/>
+            <Viewbox Height="40" Canvas.Top="131" Width="65">                
+                <TextBlock x:Name="textBlock" Text="{Binding ElementName=slider,Path=Value,StringFormat={}{0:0.0}}" Width="40" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" Margin="3,0" FontSize="14"/>
             </Viewbox>
         </Canvas>
     </Viewbox>

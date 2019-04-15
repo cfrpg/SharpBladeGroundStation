@@ -123,8 +123,8 @@ namespace SharpBladeGroundStation.CommunicationLink
 				double dt = now.Subtract(lasttime).TotalMilliseconds;
 				if (dt > 1000)
 				{
-					TxRate = (int)((dataReceived - lastrx) / (dt / 1000));
-					RxRate = (int)((dataSent - lasttx) / (dt / 1000));
+					RxRate = (int)((dataReceived - lastrx) / (dt / 1000));
+					TxRate = (int)((dataSent - lasttx) / (dt / 1000));
 					lastrx = dataReceived;
 					lasttx = dataSent;
 					lasttime = now;

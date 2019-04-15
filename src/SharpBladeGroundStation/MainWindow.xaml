@@ -107,7 +107,7 @@
                 </GroupBox>
             </Viewbox>
             <Viewbox Margin="2">
-                <Border Width="300" Height="100" BorderBrush="Black" BorderThickness="1" CornerRadius="3">
+                <Border Width="300" Height="200" BorderBrush="Black" BorderThickness="1" CornerRadius="3">
                     <Grid x:Name="statusGrid">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
@@ -132,7 +132,6 @@
 
                 </Border>
             </Viewbox>
-            <Button x:Name="button" Content="启动黑科技" HorizontalAlignment="Left" Height="38"  VerticalAlignment="Bottom" Width="97" Click="button_Click" Margin="30,30,0,0"/>
         </StackPanel>
 
         <Grid Grid.Column="2" Background="#FFB4B4B4">
@@ -146,14 +145,7 @@
             </Grid.ColumnDefinitions>
             <TabControl x:Name="tabControl" Margin="0" TabStripPlacement="Bottom" Grid.RowSpan="2" Grid.ColumnSpan="2">
                 <TabItem Header="导航" Height="30" RenderTransformOrigin="0.5,0.5">
-                    <TabItem.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform Angle="2.424"/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </TabItem.RenderTransform>
+                  
                     <Grid Background="#CCE5E5E5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100*"/>
@@ -286,7 +278,7 @@
                                                 <TextBlock Text="速度：" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                                                 <TextBox Text="{Binding Speed}" Grid.Row="4" Grid.Column="1" Margin="5" />
                                                 <CheckBox IsChecked="{Binding ChangeSpeed}" Content="设置速度" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="5" Grid.Column="1" Margin="5,0,0,0"/>
-                                                
+
                                             </Grid>
                                         </Grid>
                                     </Border>
@@ -454,6 +446,7 @@
                                 </Grid>
                             </TabItem>
                         </TabControl>
+                        <Button x:Name="button" Content="启动黑科技" HorizontalAlignment="Left" Height="38"  VerticalAlignment="Bottom" Width="97" Click="button_Click" Margin="23,0,0,10" Grid.Row="1"/>
                     </Grid>
                 </TabItem>
             </TabControl>
